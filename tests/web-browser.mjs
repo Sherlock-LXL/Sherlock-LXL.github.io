@@ -102,7 +102,8 @@ try{
       assert.equal(await page.locator('#inspector[open]').count(),0);
       await page.keyboard.press('KeyP');
       await page.keyboard.press('Escape');
-      await page.locator('#memory-open').click();
+      await page.locator('#memory-open').focus();
+      await page.keyboard.press('Enter');
       await page.locator('.memory-index [data-memory]').first().click();
       await page.locator('#memory-visit').click();
       await page.locator('#memory-prompt').waitFor({timeout:10000});
