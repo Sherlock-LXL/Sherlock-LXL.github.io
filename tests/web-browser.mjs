@@ -29,6 +29,7 @@ try{
     try{
       const context=await browser.newContext({viewport:{width:1440,height:1000}});
       const page=await context.newPage(),errors=[],requests=[],failures=[];
+      const activate=async locator=>{await locator.focus();await page.keyboard.press('Enter');};
       page.on('pageerror',e=>errors.push(e.message));
       page.on('request',r=>requests.push(r.url()));
       page.on('response',r=>{if(r.status()>=400)failures.push(`${r.status()} ${r.url()}`);});
@@ -102,8 +103,7 @@ try{
       assert.equal(await page.locator('#inspector[open]').count(),0);
       await page.keyboard.press('KeyP');
       await page.keyboard.press('Escape');
-      await page.locator('#memory-open').focus();
-      await page.keyboard.press('Enter');
+      await activate(page.locator('#memory-open'));
       await page.locator('.memory-index [data-memory]').first().click();
       await page.locator('#memory-visit').click();
       await page.locator('#memory-prompt').waitFor({timeout:10000});
@@ -113,7 +113,7 @@ try{
       await page.keyboard.press('Escape');
       await page.keyboard.press('Escape');
       checkpoint('E About, F GitHub, photo E and G memory passed');
-      await page.locator('#overview').click();
+      await activate(page.locator('#overview'));
       await page.waitForFunction(()=>document.querySelector('#world')?.dataset.view==='map');
       await page.waitForFunction(()=>performance.getEntriesByType('resource').some(r=>r.name.endsWith('/weiming/yan-lai-you-sheng.webp')),{},{timeout:15000});
       await page.screenshot({path:`artifacts/web/${name}-world.png`});
@@ -132,33 +132,33 @@ try{
       checkpoint('Map, R music and album gallery passed');
       assert.ok(!requests.some(u=>/\.mp3|\.mp4|\/api\//.test(u)),'no audio request before opt-in');
       await page.keyboard.press('Escape');await page.keyboard.press('Escape');
-      await page.locator('#memory-open').click();await page.locator('#atlas-visit').click();
+      await activate(page.locator('#memory-open'));await activate(page.locator('#atlas-visit'));
       await page.keyboard.press('Escape');
-      await page.locator('#sound').click();
+      await activate(page.locator('#sound'));
       await page.waitForFunction(()=>window.__xiangmetaAudio().playing&&window.__xiangmetaAudio().context==='running',null,{timeout:15000});
       assert.match(await page.evaluate(()=>window.__xiangmetaAudio().track),/^backing-0[1-7]$/);
-      await page.locator('[data-region="personal-museum"]').click();
-      await page.waitForFunction(()=>window.__xiangmetaAudio().track==='season-autumn-v1'&&window.__xiangmetaAudio().playing,null,{timeout:15000});
+      await activate(page.locator('[data-region="personal-museum"]'));
+      await page.waitForFunction(()=>{const s=window.__xiangmetaAudio();return s.track==='season-autumn-v1'&&s.playing&&s.heard.includes('season-autumn-v1');},null,{timeout:15000});
       assert.equal(await page.evaluate(()=>window.__xiangmetaAudio().track),'season-autumn-v1');
       for(const [region,track] of [['ai-mountain','season-spring-v1'],['weiming-studio','season-summer-v1'],['science-valley','season-winter-v1']]){
-        await page.locator(`[data-region="${region}"]`).click();
+        await activate(page.locator(`[data-region="${region}"]`));
         await page.waitForFunction(id=>{const s=window.__xiangmetaAudio();return s.track===id&&s.playing&&s.heard.includes(id);},track,{timeout:15000});
       }
       const beforePause=await page.evaluate(()=>window.__xiangmetaAudio());
-      await page.locator('#sound').click();
+      await activate(page.locator('#sound'));
       await page.waitForFunction(()=>window.__xiangmetaAudio().muted&&!window.__xiangmetaAudio().playing);
       const paused=await page.evaluate(()=>window.__xiangmetaAudio());
       assert.ok(paused.time>=beforePause.time);
-      await page.locator('#sound').click();
+      await activate(page.locator('#sound'));
       await page.waitForFunction(t=>window.__xiangmetaAudio().playing&&window.__xiangmetaAudio().time>t+.2,paused.time,{timeout:15000});
-      await page.locator('[data-region="ai-mountain"]').click();
+      await activate(page.locator('[data-region="ai-mountain"]'));
       const reentry=await page.evaluate(()=>window.__xiangmetaAudio());
       assert.equal(reentry.track,'season-winter-v1');assert.equal(reentry.heard.length,4);assert.ok(reentry.time>=paused.time);
       await page.screenshot({path:`artifacts/web/${name}-music.png`});
-      await page.locator('#sound').click();
+      await activate(page.locator('#sound'));
       checkpoint('Opt-in MP3 playback, all four seasons, pause/resume and no replay on re-entry passed');
       for(const [project,parameter] of [['bubble-lab','saturation'],['sonoluminescence','drive']]){
-        await page.locator('#collections').click();await page.locator(`[data-exhibit="${project}"]`).click();
+        await activate(page.locator('#collections'));await activate(page.locator(`[data-exhibit="${project}"]`));
         await page.waitForFunction(()=>document.querySelector('#research-radius')?.getAttribute('d')?.length>100,null,{timeout:15000});
         const curve=await page.locator('#research-radius').getAttribute('d');
         await page.locator(`[data-parameter="${parameter}"]`).focus();await page.keyboard.press('ArrowRight');
@@ -168,8 +168,8 @@ try{
       checkpoint('Both research Workers respond to parameter changes');
       const catalog=JSON.parse(await readFile(path.join(root,'content/world.json'),'utf8'));
       for(const m of catalog.modules){
-        await page.locator('#collections').click();await page.locator(`[data-exhibit="${m.id}"]`).click();
-        await page.locator('#visit').click();await page.keyboard.press('Escape');
+        await activate(page.locator('#collections'));await activate(page.locator(`[data-exhibit="${m.id}"]`));
+        await activate(page.locator('#visit'));await page.keyboard.press('Escape');
         await page.waitForFunction(title=>document.querySelector('#interaction-prompt:not([hidden]) .nearby-copy b')?.textContent===title,m.portfolio.name,{timeout:15000});
         const actions=await page.locator('#interaction-prompt [data-near-key]').evaluateAll(elements=>elements.map(el=>({
           key:el.dataset.nearKey,label:el.textContent.trim().replace(/^[FER]\s+|\s*↗$/g,''),href:el.getAttribute('href')
@@ -186,13 +186,13 @@ try{
           await page.keyboard.press('KeyF');await page.locator('#inspector[open].product-mode').waitFor();
           assert.equal(await page.locator('#panel-title').textContent(),m.title);
           await page.keyboard.press('Escape');await page.keyboard.press('Escape');
-          await page.locator('#interaction-prompt [data-near-key="E"]').click();
+          await activate(page.locator('#interaction-prompt [data-near-key="E"]'));
           await page.locator('#inspector[open]:not(.product-mode)').waitFor();
           assert.equal(await page.locator('#panel-title').textContent(),m.title);
           await page.keyboard.press('Escape');await page.keyboard.press('Escape');
           if(m.id==='bubble-lab'){
             for(const selector of ['#nearby','#interaction-prompt [data-near-key="F"]']){
-              await page.locator(selector).click();await page.locator('#inspector[open].product-mode').waitFor();
+              await activate(page.locator(selector));await page.locator('#inspector[open].product-mode').waitFor();
               assert.equal(await page.locator('#panel-title').textContent(),m.title);
               await page.keyboard.press('Escape');await page.keyboard.press('Escape');
             }
@@ -200,7 +200,7 @@ try{
           }
         }
       }
-      await page.locator('#harbor-open').click();await page.locator('#harbor-visit').click();
+      await activate(page.locator('#harbor-open'));await activate(page.locator('#harbor-visit'));
       await page.keyboard.press('Escape');
       await page.waitForFunction(()=>document.querySelector('#interaction-prompt:not([hidden]) .nearby-copy b')?.textContent==='海风港口',null,{timeout:15000});
       assert.deepEqual(await page.locator('#interaction-prompt kbd').allTextContents(),['F']);
