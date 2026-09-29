@@ -1,0 +1,183 @@
+.mobile-nav-dismiss,.mobile-menu-button,.mobile-tools,.touch-controls{display:none}
+
+@media (max-width:900px) and (pointer:coarse){
+  html.touch-experience,html.touch-experience body{height:100%;overflow:hidden}
+  html.touch-experience body{overscroll-behavior:none}
+  html.touch-experience #app{height:100dvh;min-height:0;display:block}
+  html.touch-experience .main-world{width:100%;height:100dvh}
+
+  html.touch-experience .sidebar{
+    position:fixed;inset:0 auto 0 0;width:min(310px,86vw);height:100dvh;
+    padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+    border:0;border-right:1px solid #60797555;background:#111f27f7;box-shadow:24px 0 70px #020b12a8;
+    transform:translateX(-104%);transition:transform .24s ease;z-index:21;overflow-y:auto
+  }
+  html.touch-experience body.mobile-nav-open .sidebar{transform:translateX(0)}
+  html.touch-experience .mobile-nav-dismiss{
+    position:fixed;inset:0;display:block;visibility:hidden;opacity:0;z-index:20;
+    width:100%;height:100%;background:#031016a3;transition:opacity .24s,visibility .24s
+  }
+  html.touch-experience body.mobile-nav-open .mobile-nav-dismiss{visibility:visible;opacity:1}
+  html.touch-experience .sidebar .brand{display:flex;padding:0 8px;margin:0 0 12px;font-size:23px}
+  html.touch-experience .sidebar .brand>span:last-child,
+  html.touch-experience .sidebar .side-caption,
+  html.touch-experience .sidebar .nav-overview span,
+  html.touch-experience .sidebar .nav-section-label,
+  html.touch-experience .sidebar .region-nav>span:not(:first-child),
+  html.touch-experience .sidebar .side-divider,
+  html.touch-experience .sidebar .secondary-nav span,
+  html.touch-experience .sidebar .secondary-nav b{display:block}
+  html.touch-experience .sidebar .side-bottom{display:none}
+  html.touch-experience .sidebar .portfolio-home{font-size:13px;margin:0 8px 24px}
+  html.touch-experience .sidebar .portfolio-home::before{content:none}
+  html.touch-experience .sidebar .side-caption{display:flex;font-size:11px;margin-bottom:8px}
+  html.touch-experience .sidebar .nav-section-label{font-size:12px;margin:22px 10px 8px}
+  html.touch-experience .sidebar .nav-overview,
+  html.touch-experience .sidebar .region-nav,
+  html.touch-experience .sidebar .secondary-nav{
+    width:100%;min-height:48px;justify-content:flex-start;padding:8px 10px;gap:12px;border-radius:8px
+  }
+  html.touch-experience .sidebar .region-nav>span:nth-child(2){font-size:14px}
+  html.touch-experience .sidebar .region-nav small{font-size:11px}
+  html.touch-experience .sidebar .secondary-nav span{font-size:14px}
+  html.touch-experience .sidebar .nav-end,
+  html.touch-experience .sidebar .secondary-nav b{margin-left:auto}
+  html.touch-experience .sidebar .side-divider{margin:14px 10px}
+  html.touch-experience .mobile-tools{
+    display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:20px 0 4px;padding-top:18px;border-top:1px solid var(--border)
+  }
+  html.touch-experience .mobile-tools>span{grid-column:1/-1;color:#93aaa5;font-size:12px;margin-bottom:2px}
+  html.touch-experience .mobile-tools button{
+    min-height:44px;padding:10px;border:1px solid #60797555;border-radius:8px;background:#20373b;color:#d8e7df;font-size:13px
+  }
+
+  html.touch-experience .topbar{height:58px;padding:0 max(12px,env(safe-area-inset-right)) 0 max(10px,env(safe-area-inset-left));z-index:8}
+  html.touch-experience .topbar-location{display:flex;align-items:center;gap:10px;min-width:0}
+  html.touch-experience .topbar-location #current-region{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  html.touch-experience .mobile-menu-button{display:inline-grid;width:40px;height:40px;flex:0 0 40px;border-radius:50%;font-size:19px}
+  html.touch-experience .topbar .breadcrumb,
+  html.touch-experience .topbar .slash,
+  html.touch-experience .top-actions #sky-settings,
+  html.touch-experience .top-actions #memory-open,
+  html.touch-experience .top-actions #photo-open,
+  html.touch-experience .top-actions #journal,
+  html.touch-experience .top-actions .local-badge{display:none}
+  html.touch-experience .top-actions{gap:8px}
+  html.touch-experience .top-actions .icon-button{width:40px;height:40px;font-size:17px}
+  html.touch-experience #world{inset:58px 0 0}
+  html.touch-experience .world-heading,
+  html.touch-experience .world-meta,
+  html.touch-experience .view-badge,
+  html.touch-experience .compass,
+  html.touch-experience .guide-card,
+  html.touch-experience .music-caption{display:none}
+  html.touch-experience .crosshair{top:calc(50% + 29px)}
+
+  html.touch-experience .touch-controls{position:absolute;inset:58px 0 0;display:block;z-index:6;pointer-events:none}
+  html.touch-experience .main-world:not(.first-person) .touch-controls,
+  html.touch-experience body.photo-mode .touch-controls{display:none}
+  html.touch-experience .touch-move-pad{
+    position:absolute;left:max(14px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));
+    display:grid;grid-template:repeat(3,46px)/repeat(3,46px);gap:2px;width:142px;height:142px;pointer-events:auto;touch-action:none
+  }
+  html.touch-experience .touch-key,
+  html.touch-experience .touch-jump{
+    display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #d5e5d77a;border-radius:50%;
+    background:#102b30d9;box-shadow:0 5px 18px #020e1766,inset 0 1px 0 #ffffff1f;color:#f2f7e9;
+    font-size:21px;line-height:1;backdrop-filter:blur(12px);touch-action:none;user-select:none
+  }
+  html.touch-experience .touch-key.pressed,
+  html.touch-experience .touch-key:active,
+  html.touch-experience .touch-jump:active{background:#b8d8aa;color:#17372d;transform:scale(.94)}
+  html.touch-experience .touch-forward{grid-column:2;grid-row:1}
+  html.touch-experience .touch-left{grid-column:1;grid-row:2}
+  html.touch-experience .touch-move-pad>span{grid-column:2;grid-row:2;width:24px;height:24px;place-self:center;border:1px solid #bcd3c24a;border-radius:50%}
+  html.touch-experience .touch-right{grid-column:3;grid-row:2}
+  html.touch-experience .touch-back{grid-column:2;grid-row:3}
+  html.touch-experience .touch-jump{
+    position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(28px,calc(env(safe-area-inset-bottom) + 10px));
+    width:66px;height:66px;pointer-events:auto;font-size:23px
+  }
+  html.touch-experience .touch-jump small{font-size:11px;font-weight:600;line-height:1}
+  html.touch-experience .touch-look-hint{
+    position:absolute;left:50%;bottom:max(20px,env(safe-area-inset-bottom));transform:translateX(-50%);
+    color:#d9e7df;font-size:11px;white-space:nowrap;text-shadow:0 2px 8px #041116;pointer-events:none
+  }
+
+  html.touch-experience .world-bottom{left:auto;right:max(16px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));width:48px;height:48px}
+  html.touch-experience .first-person .world-bottom{display:none}
+  html.touch-experience .coordinates,
+  html.touch-experience .controls-pill{display:none}
+  html.touch-experience .overview-small{top:0;right:0;width:48px;height:48px;background:#17383de8}
+  html.touch-experience .interaction-prompt,
+  html.touch-experience .interaction-prompt#interaction-prompt{
+    bottom:176px;width:calc(100% - 28px);max-width:430px;min-width:0;padding:14px 16px;gap:10px;border-radius:10px
+  }
+  html.touch-experience .interaction-prompt.memory-prompt{bottom:176px;min-width:0}
+  html.touch-experience .nearby-copy b{font-size:16px;line-height:1.35}
+  html.touch-experience .nearby-copy small{font-size:12px;line-height:1.55}
+  html.touch-experience #interaction-prompt .nearby-actions{gap:8px}
+  html.touch-experience #interaction-prompt .nearby-actions a,
+  html.touch-experience #interaction-prompt .nearby-actions button{min-height:42px;padding:7px 10px;font-size:12px}
+  html.touch-experience .toast{left:14px;right:14px;bottom:176px;font-size:13px;line-height:1.5}
+  html.touch-experience #trail-guide{top:72px;left:10px;right:10px;max-width:none;font-size:12px}
+
+  html.touch-experience dialog,
+  html.touch-experience dialog.product-mode{
+    --panel-inset:18px;width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 16px);margin:8px auto;border-radius:12px
+  }
+  html.touch-experience dialog h2,
+  html.touch-experience dialog.product-mode h2{font-size:24px;line-height:1.35;letter-spacing:0}
+  html.touch-experience .panel-top .icon-button{width:44px;height:44px;flex:0 0 44px}
+  html.touch-experience .panel-top .eyebrow,
+  html.touch-experience .tag-row span,
+  html.touch-experience .module-status,
+  html.touch-experience .workspace-label,
+  html.touch-experience .source-note{font-size:12px;letter-spacing:0}
+  html.touch-experience .panel-description,
+  html.touch-experience .panel-subtitle,
+  html.touch-experience .timeline p,
+  html.touch-experience .growth-list p,
+  html.touch-experience .help-grid,
+  html.touch-experience .connection-card span,
+  html.touch-experience .collection-item small{font-size:14px;line-height:1.75}
+  html.touch-experience .source-note{color:#91aaa3;line-height:1.7}
+  html.touch-experience .connection-card b,
+  html.touch-experience .collection-item b,
+  html.touch-experience .timeline h3,
+  html.touch-experience .growth-list h3{font-size:15px;line-height:1.5}
+  html.touch-experience .quiet-button,
+  html.touch-experience .primary-button,
+  html.touch-experience .panel-tabs button{min-height:44px;font-size:13px}
+  html.touch-experience .fact-grid{grid-template-columns:1fr;gap:0;padding:0}
+  html.touch-experience .fact-grid div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;text-align:left;border:0;border-bottom:1px solid var(--border)}
+  html.touch-experience .fact-grid div:last-child{border-bottom:0}
+  html.touch-experience .fact-grid span{font-size:12px;margin:0}
+  html.touch-experience .product-mode .product-workspace{grid-template-columns:1fr}
+  html.touch-experience .product-mode .product-output{min-height:170px}
+  html.touch-experience .product-mode .output-empty{min-height:120px}
+  html.touch-experience .panel-footer{gap:8px}
+  html.touch-experience .panel-footer button{flex:1 1 calc(50% - 4px);max-width:none}
+  html.touch-experience .panel-footer .back-world{margin-left:0}
+  html.touch-experience .time-presets{grid-template-columns:1fr 1fr}
+  html.touch-experience .research-controls{grid-template-columns:1fr}
+  html.touch-experience .album-shelf{grid-template-columns:1fr 1fr}
+  html.touch-experience .album-detail h3{font-size:20px}
+  html.touch-experience .album-lyrics{font-size:14px;line-height:1.9}
+  html.touch-experience #photo-toolbar{
+    inset:auto 8px 8px;max-height:calc(100dvh - 16px);overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px
+  }
+  html.touch-experience #photo-toolbar>div,
+  html.touch-experience #photo-toolbar #photo-status{grid-column:1/-1}
+  html.touch-experience #photo-toolbar label,
+  html.touch-experience #photo-toolbar input{width:100%}
+}
+
+@media (max-width:430px) and (pointer:coarse){
+  html.touch-experience .touch-look-hint{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html.touch-experience .sidebar,
+  html.touch-experience .mobile-nav-dismiss{transition:none}
+}

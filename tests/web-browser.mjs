@@ -211,14 +211,31 @@ try{
       await page.keyboard.press('Escape');await page.keyboard.press('Escape');
       checkpoint('All 10 sign/HUD key lists match; no-repository F, E, HUD clicks and harbor actions passed');
       const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
-      const mp=await mobile.newPage(),mobileRequests=[];mp.on('request',r=>mobileRequests.push(r.url()));
+      const mp=await mobile.newPage(),mobileErrors=[];mp.on('pageerror',e=>mobileErrors.push(e.message));
       await mp.goto(url(''));await mp.locator('.hero').waitFor();
       assert.equal(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-      await mp.goto(url('world/'));await mp.getByRole('link',{name:'View Projects'}).waitFor();
-      assert.ok(!mobileRequests.some(u=>/three-|main-.*\.js/.test(u)));
-      await mp.getByRole('link',{name:'View Projects'}).click();await mp.locator('.project-card').first().waitFor();
+      assert.equal(await mp.locator('.project-card>p').first().evaluate(e=>getComputedStyle(e).fontSize),'14px');
+      await mp.goto(url('world/?inspect'));await mp.locator('#world canvas').waitFor({timeout:90000});
+      await mp.waitForFunction(()=>typeof window.__xiangmetaInspect==='function');
+      assert.equal(await mp.locator('[data-touch-key]').count(),4);
+      const mobileStart=await mp.evaluate(()=>window.__xiangmetaInspect().player);
+      await mp.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerdown',{pointerId:21,pointerType:'touch',button:0,buttons:1});
+      await mp.waitForFunction(p=>{const v=window.__xiangmetaInspect().player;return Math.hypot(v.x-p.x,v.z-p.z)>.5},mobileStart);
+      await mp.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerup',{pointerId:21,pointerType:'touch',button:0});
+      await mp.locator('#touch-jump').dispatchEvent('pointerdown',{pointerId:22,pointerType:'touch',button:0,buttons:1});
+      await mp.waitForFunction(()=>!window.__xiangmetaInspect().player.grounded);
+      await mp.waitForFunction(()=>window.__xiangmetaInspect().player.grounded);
+      const mobileYaw=await mp.evaluate(()=>window.__xiangmetaInspect().yaw);
+      await mp.locator('#world canvas').dispatchEvent('pointerdown',{pointerId:23,pointerType:'touch',button:0,buttons:1,clientX:300,clientY:350});
+      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:23,pointerType:'touch',buttons:1,clientX:210,clientY:350})));
+      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:23,pointerType:'touch',clientX:210,clientY:350})));
+      assert.notEqual(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),mobileYaw);
+      await mp.locator('#mobile-menu').click();
+      await mp.waitForFunction(()=>document.body.classList.contains('mobile-nav-open'));
+      assert.equal(await mp.locator('.mobile-tools button').count(),6);
       assert.equal(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
       await mp.screenshot({path:`artifacts/web/${name}-mobile.png`,fullPage:true});
+      assert.deepEqual(mobileErrors,[]);
       await mobile.close();
       const noWebGL=await browser.newContext();
       await noWebGL.addInitScript(()=>{
@@ -236,8 +253,8 @@ try{
       assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
       assert.ok(!requests.some(u=>/\.mp4|\/api\/|audio\/manifest/.test(u)));
       assert.ok(requests.filter(u=>u.endsWith('.mp3')).every(u=>u.includes('/assets/music/')));
-      checkpoint('Mobile and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests');
-      results.push({engine:name,status:'passed',checks:['landing isolated','filters/search/refresh','music links','3D boot','distant cover previews','fixed HUD','clear keys','walk/jump','E About','F GitHub','photo E','G memory','R music','map','opt-in BGM','four seasons','pause/resume/re-entry','research Workers','10 matching station hints','F without GitHub','mouse/keyboard consistency','harbor actions','mobile fallback','WebGL fallback'],requests:requests.length});
+      checkpoint('Mobile touch movement/look/jump and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests');
+      results.push({engine:name,status:'passed',checks:['landing isolated','filters/search/refresh','music links','3D boot','distant cover previews','fixed HUD','clear keys','walk/jump','E About','F GitHub','photo E','G memory','R music','map','opt-in BGM','four seasons','pause/resume/re-entry','research Workers','10 matching station hints','F without GitHub','mouse/keyboard consistency','harbor actions','mobile touch controls','WebGL fallback'],requests:requests.length});
     }finally{await browser.close();}
   }
   await writeFile('artifacts/web/results.json',JSON.stringify({base,results},null,2));

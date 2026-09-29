@@ -78,7 +78,7 @@ export class World {
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.autoUpdate=false;
     this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
-    const canvas=this.renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('aria-label','第一人称世界。WASD 行走，空格跳跃，点击或拖动环顾，F 打开 GitHub 或展览，E 查看项目，R 打开 Demo、音乐或 MV，G 探索装置。');host.append(canvas);
+    const canvas=this.renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('aria-label',matchMedia('(pointer: coarse)').matches?'第一人称世界。使用左下方向键移动，拖动画面环顾，右下按钮跳跃，靠近展台后点击浮窗交互。':'第一人称世界。WASD 行走，空格跳跃，点击或拖动环顾，F 打开 GitHub 或展览，E 查看项目，R 打开 Demo、音乐或 MV，G 探索装置。');host.append(canvas);
     canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();this.setPaused(true);host.dispatchEvent(new CustomEvent('world-context-lost'));});
     this.photo=new PhotoCamera(canvas);
     host.dataset.view=this.mode;host.dataset.eyeHeight=String(EYE_HEIGHT);
@@ -218,6 +218,11 @@ export class World {
   photoFov(value:number){this.photo.fov(value);}
   async photograph(postcard:boolean){if(!this.photo.active)return;const p=this.photo.camera.position,r=this.data.regions.find(r=>Math.hypot(p.x-r.position[0],p.z-r.position[1])<r.radius);await exportPostcard(this.renderer,this.scene,this.photo.camera,r?.title??horizons.find(h=>Math.hypot(p.x-h.target[0],p.z-h.target[2])<50)?.title??(Math.hypot(p.x,p.z)<10?'记忆星图 · 中央枢纽':'群岛之间'),this.environment.hour,postcard);}
   quality(low:boolean){this.lowQuality=low;this.renderer.setPixelRatio(low?1:Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=!low;this.renderer.shadowMap.needsUpdate=true;this.resize();}
+  setTouchKey(code:'KeyW'|'KeyA'|'KeyS'|'KeyD',pressed:boolean){
+    if(pressed&&this.mode==='first-person'&&!this.paused)this.keys.add(code);
+    else this.keys.delete(code);
+  }
+  requestJump(){if(this.mode==='first-person'&&!this.paused)this.jumpRequested=true;}
   get isLowQuality(){return this.lowQuality;}
   get timeOfDay(){return this.environment.hour;}
   get timeCycling(){return this.environment.cycling;}

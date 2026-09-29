@@ -3,6 +3,7 @@ import {navIcon} from './core/nav-icons';
 import './style.css';
 import './refined-ui.css';
 import './web-world.css';
+import './mobile.css';
 import {sitePath,projectLinks,externalAttrs} from './core/portfolio';
 import {nearbyActions,type InteractionKey} from './core/nearby-actions';
 import {mountAlbumGallery} from './core/album-gallery';
@@ -23,6 +24,7 @@ import {weatherKinds,weatherNames} from '../shared/weather.mjs';
 import {artwork} from './world/artwork';
 
 const app=document.querySelector<HTMLDivElement>('#app')!;
+const touchExperience=document.documentElement.classList.contains('touch-experience');
 const escape=(value:unknown)=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const icon=(name:string)=>({world:'◈',mountain:'△',science:'◌',museum:'▥',studio:'♫',guide:'✦',arrow:'↗',sound:'♪',map:'⌖',close:'×',star:'☆'}[name]??'◈');
 app.innerHTML='<div class="web-loading"><span class="loading-symbol">✳</span><h1>XiangMeta</h1><p>正在读取项目与世界档案…</p><progress aria-label="读取世界档案"></progress></div>';
@@ -43,8 +45,9 @@ async function boot(){
       <button class="secondary-nav" id="favorites" aria-label="我的收藏" title="我的收藏">${navIcon('favorites')} <span>我的收藏</span><b id="favorite-count">${store.favorites.size}</b></button>
       <div class="side-bottom"><div class="journey-heading">探索足迹 <span id="progress-count"></span></div><div class="progress-track"><div id="progress-fill"></div></div><p>每一段探索，都是新的连接。</p><div class="build-tag"><span class="status-dot"></span> 持续生长 <span>v${version}</span></div></div>
     </aside>
+    ${touchExperience?'<button class="mobile-nav-dismiss" id="mobile-nav-dismiss" aria-label="关闭探索菜单"></button>':''}
     <main class="main-world first-person">
-      <header class="topbar"><div><span class="breadcrumb">我的数字宇宙</span><span class="slash">/</span><span id="current-region">世界总览</span></div><div class="top-actions"><span class="local-badge"><span class="status-dot"></span> 本地世界</span><button class="icon-button" id="sound" aria-label="开启声音" title="开启声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-3v13M9 9l11-3"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg><span class="muted-slash" aria-hidden="true"></span></button><button class="journal-button" id="journal" aria-label="旅行印记" title="旅行印记">✧ <span id="stamp-count"></span></button><button class="icon-button" id="help" aria-label="操作指南">?</button></div></header>
+      <header class="topbar"><div class="topbar-location">${touchExperience?'<button class="icon-button mobile-menu-button" id="mobile-menu" aria-label="打开探索菜单" aria-expanded="false">☰</button>':''}<span class="breadcrumb">我的数字宇宙</span><span class="slash">/</span><span id="current-region">世界总览</span></div><div class="top-actions"><span class="local-badge"><span class="status-dot"></span> 本地世界</span><button class="icon-button" id="sound" aria-label="开启声音" title="开启声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-3v13M9 9l11-3"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg><span class="muted-slash" aria-hidden="true"></span></button><button class="journal-button" id="journal" aria-label="旅行印记" title="旅行印记">✧ <span id="stamp-count"></span></button><button class="icon-button" id="help" aria-label="操作指南">?</button></div></header>
       <section id="world" aria-label="可探索的 3D 世界"></section>
       <div class="world-heading"><div class="eyebrow"><span class="line"></span> THE LIVING ATLAS</div><h1>一个世界，无限可能<span>。</span></h1><p>让好奇心带路，让每一次创造成为新的大陆。</p></div>
       <div class="world-meta"><span class="status-dot"></span> ${data.regions.length} REGIONS <span class="meta-divider">/</span> ${String(data.modules.length).padStart(2,'0')} EXHIBITS <span class="meta-divider">/</span> ALWAYS GROWING</div>
@@ -54,6 +57,7 @@ async function boot(){
       <div class="view-badge"><span class="status-dot"></span><span id="view-name">第一人称探索</span><button id="capture-look">点击进入环顾</button></div>
       <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">⌖</button></div>
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>↗</span></button>
+      ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-move-pad" aria-label="移动方向"><button class="touch-key touch-forward" data-touch-key="KeyW" aria-label="向前移动">↑</button><button class="touch-key touch-left" data-touch-key="KeyA" aria-label="向左移动">←</button><button class="touch-key touch-right" data-touch-key="KeyD" aria-label="向右移动">→</button><button class="touch-key touch-back" data-touch-key="KeyS" aria-label="向后移动">↓</button><span aria-hidden="true"></span></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
@@ -68,6 +72,14 @@ async function boot(){
   $('.top-actions').insertAdjacentHTML('afterbegin','<button id="sky-settings" class="sky-clock" title="调整海岛时光" aria-label="海岛时光">◒ <span id="sky-clock">09:00</span></button>');
   $('.top-actions').insertAdjacentHTML('afterbegin','<button id="memory-open" class="journal-button" aria-label="记忆星图" title="记忆星图">✶ <span id="memory-count">0</span></button><button id="photo-open" class="icon-button" aria-label="摄影模式" title="摄影模式 · P">▧</button>');
   $('#collections').insertAdjacentHTML('beforebegin','<button id="growth-open" aria-label="成长路径" title="成长路径" class="secondary-nav">'+navIcon('growth')+' <span>成长路径</span><b>EXPLORE</b></button>');
+  if(touchExperience){
+    $('.side-bottom').insertAdjacentHTML('beforebegin','<div class="mobile-tools"><span>探索工具</span><button data-mobile-tool="sky-settings">海岛时光</button><button data-mobile-tool="memory-open">记忆星图</button><button data-mobile-tool="photo-open">摄影模式</button><button data-mobile-tool="journal">旅行印记</button><button data-mobile-tool="guide">世界向导</button><button data-mobile-tool="help">操作指南</button></div>');
+    const menu=$<HTMLButtonElement>('#mobile-menu');
+    const closeMenu=()=>{document.body.classList.remove('mobile-nav-open');menu.setAttribute('aria-expanded','false');};
+    menu.onclick=()=>{const open=document.body.classList.toggle('mobile-nav-open');menu.setAttribute('aria-expanded',String(open));};
+    $('#mobile-nav-dismiss').onclick=closeMenu;
+    $('.sidebar').addEventListener('click',event=>{const target=(event.target as Element).closest<HTMLElement>('[data-mobile-tool],.region-nav,.nav-overview,.secondary-nav,.portfolio-home');if(!target)return;const id=target.dataset.mobileTool;if(id)document.getElementById(id)?.click();closeMenu();});
+  }
   $('.main-world').insertAdjacentHTML('beforeend','<button class="interaction-prompt memory-prompt" id="memory-prompt" hidden><span class="interaction-key">G</span><span><b id="memory-near-name"></b><small>收集碎片 · 点亮星图</small></span><span class="prompt-art" id="memory-prompt-icon"></span></button><div id="trail-guide" hidden><span id="trail-text"></span><button id="trail-stop" aria-label="结束路线">×</button></div><div id="photo-toolbar" hidden><div><b>XIANGMETA / PHOTO MODE</b><small>WASD 移动 · Q / E 升降 · 拖动环顾 · P / Esc 返回</small></div><label>视角 <input id="photo-fov" type="range" min="30" max="90" value="60" aria-label="摄影视野"/></label><label>光线 <select id="photo-hour" aria-label="摄影时刻"><option value="">当前时刻</option><option value="6.2">晨曦</option><option value="10">晴昼</option><option value="17.8">暮色</option><option value="22">月夜</option></select></label><button id="photo-save">导出照片</button><button id="postcard-save">制作明信片</button><button id="photo-exit">返回世界</button><span id="photo-status" role="status"></span></div>');
   let stream:MediaStream|undefined;let imageData='';let toastTimer:ReturnType<typeof setTimeout>;
   function toast(text:string){$('.toast').textContent=text;$('.toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.toast').hidden=true,4500);}
@@ -214,8 +226,18 @@ async function boot(){
       const percent=Math.round(done/total*100);$<HTMLProgressElement>('#world-progress').value=percent;$('#load-percent').textContent=`${percent}%`;$('#load-label').textContent=`正在准备 · ${label}`;
     });
     $('#world-loading').remove();
+    if(touchExperience){
+      document.querySelectorAll<HTMLButtonElement>('[data-touch-key]').forEach(button=>{
+        const code=button.dataset.touchKey as 'KeyW'|'KeyA'|'KeyS'|'KeyD';
+        const release=(event:PointerEvent)=>{event.preventDefault();button.classList.remove('pressed');world?.setTouchKey(code,false);};
+        button.addEventListener('pointerdown',event=>{event.preventDefault();button.classList.add('pressed');world?.setTouchKey(code,true);try{button.setPointerCapture(event.pointerId);}catch{}});
+        button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
+      });
+      $('#touch-jump').addEventListener('pointerdown',event=>{event.preventDefault();world?.requestJump();});
+    }
   }catch(error){
     $('#world-loading').remove();
+    document.querySelector('#touch-controls')?.remove();
     $('#world').innerHTML=`<div class="render-error"><b>3D 渲染暂时不可用</b><p>请使用支持 WebGL2 的浏览器并开启硬件加速。</p><a href="${sitePath('projects/')}">继续浏览全部项目 →</a></div>`;console.error(error);
   }
   $('#world').addEventListener('world-context-lost',()=>{app.insertAdjacentHTML('beforeend',`<div class="web-loading"><h1>图形连接已中断</h1><p>重新加载世界，或继续浏览项目。</p><div class="loading-actions"><a href="${escape(location.href)}">重新进入</a><a href="${sitePath('projects/')}">View Projects →</a></div></div>`);});
@@ -248,7 +270,8 @@ async function boot(){
   const soundLabel=()=>{const text=store.muted?'开启音乐与音效':'暂停音乐与音效';$('#sound').classList.toggle('enabled',!store.muted);$('#sound').setAttribute('aria-label',text);$('#sound').setAttribute('aria-pressed',String(!store.muted));$('#sound').title=text;};
   $('#sound').onclick=async()=>{store.muted=!store.muted;soundLabel();try{await audio.setMuted(store.muted);store.save();toast(store.muted?'音乐与音效已暂停':'BGM、四季音乐与风铃已开启');}catch{store.muted=true;soundLabel();toast('音乐暂时不可用，请点击 ♪ 重试');}};
   soundLabel();
-  $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','以自己的视角，走进世界')+`<div class="help-grid"><p><kbd>W A S D</kbd> 或方向键：行走；Shift 加速；Space 跳跃</p><p>点击画布或「进入环顾」：鼠标环顾；也可以按住拖动</p><p><kbd>F</kbd>：打开项目 GitHub；没有仓库链接时打开展览；作品前查看作品，港口查看航线</p><p><kbd>E</kbd>：查看项目简介、技术栈、结果与资料</p><p><kbd>R</kbd>：打开 Demo / 音乐 / MV，仅有链接的项目显示</p><p><kbd>G</kbd>：收集记忆或体验趣味装置</p><p><kbd>P</kbd>：摄影模式；WASD 平移，Q / E 升降，导出明信片</p><p>左侧区域导航：传送；「世界总览」：拖动旋转与滚轮缩放</p><p><kbd>Esc</kbd>：释放鼠标或关闭面板；关闭后可继续探索</p></div><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低渲染质量，适配低性能设备</label><p class="source-note">科研模拟按论文方程计算，默认值是演示参数。个人音乐和 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
+  const helpControls=touchExperience?'<p>左下方向键：持续按住即可行走，也可以同时按两个方向斜向移动</p><p>在世界画面上拖动：环顾四周；右下「跳跃」越过台阶</p><p>靠近展台后，直接点击浮窗中的 GitHub、简介、Demo 或展览按钮</p><p>左上菜单：切换区域、打开世界总览、项目索引、记忆与摄影工具</p>':'<p><kbd>W A S D</kbd> 或方向键：行走；Shift 加速；Space 跳跃</p><p>点击画布或「进入环顾」：鼠标环顾；也可以按住拖动</p><p><kbd>F</kbd>：打开项目 GitHub；没有仓库链接时打开展览；作品前查看作品，港口查看航线</p><p><kbd>E</kbd>：查看项目简介、技术栈、结果与资料</p><p><kbd>R</kbd>：打开 Demo / 音乐 / MV，仅有链接的项目显示</p><p><kbd>G</kbd>：收集记忆或体验趣味装置</p><p><kbd>P</kbd>：摄影模式；WASD 平移，Q / E 升降，导出明信片</p><p>左侧区域导航：传送；「世界总览」：拖动旋转与滚轮缩放</p><p><kbd>Esc</kbd>：释放鼠标或关闭面板；关闭后可继续探索</p>';
+  $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','以自己的视角，走进世界')+`<div class="help-grid">${helpControls}</div><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低渲染质量，适配低性能设备</label><p class="source-note">科研模拟按论文方程计算，默认值是演示参数。个人音乐和 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
   const openExternal=(url:string)=>{if(document.pointerLockElement)document.exitPointerLock();window.open(url,'_blank','noopener,noreferrer');};
   bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});
   bus.on('demo',m=>{const {demo}=projectLinks(m);if(demo)openExternal(demo);});

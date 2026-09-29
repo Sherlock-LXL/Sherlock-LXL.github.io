@@ -59,9 +59,25 @@ try{
   await page.waitForFunction(()=>Number(document.querySelector('#world')?.dataset.previewReady)>0,null,{timeout:30000});
   await page.locator('#interaction-prompt a[href="https://github.com/Sherlock-LXL/xianglm"]').waitFor({timeout:30000});
 
+  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const mobilePage=await mobile.newPage();
+  await mobilePage.goto(url('world/?inspect'));
+  await mobilePage.locator('#world canvas').waitFor({timeout:75000});
+  await mobilePage.waitForFunction(()=>typeof window.__xiangmetaInspect==='function');
+  await mobilePage.locator('#touch-controls').waitFor();
+  const start=await mobilePage.evaluate(()=>window.__xiangmetaInspect().player);
+  await mobilePage.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerdown',{pointerId:31,pointerType:'touch',button:0,buttons:1});
+  await mobilePage.waitForFunction(p=>{const v=window.__xiangmetaInspect().player;return Math.hypot(v.x-p.x,v.z-p.z)>.4},start);
+  await mobilePage.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerup',{pointerId:31,pointerType:'touch',button:0});
+  await mobilePage.locator('#touch-jump').dispatchEvent('pointerdown',{pointerId:32,pointerType:'touch',button:0,buttons:1});
+  await mobilePage.waitForFunction(()=>!window.__xiangmetaInspect().player.grounded);
+  await mobilePage.waitForFunction(()=>window.__xiangmetaInspect().player.grounded);
+  assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await mobile.close();
+
   assert.deepEqual(errors,[]);
   assert.deepEqual(failures,[]);
-  console.log('Smoke passed: landing, project link and 3D world startup.');
+  console.log('Smoke passed: landing, project link, 3D startup and mobile touch movement.');
 }finally{
   await browser.close();
   await new Promise((resolve,reject)=>server.close(error=>error?reject(error):resolve()));

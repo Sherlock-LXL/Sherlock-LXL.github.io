@@ -4,4 +4,28 @@
 @media(min-width:1500px){.hero{min-height:680px}.atlas{height:540px}}
 @media(max-width:1000px){main,.site-header,.site-footer{padding-inline:30px}.hero{gap:10px}.hero h1{font-size:55px}.atlas{height:450px}.isle{width:145px;padding:14px}.isle-ai{left:10%}.atlas-core{width:94px;height:94px}.hero-actions .button{padding:12px 16px;gap:12px}.wordmark small,.wordmark-dot{display:none}.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.about-section{gap:40px}.index-strip>span{display:none}.index-strip{justify-content:center}}
 @media(max-width:680px){html{scroll-padding-top:30px}main,.site-header,.site-footer{padding-inline:22px}.site-header{height:80px}.wordmark{font-size:18px}.wordmark>span:first-child{font-size:29px}.site-header nav{gap:18px;font-size:11px}.site-header nav>a:first-child,.nav-enter{display:none}.hero{grid-template-columns:1fr;padding-top:50px;gap:10px}.hero h1{font-size:57px;margin-top:24px}.hero-description{font-size:16px}.hero-handle{font-size:25px}.atlas{height:415px;margin-inline:-4px}.isle-ai{left:16%;top:15px}.isle-research{right:0;top:150px}.isle-creative{left:3%;bottom:30px}.hero-actions{gap:12px}.hero-actions .button{font-size:12px;padding:14px 18px}.about-section{grid-template-columns:1fr;padding-block:55px;gap:15px}.about-section h2{font-size:28px}.project-grid{grid-template-columns:1fr}.project-card h3,.project-card>p,.technologies{min-height:0}.project-card>p{font-size:13px}.project-card h3{font-size:23px}.card-top{margin-bottom:23px}.project-card{padding:24px 24px 0}.section-heading{align-items:start}.section-heading h2{font-size:22px}.section-heading>a{white-space:nowrap;font-size:10px;margin-top:33px}.projects-section{padding-bottom:45px}.world-invitation{padding:28px;flex-direction:column;align-items:start}.world-invitation h2{font-size:25px}.world-invitation .button{margin-top:12px}.contact-section{flex-direction:column;align-items:start;padding-block:60px}.contact-section h2{font-size:23px}.site-footer{height:auto;min-height:90px;gap:10px;flex-wrap:wrap;padding-block:20px;font-size:8px}.site-footer>span:nth-child(2){display:none}.projects-heading{padding:50px 0}.projects-heading h1{font-size:38px}.project-tools{align-items:stretch;flex-direction:column}.search-label input{width:100%}.project-details p{font-size:13px}.project-details h4{font-size:13px}.facts b{font-size:15px}.facts small{font-size:10px}.record-grid b{font-size:12px}}
+@media(max-width:680px){
+  h1,h2,h3,h4,.eyebrow,.disciplines,.wordmark,.atlas-caption,.atlas-coordinate,.card-top,.technologies span,.site-footer{letter-spacing:0}
+  main,.site-header,.site-footer{padding-inline:20px}
+  .site-header{height:72px}.site-header nav{gap:16px;font-size:13px}
+  .hero{padding-top:38px}.hero h1{font-size:48px;line-height:1.14}.hero-handle{font-size:24px;line-height:1.3;margin-top:10px}
+  .disciplines{font-size:13px;line-height:1.7}.hero-description{font-size:17px;line-height:1.75;margin-block:24px}
+  .hero-actions{flex-wrap:wrap}.hero-actions .button{min-height:46px;font-size:13px;flex:1 1 145px}
+  .device-note{font-size:12px;line-height:1.6}
+  .atlas{height:430px}.atlas-core{width:82px;height:82px}.atlas-core span{font-size:37px}.atlas-core b{font-size:9px}
+  .isle{width:148px;padding:15px}.isle b{font-size:13px}.isle small{font-size:11px;line-height:1.5}.isle i{font-size:10px}
+  .isle-ai{left:5%;top:12px}.isle-research{top:176px}.isle-creative{left:2%;bottom:18px}
+  .index-strip{font-size:11px}.index-strip b{font-size:20px}
+  .about-section>div>p:not(.eyebrow){font-size:15px;line-height:1.95}.text-link{font-size:14px}
+  .eyebrow{font-size:11px}.projects-heading>p:not(.eyebrow){font-size:15px;line-height:1.85}
+  .projects-heading h1{font-size:37px;line-height:1.3}
+  .filters button{min-height:42px;padding:9px 14px;font-size:12px}.search-label{font-size:12px}.search-label input{min-height:44px;font-size:14px}
+  .project-card{padding:24px 22px 0}.card-top{font-size:11px}.project-card h3{font-size:24px;line-height:1.35}
+  .project-card>p{font-size:14px;line-height:1.8}.technologies{gap:7px}.technologies span{padding:5px 8px;font-size:11px}
+  .project-links,.project-links>a{font-size:13px}.card-detail,summary{min-height:50px;font-size:13px}
+  .project-details h4{font-size:14px}.project-details p{font-size:14px;line-height:1.8}
+  .facts small,.record-grid small{font-size:11px}.record-grid b{font-size:13px}
+  .world-invitation p:last-child{font-size:13px;line-height:1.7}.contact-section>div:last-child{font-size:14px}
+  .site-footer{font-size:11px}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
