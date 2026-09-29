@@ -58,12 +58,13 @@ try{
   await page.locator('#world canvas').waitFor({state:'visible',timeout:15000});
   await page.waitForFunction(()=>Number(document.querySelector('#world')?.dataset.previewReady)>0,null,{timeout:30000});
   await page.locator('#interaction-prompt a[href="https://github.com/Sherlock-LXL/xianglm"]').waitFor({timeout:30000});
+  await context.close();
 
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   const mobilePage=await mobile.newPage();
   await mobilePage.goto(url('world/?inspect'));
   await mobilePage.locator('#world canvas').waitFor({timeout:75000});
-  await mobilePage.waitForFunction(()=>typeof window.__xiangmetaInspect==='function');
+  await mobilePage.waitForFunction(()=>typeof window.__xiangmetaInspect==='function',null,{timeout:75000});
   await mobilePage.locator('#touch-controls').waitFor();
   const start=await mobilePage.evaluate(()=>window.__xiangmetaInspect().player);
   await mobilePage.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerdown',{pointerId:31,pointerType:'touch',button:0,buttons:1});
