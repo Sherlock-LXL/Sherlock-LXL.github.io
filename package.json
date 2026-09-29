@@ -11,9 +11,11 @@
   },
   "scripts": {
     "dev": "vite",
+    "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/web-portfolio.test.mjs tests/jump.test.mjs tests/terrain.test.mjs tests/research-physics.test.mjs tests/garden-route.test.mjs tests/discovery-focus.test.mjs tests/music.test.mjs",
+    "test:smoke": "node tests/web-smoke.mjs",
     "test:ui": "node tests/web-browser.mjs",
     "export:pages": "node scripts/export-pages.mjs"
   },

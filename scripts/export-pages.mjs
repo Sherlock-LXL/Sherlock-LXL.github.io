@@ -13,7 +13,7 @@ const copy=async relative=>{await mkdir(path.dirname(path.join(destination,relat
 for(const file of ['src','shared','index.html','projects','world','vite.config.ts','tsconfig.json','README.md','LICENSE','CREDITS.md','.gitignore','.github','data/profile.json','data/world.json','data/audio.json','data/image-previews.json','data/media-sizes.json','backend/catalog.mjs','scripts/web-content.mjs','scripts/export-pages.mjs','docs/web-migration.md','docs/web-portfolio-audit.md','docs/images'])await copy(file);
 const pkg=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
 const tests=pkg.scripts.test.match(/tests\/[\w.-]+\.mjs/g);
-for(const file of [...tests,'tests/web-browser.mjs'])await copy(file);
+for(const file of [...tests,'tests/web-smoke.mjs','tests/web-browser.mjs'])await copy(file);
 for(const module of catalog.modules){
   const {status,...manifest}=module;
   const dir=path.join(destination,'modules',module.id);await mkdir(dir,{recursive:true});
@@ -23,7 +23,7 @@ for(const module of catalog.modules){
   }
 }
 for(const {file} of assets.values())await copy(path.relative(root,file));
-const scripts={dev:'vite',build:pkg.scripts.build,preview:pkg.scripts.preview,test:pkg.scripts.test,'test:ui':pkg.scripts['test:ui'],'export:pages':'node scripts/export-pages.mjs'};
+const scripts={dev:'vite',typecheck:pkg.scripts.typecheck,build:pkg.scripts.build,preview:pkg.scripts.preview,test:pkg.scripts.test,'test:smoke':pkg.scripts['test:smoke'],'test:ui':pkg.scripts['test:ui'],'export:pages':'node scripts/export-pages.mjs'};
 const {electron,'electron-builder':builder,...devDependencies}=pkg.devDependencies;
 const webPackage={name:'xiangmeta-portfolio',version:pkg.version,private:true,type:'module',description:pkg.description,author:'李湘伦 / Sherlock-LXL',license:'MIT',engines:{node:'>=22.14.0'},scripts,dependencies:pkg.dependencies,devDependencies};
 await writeFile(path.join(destination,'package.json'),JSON.stringify(webPackage,null,2)+'\n');
