@@ -36,7 +36,7 @@ function atlas(){
 async function boot(){
   const {profile,projects}=await readContent<Portfolio>('projects');
   const touchExperience=matchMedia('(pointer: coarse) and (max-width: 900px)').matches;
-  const worldHint=touchExperience?'方向键移动 · 拖动画面环顾 · 点击跳跃与展台操作':'WASD 行走 · 鼠标环顾 · F 打开 GitHub / 展览 · E 查看简介';
+  const worldHint=touchExperience?'摇杆移动 · 拖动画面环顾 · 点击跳跃与展台操作':'WASD 行走 · 鼠标环顾 · F 打开 GitHub / 展览 · E 查看简介';
   const categories=[...new Set(projects.map(p=>p.category))];
   const navigation=`<a class="wordmark" href="${sitePath()}"><span>✳</span> XiangMeta<span class="wordmark-dot">/</span><small>${esc(profile.handle)}</small></a><nav aria-label="主导航"><a href="${sitePath()}#about">About</a><a href="${sitePath('projects/')}" ${!isHome?'aria-current="page"':''}>Projects</a>${link(profile.github,'GitHub')}<a class="nav-enter" href="${worldURL()}">Enter world ↗</a></nav>`;
   const heading=isHome?`<section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="live-dot"></span> THE PERSONAL ATLAS</p><h1>李湘伦<span class="hero-handle">Sherlock-LXL</span></h1><p class="disciplines">${esc(profile.disciplines)}</p><p class="hero-description">让好奇心带路，<br>让每一次创造成为新的大陆。</p><div class="hero-actions"><a class="button primary" href="${worldURL()}">Enter XiangMeta <span>↗</span></a><a class="button" href="${sitePath('projects/')}">View Projects <span>→</span></a></div><p class="device-note">${touchExperience?'已适配触控移动、环顾与跳跃':'自由探索 3D 世界 · 桌面浏览器体验更佳'}</p></div>${atlas()}</section>

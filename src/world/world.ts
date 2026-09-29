@@ -47,7 +47,7 @@ export class World {
   private harborScene!:ReturnType<typeof buildHarbor>;private nearHarbor=false;
   private artworkRay=new T.Raycaster();private aim=new T.Vector2();
   private labels:{element:HTMLButtonElement;position:T.Vector3;id:string}[]=[];
-  private keys=new Set<string>();private paused=false;private near:Exhibit|null=null;private region='';
+  private keys=new Set<string>();private touchSide=0;private touchForward=0;private paused=false;private near:Exhibit|null=null;private region='';
   private guide=new T.Group();private selected!:T.Mesh;private environment!:Environment;
   private clock=new T.Clock();private time=0;private frame=0;private disposed=false;
   private observer!:ResizeObserver;private events=new AbortController();private disposers:(()=>void)[]=[];
@@ -159,8 +159,8 @@ export class World {
       if(event.code==='KeyG'&&!event.repeat){event.preventDefault();this.interactDiscovery();}
       if(event.code==='Space'&&!event.repeat&&this.mode==='first-person')this.jumpRequested=true;
     },options);
-    window.addEventListener('keyup',e=>this.keys.delete(e.code),options);window.addEventListener('blur',()=>{this.keys.clear();this.jumpRequested=false;},options);
-    document.addEventListener('visibilitychange',()=>{if(document.hidden){this.keys.clear();this.jumpRequested=false;this.look.release();}},options);
+    window.addEventListener('keyup',e=>this.keys.delete(e.code),options);window.addEventListener('blur',()=>{this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;},options);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden){this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.look.release();}},options);
     if(new URLSearchParams(location.search).has('inspect')){
       const inspect=()=>({benches:garden.benches,walls:garden.walls,snowDrifts:this.seasons.snowDrifts,accents:accents.entries,discoveries:discoveries(data.regions),rails:garden.rails,harbor:{near:this.nearHarbor,...harbor},clouds:{canopyPosition:this.scene.getObjectByName('weather-cloud-canopy')?.position.toArray(),canopyOrder:this.scene.getObjectByName('weather-cloud-canopy')?.renderOrder,puffsOpaque:!((this.scene.getObjectByName('drifting-clouds') as T.Mesh).material as T.Material).transparent},nearArtwork:this.nearArtwork?.id??null,artworks:this.artworks.map(({module,...a})=>({...a,moduleId:module.id})),weather:this.environment.weatherState,snowmen:this.scene.getObjectsByProperty('name','snowman').length,player:{...this.player},camera:this.camera.position.toArray(),yaw:this.look.yaw,pitch:this.look.pitch,mode:this.mode,calls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,hour:this.environment.hour,photo:this.photo.active,photoCamera:this.photo.camera.position.toArray(),gardenRoads:garden.roads,flowerCount:garden.flowerCount,flowerRoots:garden.flowerRoots,shortcuts:this.memories.shortcutPaths,obstacles:this.obstacles,memories:this.memories.entries.map(e=>({id:e.id,x:e.x,z:e.z})),trails:[...this.memories.trailPaths]});
       Object.assign(window,{__xiangmetaInspect:()=>({...inspect(),stations:this.stations.map(s=>({...s,hint:this.scene.getObjectByName(`station-${s.id}`)?.getObjectByName('solid-sign')?.userData.subtitle})),textures:textureStatus(),render:{pixelRatio:this.renderer.getPixelRatio(),shadowSize:renderSettings.shadowSize},foundations:this.scene.getObjectsByProperty('name','stratified-island').length})});this.disposers.push(()=>{delete (window as unknown as Record<string,unknown>).__xiangmetaInspect;});
@@ -197,7 +197,7 @@ export class World {
     }
   }
   private resize(){const w=this.width=this.host.clientWidth,h=this.height=Math.max(1,this.host.clientHeight);this.renderer.setSize(w,h);for(const camera of [this.camera,this.mapCamera]){camera.aspect=w/h;camera.updateProjectionMatrix();}this.photo.resize(w,h);this.renderer.render(this.scene,this.photo.active?this.photo.camera:this.mode==='map'?this.mapCamera:this.camera);}
-  setPaused(value:boolean){value=value||this.photo.active;this.paused=value;if(value){this.keys.clear();this.jumpRequested=false;this.look.release();this.wonders.clear();}this.orbit.enabled=!value&&this.mode==='map';}
+  setPaused(value:boolean){value=value||this.photo.active;this.paused=value;if(value){this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.look.release();this.wonders.clear();}this.orbit.enabled=!value&&this.mode==='map';}
   interactExhibit(key:InteractionKey='F'){
     if(this.paused||this.mode!=='first-person'||!nearbyActions(this.near,this.nearArtwork,this.nearHarbor).some(a=>a.key===key))return;
     const m=this.nearArtwork?.module??this.near;
@@ -218,10 +218,7 @@ export class World {
   photoFov(value:number){this.photo.fov(value);}
   async photograph(postcard:boolean){if(!this.photo.active)return;const p=this.photo.camera.position,r=this.data.regions.find(r=>Math.hypot(p.x-r.position[0],p.z-r.position[1])<r.radius);await exportPostcard(this.renderer,this.scene,this.photo.camera,r?.title??horizons.find(h=>Math.hypot(p.x-h.target[0],p.z-h.target[2])<50)?.title??(Math.hypot(p.x,p.z)<10?'记忆星图 · 中央枢纽':'群岛之间'),this.environment.hour,postcard);}
   quality(low:boolean){this.lowQuality=low;this.renderer.setPixelRatio(low?1:Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=!low;this.renderer.shadowMap.needsUpdate=true;this.resize();}
-  setTouchKey(code:'KeyW'|'KeyA'|'KeyS'|'KeyD',pressed:boolean){
-    if(pressed&&this.mode==='first-person'&&!this.paused)this.keys.add(code);
-    else this.keys.delete(code);
-  }
+  setTouchMove(side:number,forward:number){if(this.mode==='first-person'&&!this.paused){this.touchSide=Math.max(-1,Math.min(1,side));this.touchForward=Math.max(-1,Math.min(1,forward));}else this.touchSide=this.touchForward=0;}
   requestJump(){if(this.mode==='first-person'&&!this.paused)this.jumpRequested=true;}
   get isLowQuality(){return this.lowQuality;}
   get timeOfDay(){return this.environment.hour;}
@@ -230,8 +227,8 @@ export class World {
   setWeather(kind:string){const cycle=this.environment.weather.cycle;if(kind==="auto"){cycle.automatic=true;return;}cycle.automatic=false;cycle.select(kind);}
   setTime(hour:number){this.environment.setHour(hour);}
   cycleTime(value:boolean){this.environment.cycling=value;}
-  overview(){loadRegionTextures();this.look.release();this.keys.clear();this.jumpRequested=false;this.mode='map';this.host.dataset.view=this.mode;this.mapCamera.position.set(70,74,88);this.orbit.target.set(0,0,0);this.orbit.enabled=!this.paused;this.orbit.update();this.near=null;this.selected.visible=false;this.bus.emit('nearby',null);this.bus.emit('view',this.mode);}
-  resumeWalk(){this.jumpRequested=false;this.mode='first-person';this.host.dataset.view=this.mode;this.orbit.enabled=false;this.keys.clear();this.syncCamera();this.bus.emit('view',this.mode);}
+  overview(){loadRegionTextures();this.look.release();this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.mode='map';this.host.dataset.view=this.mode;this.mapCamera.position.set(70,74,88);this.orbit.target.set(0,0,0);this.orbit.enabled=!this.paused;this.orbit.update();this.near=null;this.selected.visible=false;this.bus.emit('nearby',null);this.bus.emit('view',this.mode);}
+  resumeWalk(){this.jumpRequested=false;this.mode='first-person';this.host.dataset.view=this.mode;this.orbit.enabled=false;this.keys.clear();this.touchSide=this.touchForward=0;this.syncCamera();this.bus.emit('view',this.mode);}
   captureMouse(){this.look.capture();}
   private teleport(x:number,z:number,tx:number,tz:number){
     this.look.release();let point={x,z};
@@ -275,9 +272,10 @@ export class World {
     if(next?.id!==this.near?.id){this.near=next;this.bus.emit('nearby',next);}
   }
   private move(dt:number){
-    const forward=Number(this.keys.has('KeyW')||this.keys.has('ArrowUp'))-Number(this.keys.has('KeyS')||this.keys.has('ArrowDown'));
-    const side=Number(this.keys.has('KeyD')||this.keys.has('ArrowRight'))-Number(this.keys.has('KeyA')||this.keys.has('ArrowLeft'));
-    const yaw=this.look.yaw,velocity=new T.Vector3(-Math.sin(yaw)*forward+Math.cos(yaw)*side,0,-Math.cos(yaw)*forward-Math.sin(yaw)*side).normalize().multiplyScalar(this.keys.has('ShiftLeft')||this.keys.has('ShiftRight')?8.5:5.2);
+    const forward=Number(this.keys.has('KeyW')||this.keys.has('ArrowUp'))-Number(this.keys.has('KeyS')||this.keys.has('ArrowDown'))+this.touchForward;
+    const side=Number(this.keys.has('KeyD')||this.keys.has('ArrowRight'))-Number(this.keys.has('KeyA')||this.keys.has('ArrowLeft'))+this.touchSide;
+    const strength=Math.min(1,Math.hypot(forward,side));
+    const yaw=this.look.yaw,velocity=new T.Vector3(-Math.sin(yaw)*forward+Math.cos(yaw)*side,0,-Math.cos(yaw)*forward-Math.sin(yaw)*side).normalize().multiplyScalar((this.keys.has('ShiftLeft')||this.keys.has('ShiftRight')?8.5:5.2)*strength);
     advanceWalker(this.player,{x:velocity.x,z:velocity.z,jump:this.jumpRequested},dt,this.data.regions,this.obstacles);this.jumpRequested=false;
     if(forward||side)this.updateLocation();
   }

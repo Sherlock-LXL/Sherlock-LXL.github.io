@@ -57,7 +57,7 @@ async function boot(){
       <div class="view-badge"><span class="status-dot"></span><span id="view-name">第一人称探索</span><button id="capture-look">点击进入环顾</button></div>
       <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">⌖</button></div>
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>↗</span></button>
-      ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-move-pad" aria-label="移动方向"><button class="touch-key touch-forward" data-touch-key="KeyW" aria-label="向前移动">↑</button><button class="touch-key touch-left" data-touch-key="KeyA" aria-label="向左移动">←</button><button class="touch-key touch-right" data-touch-key="KeyD" aria-label="向右移动">→</button><button class="touch-key touch-back" data-touch-key="KeyS" aria-label="向后移动">↓</button><span aria-hidden="true"></span></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
+      ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
@@ -227,13 +227,16 @@ async function boot(){
     });
     $('#world-loading').remove();
     if(touchExperience){
-      document.querySelectorAll<HTMLButtonElement>('[data-touch-key]').forEach(button=>{
-        const code=button.dataset.touchKey as 'KeyW'|'KeyA'|'KeyS'|'KeyD';
-        const release=(event:PointerEvent)=>{event.preventDefault();button.classList.remove('pressed');world?.setTouchKey(code,false);};
-        button.addEventListener('pointerdown',event=>{event.preventDefault();button.classList.add('pressed');world?.setTouchKey(code,true);try{button.setPointerCapture(event.pointerId);}catch{}});
-        button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release);
-      });
-      $('#touch-jump').addEventListener('pointerdown',event=>{event.preventDefault();world?.requestJump();});
+      const joystick=$('#touch-joystick'),knob=$('.touch-joystick-knob');let joystickPointer:number|null=null;
+      const moveJoystick=(event:PointerEvent)=>{
+        if(event.pointerId!==joystickPointer)return;event.preventDefault();event.stopPropagation();
+        const box=joystick.getBoundingClientRect(),limit=38,dx=event.clientX-(box.left+box.width/2),dy=event.clientY-(box.top+box.height/2),length=Math.hypot(dx,dy),scale=length>limit?limit/length:1,x=dx*scale,y=dy*scale;
+        knob.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;world?.setTouchMove(x/limit,-y/limit);
+      };
+      const releaseJoystick=(event:PointerEvent)=>{if(event.pointerId!==joystickPointer)return;event.preventDefault();event.stopPropagation();joystickPointer=null;knob.style.transform='translate(0,0)';world?.setTouchMove(0,0);};
+      joystick.addEventListener('pointerdown',event=>{if(joystickPointer!==null)return;joystickPointer=event.pointerId;try{joystick.setPointerCapture(event.pointerId);}catch{}moveJoystick(event);});
+      joystick.addEventListener('pointermove',moveJoystick);joystick.addEventListener('pointerup',releaseJoystick);joystick.addEventListener('pointercancel',releaseJoystick);joystick.addEventListener('lostpointercapture',releaseJoystick);
+      $('#touch-jump').addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();world?.requestJump();});
     }
   }catch(error){
     $('#world-loading').remove();
@@ -270,7 +273,7 @@ async function boot(){
   const soundLabel=()=>{const text=store.muted?'开启音乐与音效':'暂停音乐与音效';$('#sound').classList.toggle('enabled',!store.muted);$('#sound').setAttribute('aria-label',text);$('#sound').setAttribute('aria-pressed',String(!store.muted));$('#sound').title=text;};
   $('#sound').onclick=async()=>{store.muted=!store.muted;soundLabel();try{await audio.setMuted(store.muted);store.save();toast(store.muted?'音乐与音效已暂停':'BGM、四季音乐与风铃已开启');}catch{store.muted=true;soundLabel();toast('音乐暂时不可用，请点击 ♪ 重试');}};
   soundLabel();
-  const helpControls=touchExperience?'<p>左下方向键：持续按住即可行走，也可以同时按两个方向斜向移动</p><p>在世界画面上拖动：环顾四周；右下「跳跃」越过台阶</p><p>靠近展台后，直接点击浮窗中的 GitHub、简介、Demo 或展览按钮</p><p>左上菜单：切换区域、打开世界总览、项目索引、记忆与摄影工具</p>':'<p><kbd>W A S D</kbd> 或方向键：行走；Shift 加速；Space 跳跃</p><p>点击画布或「进入环顾」：鼠标环顾；也可以按住拖动</p><p><kbd>F</kbd>：打开项目 GitHub；没有仓库链接时打开展览；作品前查看作品，港口查看航线</p><p><kbd>E</kbd>：查看项目简介、技术栈、结果与资料</p><p><kbd>R</kbd>：打开 Demo / 音乐 / MV，仅有链接的项目显示</p><p><kbd>G</kbd>：收集记忆或体验趣味装置</p><p><kbd>P</kbd>：摄影模式；WASD 平移，Q / E 升降，导出明信片</p><p>左侧区域导航：传送；「世界总览」：拖动旋转与滚轮缩放</p><p><kbd>Esc</kbd>：释放鼠标或关闭面板；关闭后可继续探索</p>';
+  const helpControls=touchExperience?'<p>拖动左下摇杆：控制行走方向与速度</p><p>在世界画面上拖动：环顾四周；右下「跳跃」越过台阶</p><p>移动与环顾支持双指同时操作，两个触点互不干扰</p><p>靠近展台后，直接点击浮窗中的 GitHub、简介、Demo 或展览按钮</p><p>左上菜单：切换区域、打开世界总览、项目索引、记忆与摄影工具</p>':'<p><kbd>W A S D</kbd> 或方向键：行走；Shift 加速；Space 跳跃</p><p>点击画布或「进入环顾」：鼠标环顾；也可以按住拖动</p><p><kbd>F</kbd>：打开项目 GitHub；没有仓库链接时打开展览；作品前查看作品，港口查看航线</p><p><kbd>E</kbd>：查看项目简介、技术栈、结果与资料</p><p><kbd>R</kbd>：打开 Demo / 音乐 / MV，仅有链接的项目显示</p><p><kbd>G</kbd>：收集记忆或体验趣味装置</p><p><kbd>P</kbd>：摄影模式；WASD 平移，Q / E 升降，导出明信片</p><p>左侧区域导航：传送；「世界总览」：拖动旋转与滚轮缩放</p><p><kbd>Esc</kbd>：释放鼠标或关闭面板；关闭后可继续探索</p>';
   $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','以自己的视角，走进世界')+`<div class="help-grid">${helpControls}</div><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低渲染质量，适配低性能设备</label><p class="source-note">科研模拟按论文方程计算，默认值是演示参数。个人音乐和 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
   const openExternal=(url:string)=>{if(document.pointerLockElement)document.exitPointerLock();window.open(url,'_blank','noopener,noreferrer');};
   bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});

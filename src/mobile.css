@@ -76,24 +76,25 @@
   html.touch-experience .touch-controls{position:absolute;inset:58px 0 0;display:block;z-index:6;pointer-events:none}
   html.touch-experience .main-world:not(.first-person) .touch-controls,
   html.touch-experience body.photo-mode .touch-controls{display:none}
-  html.touch-experience .touch-move-pad{
-    position:absolute;left:max(14px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));
-    display:grid;grid-template:repeat(3,46px)/repeat(3,46px);gap:2px;width:142px;height:142px;pointer-events:auto;touch-action:none
+  html.touch-experience .touch-joystick{
+    position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));
+    width:126px;height:126px;border:1px solid #d5e5d75c;border-radius:50%;pointer-events:auto;touch-action:none;user-select:none;
+    background:radial-gradient(circle,#17363a66 0 30%,#102b30b8 31% 100%);box-shadow:0 7px 24px #020e1766,inset 0 1px 0 #ffffff1a;backdrop-filter:blur(10px)
   }
-  html.touch-experience .touch-key,
+  html.touch-experience .touch-joystick::before,
+  html.touch-experience .touch-joystick::after{content:"";position:absolute;left:50%;top:18px;bottom:18px;width:1px;background:#cfe0d42b}
+  html.touch-experience .touch-joystick::after{top:50%;left:18px;right:18px;width:auto;height:1px}
+  html.touch-experience .touch-joystick-knob{
+    position:absolute;left:50%;top:50%;width:58px;height:58px;margin:-29px 0 0 -29px;border:1px solid #e4efe29c;border-radius:50%;
+    background:#24484be8;box-shadow:0 4px 14px #020e1780,inset 0 1px 0 #ffffff29;will-change:transform
+  }
+  html.touch-experience .touch-joystick small{position:absolute;left:0;right:0;bottom:9px;color:#d9e7df;font-size:10px;text-align:center;pointer-events:none}
   html.touch-experience .touch-jump{
-    display:grid;place-items:center;width:46px;height:46px;padding:0;border:1px solid #d5e5d77a;border-radius:50%;
+    display:grid;place-items:center;padding:0;border:1px solid #d5e5d77a;border-radius:50%;
     background:#102b30d9;box-shadow:0 5px 18px #020e1766,inset 0 1px 0 #ffffff1f;color:#f2f7e9;
-    font-size:21px;line-height:1;backdrop-filter:blur(12px);touch-action:none;user-select:none
+    line-height:1;backdrop-filter:blur(12px);touch-action:none;user-select:none
   }
-  html.touch-experience .touch-key.pressed,
-  html.touch-experience .touch-key:active,
   html.touch-experience .touch-jump:active{background:#b8d8aa;color:#17372d;transform:scale(.94)}
-  html.touch-experience .touch-forward{grid-column:2;grid-row:1}
-  html.touch-experience .touch-left{grid-column:1;grid-row:2}
-  html.touch-experience .touch-move-pad>span{grid-column:2;grid-row:2;width:24px;height:24px;place-self:center;border:1px solid #bcd3c24a;border-radius:50%}
-  html.touch-experience .touch-right{grid-column:3;grid-row:2}
-  html.touch-experience .touch-back{grid-column:2;grid-row:3}
   html.touch-experience .touch-jump{
     position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(28px,calc(env(safe-area-inset-bottom) + 10px));
     width:66px;height:66px;pointer-events:auto;font-size:23px

@@ -217,11 +217,13 @@ try{
       assert.equal(await mp.locator('.project-card>p').first().evaluate(e=>getComputedStyle(e).fontSize),'14px');
       await mp.goto(url('world/?inspect'));await mp.locator('#world canvas').waitFor({timeout:90000});
       await mp.waitForFunction(()=>typeof window.__xiangmetaInspect==='function');
-      assert.equal(await mp.locator('[data-touch-key]').count(),4);
+      const joystick=mp.locator('#touch-joystick'),joystickBox=await joystick.boundingBox();
+      assert.ok(joystickBox);const joystickCenter={x:joystickBox.x+joystickBox.width/2,y:joystickBox.y+joystickBox.height/2};
       const mobileStart=await mp.evaluate(()=>window.__xiangmetaInspect().player);
-      await mp.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerdown',{pointerId:21,pointerType:'touch',button:0,buttons:1});
+      await joystick.dispatchEvent('pointerdown',{pointerId:21,pointerType:'touch',button:0,buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y});
+      await joystick.dispatchEvent('pointermove',{pointerId:21,pointerType:'touch',buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
       await mp.waitForFunction(p=>{const v=window.__xiangmetaInspect().player;return Math.hypot(v.x-p.x,v.z-p.z)>.5},mobileStart);
-      await mp.locator('[data-touch-key="KeyW"]').dispatchEvent('pointerup',{pointerId:21,pointerType:'touch',button:0});
+      await joystick.dispatchEvent('pointerup',{pointerId:21,pointerType:'touch',button:0,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
       await mp.locator('#touch-jump').dispatchEvent('pointerdown',{pointerId:22,pointerType:'touch',button:0,buttons:1});
       await mp.waitForFunction(()=>!window.__xiangmetaInspect().player.grounded);
       await mp.waitForFunction(()=>window.__xiangmetaInspect().player.grounded);
@@ -230,6 +232,18 @@ try{
       await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:23,pointerType:'touch',buttons:1,clientX:210,clientY:350})));
       await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:23,pointerType:'touch',clientX:210,clientY:350})));
       assert.notEqual(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),mobileYaw);
+      const canvas=mp.locator('#world canvas');
+      await joystick.dispatchEvent('pointerdown',{pointerId:24,pointerType:'touch',button:0,buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y});
+      await joystick.dispatchEvent('pointermove',{pointerId:24,pointerType:'touch',buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
+      await canvas.dispatchEvent('pointerdown',{pointerId:25,pointerType:'touch',button:0,buttons:1,clientX:300,clientY:350});
+      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:25,pointerType:'touch',buttons:1,clientX:270,clientY:350})));
+      const dragYaw=await mp.evaluate(()=>window.__xiangmetaInspect().yaw);
+      await joystick.dispatchEvent('pointermove',{pointerId:24,pointerType:'touch',buttons:1,clientX:joystickCenter.x+20,clientY:joystickCenter.y-32});
+      assert.equal(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),dragYaw);
+      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:25,pointerType:'touch',buttons:1,clientX:230,clientY:350})));
+      assert.notEqual(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),dragYaw);
+      await joystick.dispatchEvent('pointerup',{pointerId:24,pointerType:'touch',button:0,clientX:joystickCenter.x+20,clientY:joystickCenter.y-32});
+      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:25,pointerType:'touch',clientX:230,clientY:350})));
       await mp.locator('#mobile-menu').click();
       await mp.waitForFunction(()=>document.body.classList.contains('mobile-nav-open'));
       assert.equal(await mp.locator('.mobile-tools button').count(),6);
@@ -253,7 +267,7 @@ try{
       assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
       assert.ok(!requests.some(u=>/\.mp4|\/api\/|audio\/manifest/.test(u)));
       assert.ok(requests.filter(u=>u.endsWith('.mp3')).every(u=>u.includes('/assets/music/')));
-      checkpoint('Mobile touch movement/look/jump and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests');
+      checkpoint('Mobile simultaneous look/move, jump and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests');
       results.push({engine:name,status:'passed',checks:['landing isolated','filters/search/refresh','music links','3D boot','distant cover previews','fixed HUD','clear keys','walk/jump','E About','F GitHub','photo E','G memory','R music','map','opt-in BGM','four seasons','pause/resume/re-entry','research Workers','10 matching station hints','F without GitHub','mouse/keyboard consistency','harbor actions','mobile touch controls','WebGL fallback'],requests:requests.length});
     }finally{await browser.close();}
   }
