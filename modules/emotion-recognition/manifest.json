@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "emotion-recognition",
+  "title": "镜子房间",
+  "subtitle": "让神经网络看见表情",
+  "region": "ai-mountain",
+  "owner": "personal",
+  "category": "AI PROJECT",
+  "description": "一面连接视觉模型的镜子。探索轻量残差 CNN 如何理解图像中的表情特征。请上传或拍摄裁切后的单人正面脸部图片。",
+  "tags": [
+    "Residual CNN",
+    "FER2013",
+    "视觉交互"
+  ],
+  "position": [
+    -8,
+    5
+  ],
+  "visual": "mirror",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "vision"
+    ],
+    "fragments": [
+      {
+        "id": "visual-features",
+        "title": "让卷积看见表情",
+        "body": "从四层 CNN 到轻量残差网络，再到三个模型的 soft-voting 集成。这里学习的是图像中的表情特征，不是对内心状态的判断。",
+        "position": [
+          -5.4,
+          11.8
+        ],
+        "growth": {
+          "order": 20,
+          "label": "02 / CNN 表情识别"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "target": "cat-recognition",
+        "title": "沿视觉捷径，去认识一只猫",
+        "body": "同样从图像特征出发，另一个 CNN 项目面对真实个体识别与数据划分。"
+      }
+    ]
+  },
+  "wayfinding": {
+    "title": "02 镜子房间",
+    "subtitle": "CNN · 表情识别"
+  },
+  "portfolio": {
+    "name": "FER2013 · Expression Recognition",
+    "category": "AI",
+    "summary": "手工实现轻量残差 CNN，通过三个独立模型的 soft-voting 识别七类面部表情。",
+    "technologies": [
+      "PyTorch",
+      "Residual CNN",
+      "FER2013"
+    ],
+    "github": "https://github.com/Sherlock-LXL/expression-recognition-cnn",
+    "featured": false,
+    "order": 3,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "模型类别",
+      "value": "7 种表情"
+    },
+    {
+      "label": "集成准确率",
+      "value": "66.59%"
+    },
+    {
+      "label": "单模型参数",
+      "value": "453,447"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 从卷积开始",
+      "body": "从四层 CNN 迭代到手工实现的轻量残差网络，使用三个独立模型进行 soft-voting。"
+    },
+    {
+      "title": "02 / 七种表情",
+      "body": "围绕愤怒、厌恶、恐惧、开心、平静、悲伤与惊讶，学习面部图像的视觉特征。"
+    },
+    {
+      "title": "03 / 镜子的回应",
+      "body": "让摄像头成为世界的一面镜子：拍下一帧，观察模型如何辨认其中的表情。"
+    }
+  ],
+  "media": []
+}

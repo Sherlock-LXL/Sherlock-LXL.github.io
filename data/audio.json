@@ -1,0 +1,72 @@
+{
+  "playlist": [
+    {
+      "id": "backing-01",
+      "title": "二分之一星球",
+      "src": "/assets/music/backing-01.mp3",
+      "gain": 0.2901
+    },
+    {
+      "id": "backing-02",
+      "title": "云歌行",
+      "src": "/assets/music/backing-02.mp3",
+      "gain": 0.4462
+    },
+    {
+      "id": "backing-03",
+      "title": "再见",
+      "src": "/assets/music/backing-03.mp3",
+      "gain": 0.3508
+    },
+    {
+      "id": "backing-04",
+      "title": "夏日信",
+      "src": "/assets/music/backing-04.mp3",
+      "gain": 0.3487
+    },
+    {
+      "id": "backing-05",
+      "title": "如梦令",
+      "src": "/assets/music/backing-05.mp3",
+      "gain": 0.6668
+    },
+    {
+      "id": "backing-06",
+      "title": "情书",
+      "src": "/assets/music/backing-06.mp3",
+      "gain": 0.4325
+    },
+    {
+      "id": "backing-07",
+      "title": "未央",
+      "src": "/assets/music/backing-07.mp3",
+      "gain": 0.4694
+    }
+  ],
+  "seasonal": {
+    "weiming-studio": {
+      "id": "season-summer-v1",
+      "title": "星河",
+      "src": "/assets/music/summer.mp3",
+      "gain": 0.867
+    },
+    "personal-museum": {
+      "id": "season-autumn-v1",
+      "title": "四季",
+      "src": "/assets/music/autumn.mp3",
+      "gain": 0.6471
+    },
+    "science-valley": {
+      "id": "season-winter-v1",
+      "title": "初雪",
+      "src": "/assets/music/winter.mp3",
+      "gain": 0.5508
+    },
+    "ai-mountain": {
+      "id": "season-spring-v1",
+      "title": "春",
+      "src": "/assets/music/spring.mp3",
+      "gain": 1.8493
+    }
+  }
+}

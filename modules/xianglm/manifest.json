@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "xianglm",
+  "title": "XiangLM Tower",
+  "subtitle": "从零开始，构建语言的世界",
+  "region": "ai-mountain",
+  "owner": "personal",
+  "category": "AI PROJECT",
+  "description": "一座献给自己训练的语言模型的塔。从字符如何变成 token，到 Transformer 如何学会回答，每一层都是一次探索。",
+  "tags": [
+    "Transformer",
+    "200M",
+    "从零训练"
+  ],
+  "position": [
+    6,
+    -16
+  ],
+  "visual": "tower",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "conversation",
+      "generation"
+    ],
+    "ambience": "tokens",
+    "fragments": [
+      {
+        "id": "tokens",
+        "title": "语言变成数字",
+        "body": "XiangLM 使用 byte-level BPE 与 32,768 词表。输入先成为 token，模型才能在数字空间里处理上下文。这是塔的第一层，也是诗园留下的另一条线索。",
+        "position": [
+          1,
+          -12
+        ]
+      },
+      {
+        "id": "training",
+        "title": "从随机初始化到回应",
+        "body": "200.3M 参数、25 个 Transformer Blocks、4B tokens 预训练，再通过 SFT 进入问答阶段。这些数字来自当前项目档案；具体 checkpoint 故事可以以后独立补入。",
+        "position": [
+          8.6,
+          -9.2
+        ],
+        "growth": {
+          "order": 50,
+          "label": "05 / Transformer · XiangLM"
+        }
+      }
+    ],
+    "connections": []
+  },
+  "wayfinding": {
+    "title": "05 XiangLM Tower",
+    "subtitle": "Transformer · 语言模型"
+  },
+  "portfolio": {
+    "name": "XiangLM",
+    "category": "AI",
+    "summary": "从随机初始化训练的 200M 中文 Decoder-only 语言模型，完成 4B tokens 预训练与指令微调。",
+    "technologies": [
+      "PyTorch",
+      "Transformer",
+      "BPE",
+      "SFT"
+    ],
+    "github": "https://github.com/Sherlock-LXL/xianglm",
+    "featured": true,
+    "order": 1,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "参数量",
+      "value": "200.3M"
+    },
+    {
+      "label": "预训练",
+      "value": "4B tokens"
+    },
+    {
+      "label": "上下文",
+      "value": "1,024 tokens"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 把语言变成数字",
+      "body": "Byte-level BPE，32,768 词表。先完成数据检查与分词，再构建可恢复的训练管线。"
+    },
+    {
+      "title": "02 / 从随机初始化开始",
+      "body": "25 个 Transformer Blocks、12 个注意力头，在 8 GB 显存上通过混合精度与梯度累积完成 4,000,022,528 tokens 的预训练。"
+    },
+    {
+      "title": "03 / 学会回应",
+      "body": "通过 244,218 条 SFT 训练样本，让预训练语言模型进一步学习问答与指令表达，从接续文字走向对话。"
+    }
+  ],
+  "media": []
+}

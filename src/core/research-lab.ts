@@ -1,0 +1,36 @@
+import content from './research-content.json';
+type Kind=keyof typeof content;
+type Sample={t:number;r:number;rate:number};
+type Field=[string,string,number,number,number,number];
+const controls:Record<Kind,Field[]>={
+ bubble:[['saturation','远场饱和比 S',.9,1.8,.01,1.2],['angle','气侧接触角 θ / °',40,140,1,90],['diffusion','扩散系数 Dg / 10⁻⁹ m²·s⁻¹',1,3,.05,2],['radius','初始曲率半径 / μm',25,250,5,100],['tension','表面张力 σ / mN·m⁻¹',50,85,1,72]],
+ sonoluminescence:[['drive','声压幅值 PA / bar',0,1.3,.01,1.15],['frequency','驱动频率 / kHz',20,40,.5,26.5],['radius','平衡半径 R₀ / μm',3,8,.1,4.5],['kappa','多方指数 κ',1,1.67,.01,1.4],['tension','表面张力 σ / mN·m⁻¹',50,90,1,72]]
+};
+export function mountResearch(host:HTMLElement,kind:Kind){
+ const paper=content[kind],growth=kind==='bubble',worker=new Worker(new URL('./research-worker.ts',import.meta.url),{type:'module'});
+ const introduction=growth?'壁面球冠以固定气侧接触角生长。扩散供应的气体与气泡内的气体积累平衡，决定曲率半径 R 的变化率。':'声场驱动一个球形气泡振荡。气体压力、蒸气压、表面张力与黏性共同影响半径波形，强驱动下会出现快速坍缩与回弹。';
+ const limit=growth?'计算采用论文式 (23)，将 C∞ 设为 S·kH·P₀ 并保持恒定；未加入有限液体气体耗竭。默认 T=293.15 K、P₀=101325 Pa、kH=10⁻⁵ mol·m⁻³·Pa⁻¹ 是演示参数，尚未实验标定。盐的作用通过接触角、扩散系数、表面张力和溶解气体条件体现，不虚构盐浓度到生长率的经验映射。':'计算采用论文式 (6)、(12)、(13)。当前演示固定为纯水（m=0、aw=1）；暂不开放缺乏盐种标定、对波形影响很小的浓度与渗透系数调节。ρ=998 kg/m³、μ=1 mPa·s、纯水蒸气压 2339 Pa 是演示常量，σ 独立调整。模型未包含液体可压缩性、传热和发光辐射，不能据此预测发光强度。';
+ host.className='research-lab';host.innerHTML=`<p class="research-source">论文模型 · Xiang Li / Guang Chen<br><b>${paper.title}</b></p><p>${introduction}</p>
+ <div class="research-layout"><div class="research-controls">${controls[kind].map(([key,label,min,max,step,value])=>`<label for="research-input-${key}">${label}<div><input id="research-input-${key}" data-parameter="${key}" type="range" min="${min}" max="${max}" step="${step}" value="${value}"><output>${value}</output></div></label>`).join('')}<button type="button" class="quiet-button" id="research-reset">恢复参数</button></div>
+ <div class="research-result"><svg class="research-animation" viewBox="0 0 360 120" aria-label="按计算半径缩放的气泡"><defs><radialGradient id="research-bubble-fill"><stop offset="0" stop-color="#dbf5fb"/><stop offset=".75" stop-color="#80c1d5" stop-opacity=".15"/><stop offset="1" stop-color="#9cd3e4" stop-opacity=".8"/></radialGradient><clipPath id="research-cap"><rect x="${growth?150:0}" y="0" width="360" height="120"/></clipPath></defs>${growth?'<path d="M150 8V112" stroke="#839fa5" stroke-width="5"/>':'<circle cx="180" cy="60" r="50" fill="none" stroke="#829da8" stroke-dasharray="4 5"/>'}<circle id="research-orb" cx="${growth?150:180}" cy="60" r="22" fill="url(#research-bubble-fill)" stroke="#a1d5df" clip-path="url(#research-cap)"/></svg><p class="research-readout" id="research-readout">正在计算…</p>
+ <div class="research-chart"><svg viewBox="0 0 620 220" role="img" aria-label="气泡半径随时间的计算曲线"><path d="M58 20V180H600 M58 100H600" class="chart-grid"/><path id="research-radius" fill="none" stroke="#82cbbb" stroke-width="2"/><text x="12" y="14">R / μm</text><text id="research-ymax" x="8" y="30"></text><text x="36" y="180">0</text><text id="research-axis" x="330" y="213"></text><text id="research-end" x="546" y="198"></text><path id="research-cursor" stroke="#d5c1a1" stroke-dasharray="3 4"/></svg></div>
+ ${growth?'<div class="research-chart"><svg viewBox="0 0 620 170" role="img" aria-label="气泡径向生长率随时间变化"><path d="M58 28V130H600" class="chart-grid"/><path id="research-rate" fill="none" stroke="#dcbf88" stroke-width="2"/><text x="58" y="16">dR/dt / μm·min⁻¹</text><text id="research-rate-bounds" x="58" y="155"></text></svg></div>':''}
+ <p id="research-status" role="status"></p></div></div><details class="research-equations" open><summary>论文核心公式与建模边界</summary>${paper.equations.map(e=>`<h4>${e.title}</h4><div class="research-equation">${e.math}</div>`).join('')}<p>${limit}</p><p>曲线为上述方程的数值解，不是实验测量；动画时间已放慢，圆形尺寸仅用于观看。</p></details>`;
+ if(!growth){
+  // Keep the imported equation nodes intact; break only between complete terms.
+  const math=host.querySelector('.research-equation math')!,row=math.firstElementChild!,terms=[...row.children],ns=math.namespaceURI!;
+  const table=document.createElementNS(ns,'mtable');table.setAttribute('columnalign','left');table.setAttribute('rowspacing','.65em');
+  for(const [start,end] of [[0,3],[3,7],[7,12],[12,terms.length]]){const line=document.createElementNS(ns,'mtr'),cell=document.createElementNS(ns,'mtd');cell.append(...terms.slice(start,end));line.append(cell);table.append(line);}math.replaceChildren(table);
+ }
+ const inputs=[...host.querySelectorAll<HTMLInputElement>('[data-parameter]')];let id=0,timer:ReturnType<typeof setTimeout>,frame=0,samples:Sample[]=[],started=0,visualMax=1;
+ const $=(s:string)=>host.querySelector<HTMLElement>(s)!;
+ const request=()=>{id++;$('#research-status').textContent='正在更新模型…';const parameters={molality:0,osmotic:1,...Object.fromEntries(inputs.map(i=>[i.dataset.parameter!,Number(i.value)]))};worker.postMessage({id,kind,parameters});};
+ inputs.forEach(input=>input.oninput=()=>{input.nextElementSibling!.textContent=input.value;clearTimeout(timer);id++;timer=setTimeout(request,90);});
+ $('#research-reset').onclick=()=>{inputs.forEach((input,i)=>{input.value=String(controls[kind][i][5]);input.nextElementSibling!.textContent=input.value;});request();};
+ worker.onmessage=({data})=>{if(data.id!==id)return;if(data.error){$('#research-status').textContent=data.error;return;}samples=data.result.samples;started=performance.now();visualMax=Math.max(1,...samples.map(s=>s.r));const max=visualMax*1.08,end=Math.max(.0001,samples.at(-1)!.t);
+  $('#research-radius').setAttribute('d',samples.map((s,i)=>`${i?'L':'M'}${58+s.t/end*542},${180-s.r/max*150}`).join(' '));$('#research-ymax').textContent=max.toFixed(1);$('#research-end').textContent=end.toFixed(1);$('#research-axis').textContent=data.result.xLabel;$('#research-status').textContent=data.result.status+(data.result.aw!==undefined?` · aw=${data.result.aw.toFixed(4)}，Pv=${data.result.pv.toFixed(0)} Pa`:'');
+  if(growth){const lo=Math.min(...samples.map(s=>s.rate)),hi=Math.max(...samples.map(s=>s.rate)),span=Math.max(1e-6,hi-lo);$('#research-rate').setAttribute('d',samples.map((s,i)=>`${i?'L':'M'}${58+s.t/end*542},${130-(s.rate-lo)/span*95}`).join(' '));$('#research-rate-bounds').textContent=`生长率范围 ${lo.toFixed(3)} 至 ${hi.toFixed(3)} μm/min`;}
+ };
+ const animate=()=>{frame=requestAnimationFrame(animate);if(!host.isConnected||!samples.length)return;const phase=((performance.now()-started)/14000)%1,end=samples.at(-1)!.t,t=phase*end;let low=0,high=samples.length-1;while(low<high){const mid=(low+high)>>1;if(samples[mid].t<t)low=mid+1;else high=mid;}const s=samples[low],max=visualMax;const radius=Math.max(2,Math.min(48,s.r/max*43));$('#research-orb').setAttribute('r',String(radius));if(growth)$('#research-orb').setAttribute('cx',String(150-radius*Math.cos(Number(inputs.find(i=>i.dataset.parameter==='angle')!.value)*Math.PI/180)));$('#research-cursor').setAttribute('d',`M${58+phase*542} 20V180`);$('#research-readout').textContent=`t = ${t.toFixed(2)} ${growth?'min':'μs'} · R = ${s.r.toFixed(2)} μm · dR/dt = ${s.rate.toFixed(3)} ${growth?'μm/min':'m/s'}`;};
+ request();animate();return()=>{clearTimeout(timer);cancelAnimationFrame(frame);worker.terminate();};
+}

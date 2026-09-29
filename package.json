@@ -1,0 +1,30 @@
+{
+  "name": "xiangmeta-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "XiangMeta — Interactive 3D developer portfolio",
+  "author": "李湘伦 / Sherlock-LXL",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.14.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test tests/web-portfolio.test.mjs tests/jump.test.mjs tests/terrain.test.mjs tests/research-physics.test.mjs tests/garden-route.test.mjs tests/discovery-focus.test.mjs tests/music.test.mjs",
+    "test:ui": "node tests/web-browser.mjs",
+    "export:pages": "node scripts/export-pages.mjs"
+  },
+  "dependencies": {
+    "three": "^0.180.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/three": "^0.180.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5",
+    "playwright": "^1.55.0"
+  }
+}

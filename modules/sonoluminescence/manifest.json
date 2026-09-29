@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "id": "sonoluminescence",
+  "title": "Sonoluminescence",
+  "subtitle": "当声音，成为一束光",
+  "region": "science-valley",
+  "owner": "personal",
+  "category": "RESEARCH",
+  "description": "基于论文 Effects of salt concentration on single-bubble sonoluminescence，计算声驱动下的单气泡半径波形，并展示水活度、蒸气压与气泡动力学的联系。",
+  "tags": [
+    "声致发光",
+    "气泡动力学",
+    "数值模拟"
+  ],
+  "position": [
+    7,
+    -4
+  ],
+  "visual": "light",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "simulation"
+    ],
+    "fragments": [],
+    "connections": []
+  },
+  "portfolio": {
+    "name": "Single-Bubble Sonoluminescence",
+    "category": "Research",
+    "summary": "从盐浓度与水活度，到声驱动下的气泡振荡，探索声音成为微弱光信号的过程。",
+    "technologies": [
+      "Bubble Dynamics",
+      "Rayleigh–Plesset",
+      "Acoustics"
+    ],
+    "featured": true,
+    "order": 7,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "研究尺度",
+      "value": "单气泡"
+    },
+    {
+      "label": "关联过程",
+      "value": "声驱动"
+    },
+    {
+      "label": "模型来源",
+      "value": "本人论文"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 动力学",
+      "body": "论文式 (6) 将 Rayleigh–Plesset 方程、多方气体压力、表面张力、黏性和正弦声压组合。"
+    },
+    {
+      "title": "02 / 盐与溶剂",
+      "body": "从水活度与蒸气压的关系出发，研究溶液条件如何影响气泡内外的压力平衡。"
+    },
+    {
+      "title": "03 / 实验方法",
+      "body": "连接 PZT 声学谐振腔、PLL/PI 共振跟踪与 PMT、光谱仪测量，在半径振荡和微弱光信号之间寻找联系。"
+    }
+  ],
+  "simulation": "sonoluminescence",
+  "media": []
+}

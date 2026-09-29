@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "cat-recognition",
+  "title": "猫咪森林",
+  "subtitle": "在校园里，认出每一个独特的它",
+  "region": "ai-mountain",
+  "owner": "personal",
+  "category": "AI PROJECT",
+  "description": "走进 Vision Forest。由普通照片出发，经过猫咪检测与裁切，再识别北大校园里的猫咪个体。",
+  "tags": [
+    "Computer Vision",
+    "Ensemble",
+    "校园猫咪"
+  ],
+  "position": [
+    -8,
+    -9
+  ],
+  "visual": "forest",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "vision"
+    ],
+    "fragments": [
+      {
+        "id": "session-split",
+        "title": "先认识数据，再认识猫",
+        "body": "猫咪个体数据集按拍摄 session 划分，降低相似照片跨集合产生的数据泄漏风险。看见一只猫，与在真实照片中稳定认出它，是两种不同的挑战。",
+        "position": [
+          -5.4,
+          -2.2
+        ],
+        "growth": {
+          "order": 40,
+          "label": "04 / CNN 猫咪识别"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "target": "photography",
+        "title": "回到观察的起点",
+        "body": "摄影与识别共享“认真看见”的主题。这里是一条策展联系；当前展廊占位画并不是猫咪训练集原图。"
+      },
+      {
+        "target": "emotion-recognition",
+        "title": "沿视觉捷径，返回镜子房间",
+        "body": "对照表情分类与猫咪个体识别的共同基础与不同挑战。"
+      }
+    ]
+  },
+  "wayfinding": {
+    "title": "04 猫咪森林",
+    "subtitle": "CNN · 猫咪识别"
+  },
+  "portfolio": {
+    "name": "PKU Cat Recognition",
+    "category": "AI",
+    "summary": "从检测、裁切到个体识别，让校园里每一次与猫咪的相遇，都能找到名字。",
+    "technologies": [
+      "PyTorch",
+      "YOLO",
+      "ResNet",
+      "ConvNeXt"
+    ],
+    "github": "https://github.com/Sherlock-LXL/pku-cat-recognition",
+    "featured": true,
+    "order": 2,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "个体类别",
+      "value": "99"
+    },
+    {
+      "label": "数据规模",
+      "value": "11,608 张"
+    },
+    {
+      "label": "Top-3",
+      "value": "95.61%"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 先认识数据",
+      "body": "建立猫咪个体数据集，按拍摄 session 划分，降低相似照片跨集合带来的数据泄漏风险。"
+    },
+    {
+      "title": "02 / 看到，再认出",
+      "body": "YOLO 检测 → 15% padding → 224×224 标准化 → ResNet50 / ResNet101 / ConvNeXt-Tiny 等权集成。"
+    },
+    {
+      "title": "03 / 走向应用",
+      "body": "把猫咪识别带到 Windows 桌面。从相机里的相遇，到可以上传照片、寻找名字的真实应用。"
+    }
+  ],
+  "media": []
+}

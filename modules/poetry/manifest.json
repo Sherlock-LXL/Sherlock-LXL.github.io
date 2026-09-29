@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "poetry",
+  "title": "双盲诗花园",
+  "subtitle": "让两个互不相识的句子相遇",
+  "region": "ai-mountain",
+  "owner": "personal",
+  "category": "AI PROJECT",
+  "description": "同一个字符级 LSTM，从两个独立的起点采样。两句诗不共享上下文，让偶然也成为创作的一部分。",
+  "tags": [
+    "LSTM",
+    "生成艺术",
+    "中文诗歌"
+  ],
+  "position": [
+    8,
+    -2
+  ],
+  "visual": "garden",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "generation"
+    ],
+    "ambience": "fireflies",
+    "fragments": [
+      {
+        "id": "independent-beginnings",
+        "title": "两次独立的开始",
+        "body": "Embedding → LSTM → Linear。两句诗都从 BOS 与独立 hidden state 出发，第二句不会看见第一句。序列生成的线索，从诗园继续延伸到语言模型。",
+        "position": [
+          10.6,
+          4.8
+        ],
+        "growth": {
+          "order": 30,
+          "label": "03 / RNN 双盲诗"
+        }
+      }
+    ],
+    "connections": [
+      {
+        "target": "xianglm",
+        "title": "沿着 token，走向另一座塔",
+        "body": "从字符 embedding、逐步采样，到 BPE token 与 Transformer：模型结构不同，序列生成的问题继续向前延伸。沿金色小径探索，或直接抵达 XiangLM。"
+      }
+    ]
+  },
+  "wayfinding": {
+    "title": "03 双盲诗花园",
+    "subtitle": "RNN · 双盲诗"
+  },
+  "portfolio": {
+    "name": "Blind Verse",
+    "category": "AI",
+    "summary": "字符级 LSTM 从两个独立起点采样，让不共享上下文的两句诗偶然相遇。",
+    "technologies": [
+      "PyTorch",
+      "LSTM",
+      "Generative Art"
+    ],
+    "github": "https://github.com/Sherlock-LXL/blind-verse-rnn",
+    "featured": false,
+    "order": 4,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "词表",
+      "value": "5,160"
+    },
+    {
+      "label": "隐藏维度",
+      "value": "1,536"
+    },
+    {
+      "label": "生成方式",
+      "value": "独立 A / B"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 学习文字的相邻关系",
+      "body": "Embedding → 单层 LSTM → Linear。经历语料整理、外部预训练与目标诗歌微调。"
+    },
+    {
+      "title": "02 / 两次独立的开始",
+      "body": "A/B 都从 <BOS> 和全新 hidden state 出发，第二句不会看到第一句。"
+    },
+    {
+      "title": "03 / 给偶然一点方向",
+      "body": "在自由采样之外，从一至三个汉字出发续写，让偶然出现的词句逐渐长成诗意。"
+    }
+  ],
+  "media": []
+}

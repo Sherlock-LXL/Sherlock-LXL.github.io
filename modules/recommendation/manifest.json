@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "id": "recommendation",
+  "title": "礼物驿站",
+  "subtitle": "从一个小小的选择，开始理解偏好",
+  "region": "ai-mountain",
+  "owner": "personal",
+  "category": "AI PROJECT",
+  "description": "一个手写 NumPy 神经网络，把七项连续评分与礼物类别组合，预测候选礼物的喜欢程度。",
+  "tags": [
+    "Neural Network",
+    "NumPy",
+    "推荐"
+  ],
+  "position": [
+    8,
+    12
+  ],
+  "visual": "gift",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "recommendation"
+    ],
+    "fragments": [
+      {
+        "id": "first-network",
+        "title": "把偏好写进网络",
+        "body": "礼物选择器把偏好问题转成神经网络可以处理的输入。这条路线从张量与网络出发，走向视觉、序列和语言。路线按概念组织，不代表项目的精确创作时间。",
+        "position": [
+          4.8,
+          19.5
+        ],
+        "growth": {
+          "order": 10,
+          "label": "01 / 礼物与神经网络"
+        }
+      }
+    ],
+    "connections": []
+  },
+  "wayfinding": {
+    "title": "01 礼物驿站",
+    "subtitle": "神经网络"
+  },
+  "portfolio": {
+    "name": "Gift Chooser",
+    "category": "AI",
+    "summary": "用 NumPy 从零实现神经网络，连接礼物特征、个人偏好与推荐评分。",
+    "technologies": [
+      "Python",
+      "NumPy",
+      "Neural Network"
+    ],
+    "github": "https://github.com/Sherlock-LXL/gift-chooser",
+    "featured": false,
+    "order": 5,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "输入维度",
+      "value": "14"
+    },
+    {
+      "label": "隐藏单元",
+      "value": "8"
+    },
+    {
+      "label": "起点",
+      "value": "61 条样本"
+    }
+  ],
+  "story": [
+    {
+      "title": "01 / 第一个完整闭环",
+      "body": "从数据验证、前向传播、反向传播，到五折交叉验证和模型保存。"
+    },
+    {
+      "title": "02 / 可解释的输入",
+      "body": "明确兴趣、实用性、情感个性化、审美、选择安全度、收纳友好度与价值匹配。"
+    },
+    {
+      "title": "03 / 理解偏好",
+      "body": "将不同维度的礼物特征组合起来，让评分成为一次关于兴趣与心意的探索。"
+    }
+  ],
+  "media": []
+}

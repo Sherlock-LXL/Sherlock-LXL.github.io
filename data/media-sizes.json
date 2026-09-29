@@ -1,0 +1,62 @@
+{
+  "audioEncoding": "LAME VBR q2, 44.1 kHz stereo",
+  "audio": [
+    {
+      "file": "backing-01.mp3",
+      "originalBytes": 9162144,
+      "webBytes": 5355448
+    },
+    {
+      "file": "backing-02.mp3",
+      "originalBytes": 11308608,
+      "webBytes": 6867457
+    },
+    {
+      "file": "backing-03.mp3",
+      "originalBytes": 9017028,
+      "webBytes": 5006076
+    },
+    {
+      "file": "backing-04.mp3",
+      "originalBytes": 10246860,
+      "webBytes": 5917432
+    },
+    {
+      "file": "backing-05.mp3",
+      "originalBytes": 9548205,
+      "webBytes": 5466333
+    },
+    {
+      "file": "backing-06.mp3",
+      "originalBytes": 6490548,
+      "webBytes": 3636286
+    },
+    {
+      "file": "backing-07.mp3",
+      "originalBytes": 9370944,
+      "webBytes": 5474332
+    },
+    {
+      "file": "summer.mp3",
+      "originalBytes": 3969288,
+      "webBytes": 2190062
+    },
+    {
+      "file": "autumn.mp3",
+      "originalBytes": 6761988,
+      "webBytes": 2580860
+    },
+    {
+      "file": "winter.mp3",
+      "originalBytes": 4801965,
+      "webBytes": 2665973
+    },
+    {
+      "file": "spring.mp3",
+      "originalBytes": 2370924,
+      "webBytes": 1046424
+    }
+  ],
+  "previewCount": 20,
+  "previewBytes": 384324
+}

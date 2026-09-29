@@ -1,0 +1,475 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    {
+      "id": "world-guide",
+      "title": "世界向导",
+      "chatModule": "xianglm"
+    }
+  ],
+  "regions": [
+    {
+      "id": "ai-mountain",
+      "title": "AI 山脉",
+      "english": "AI MOUNTAIN",
+      "description": "从第一层神经元，到自己的语言模型。",
+      "color": "#ebbdcf",
+      "position": [
+        -32,
+        -40
+      ],
+      "radius": 26,
+      "scenery": "woodland",
+      "discovery": {
+        "kind": "butterflies",
+        "title": "纸蝶来信",
+        "action": "唤起纸蝶",
+        "description": "一页想象，飞成一小片春天。打开书页，看纸蝶从花园升起。",
+        "position": [
+          12,
+          8.5
+        ],
+        "scale": 0.8
+      },
+      "spawn": [
+        8,
+        23.5
+      ],
+      "terrain": {
+        "kind": "mountain",
+        "height": 14,
+        "terraces": [
+          {
+            "center": [
+              8,
+              12
+            ],
+            "height": 1,
+            "radius": 7
+          },
+          {
+            "center": [
+              -8,
+              5
+            ],
+            "height": 4,
+            "radius": 7
+          },
+          {
+            "center": [
+              8,
+              -2
+            ],
+            "height": 7,
+            "radius": 7
+          },
+          {
+            "center": [
+              -8,
+              -9
+            ],
+            "height": 10,
+            "radius": 7
+          },
+          {
+            "center": [
+              6,
+              -16
+            ],
+            "height": 13,
+            "radius": 7
+          }
+        ],
+        "shortcuts": [
+          {
+            "title": "视觉捷径 · CNN ↔ CNN",
+            "points": [
+              [
+                -8,
+                11.6
+              ],
+              [
+                -14,
+                11.6
+              ],
+              [
+                -15,
+                6
+              ],
+              [
+                -15,
+                1
+              ],
+              [
+                -14,
+                -2.4
+              ],
+              [
+                -8,
+                -2.4
+              ]
+            ],
+            "profile": [
+              [
+                -8,
+                11.6,
+                4
+              ],
+              [
+                -14,
+                11.6,
+                4
+              ],
+              [
+                -15,
+                6,
+                5.4
+              ],
+              [
+                -15,
+                1,
+                8
+              ],
+              [
+                -14,
+                -2.4,
+                10
+              ],
+              [
+                -8,
+                -2.4,
+                10
+              ]
+            ]
+          }
+        ],
+        "route": {
+          "width": 3.2,
+          "points": [
+            [
+              15.8,
+              19.8,
+              0
+            ],
+            [
+              8,
+              23.5,
+              0
+            ],
+            [
+              8,
+              23,
+              0
+            ],
+            [
+              8,
+              22.5,
+              0.108
+            ],
+            [
+              8,
+              21.5,
+              0.362
+            ],
+            [
+              8,
+              20.5,
+              0.667
+            ],
+            [
+              8,
+              19.5,
+              0.911
+            ],
+            [
+              8,
+              18.6,
+              1
+            ],
+            [
+              -8,
+              11.6,
+              4
+            ],
+            [
+              8,
+              4.6,
+              7
+            ],
+            [
+              -8,
+              -2.4,
+              10
+            ],
+            [
+              6,
+              -9.4,
+              13
+            ]
+          ]
+        },
+        "arrivalCourt": {
+          "center": [
+            4.2,
+            18.4
+          ],
+          "radius": 2.3,
+          "height": 1
+        }
+      },
+      "season": "spring",
+      "discoveries": [
+        {
+          "id": "spring-lantern",
+          "kind": "bloom",
+          "title": "春日花灯",
+          "action": "唤醒花瓣",
+          "description": "一盏藏在春径旁的花灯。轻轻唤醒它，花瓣舒展开来，露出一粒温暖的光。",
+          "position": [
+            1,
+            22
+          ]
+        },
+        {
+          "id": "token-loom",
+          "kind": "tokenloom",
+          "title": "词语织机",
+          "action": "拨动词序",
+          "description": "一枚枚词语穿过织机，在山风里编织新的句子。",
+          "position": [
+            11,
+            -6.5
+          ],
+          "scale": 0.68
+        },
+        {
+          "id": "cloud-bells",
+          "kind": "cloudbell",
+          "title": "云间铃",
+          "action": "轻摇云铃",
+          "description": "让三枚小铃追逐山间的风，听一段轻轻落下的旋律。",
+          "position": [
+            -11.5,
+            1
+          ],
+          "scale": 0.68
+        }
+      ]
+    },
+    {
+      "id": "science-valley",
+      "title": "科学山谷",
+      "english": "SCIENCE VALLEY",
+      "description": "在微小的气泡里，探索宏大的物理。",
+      "color": "#cbdde9",
+      "position": [
+        24,
+        -20
+      ],
+      "radius": 17,
+      "scenery": "laboratory",
+      "discovery": {
+        "kind": "bubbles",
+        "title": "气泡许愿机",
+        "action": "释放气泡",
+        "description": "把好奇心放进一颗气泡，让它带着微小的光慢慢升起。",
+        "position": [
+          5,
+          11
+        ]
+      },
+      "season": "winter",
+      "discoveries": [
+        {
+          "id": "orbital-snow",
+          "kind": "orrery",
+          "title": "星轨仪",
+          "action": "拨动星轨",
+          "description": "雪地里的小小天体仪。三道倾斜轨道围绕着光核，像一场可以握在手心的宇宙漫游。",
+          "position": [
+            9,
+            6.5
+          ]
+        },
+        {
+          "id": "snow-globe",
+          "kind": "snowglobe",
+          "title": "掌心雪境",
+          "action": "摇落细雪",
+          "description": "轻轻摇动雪景球，让一场小雪绕过常青树。",
+          "position": [
+            -8,
+            12
+          ],
+          "scale": 0.68
+        },
+        {
+          "id": "newton-cradle",
+          "kind": "pendulum",
+          "title": "雪原钟摆",
+          "action": "拨动钟摆",
+          "description": "拨开第一颗小球，看节奏在两端来回传递。",
+          "position": [
+            2,
+            0
+          ],
+          "scale": 0.68
+        }
+      ]
+    },
+    {
+      "id": "personal-museum",
+      "title": "个人博物馆",
+      "english": "PERSONAL MUSEUM",
+      "description": "光影、旋律，以及成为自己的过程。",
+      "color": "#e3c385",
+      "position": [
+        -24,
+        24
+      ],
+      "radius": 17,
+      "scenery": "museum",
+      "discovery": {
+        "kind": "prism",
+        "title": "光谱风车",
+        "action": "转动光谱",
+        "description": "同一道光，也能拥有不同的颜色。转动雕塑，看彩色叶片缓缓旋转。",
+        "position": [
+          5,
+          11
+        ]
+      },
+      "season": "autumn",
+      "arrivalPath": [
+        [
+          10,
+          -12.5
+        ],
+        [
+          6,
+          -11
+        ]
+      ],
+      "forecourt": [
+        0,
+        -10
+      ],
+      "spawn": [
+        0,
+        -11
+      ],
+      "discoveries": [
+        {
+          "id": "leaf-waltz",
+          "kind": "leaves",
+          "title": "秋叶回旋",
+          "action": "唤起秋风",
+          "description": "落叶没有急着落下。给它们一点秋风，金色的叶片便沿着弧线缓缓起舞。",
+          "position": [
+            11,
+            -8
+          ]
+        },
+        {
+          "id": "autumn-colors",
+          "kind": "kaleidoscope",
+          "title": "秋色万花镜",
+          "action": "转动秋色",
+          "description": "把金色、粉紫与湖蓝转成一朵不断变化的花。",
+          "position": [
+            -12,
+            -6
+          ],
+          "scale": 0.68
+        },
+        {
+          "id": "little-record",
+          "kind": "vinyl",
+          "title": "袖珍唱片机",
+          "action": "转起唱片",
+          "description": "让唱片慢慢转起来，拾起秋日里的一小段音符。",
+          "position": [
+            0,
+            -4
+          ],
+          "scale": 0.68
+        }
+      ]
+    },
+    {
+      "id": "weiming-studio",
+      "title": "未名拾音",
+      "english": "WEIMING STUDIO",
+      "description": "把共同的声音，留给更远的地方。",
+      "color": "#acd9c5",
+      "position": [
+        24,
+        24
+      ],
+      "radius": 17,
+      "scenery": "studio",
+      "discovery": {
+        "kind": "chimes",
+        "title": "星音风铃",
+        "action": "拨响风铃",
+        "description": "给这次旅程留下一小段旋律。开启声音后，可以听见五声音阶的风铃。",
+        "position": [
+          5,
+          11
+        ]
+      },
+      "season": "summer",
+      "arrivalPath": [
+        [
+          -9,
+          -10
+        ]
+      ],
+      "forecourt": [
+        0,
+        -9
+      ],
+      "spawn": [
+        0,
+        -9
+      ],
+      "discoveries": [
+        {
+          "id": "tidal-pearl",
+          "kind": "tides",
+          "title": "潮汐珠",
+          "action": "轻触潮汐",
+          "description": "沙岸边的一粒珍珠，把一次轻触变成一圈圈向外舒展的水纹。",
+          "position": [
+            -10,
+            -5.5
+          ]
+        },
+        {
+          "id": "pearl-shell",
+          "kind": "shell",
+          "title": "藏星贝壳",
+          "action": "打开贝壳",
+          "description": "海风轻轻掀开贝壳，一颗珍珠在里面醒来。",
+          "position": [
+            6,
+            -6
+          ],
+          "scale": 0.68
+        },
+        {
+          "id": "little-beacon",
+          "kind": "lighthouse",
+          "title": "微光灯塔",
+          "action": "点亮航灯",
+          "description": "转动一束温柔的灯光，为远方尚未启航的故事留一个方向。",
+          "position": [
+            -2,
+            -12
+          ],
+          "scale": 0.68
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "id": "weiming",
+  "title": "未名拾音 Studio",
+  "subtitle": "共同创作，让燕来有声",
+  "region": "weiming-studio",
+  "owner": "team",
+  "category": "COLLECTION",
+  "description": "未名拾音的品牌与团队空间。从第一场共同创作出发，连接校园、音乐与影像，让更多声音在这里相遇。",
+  "tags": [
+    "团队品牌",
+    "燕来有声",
+    "音乐影像"
+  ],
+  "position": [
+    0,
+    -2
+  ],
+  "rotation": 180,
+  "visual": "studio",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "listening"
+    ],
+    "ambience": "stage",
+    "fragments": [
+      {
+        "id": "together",
+        "title": "共同的声音",
+        "body": "《燕来有声》属于未名拾音的团队空间。这里保留品牌项目与共同创作的故事，个人音乐历史则在个人博物馆独立展示。",
+        "position": [
+          -3,
+          8
+        ]
+      }
+    ],
+    "connections": []
+  },
+  "portfolio": {
+    "name": "未名拾音 · 燕来有声",
+    "category": "Creative",
+    "summary": "连接校园、音乐与影像的团队创作。《燕来有声》完整 MV 可在哔哩哔哩观看。",
+    "technologies": [
+      "Music",
+      "Film",
+      "Collaboration"
+    ],
+    "demo": "https://www.bilibili.com/video/BV1kCTX6uEf7/",
+    "featured": false,
+    "order": 9,
+    "screenshots": []
+  },
+  "facts": [
+    {
+      "label": "成立日期",
+      "value": "2026.06.16"
+    },
+    {
+      "label": "已发布合作曲",
+      "value": "燕来有声"
+    },
+    {
+      "label": "下一站",
+      "value": "原创中秋曲"
+    }
+  ],
+  "story": [
+    {
+      "title": "2026.06.16 · 未名拾音成立",
+      "body": "未名拾音正式成立。我们以音乐为起点，让创作、演唱与影像彼此连接，把一群人的热爱，汇成可以被听见的作品。"
+    },
+    {
+      "title": "2026.07.06 · 让燕来有声",
+      "body": "与《燕云十六声》合作发布《燕来有声》。让共同的声音走进更广阔的江湖，也为未名拾音留下第一段清晰的创作足迹。点击作品链接，在哔哩哔哩观看完整 MV。"
+    },
+    {
+      "title": "中秋预告 · 共赴一轮明月",
+      "body": "一首由 30 所 985 院校共同演唱、出镜的原创歌曲，计划于中秋发布。以旋律连接不同校园，让相隔山海的青春，在同一轮明月下相遇。曲名尚未确定，更多内容敬请期待。"
+    },
+    {
+      "title": "更远的未来 · 敬请期待",
+      "body": "新的合作、新的旋律与更多相遇，正在路上。未名拾音的故事，将随每一次共同创作继续生长。"
+    }
+  ],
+  "media": [
+    {
+      "kind": "image",
+      "title": "燕来有声",
+      "src": "/assets/modules/weiming/yan-lai-you-sheng.webp",
+      "thumbnail": "/assets/modules/weiming/yan-lai-you-sheng.webp"
+    }
+  ],
+  "link": "https://www.bilibili.com/video/BV1kCTX6uEf7/"
+}

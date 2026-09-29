@@ -1,0 +1,4 @@
+/** Orthogonal building placement keeps model, console, approach and colliders aligned. */
+export function exhibitPoint(module,x=0,z=0){const angle=(module.rotation??0)*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);return {x:module.position[0]+x*c+z*s,z:module.position[1]-x*s+z*c};}
+export function exhibitLocal(module,x,z){const angle=(module.rotation??0)*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle),dx=x-module.position[0],dz=z-module.position[1];return {x:dx*c-dz*s,z:dx*s+dz*c};}
+export function placedCollider(module,o){const p=exhibitPoint(module,o.x,o.z),swap=(module.rotation??0)%180!==0;return {...o,...p,...(o.halfX===undefined?{}:{halfX:swap?o.halfZ:o.halfX,halfZ:swap?o.halfX:o.halfZ}),...(o.segment?{segment:[...Object.values(exhibitPoint(module,o.segment[0],o.segment[1])),...Object.values(exhibitPoint(module,o.segment[2],o.segment[3]))]}:{})};}

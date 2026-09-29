@@ -1,0 +1,46 @@
+{
+  "bubble": {
+    "title": "Wall-Attached Bubble Growth in Electrolyte Solutions",
+    "source": "wall-attached-bubble-growth.docx",
+    "equations": [
+      {
+        "title": "球冠体积系数 · 式 (5)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mrow><mtext>κ</mtext></mrow><mrow><mtext>V</mtext></mrow></msub><mrow><mo>(</mo><mrow><mtext>θ</mtext></mrow><mo>)</mo></mrow><mtext>=</mtext><mfrac><mrow><mtext>π</mtext></mrow><mrow><mtext>3</mtext></mrow></mfrac><mtext>(2-3</mtext><mrow><mrow><mtext>cos</mtext></mrow><mrow><mtext>θ</mtext></mrow></mrow><mtext>+</mtext><mrow><mrow><msup><mrow><mtext>cos</mtext></mrow><mrow><mtext>3</mtext></mrow></msup></mrow><mrow><mtext>θ</mtext></mrow></mrow><mtext>)</mtext></mrow></math>"
+      },
+      {
+        "title": "Henry 定律与 Laplace 压力 · 式 (17)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mrow><mtext>C</mtext></mrow><mrow><mtext>s</mtext></mrow></msub><mrow><mo>(</mo><mrow><mtext>R</mtext></mrow><mo>)</mo></mrow><mtext>=</mtext><msub><mrow><mtext>k</mtext></mrow><mrow><mtext>H</mtext></mrow></msub><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>g</mtext></mrow></msub><mtext>=</mtext><msub><mrow><mtext>k</mtext></mrow><mrow><mtext>H</mtext></mrow></msub><mtext>(</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><mtext>+</mtext><mfrac><mrow><mtext>2σ</mtext></mrow><mrow><mtext>R</mtext></mrow></mfrac><mtext>)</mtext></mrow></math>"
+      },
+      {
+        "title": "Popov 几何因子 · 式 (19)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>f</mtext><mrow><mo>(</mo><mrow><mtext>θ</mtext></mrow><mo>)</mo></mrow><mtext>=</mtext><mfrac><mrow><mrow><mrow><mtext>sin</mtext></mrow><mrow><mtext>θ</mtext></mrow></mrow></mrow><mrow><mtext>1+</mtext><mrow><mrow><mtext>cos</mtext></mrow><mrow><mtext>θ</mtext></mrow></mrow></mrow></mfrac><mtext>+4</mtext><mrow><msubsup><mo>∫</mo><mrow><mtext>0</mtext></mrow><mrow><mtext>∞</mtext></mrow></msubsup><mrow><mfrac><mrow><mtext>1+</mtext><mrow><mrow><mtext>cosh</mtext></mrow><mrow><mtext>2</mtext><mtext>θ</mtext><mtext>ξ</mtext></mrow></mrow></mrow><mrow><mrow><mrow><mtext>sinh</mtext></mrow><mrow><mtext>2π</mtext><mtext>ξ</mtext></mrow></mrow></mrow></mfrac><mrow><mrow><mtext>tanh</mtext></mrow><mrow><mtext>[(</mtext><mtext>π</mtext><mtext>-</mtext><mtext>θ</mtext><mtext>)</mtext><mtext>ξ</mtext><mtext>]</mtext><mtext>d</mtext><mtext>ξ</mtext></mrow></mrow></mrow></mrow></mrow></math>"
+      },
+      {
+        "title": "壁面气泡生长方程 · 式 (23)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mfrac><mrow><mtext>dR</mtext></mrow><mrow><mtext>dt</mtext></mrow></mfrac><mtext>=</mtext><mfrac><mrow><mtext>π</mtext><mrow><mrow><mtext>sin</mtext></mrow><mrow><mtext>θ</mtext></mrow></mrow><mtext>f(θ)</mtext></mrow><mrow><msub><mrow><mtext>κ</mtext></mrow><mrow><mtext>V</mtext></mrow></msub></mrow></mfrac><mfrac><mrow><mtext>R</mtext><mtext>T</mtext><msub><mrow><mtext>D</mtext></mrow><mrow><mtext>g</mtext></mrow></msub><mtext>[</mtext><msub><mrow><mtext>C</mtext></mrow><mrow><mtext>∞</mtext></mrow></msub><mrow><mo>(</mo><mrow><mtext>t</mtext></mrow><mo>)</mo></mrow><mtext>-</mtext><msub><mrow><mtext>k</mtext></mrow><mrow><mtext>H</mtext></mrow></msub><mtext>(</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><mtext>+</mtext><mfrac><mrow><mtext>2σ</mtext></mrow><mrow><mtext>R</mtext></mrow></mfrac><mtext>)]</mtext></mrow><mrow><mtext>3</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><mtext>R+4σ</mtext></mrow></mfrac></mrow></math>"
+      }
+    ]
+  },
+  "sonoluminescence": {
+    "title": "Effects of salt concentration on single-bubble sonoluminescence",
+    "source": "salt-single-bubble-sonoluminescence.docx",
+    "equations": [
+      {
+        "title": "Rayleigh–Plesset 动力学 · 式 (6)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>ρ</mtext><mrow><mo>(</mo><mrow><mfrac><mrow><mtext>3</mtext></mrow><mrow><mtext>2</mtext></mrow></mfrac><msup><mrow><mo>(</mo><mrow><mfrac><mrow><mtext>dR</mtext></mrow><mrow><mtext>d</mtext><mtext>t</mtext></mrow></mfrac></mrow><mo>)</mo></mrow><mrow><mtext>2</mtext></mrow></msup><mtext>+R</mtext><mfrac><mrow><msup><mrow><mtext>d</mtext></mrow><mrow><mtext>2</mtext></mrow></msup><mtext>R</mtext></mrow><mrow><mtext>d</mtext><msup><mrow><mtext>t</mtext></mrow><mrow><mtext>2</mtext></mrow></msup></mrow></mfrac></mrow><mo>)</mo></mrow><mtext>=</mtext><mrow><mo>(</mo><mrow><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><mtext>+</mtext><mfrac><mrow><mtext>2σ</mtext></mrow><mrow><msub><mrow><mtext>R</mtext></mrow><mrow><mtext>0</mtext></mrow></msub></mrow></mfrac><mtext>-</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>v</mtext></mrow></msub></mrow><mo>)</mo></mrow><msup><mrow><mrow><mo>(</mo><mrow><mfrac><mrow><msub><mrow><mtext>R</mtext></mrow><mrow><mtext>0</mtext></mrow></msub></mrow><mrow><mtext>R</mtext></mrow></mfrac></mrow><mo>)</mo></mrow></mrow><mrow><mtext>3κ</mtext></mrow></msup><mtext>+</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>v</mtext></mrow></msub><mtext>-</mtext><mfrac><mrow><mtext>2σ</mtext></mrow><mrow><mtext>R</mtext></mrow></mfrac><mtext>-</mtext><mfrac><mrow><mtext>4μ</mtext></mrow><mrow><mtext>R</mtext></mrow></mfrac><mfrac><mrow><mtext>dR</mtext></mrow><mrow><mtext>d</mtext><mtext>t</mtext></mrow></mfrac><mtext>-</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><mtext>-</mtext><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>A</mtext></mrow></msub><mrow><mrow><mtext>sin</mtext></mrow><mrow><mtext>(ωt)</mtext></mrow></mrow></mrow></math>"
+      },
+      {
+        "title": "准绝热温度关系 · 式 (10)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mtext>T=</mtext><msub><mrow><mtext>T</mtext></mrow><mrow><mtext>0</mtext></mrow></msub><msup><mrow><mo>(</mo><mrow><mtext>(</mtext><mfrac><mrow><msub><mrow><mtext>R</mtext></mrow><mrow><mtext>0</mtext></mrow></msub></mrow><mrow><mtext>R</mtext></mrow></mfrac><mtext>)</mtext></mrow><mo>)</mo></mrow><mrow><mtext>3(γ-1)</mtext></mrow></msup></mrow></math>"
+      },
+      {
+        "title": "水活度 · 式 (12)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mrow><mrow><mtext>ln</mtext></mrow><mrow><msub><mrow><mtext>a</mtext></mrow><mrow><mtext>w</mtext></mrow></msub></mrow></mrow><mtext>=-</mtext><mfrac><mrow><msub><mrow><mtext>M</mtext></mrow><mrow><mtext>w</mtext></mrow></msub></mrow><mrow><mtext>1000</mtext></mrow></mfrac><mtext>ϕ</mtext><mrow><msubsup><mo>∑</mo><mrow></mrow><mrow></mrow></msubsup><mrow><msub><mrow><mtext>m</mtext></mrow><mrow><mtext>i</mtext></mrow></msub></mrow></mrow></mrow></math>"
+      },
+      {
+        "title": "溶液蒸气压 · 式 (13)",
+        "math": "<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>v</mtext></mrow></msub><mtext>=</mtext><msub><mrow><mtext>a</mtext></mrow><mrow><mtext>w</mtext></mrow></msub><msup><mrow><msub><mrow><mtext>P</mtext></mrow><mrow><mtext>v</mtext></mrow></msub></mrow><mrow><mtext>*</mtext></mrow></msup></mrow></math>"
+      }
+    ]
+  }
+}
