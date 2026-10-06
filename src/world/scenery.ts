@@ -1,4 +1,3 @@
-import {researchCamp} from './research-camp';
 import * as T from 'three';
 import { material,mesh,tree,softBox } from './architecture';
 import type { Exhibit,Region } from '../core/types';
@@ -139,10 +138,7 @@ export function dressRegion(region:Region,exhibits:Exhibit[],obstacles:Obstacle[
         for(let n=0;n<3;n++){mesh(g,new T.CylinderGeometry(.018,.018,.4,6),dark,x+n*.22,.2,z);mesh(g,new T.SphereGeometry(.14,12,8),material('#efb7c4'),x+n*.22,.46,z);}}
     },
     laboratory:()=>{
-      g.add(researchCamp());
-      for(let i=0;i<5;i++)block(-9+i*4.5,-12,1.1);
-      for(const x of [-10.5,10.5])block(x,-12.8,.3);
-
+      // The domed research station is built by region-landmarks; keep this forecourt open.
     },
     museum:()=>{
       // Both galleries own their architecture; this shared forecourt stays open.

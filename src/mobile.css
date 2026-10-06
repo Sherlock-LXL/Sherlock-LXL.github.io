@@ -71,6 +71,7 @@
   html.touch-experience .compass,
   html.touch-experience .guide-card,
   html.touch-experience .music-caption{display:none}
+  html.touch-experience .mini-atlas text{display:none}
   html.touch-experience .crosshair{top:calc(50% + 29px)}
 
   html.touch-experience .touch-controls{position:absolute;inset:58px 0 0;display:block;z-index:6;pointer-events:none}

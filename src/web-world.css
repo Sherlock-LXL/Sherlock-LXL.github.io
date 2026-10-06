@@ -21,3 +21,18 @@
 @media(max-width:1320px){.coordinates{display:none}}
 @media(max-width:1000px){.controls-pill{grid-template-columns:minmax(0,1fr) 1px minmax(0,.7fr);width:calc(100% - 54px);left:0;transform:none}.controls-pill #look-hint,.controls-pill i:nth-of-type(2){display:none}}
 @media(max-width:760px){.controls-pill{display:flex;max-width:340px;justify-content:center}.controls-pill>span,.controls-pill i{display:none}.controls-pill button{font-size:12px}}
+
+/* Floating atlas: quick orientation and one-click travel. */
+.mini-atlas{position:absolute;right:28px;top:102px;width:168px;height:168px;border-radius:50%;background:radial-gradient(circle at 48% 42%,#193039f0,#0e212bf5 70%,#0a1920f8);border:1px solid #85b5a73f;box-shadow:0 10px 32px #040c1270,inset 0 1px 0 #ffffff10;backdrop-filter:blur(16px);padding:0;z-index:4;pointer-events:auto}
+.mini-atlas svg{display:block;width:100%;height:100%;overflow:visible}
+.mini-atlas .atlas-sea{fill:#13303a;stroke:#5f8a7f4a;stroke-width:.6}
+.mini-atlas .atlas-region circle{fill:var(--accent);fill-opacity:.65;stroke:#f3eadc80;stroke-width:.6;cursor:pointer;transition:fill-opacity .18s}
+.mini-atlas .atlas-region:hover circle,.mini-atlas .atlas-region:focus circle{fill-opacity:1;stroke:#fff}
+.mini-atlas text{fill:#d5e4de;font-size:5.2px;letter-spacing:.3px;text-anchor:middle;paint-order:stroke;stroke:#0b1a21;stroke-width:1.1;pointer-events:none}
+.mini-atlas .atlas-hub{fill:#f4e3b2;stroke:#fff;stroke-width:.4}
+.mini-atlas #atlas-player circle:first-child{fill:#c7eaa0;stroke:#2a4c3a;stroke-width:.5}
+.mini-atlas #atlas-player .atlas-pulse{fill:none;stroke:#c7eaa0;stroke-width:.6;opacity:.55;animation:atlas-pulse 1.8s infinite ease-out}
+@keyframes atlas-pulse{0%{r:3;opacity:.65}100%{r:9;opacity:0}}
+.main-world:not(.first-person) .mini-atlas{display:none}
+@media(max-width:1180px){.mini-atlas{width:132px;height:132px;right:20px;top:92px}}
+@media(max-width:900px) and (pointer:coarse){html.touch-experience .mini-atlas{top:66px;right:12px;width:112px;height:112px}}

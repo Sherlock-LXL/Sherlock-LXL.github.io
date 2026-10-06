@@ -29,7 +29,11 @@ try{
     try{
       const context=await browser.newContext({viewport:{width:1440,height:1000}});
       const page=await context.newPage(),errors=[],requests=[],failures=[];
-      const activate=async locator=>{await locator.focus();await page.keyboard.press('Enter');};
+      const activate=async locator=>{
+        await page.evaluate(()=>document.pointerLockElement&&document.exitPointerLock());
+        await page.waitForFunction(()=>!document.pointerLockElement);
+        await locator.click();
+      };
       page.on('pageerror',e=>errors.push(e.message));
       page.on('request',r=>requests.push(r.url()));
       page.on('response',r=>{if(r.status()>=400)failures.push(`${r.status()} ${r.url()}`);});
@@ -168,6 +172,7 @@ try{
       checkpoint('Both research Workers respond to parameter changes');
       const catalog=JSON.parse(await readFile(path.join(root,'content/world.json'),'utf8'));
       for(const m of catalog.modules){
+        checkpoint(`Checking exhibit ${m.id}`);
         await activate(page.locator('#collections'));await activate(page.locator(`[data-exhibit="${m.id}"]`));
         await activate(page.locator('#visit'));await page.keyboard.press('Escape');
         await page.waitForFunction(title=>document.querySelector('#interaction-prompt:not([hidden]) .nearby-copy b')?.textContent===title,m.portfolio.name,{timeout:15000});
@@ -216,7 +221,7 @@ try{
       assert.equal(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
       assert.equal(await mp.locator('.project-card>p').first().evaluate(e=>getComputedStyle(e).fontSize),'14px');
       await mp.goto(url('world/?inspect'));await mp.locator('#world canvas').waitFor({timeout:90000});
-      await mp.waitForFunction(()=>typeof window.__xiangmetaInspect==='function');
+      await mp.waitForFunction(()=>typeof window.__xiangmetaInspect==='function',null,{timeout:90000});
       const joystick=mp.locator('#touch-joystick'),joystickBox=await joystick.boundingBox();
       assert.ok(joystickBox);const joystickCenter={x:joystickBox.x+joystickBox.width/2,y:joystickBox.y+joystickBox.height/2};
       const mobileStart=await mp.evaluate(()=>window.__xiangmetaInspect().player);

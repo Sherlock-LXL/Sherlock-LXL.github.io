@@ -2,6 +2,11 @@ import {gardenAccents} from './garden-accents';
 import {regionTexture,loadRegionTextures,configurePreviews,readyPreviews,textureStatus} from './lazy-texture';
 import {islandFoundation} from './island-foundation';
 import {renderSettings} from './render-settings';
+import {regionLandmark} from './region-landmarks';
+import {TravelerEffects} from './traveler-effects';
+import {WorldResonance} from './world-resonance';
+import {WorldWhispers} from './world-whispers';
+import {worldFeatures} from './features';
 import {bridgeLightSpan} from '../../shared/bridge-joints.mjs';
 import * as T from 'three';
 import {exhibitPoint,placedCollider} from '../../shared/exhibit-layout.mjs';
@@ -53,6 +58,7 @@ export class World {
   private observer!:ResizeObserver;private events=new AbortController();private disposers:(()=>void)[]=[];
   private parameters=new Map<string,number>();private mixers:T.AnimationMixer[]=[];private projected=new T.Vector3();
   private wonders!:Discoveries;
+  private traveler?:TravelerEffects;private resonance?:WorldResonance;private whispers?:WorldWhispers;
   private seasons!:Seasons;
   private memories!:Memories;private signatures!:Signatures;private photo!:PhotoCamera;private photoTime={hour:9,cycling:true};private reduced=matchMedia('(prefers-reduced-motion: reduce)');
   private extensions=new Map<string,ReturnType<typeof moduleExtensions>>();
@@ -97,16 +103,53 @@ export class World {
       const [x,z]=r.position;this.island(x,z,r.radius,r.color,exhibits,r);
       // Bridge ends tuck below the island surface, never sharing its depth.
       const distance=Math.hypot(x,z),start=8.4,end=distance-r.radius+.6,length=end-start,mid=(start+end)/2;
-      const bridge=mesh(this.scene,new T.BoxGeometry(5.6,.4,length),material('#f1dfc7',.78,.03,'wood'),x/distance*mid,-.24,z/distance*mid);bridge.rotation.y=Math.atan2(x,z);
-      const rail=material('#a3bbb0'),glow=nightLight(r.color);
+      const bridge=mesh(this.scene,new T.BoxGeometry(5.6,.4,length),material('#efdfc2',.82,.03,'wood'),x/distance*mid,-.24,z/distance*mid);bridge.rotation.y=Math.atan2(x,z);
+      // Plank seams: subtle grooves along the deck.
+      const seamsPlank=material('#ba9f78',.9,0,'wood');
+      for(let p=.45;p<length-.35;p+=.7)mesh(bridge,new T.BoxGeometry(5.36,.006,.025),seamsPlank,0,.203,p-length/2).castShadow=false;
+      const rail=material('#a3bbb0',.5,.1),iron=material('#5c6b70',.5,.2,'metal'),glow=nightLight(r.color),stoneLight=material('#dfd2b3',.9,.02,'stone');
+      // Supporting piers (down into the sea).  Keep clear of the island edge so the arches
+      // never slice through the shoreline terrain.
+      const safeMargin=2.4;
+      const spanStart=-length/2+safeMargin,spanEnd=length/2-safeMargin,span=Math.max(0,spanEnd-spanStart);
+      const pierCount=Math.max(0,Math.floor(span/4.5));
+      for(let i=1;i<=pierCount;i++){
+        const pz=spanStart+span*(i/(pierCount+1));
+        for(const side of [-1,1]){
+          mesh(bridge,new T.CylinderGeometry(.26,.36,6.4,10),stoneLight,side*2.5,-3.2,pz);
+          mesh(bridge,new T.CylinderGeometry(.38,.42,.3,12),iron,side*2.5,-.4,pz).castShadow=false;
+        }
+        const archPoints=Array.from({length:17},(_,j)=>{const u=j/16;return new T.Vector3((u-.5)*5,-Math.sin(u*Math.PI)*2.0-.4,pz);});
+        mesh(bridge,new T.TubeGeometry(new T.CatmullRomCurve3(archPoints),22,.09,8,false),iron);
+      }
       for(const side of [-1,1]){
         const line=bridgeLightSpan(distance,r.radius);
+        // Top handrail.
         mesh(bridge,new T.BoxGeometry(.09,.09,line.length),rail,side*2.65,1.15,line.mid-mid);
-        const seam=mesh(bridge,new T.BoxGeometry(.035,.024,line.length),glow,side*2.65,.285,line.mid-mid);seam.name='bridge-light-seam';
-        for(let p=line.start+.18;p<line.end;p+=1.8)mesh(bridge,new T.BoxGeometry(.1,.95,.1),rail,side*2.65,.67,p-mid);
+        // Mid rail for safer silhouette.
+        mesh(bridge,new T.BoxGeometry(.045,.045,line.length),rail,side*2.65,.78,line.mid-mid).castShadow=false;
+        const seam=mesh(bridge,new T.BoxGeometry(.035,.024,line.length),glow,side*2.65,.285,line.mid-mid);seam.name='bridge-light-seam';seam.castShadow=false;
+        // Balusters, denser.
+        for(let p=line.start+.55;p<line.end-.55;p+=1.1){
+          mesh(bridge,new T.CylinderGeometry(.038,.04,.95,10),rail,side*2.65,.67,p-mid);
+          // Topping bronze cap.
+          mesh(bridge,new T.SphereGeometry(.055,8,6),iron,side*2.65,1.17,p-mid).castShadow=false;
+        }
+        // Lamp posts every 5m.
+        for(let p=line.start+1.5;p<line.end-1.5;p+=5){
+          mesh(bridge,new T.CylinderGeometry(.06,.09,1.7,10),iron,side*2.78,.72,p-mid);
+          mesh(bridge,new T.BoxGeometry(.5,.05,.05),iron,side*(2.78-.25),1.6,p-mid);
+          mesh(bridge,new T.SphereGeometry(.14,12,10),glow,side*(2.78-.5),1.6,p-mid).castShadow=false;
+          mesh(bridge,new T.ConeGeometry(.17,.12,10),iron,side*(2.78-.5),1.74,p-mid);
+        }
       }
       this.disposers.push(batchStatic(bridge));
       const scenery=r.terrain?mountainScenery(r,exhibits,this.obstacles):dressRegion(r,exhibits,this.obstacles);this.scene.add(scenery);this.disposers.push(batchStatic(scenery));
+      const landmark=regionLandmark(r);
+      if(landmark){
+        landmark.root.position.set(r.position[0],0,r.position[1]);this.scene.add(landmark.root);this.disposers.push(batchStatic(landmark.root));
+        for(const c of landmark.colliders)this.obstacles.push({...c,x:r.position[0]+c.x,z:r.position[1]+c.z});
+      }
       const strip=mesh(this.scene,new T.TorusGeometry(r.radius-.28,.027,6,96),glow,x,.045,z);strip.rotation.x=-Math.PI/2;strip.castShadow=false;
       this.label(r.english,new T.Vector3(x,1,z+12),()=>this.focusRegion(r.id),'region-label');
       yield r.title;
@@ -133,12 +176,18 @@ export class World {
     this.harborScene=buildHarbor(this.scene,this.obstacles);this.disposers.push(()=>this.harborScene.dispose());
     this.label('⚓ 海风港口',new T.Vector3(0,-1.7,26.5),()=>bus.emit('harbor',undefined),'harbor-label','harbor');
     const hub=buildHub();this.scene.add(hub);this.disposers.push(batchStatic(hub));
-    this.obstacles.push({x:0,z:0,radius:1.9});
-    mesh(this.guide,new T.SphereGeometry(.42,32,20),nightLight('#bae3d1'));this.guide.position.set(0,4.85,0);this.scene.add(this.guide);
+    this.obstacles.push({x:0,z:0,radius:2.6,height:3.1});
+    // Four hub piers at distance ~1.78 — slender pillars, not full-radius wall.
+    for(let i=0;i<4;i++){const a=i/4*Math.PI*2;this.obstacles.push({x:Math.sin(a)*1.78,z:Math.cos(a)*1.78,radius:.42,height:2.9});}
+    mesh(this.guide,new T.SphereGeometry(.42,32,20),nightLight('#bae3d1'));this.guide.position.set(0,9.5,0);this.scene.add(this.guide);
     for(const angle of [-.45,.45]){const orbit=mesh(this.guide,new T.TorusGeometry(.82,.027,8,64),material('#c8b690',.3,.3));orbit.rotation.x=Math.PI/2;orbit.rotation.y=angle;}
-    this.label('✦ 世界向导',new T.Vector3(0,5.8,0),()=>document.dispatchEvent(new CustomEvent('open-guide')),'guide-label');
+    this.label('✦ 世界向导',new T.Vector3(0,10.4,0),()=>document.dispatchEvent(new CustomEvent('open-guide')),'guide-label');
     this.selected=mesh(this.scene,new T.TorusGeometry(.87,.045,6,48),new T.MeshBasicMaterial({color:'#ddffc3'}),0,.13);this.selected.rotation.x=-Math.PI/2;this.selected.visible=false;
-    this.wonders=new Discoveries(this.scene,discoveries(data.regions),this.obstacles,bus,found);this.disposers.push(()=>this.wonders.dispose());
+    const wonderEntries=discoveries(data.regions);
+    if(worldFeatures.worldResonance){this.resonance=new WorldResonance(hub,data.regions,wonderEntries,bus,found);this.disposers.push(()=>this.resonance?.dispose());}
+    if(worldFeatures.travelerEffects){this.traveler=new TravelerEffects(this.scene,data);this.disposers.push(()=>this.traveler?.dispose());}
+    if(worldFeatures.worldWhispers)this.whispers=new WorldWhispers(bus);
+    this.wonders=new Discoveries(this.scene,wonderEntries,this.obstacles,bus,found);this.disposers.push(()=>this.wonders.dispose());
     const garden=buildGardenRoutes(this.scene,data,this.obstacles);this.disposers.push(garden.release);
     this.seasons=new Seasons(this.scene,data,this.obstacles);this.disposers.push(()=>this.seasons.dispose());
     this.memories=new Memories(this.scene,data,this.obstacles,bus,memories);this.signatures=new Signatures(this.scene,data);
@@ -147,8 +196,8 @@ export class World {
     yield '步道、记忆与四季';
     this.environment.collectLights();this.renderer.shadowMap.needsUpdate=true;
     this.disposers.push(bus.on('interact',m=>this.runHook(m.id,'onInteract')));
-    this.player=createWalker(4.5,5,this.data.regions);
-    Object.assign(this.look,lookAngles(4.5,5,0,0));this.look.pitch=.02;this.syncCamera();
+    this.player=createWalker(5.4,5.4,this.data.regions);
+    Object.assign(this.look,lookAngles(5.4,5.4,-1.5,-1));this.look.pitch=.04;this.syncCamera();
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(host);this.resize();
     const options={signal:this.events.signal};
     window.addEventListener('keydown',event=>{
@@ -162,7 +211,7 @@ export class World {
     window.addEventListener('keyup',e=>this.keys.delete(e.code),options);window.addEventListener('blur',()=>{this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;},options);
     document.addEventListener('visibilitychange',()=>{if(document.hidden){this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.look.release();}},options);
     if(new URLSearchParams(location.search).has('inspect')){
-      const inspect=()=>({benches:garden.benches,walls:garden.walls,snowDrifts:this.seasons.snowDrifts,accents:accents.entries,discoveries:discoveries(data.regions),rails:garden.rails,harbor:{near:this.nearHarbor,...harbor},clouds:{canopyPosition:this.scene.getObjectByName('weather-cloud-canopy')?.position.toArray(),canopyOrder:this.scene.getObjectByName('weather-cloud-canopy')?.renderOrder,puffsOpaque:!((this.scene.getObjectByName('drifting-clouds') as T.Mesh).material as T.Material).transparent},nearArtwork:this.nearArtwork?.id??null,artworks:this.artworks.map(({module,...a})=>({...a,moduleId:module.id})),weather:this.environment.weatherState,snowmen:this.scene.getObjectsByProperty('name','snowman').length,player:{...this.player},camera:this.camera.position.toArray(),yaw:this.look.yaw,pitch:this.look.pitch,mode:this.mode,calls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,hour:this.environment.hour,photo:this.photo.active,photoCamera:this.photo.camera.position.toArray(),gardenRoads:garden.roads,flowerCount:garden.flowerCount,flowerRoots:garden.flowerRoots,shortcuts:this.memories.shortcutPaths,obstacles:this.obstacles,memories:this.memories.entries.map(e=>({id:e.id,x:e.x,z:e.z})),trails:[...this.memories.trailPaths]});
+      const inspect=()=>({benches:garden.benches,walls:garden.walls,snowDrifts:this.seasons.snowDrifts,accents:accents.entries,discoveries:wonderEntries,rails:garden.rails,resonance:this.resonance?.snapshot??null,traveler:this.traveler?.snapshot??null,whispers:this.whispers?.snapshot??null,signatures:this.signatures?.snapshot??[],harbor:{near:this.nearHarbor,...harbor},clouds:{canopyPosition:this.scene.getObjectByName('weather-cloud-canopy')?.position.toArray(),canopyOrder:this.scene.getObjectByName('weather-cloud-canopy')?.renderOrder,puffsOpaque:!((this.scene.getObjectByName('drifting-clouds') as T.Mesh).material as T.Material).transparent},nearArtwork:this.nearArtwork?.id??null,artworks:this.artworks.map(({module,...a})=>({...a,moduleId:module.id})),weather:this.environment.weatherState,snowmen:this.scene.getObjectsByProperty('name','snowman').length,player:{...this.player},camera:this.camera.position.toArray(),yaw:this.look.yaw,pitch:this.look.pitch,mode:this.mode,calls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,hour:this.environment.hour,photo:this.photo.active,photoCamera:this.photo.camera.position.toArray(),gardenRoads:garden.roads,flowerCount:garden.flowerCount,flowerRoots:garden.flowerRoots,shortcuts:this.memories.shortcutPaths,obstacles:this.obstacles,memories:this.memories.entries.map(e=>({id:e.id,x:e.x,z:e.z})),trails:[...this.memories.trailPaths]});
       Object.assign(window,{__xiangmetaInspect:()=>({...inspect(),stations:this.stations.map(s=>({...s,hint:this.scene.getObjectByName(`station-${s.id}`)?.getObjectByName('solid-sign')?.userData.subtitle})),textures:textureStatus(),render:{pixelRatio:this.renderer.getPixelRatio(),shadowSize:renderSettings.shadowSize},foundations:this.scene.getObjectsByProperty('name','stratified-island').length})});this.disposers.push(()=>{delete (window as unknown as Record<string,unknown>).__xiangmetaInspect;});
     }
     this.frame=requestAnimationFrame(this.animate);
@@ -227,7 +276,7 @@ export class World {
   setWeather(kind:string){const cycle=this.environment.weather.cycle;if(kind==="auto"){cycle.automatic=true;return;}cycle.automatic=false;cycle.select(kind);}
   setTime(hour:number){this.environment.setHour(hour);}
   cycleTime(value:boolean){this.environment.cycling=value;}
-  overview(){loadRegionTextures();this.look.release();this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.mode='map';this.host.dataset.view=this.mode;this.mapCamera.position.set(70,74,88);this.orbit.target.set(0,0,0);this.orbit.enabled=!this.paused;this.orbit.update();this.near=null;this.selected.visible=false;this.bus.emit('nearby',null);this.bus.emit('view',this.mode);}
+  overview(){loadRegionTextures();this.look.release();this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.mode='map';this.host.dataset.view=this.mode;this.mapCamera.position.set(96,112,124);this.orbit.target.set(0,0,0);this.orbit.enabled=!this.paused;this.orbit.update();this.near=null;this.selected.visible=false;this.bus.emit('nearby',null);this.bus.emit('view',this.mode);}
   resumeWalk(){this.jumpRequested=false;this.mode='first-person';this.host.dataset.view=this.mode;this.orbit.enabled=false;this.keys.clear();this.touchSide=this.touchForward=0;this.syncCamera();this.bus.emit('view',this.mode);}
   captureMouse(){this.look.capture();}
   private teleport(x:number,z:number,tx:number,tz:number){
@@ -237,6 +286,7 @@ export class World {
       const safe=candidates.find(p=>walkable(p.x,p.z,this.data.regions,this.obstacles));if(!safe)return;point=safe;
     }
     this.player=createWalker(point.x,point.z,this.data.regions);this.jumpRequested=false;Object.assign(this.look,lookAngles(point.x,point.z,tx,tz));this.resumeWalk();
+    this.traveler?.reset(point.x,point.z);
     this.host.classList.remove('arriving');void this.host.offsetWidth;this.host.classList.add('arriving');this.updateLocation();this.updateNearby();this.bus.emit('sound','ui');
   }
   focusRegion(id:string){const r=this.data.regions.find(r=>r.id===id);if(r)this.teleport(r.position[0]+(r.spawn?.[0]??0),r.position[1]+(r.spawn?.[1]??10),r.position[0],r.position[1]-4);}
@@ -246,8 +296,9 @@ export class World {
   setParameter(id:string,value:number){this.parameters.set(id,value);}
   private syncCamera(){this.camera.position.set(this.player.x,this.player.y+EYE_HEIGHT,this.player.z);this.camera.rotation.set(this.look.pitch,this.look.yaw,0,'YXZ');this.host.dataset.feetHeight=this.player.y.toFixed(3);this.host.dataset.grounded=String(this.player.grounded);}
   private updateLocation(){
-    const region=this.data.regions.find(r=>Math.hypot(this.player.x-r.position[0],this.player.z-r.position[1])<r.radius)?.id??'nexus';
-    if(region!==this.region){this.region=region;loadRegionTextures(region);this.bus.emit('region',region);}
+    const region=this.data.regions.find(r=>Math.hypot(this.player.x-r.position[0],this.player.z-r.position[1])<r.radius)?.id
+      ??'nexus';
+    if(region!==this.region){this.region=region;loadRegionTextures(region);this.traveler?.enter(region,this.player.x,this.player.z);this.bus.emit('region',region);}
     this.bus.emit('move',{x:this.player.x,z:this.player.z});
   }
   private updateNearby(){
@@ -281,10 +332,15 @@ export class World {
   }
   private animate=()=>{
     this.frame=requestAnimationFrame(this.animate);const dt=Math.min(this.clock.getDelta(),.1);if(document.hidden)return;const motion=this.photo.active?0:dt;this.time+=motion;
+    const previousX=this.player.x,previousZ=this.player.z;
     this.mixers.forEach(m=>m.update(motion));this.photo.update(dt);if(this.mode==='first-person'){if(!this.paused)this.move(dt);this.syncCamera();}else if(!this.photo.active)this.orbit.update();
-    this.guide.position.y=4.85+Math.sin(this.time*1.2)*.1;this.guide.rotation.y+=motion*.35;
+    const moving=Math.hypot(this.player.x-previousX,this.player.z-previousZ)>.001;
+    this.traveler?.update(motion,this.player.x,this.player.z,this.player.y,this.look.yaw,moving,this.player.grounded,this.reduced.matches,this.region||'nexus');
+    this.whispers?.update(motion,this.region||'nexus',moving,this.mode!=='first-person'||this.paused||!!this.near||!!this.nearArtwork||this.nearHarbor,this.environment.hour,this.resonance?.snapshot.complete);
+    this.resonance?.update(motion,this.reduced.matches);
+    this.guide.position.y=9.5+Math.sin(this.time*1.2)*.1;this.guide.rotation.y+=motion*.35;
     this.harborScene.update(motion);
-    this.environment.update(dt,this.photo.active,this.photo.active?this.photo.camera.position:this.camera.position);this.signatures.update(motion,this.environment.hour,this.reduced.matches);
+    this.environment.update(dt,this.photo.active,this.photo.active?this.photo.camera.position:this.camera.position);this.signatures.update(motion,this.environment.hour,this.reduced.matches,this.player.x,this.player.z,worldFeatures.responsiveSignatures);
     this.seasons.update(motion,this.reduced.matches);
     for(const [id,e] of this.extensions)if(e.scene?.update)try{e.scene.update(motion,this.environment.hour);}catch(error){console.warn(`Module animation ${id} stopped`,error);e.scene.update=undefined;}
     for(const [id,obj] of this.objects){const pulse=obj.getObjectByName('pulse');if(pulse){const value=this.parameters.get(id)??.5;pulse.scale.setScalar(.7+value*.35+Math.sin(this.time*(1+value*4))*.15);}}

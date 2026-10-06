@@ -23,6 +23,8 @@ import {horizons} from './world/horizons';
 import {harborRoutes} from '../shared/harbor.mjs';
 import {weatherKinds,weatherNames} from '../shared/weather.mjs';
 import {artwork} from './world/artwork';
+import {resonantRegions} from '../shared/ambient-response.mjs';
+import {worldFeatures} from './world/features';
 
 const app=document.querySelector<HTMLDivElement>('#app')!;
 const touchExperience=document.documentElement.classList.contains('touch-experience');
@@ -60,6 +62,7 @@ async function boot(){
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>${diagonalArrow}</span></button>
       ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
+      <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-100 -100 200 200" role="img" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="99"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+6}">${escape(r.english)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
     <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div></dialog>`;
@@ -84,6 +87,7 @@ async function boot(){
   $('.main-world').insertAdjacentHTML('beforeend','<button class="interaction-prompt memory-prompt" id="memory-prompt" hidden><span class="interaction-key">G</span><span><b id="memory-near-name"></b><small>收集碎片 · 点亮星图</small></span><span class="prompt-art" id="memory-prompt-icon"></span></button><div id="trail-guide" hidden><span id="trail-text"></span><button id="trail-stop" aria-label="结束路线">×</button></div><div id="photo-toolbar" hidden><div><b>XIANGMETA / PHOTO MODE</b><small>WASD 移动 · Q / E 升降 · 拖动环顾 · P / Esc 返回</small></div><label>视角 <input id="photo-fov" type="range" min="30" max="90" value="60" aria-label="摄影视野"/></label><label>光线 <select id="photo-hour" aria-label="摄影时刻"><option value="">当前时刻</option><option value="6.2">晨曦</option><option value="10">晴昼</option><option value="17.8">暮色</option><option value="22">月夜</option></select></label><button id="photo-save">导出照片</button><button id="postcard-save">制作明信片</button><button id="photo-exit">返回世界</button><span id="photo-status" role="status"></span></div>');
   let stream:MediaStream|undefined;let imageData='';let toastTimer:ReturnType<typeof setTimeout>;
   function toast(text:string){$('.toast').textContent=text;$('.toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.toast').hidden=true,4500);}
+  bus.on('whisper',text=>toast(text));
   function progress(){const count=data.modules.filter(m=>store.visited.has(m.id)).length;$('#progress-count').textContent=`${String(count).padStart(2,'0')} / ${String(data.modules.length).padStart(2,'0')}`;$('#progress-fill').style.width=`${count/data.modules.length*100}%`;$('#favorite-count').textContent=String(data.modules.filter(m=>store.favorites.has(m.id)).length);}
   function stopCamera(){stream?.getTracks().forEach(t=>t.stop());stream=undefined;}
   let cleanupResearch=()=>{};
@@ -246,10 +250,12 @@ async function boot(){
   }
   $('#world').addEventListener('world-context-lost',()=>{app.insertAdjacentHTML('beforeend',`<div class="web-loading"><h1>图形连接已中断</h1><p>重新加载世界，或继续浏览项目。</p><div class="loading-actions"><a href="${escape(location.href)}">重新进入</a><a href="${sitePath('projects/')}">View Projects →</a></div></div>`);});
   const entries=discoveries(data.regions);
+  const resonanceTotal=new Set(entries.map(entry=>entry.regionId)).size;
+  const resonanceCount=()=>resonantRegions(entries,store.discoveries).size;
   function stamps(){const count=entries.filter(d=>store.discoveries.has(d.id)).length;$('#stamp-count').textContent=`${count}/${entries.length}`;$('#journal').hidden=!entries.length;}
   $('#journal').onclick=()=>{
     const count=entries.filter(d=>store.discoveries.has(d.id)).length;
-    showPanel(panelHeader('LITTLE WONDERS','旅行印记')+`<p class="panel-description">${count===entries.length?'每一座岛，都留下了你的好奇心。':'慢一点，也许会发现展台之外的小惊喜。'}<br>已发现 ${count} / ${entries.length} · 记录保存在本机</p><div class="stamp-list">${entries.map(d=>`<article class="stamp-card ${store.discoveries.has(d.id)?'found':''}" data-stamp="${d.id}"><span class="stamp-symbol" style="--stamp:${d.color}">${store.discoveries.has(d.id)?'✧':'◇'}</span><div><small>${escape(d.regionTitle)} · ${store.discoveries.has(d.id)?'已收集':'未发现'}</small><h3>${escape(d.title)}</h3><p>${escape(d.description)}</p><button class="quiet-button" data-wonder-region="${d.regionId}">前往入口 ${diagonalArrow}</button></div></article>`).join('')}</div><p class="source-note">在区域中寻找这些小装置，靠近按 G 触发。风铃遵循右上角声音开关。</p>`);
+    showPanel(panelHeader('LITTLE WONDERS','旅行印记')+`<p class="panel-description">${count===entries.length?'每一座岛，都留下了你的好奇心。':'慢一点，也许会发现展台之外的小惊喜。'}<br>已发现 ${count} / ${entries.length} · 记录保存在本机${worldFeatures.worldResonance?`<br>四域共鸣 ${resonanceCount()} / ${resonanceTotal} · 每个核心区域发现一个装置即可点亮星塔`:''}</p><div class="stamp-list">${entries.map(d=>`<article class="stamp-card ${store.discoveries.has(d.id)?'found':''}" data-stamp="${d.id}"><span class="stamp-symbol" style="--stamp:${d.color}">${store.discoveries.has(d.id)?'✧':'◇'}</span><div><small>${escape(d.regionTitle)} · ${store.discoveries.has(d.id)?'已收集':'未发现'}</small><h3>${escape(d.title)}</h3><p>${escape(d.description)}</p><button class="quiet-button" data-wonder-region="${d.regionId}">前往入口 ${diagonalArrow}</button></div></article>`).join('')}</div><p class="source-note">在区域中寻找这些小装置，靠近按 G 触发。风铃遵循右上角声音开关。</p>`);
     dialog.querySelectorAll<HTMLButtonElement>('[data-wonder-region]').forEach(button=>button.onclick=()=>{world?.focusRegion(button.dataset.wonderRegion!);closePanel();});
   };
   $('#discovery-prompt').onclick=()=>world?.interactDiscovery();
@@ -264,11 +270,11 @@ async function boot(){
     $<HTMLInputElement>('#cycle-time').onchange=e=>world?.cycleTime((e.target as HTMLInputElement).checked);
   };
   bus.on('wonderNearby',d=>{$('#discovery-prompt').hidden=!d;$('#discovery-name').textContent=d?.title??'';$('#discovery-action').textContent=d?`${d.action} · ${store.discoveries.has(d.id)?'再次体验':'收集旅行印记'}`:'';});
-  bus.on('discover',d=>{const first=!store.discoveries.has(d.id);store.discoveries.add(d.id);store.save();stamps();$('#discovery-action').textContent=`${d.action} · 再次体验`;toast(`${first?'发现新印记':'再次体验'} · ${d.title}${d.kind==='chimes'&&store.muted?' · 右上角开启声音，可听见风铃':''}`);});
+  bus.on('discover',d=>{const first=!store.discoveries.has(d.id),before=resonanceCount();store.discoveries.add(d.id);store.save();const after=resonanceCount();stamps();$('#discovery-action').textContent=`${d.action} · 再次体验`;const resonance=worldFeatures.worldResonance&&after>before?(after===resonanceTotal?' · 四域共鸣完成，中央星塔已点亮':` · 四域共鸣 ${after}/${resonanceTotal}`):'';toast(`${first?'发现新印记':'再次体验'} · ${d.title}${resonance}${d.kind==='chimes'&&store.muted?' · 右上角开启声音，可听见风铃':''}`);});
   stamps();
   const overview=()=>{world?.overview();$('#current-region').textContent='世界总览';document.querySelectorAll('.region-nav').forEach(b=>b.classList.remove('active'));$('#overview').classList.add('active');};
   $('#overview').onclick=overview;$('#camera-reset').onclick=()=>world?.resumeWalk();$('#capture-look').onclick=()=>world?.captureMouse();$('.brand').onclick=e=>{e.preventDefault();overview();};
-  document.querySelectorAll<HTMLButtonElement>('.region-nav').forEach(b=>b.onclick=()=>world?.focusRegion(b.dataset.region!));
+  document.querySelectorAll<HTMLButtonElement>('.region-nav').forEach(b=>b.onclick=()=>b.dataset.region&&world?.focusRegion(b.dataset.region));
   $('#collections').onclick=()=>collection();$('#favorites').onclick=()=>collection(true);$('#guide').onclick=showGuide;document.addEventListener('open-guide',showGuide);
   store.muted=true;
   const soundLabel=()=>{const text=store.muted?'开启音乐与音效':'暂停音乐与音效';$('#sound').classList.toggle('enabled',!store.muted);$('#sound').setAttribute('aria-label',text);$('#sound').setAttribute('aria-pressed',String(!store.muted));$('#sound').title=text;};
@@ -279,8 +285,9 @@ async function boot(){
   const openExternal=(url:string)=>{if(document.pointerLockElement)document.exitPointerLock();window.open(url,'_blank','noopener,noreferrer');};
   bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});
   bus.on('demo',m=>{const {demo}=projectLinks(m);if(demo)openExternal(demo);});
-  bus.on('move',p=>{$('#coordinate').textContent=`X ${p.x.toFixed(1)} · Z ${p.z.toFixed(1)}`;});
-  bus.on('view',mode=>{$('.main-world').classList.toggle('first-person',mode==='first-person');$('#view-name').textContent=mode==='first-person'?'第一人称探索':'世界地图';$('#capture-look').hidden=mode==='map';$('#look-hint').textContent=mode==='map'?'拖动旋转 · 滚轮缩放':'点击 / 拖动环顾 · Esc 释放鼠标';if(mode==='first-person')$('#current-region').textContent=data.regions.find(r=>r.english===$('.coordinates small').textContent)?.title??'中央枢纽';});
+  bus.on('move',p=>{$('#coordinate').textContent=`X ${p.x.toFixed(1)} · Z ${p.z.toFixed(1)}`;const marker=document.getElementById('atlas-player');if(marker)marker.setAttribute('transform',`translate(${p.x.toFixed(2)},${p.z.toFixed(2)})`);});
+  document.querySelectorAll<SVGGElement>('[data-mini-region]').forEach(g=>{g.addEventListener('click',()=>world?.focusRegion(g.dataset.miniRegion!));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();world?.focusRegion(g.dataset.miniRegion!);}});});
+  bus.on('view',mode=>{$('.main-world').classList.toggle('first-person',mode==='first-person');$('#view-name').textContent=mode==='first-person'?'第一人称探索':'世界地图';$('#capture-look').hidden=mode==='map';$('#look-hint').textContent=mode==='map'?'拖动旋转 · 滚轮缩放':'点击 / 拖动环顾 · Esc 释放鼠标';if(mode==='first-person'){const english=$('.coordinates small').textContent;$('#current-region').textContent=data.regions.find(r=>r.english===english)?.title??'中央枢纽';}});
   bus.on('look',locked=>{$('.main-world').classList.toggle('mouse-locked',locked);$('#capture-look').textContent=locked?'Esc 释放鼠标':'点击进入环顾';});
   bus.on('region',id=>{const r=data.regions.find(r=>r.id===id);$('#current-region').textContent=r?.title??'中央枢纽';$('.coordinates small').textContent=r?.english??'XIANGMETA NEXUS';document.querySelectorAll<HTMLButtonElement>('.region-nav').forEach(b=>b.classList.toggle('active',b.dataset.region===id));$('#overview').classList.toggle('active',id==='nexus');});
   let nearbyModule:Exhibit|null=null,nearbyArtwork:ArtworkInteraction|null=null,nearbyHarbor=false;

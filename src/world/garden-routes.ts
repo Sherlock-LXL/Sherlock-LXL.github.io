@@ -29,7 +29,7 @@ export function buildGardenRoutes(scene:T.Scene,catalog:Catalog,obstacles:Obstac
         const p=points[reverse?points.length-1:0],q=points[reverse?Math.max(0,points.length-7):Math.min(6,points.length-1)],dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,dz)||1;
         for(let n=0;n<3;n++){const x=p.x+dx/d*(.5+n*.5),z=p.z+dz/d*(.5+n*.5);for(const side of [-1,1]){const stroke=mesh(group,new T.BoxGeometry(.055,.027,.42),glow,x+dz/d*side*.13,groundHeight(x,z,catalog.regions)+.2,z-dx/d*side*.13);stroke.rotation.y=Math.atan2(dx,dz)+side*.65;stroke.castShadow=false;}}
       }
-      let accumulated=0;const samples:number[]=[0];for(let i=1;i<points.length;i++){accumulated+=Math.hypot(points[i].x-points[i-1].x,points[i].z-points[i-1].z);if(accumulated>=1.4){samples.push(i);accumulated=0;}}
+      let accumulated=0;const samples:number[]=[0];for(let i=1;i<points.length;i++){accumulated+=Math.hypot(points[i].x-points[i-1].x,points[i].z-points[i-1].z);if(accumulated>=1.9){samples.push(i);accumulated=0;}}
       for(const side of [-1,1]){
         const candidates=samples.map((i,j)=>{
           const a=points[Math.max(0,i-1)],b=points[Math.min(points.length-1,i+1)],p=points[i],d=Math.hypot(b.x-a.x,b.z-a.z)||1,nx=-(b.z-a.z)/d*side,nz=(b.x-a.x)/d*side,offset=route.width/2+.4,x=p.x+nx*offset,z=p.z+nz*offset;
@@ -37,6 +37,8 @@ export function buildGardenRoutes(scene:T.Scene,catalog:Catalog,obstacles:Obstac
           const junction=prepared.some(other=>other!==route&&closestRoute(x-rx,z-rz,other).distance<other.width/2+.8);
           if(inPlaza||junction||onRegionRoute(x-rx,z-rz,region,[],.8)||closestRoute(x-rx,z-rz,route).distance<route.width/2+.24||!walkable(x,z,catalog.regions,obstacles))return null;
           const y=groundHeight(x,z,catalog.regions);
+          // Guard only the downhill edge. Uphill rails create cages and often cut into the slope.
+          if(groundHeight(p.x,p.z,catalog.regions)-y<.3)return null;
           const rim=Array.from({length:8},(_,n)=>groundHeight(x+Math.cos(n*Math.PI/4)*.13,z+Math.sin(n*Math.PI/4)*.13,catalog.regions));
           if(Math.max(...rim)-Math.min(...rim)>.65)return null;
           return {x,z,y:Math.max(y,...rim,groundHeight(p.x,p.z,catalog.regions)),rootY:Math.min(y,...rim)-.045,j,a,b,p,d,nx,nz};

@@ -51,10 +51,11 @@ export class Seasons {
         // Lobed maple leaves, instanced in drifts, replace the old wheat field.
         const shape=new T.Shape();const outline=[[0,1],[.15,.5],[.43,.68],[.36,.26],[.83,.34],[.65,.05],[1,-.12],[.45,-.27],[.47,-.53],[.1,-.38],[0,-.72],[-.1,-.38],[-.47,-.53],[-.45,-.27],[-1,-.12],[-.65,.05],[-.83,.34],[-.36,.26],[-.43,.68],[-.15,.5]];
         outline.forEach(([x,y],i)=>i?shape.lineTo(x,y):shape.moveTo(x,y));shape.closePath();
-        const leaves=new T.InstancedMesh(new T.ShapeGeometry(shape),new T.MeshStandardMaterial({color:'#ffffff',side:T.DoubleSide,roughness:1}),1900),pose=new T.Object3D();let count=0;
+        const leafMaterial=new T.MeshStandardMaterial({color:'#ffffff',side:T.DoubleSide,roughness:1,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-2});
+        const leaves=new T.InstancedMesh(new T.ShapeGeometry(shape),leafMaterial,1900),pose=new T.Object3D();let count=0;
         for(let i=0;i<11000&&count<1900;i++){const x=(random()*2-1)*(r.radius-1),z=(random()*2-1)*(r.radius-1);if(Math.hypot(x,z)>r.radius-1||exhibits.some(m=>{const p=exhibitLocal(m,x,z);return Math.abs(p.x)<4.9&&p.z>-8.9&&p.z<4;})||obstacles.some(o=>overlaps(x+r.position[0],z+r.position[1],o,.12)))continue;
           if(onRegionRoute(x,z,r,exhibits,.2)&&random()>.08)continue;
-          const size=.10+random()*.13;pose.position.set(x,.028+random()*.015,z);pose.rotation.set(-Math.PI/2,0,random()*6.28);pose.scale.set(size,size,1);pose.updateMatrix();leaves.setMatrixAt(count,pose.matrix);leaves.setColorAt(count++,new T.Color(['#ce7854','#d99650','#d5aa59','#b9664b','#e6bd6b'][i%5]));}
+          const size=.10+random()*.13;pose.position.set(x,.06+random()*.025,z);pose.rotation.set(-Math.PI/2,0,random()*6.28);pose.scale.set(size,size,1);pose.updateMatrix();leaves.setMatrixAt(count,pose.matrix);leaves.setColorAt(count++,new T.Color(['#ce7854','#d99650','#d5aa59','#b9664b','#e6bd6b'][i%5]));}
         leaves.count=count;leaves.receiveShadow=true;root.add(leaves);
       }
       if(r.season==='winter'){

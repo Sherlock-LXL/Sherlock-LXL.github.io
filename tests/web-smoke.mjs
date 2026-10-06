@@ -58,6 +58,10 @@ try{
   await page.locator('#world canvas').waitFor({state:'visible',timeout:15000});
   await page.waitForFunction(()=>Number(document.querySelector('#world')?.dataset.previewReady)>0,null,{timeout:30000});
   await page.locator('#interaction-prompt a[href="https://github.com/Sherlock-LXL/xianglm"]').waitFor({timeout:30000});
+  assert.equal(await page.locator('[data-park],[data-mini-park]').count(),0);
+  assert.equal(await page.evaluate(()=>window.__xiangmetaInspect().foundations),5);
+  assert.equal(await page.evaluate(()=>window.__xiangmetaInspect().resonance.total),4);
+  await page.waitForFunction(()=>window.__xiangmetaInspect().signatures.some(effect=>effect.kind==='tokens'&&effect.activity>.4));
   await context.close();
 
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
@@ -89,12 +93,14 @@ try{
   assert.notEqual(await mobilePage.evaluate(()=>window.__xiangmetaInspect().yaw),dragYaw);
   await joystick.dispatchEvent('pointerup',{pointerId:40,pointerType:'touch',button:0,clientX:joystickCenter.x+20,clientY:joystickCenter.y-32});
   await mobilePage.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:41,pointerType:'touch',clientX:230,clientY:350})));
+  assert.ok(await mobilePage.evaluate(()=>window.__xiangmetaInspect().traveler.activeMarks>0));
+  assert.equal(await mobilePage.locator('.mini-atlas text').first().evaluate(element=>getComputedStyle(element).display),'none');
   assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   await mobile.close();
 
   assert.deepEqual(errors,[]);
   assert.deepEqual(failures,[]);
-  console.log('Smoke passed: landing, project link, 3D startup and mobile touch movement.');
+  console.log('Smoke passed: four-island world, project link, responsive ambience, resonance and mobile movement.');
 }finally{
   await browser.close();
   await new Promise((resolve,reject)=>server.close(error=>error?reject(error):resolve()));
