@@ -11,5 +11,5 @@ const drawings:Record<string,string>={
  collections:'<rect x="4" y="5" width="12" height="11" rx="2" fill="currentColor" fill-opacity=".2"/><rect x="21" y="5" width="11" height="17" rx="2"/><rect x="4" y="21" width="12" height="11" rx="2"/><rect x="21" y="27" width="11" height="5" rx="2" fill="currentColor" fill-opacity=".3"/><path d="m7 13 3-4 3 4M24 18l2-4 3 4"/>',
  favorites:'<path d="M6 9v23l12-6 12 6V9"/><path d="m18 3 3.3 6.7 7.4 1.1-5.4 5.2 1.3 7.4-6.6-3.5-6.6 3.5 1.3-7.4-5.4-5.2 7.4-1.1Z" fill="currentColor" fill-opacity=".25"/>'
 };
-const colors:Record<string,string>={world:'#afcfa1',mountain:'#d5a9bd',science:'#a1c4d5',museum:'#d5bc91',studio:'#a1cfbb',growth:'#abc3d5',horizons:'#bcaed5',harbor:'#9fc9ce',collections:'#d1b9a2',favorites:'#d1b2c7'};
+const colors:Record<string,string>={world:'#3d7560',mountain:'#a34a35',science:'#355f7a',museum:'#93652c',studio:'#3d7560',growth:'#355f7a',horizons:'#6d5683',harbor:'#355f7a',collections:'#93652c',favorites:'#a34a35'};
 export function navIcon(name:string){return `<span class="nav-art" style="color:${colors[name]??colors.world}" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${drawings[name]??drawings.world}</svg></span>`;}

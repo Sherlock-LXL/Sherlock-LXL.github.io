@@ -1,0 +1,8 @@
+import {build} from 'esbuild';import {chromium} from 'playwright';import assert from 'node:assert/strict';import {createServer} from '../backend/server.mjs';import {writeFile} from 'node:fs/promises';
+const code=await build({entryPoints:['tests/model-audit-v18.ts'],bundle:true,write:false,format:'iife',platform:'browser'}),service=await createServer({port:0});
+const browser=await chromium.launch({channel:'msedge',headless:true,args:['--enable-unsafe-swiftshader']}),page=await browser.newPage({viewport:{width:1100,height:850}}),errors=[],results=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'&&/shader|WebGL|THREE/.test(m.text()))errors.push(m.text());});
+try{await page.route('**/__audit',r=>r.fulfill({contentType:'text/html',body:'<body style="margin:0">'}));await page.goto(service.url+'/__audit');await page.addScriptTag({content:code.outputFiles[0].text});
+ for(const id of ['cat','exchange','robot','institute',...service.catalog.public.modules.map(m=>m.id)])for(const a of (['cat','exchange','robot','institute'].includes(id)?[0,.85,2.6]:[.45,2.4])){const result=await page.evaluate(([id,a,c])=>window.auditView(id,a,c),[id,a,service.catalog.public]);assert.deepEqual(result.invalid,[]);if(id==='cat')assert.equal(result.paws,2);assert.ok(result.bounds.every(Number.isFinite));results.push({id,a,...result});await page.screenshot({path:`artifacts/v18-model-${id}-${a}.png`});}
+ assert.deepEqual(errors,[]);await writeFile('artifacts/model-audit-v18.json',JSON.stringify(results,null,2));console.log('PASS: 10 exhibits, resting cat, 3 future islands; finite meshes, images, and 32 multiview renders');
+}finally{await browser.close();service.server.closeAllConnections();service.server.close();}

@@ -1,0 +1,2557 @@
+{
+  "project": "D:\\GitHub\\xiangmeta",
+  "currentVersion": "0.19.0",
+  "protectedRelease": "build/XiangMeta-0.19.0",
+  "archives": [
+    {
+      "source": "docs\\v0.10-four-seasons.md",
+      "archive": "docs\\releases\\0.10.0\\README.md",
+      "sha256": "971e0e3c4114e30a3be7d86f5a5654f4ddab38cab838dc3d0cd6c360fcd3aca4"
+    },
+    {
+      "source": "docs\\v0.11-galleries-and-starlight.md",
+      "archive": "docs\\releases\\0.11.0\\README.md",
+      "sha256": "8d19fe924143a743e49fd7f552725e122e5a8d671f6d99820f8edcab44164aa9"
+    },
+    {
+      "source": "docs\\v0.12-local-runtime.md",
+      "archive": "docs\\releases\\0.12.0\\README.md",
+      "sha256": "67ec225c555bcbfa6b8fe55cda1de515155ead4889ac6e10163d9e08d417f27f"
+    },
+    {
+      "source": "docs\\v0.13-weather-and-galleries.md",
+      "archive": "docs\\releases\\0.13.0\\README.md",
+      "sha256": "c5d24e790754c1f677597fc593f60d6d950fdaa186d00fb4a868a39b2fd19c0b"
+    },
+    {
+      "source": "docs\\v0.13.1-reliability.md",
+      "archive": "docs\\releases\\0.13.1\\README.md",
+      "sha256": "992c3396a920b16d3c752464834a30f9247473b74aaca4ea1b43df8240d0f868"
+    },
+    {
+      "source": "docs\\v0.14-clouds-and-research.md",
+      "archive": "docs\\releases\\0.14.0\\README.md",
+      "sha256": "e333e006bcdfcde3537f02ebf3aeb8739d29a89a6cb38f3d68004de76a3ddb9c"
+    },
+    {
+      "source": "docs\\v0.15-harbor-and-materials.md",
+      "archive": "docs\\releases\\0.15.0\\README.md",
+      "sha256": "153bda0092f14922f0e66f2ed81276325ad2bd31b85e75021838800776b6314a"
+    },
+    {
+      "source": "docs\\v0.16-seasonal-wonders.md",
+      "archive": "docs\\releases\\0.16.0\\README.md",
+      "sha256": "59fd29b893c5ad10f622c29c1772962eb5de340897289faa95a056eb8ac4f694"
+    },
+    {
+      "source": "docs\\v0.17-island-curiosities.md",
+      "archive": "docs\\releases\\0.17.0\\README.md",
+      "sha256": "d7360607fc17753042f645b4245faf3939db64fd0e7ea0244ac7fe5e3d4943df"
+    },
+    {
+      "source": "docs\\v0.18-gardens-and-horizons.md",
+      "archive": "docs\\releases\\0.18.0\\README.md",
+      "sha256": "7596c1ff5f025b6318bf4d5cdf609d308eee838ee24a220c6b2965fecfd559e6"
+    },
+    {
+      "source": "docs\\v0.19-rain-and-clearance.md",
+      "archive": "docs\\releases\\0.19.0\\README.md",
+      "sha256": "e5242016a9e477cb654c4bcd141ee7516b71eaaf133eaa520537c2f37efbbe6a"
+    },
+    {
+      "source": "docs\\v0.2-first-person.md",
+      "archive": "docs\\releases\\0.2.0\\README.md",
+      "sha256": "6540e01e2a2500c1f1a3d2a7f8e7a8b40fc00125545d19675d3217c5e1c09a69"
+    },
+    {
+      "source": "docs\\v0.3-macaron.md",
+      "archive": "docs\\releases\\0.3.0\\README.md",
+      "sha256": "322af790c9cf9cbd7127ce3e2dd96027fa9c72aca0438eb1a3eae6b1f5499dd1"
+    },
+    {
+      "source": "docs\\v0.4-little-wonders.md",
+      "archive": "docs\\releases\\0.4.0\\README.md",
+      "sha256": "029af869afa36c4a2a2868d3b3f0030582e8323cf5941e16fc67136e46611dd7"
+    },
+    {
+      "source": "docs\\v0.5-jump-and-detail.md",
+      "archive": "docs\\releases\\0.5.0\\README.md",
+      "sha256": "c51f5b59fb35d7e07370f90831c823d4fe744a71b60056365be4ba5446f96226"
+    },
+    {
+      "source": "docs\\v0.6-island-time.md",
+      "archive": "docs\\releases\\0.6.0\\README.md",
+      "sha256": "d4f7f6777d2a73453624b30ebe154f9bd73d8ac7f84f94674278cf7a95a798c9"
+    },
+    {
+      "source": "docs\\v0.7-growth-and-memory.md",
+      "archive": "docs\\releases\\0.7.0\\README.md",
+      "sha256": "a7b0ccc554a738bad4f0e4c693b6732f69a230167b1213681b078cbaaf7a192f",
+      "originalSha256": "958e0b5152e2baa45d0493facb3dc0e5b5ce4ab595c21582403edba3e6fa393d",
+      "adjustment": "Only relative Markdown links updated for the archive location."
+    },
+    {
+      "source": "docs\\v0.8-mountain-horizons.md",
+      "archive": "docs\\releases\\0.8.0\\README.md",
+      "sha256": "ffe44559b30a41ca7cb1b4360fbbad36f8fd052f843fc3626dd1e824cbd3b9d0",
+      "originalSha256": "52e5feade184447d83c73eb1388ac59a2474def9f60287a3af99f87ee9474db2",
+      "adjustment": "Only relative Markdown links updated for the archive location."
+    },
+    {
+      "source": "docs\\v0.9-mountain-garden.md",
+      "archive": "docs\\releases\\0.9.0\\README.md",
+      "sha256": "98678d7920405912ec556f77ef243406296462fadd84488366a6e9f236d7d2a5",
+      "originalSha256": "7d3fa37da1baa876068cb83620ef86a797dfc0dd3f7734f769c96aa6bc76433b",
+      "adjustment": "Only relative Markdown links updated for the archive location."
+    },
+    {
+      "source": "docs\\verification.md",
+      "archive": "docs\\releases\\0.1.0\\README.md",
+      "sha256": "d46ae7fc27c0f026f52bfe467dbbe82d670e6ed654185944bd05f49a424c7ef9"
+    },
+    {
+      "source": "README.md",
+      "archive": "docs\\releases\\0.19.0\\project-readme-before-cleanup.md",
+      "sha256": "44964a2255f679f8ea0e855bc4e4758326686697a5ce0ded5ddabe66c7ec8772"
+    },
+    {
+      "source": "build\\XiangMeta-0.12.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.12.0\\delivery\\SHA256.txt",
+      "sha256": "63df907594036d5a4a570eebad7d52ea041d637c70ebcbdd37e7fe60572d36d9"
+    },
+    {
+      "source": "build\\XiangMeta-0.12.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.12.0\\delivery\\使用说明.txt",
+      "sha256": "11402d0ad8daef3a2204d832f43a3d757d0039edef9386355bf2ee21f63133c2"
+    },
+    {
+      "source": "build\\XiangMeta-0.13.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.13.0\\delivery\\SHA256.txt",
+      "sha256": "41c067416ec348e48b64b6569ecf950ba24bbbbcb85af0b3ae6fd6a3345f58df"
+    },
+    {
+      "source": "build\\XiangMeta-0.13.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.13.0\\delivery\\使用说明.txt",
+      "sha256": "57f1c70b5db5a2a9d85ee95b5e2efcc85bf9f15a74cac6a0e40b19150d025df5"
+    },
+    {
+      "source": "build\\XiangMeta-0.13.1\\SHA256.txt",
+      "archive": "docs\\releases\\0.13.1\\delivery\\SHA256.txt",
+      "sha256": "bd3f85e789ccb06a9e17c72a37c058a84fff8c43754d3adbbe3335e2af22abb3"
+    },
+    {
+      "source": "build\\XiangMeta-0.13.1\\使用说明.txt",
+      "archive": "docs\\releases\\0.13.1\\delivery\\使用说明.txt",
+      "sha256": "7e8815079fb045831a91c7c9c988b78c3c3d28eaa7bb97b1de51990efdf6e930"
+    },
+    {
+      "source": "build\\XiangMeta-0.14.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.14.0\\delivery\\SHA256.txt",
+      "sha256": "043d86149c4ba6f2e3e6cbf8007bc7cce00926a05f63c16be7c1a09b3515fb21"
+    },
+    {
+      "source": "build\\XiangMeta-0.14.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.14.0\\delivery\\使用说明.txt",
+      "sha256": "d92acc92006b60df7cb80461b389eac8468bb14932ccd173ebba489daa309fb7"
+    },
+    {
+      "source": "build\\XiangMeta-0.15.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.15.0\\delivery\\SHA256.txt",
+      "sha256": "c5de97564ee3b509c5f9b72ebf9fe920393ebc470a5a1a838d1f16a5babb6c46"
+    },
+    {
+      "source": "build\\XiangMeta-0.15.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.15.0\\delivery\\使用说明.txt",
+      "sha256": "3585eddcb3ac1ae8fd8ba7874c8b47929f167dc05296fb289a1e991b66773791"
+    },
+    {
+      "source": "build\\XiangMeta-0.15.0\\待补资料.md",
+      "archive": "docs\\releases\\0.15.0\\delivery\\待补资料.md",
+      "sha256": "6a9678f037b607eeb26de6439e8f040a3944dc793b859eb9e89ad565d2561cbe"
+    },
+    {
+      "source": "build\\XiangMeta-0.15.0\\更新说明.md",
+      "archive": "docs\\releases\\0.15.0\\delivery\\更新说明.md",
+      "sha256": "153bda0092f14922f0e66f2ed81276325ad2bd31b85e75021838800776b6314a"
+    },
+    {
+      "source": "build\\XiangMeta-0.16.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.16.0\\delivery\\SHA256.txt",
+      "sha256": "28ef6432a3ba30a7fb69cb6ed2809de37134c73806303f6dc1d562f398c842c9"
+    },
+    {
+      "source": "build\\XiangMeta-0.16.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.16.0\\delivery\\使用说明.txt",
+      "sha256": "6510874ca46dee4f66d677ddc9f668a614d1d56f398c3dc41c9637b1396a45b0"
+    },
+    {
+      "source": "build\\XiangMeta-0.16.0\\后续内容备忘.md",
+      "archive": "docs\\releases\\0.16.0\\delivery\\后续内容备忘.md",
+      "sha256": "e980a9bca5a10fbb5f663e3ef5e658d4e93f81797a38437fa3100e7cbe7eddc4"
+    },
+    {
+      "source": "build\\XiangMeta-0.16.0\\更新说明.md",
+      "archive": "docs\\releases\\0.16.0\\delivery\\更新说明.md",
+      "sha256": "59fd29b893c5ad10f622c29c1772962eb5de340897289faa95a056eb8ac4f694"
+    },
+    {
+      "source": "build\\XiangMeta-0.17.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.17.0\\delivery\\SHA256.txt",
+      "sha256": "2e624102218ddda54c8dd35331108f112a678d242b31dad1afc0cf0b7e9268c1"
+    },
+    {
+      "source": "build\\XiangMeta-0.17.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.17.0\\delivery\\使用说明.txt",
+      "sha256": "f4a23378d5821bec2caf6623229b44bb24f489237dfd213890c3c9408d8d3315"
+    },
+    {
+      "source": "build\\XiangMeta-0.17.0\\后续内容备忘.md",
+      "archive": "docs\\releases\\0.17.0\\delivery\\后续内容备忘.md",
+      "sha256": "e980a9bca5a10fbb5f663e3ef5e658d4e93f81797a38437fa3100e7cbe7eddc4"
+    },
+    {
+      "source": "build\\XiangMeta-0.17.0\\更新说明.md",
+      "archive": "docs\\releases\\0.17.0\\delivery\\更新说明.md",
+      "sha256": "d7360607fc17753042f645b4245faf3939db64fd0e7ea0244ac7fe5e3d4943df"
+    },
+    {
+      "source": "build\\XiangMeta-0.18.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.18.0\\delivery\\SHA256.txt",
+      "sha256": "19edf241c1b689b44dc82d1a8ba2ab4224c2a42284dc9254e7a9a76a45572120"
+    },
+    {
+      "source": "build\\XiangMeta-0.18.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.18.0\\delivery\\使用说明.txt",
+      "sha256": "9b3bf9bb9e119b8bdc771f956ad34741133e3b97090e720f4bea6836e9f4ebc3"
+    },
+    {
+      "source": "build\\XiangMeta-0.18.0\\后续内容备忘.md",
+      "archive": "docs\\releases\\0.18.0\\delivery\\后续内容备忘.md",
+      "sha256": "e980a9bca5a10fbb5f663e3ef5e658d4e93f81797a38437fa3100e7cbe7eddc4"
+    },
+    {
+      "source": "build\\XiangMeta-0.18.0\\更新说明.md",
+      "archive": "docs\\releases\\0.18.0\\delivery\\更新说明.md",
+      "sha256": "7596c1ff5f025b6318bf4d5cdf609d308eee838ee24a220c6b2965fecfd559e6"
+    },
+    {
+      "source": "build\\XiangMeta-0.19.0\\SHA256.txt",
+      "archive": "docs\\releases\\0.19.0\\delivery\\SHA256.txt",
+      "sha256": "3001c82a45baff61a11d72b16259892b14de2a101d2d847149e31972f2eaafcf"
+    },
+    {
+      "source": "build\\XiangMeta-0.19.0\\使用说明.txt",
+      "archive": "docs\\releases\\0.19.0\\delivery\\使用说明.txt",
+      "sha256": "46f1575760095be28d0668129bdf1688fa6c152659e5212bca9dc94200c6025c"
+    },
+    {
+      "source": "build\\XiangMeta-0.19.0\\后续内容备忘.md",
+      "archive": "docs\\releases\\0.19.0\\delivery\\后续内容备忘.md",
+      "sha256": "e980a9bca5a10fbb5f663e3ef5e658d4e93f81797a38437fa3100e7cbe7eddc4"
+    },
+    {
+      "source": "build\\XiangMeta-0.19.0\\更新说明.md",
+      "archive": "docs\\releases\\0.19.0\\delivery\\更新说明.md",
+      "sha256": "e5242016a9e477cb654c4bcd141ee7516b71eaaf133eaa520537c2f37efbbe6a"
+    },
+    {
+      "source": "build\\SHA256-0.12.0.txt",
+      "archive": "docs\\releases\\0.12.0\\delivery-root\\SHA256-0.12.0.txt",
+      "sha256": "63df907594036d5a4a570eebad7d52ea041d637c70ebcbdd37e7fe60572d36d9"
+    },
+    {
+      "source": "build\\SHA256-0.13.0.txt",
+      "archive": "docs\\releases\\0.13.0\\delivery-root\\SHA256-0.13.0.txt",
+      "sha256": "41c067416ec348e48b64b6569ecf950ba24bbbbcb85af0b3ae6fd6a3345f58df"
+    },
+    {
+      "source": "build\\SHA256-0.13.1.txt",
+      "archive": "docs\\releases\\0.13.1\\delivery-root\\SHA256-0.13.1.txt",
+      "sha256": "bd3f85e789ccb06a9e17c72a37c058a84fff8c43754d3adbbe3335e2af22abb3"
+    },
+    {
+      "source": "build\\SHA256-0.2.0.txt",
+      "archive": "docs\\releases\\0.2.0\\delivery-root\\SHA256-0.2.0.txt",
+      "sha256": "f8fb0d177db1d4995b807e0870dd86dbf82ba6495cbf413fd77386ffb3a9989b"
+    },
+    {
+      "source": "build\\SHA256-0.3.0.txt",
+      "archive": "docs\\releases\\0.3.0\\delivery-root\\SHA256-0.3.0.txt",
+      "sha256": "f73b84eb197bd81cd5e5d2be7caa37678b099294dd420cca277154593adf5a84"
+    },
+    {
+      "source": "build\\SHA256-0.4.0.txt",
+      "archive": "docs\\releases\\0.4.0\\delivery-root\\SHA256-0.4.0.txt",
+      "sha256": "2fd0200702c35d91683938caab1989310ef0d41d63c674c03ad335b729e5f9c8"
+    },
+    {
+      "source": "build\\SHA256-0.5.0.txt",
+      "archive": "docs\\releases\\0.5.0\\delivery-root\\SHA256-0.5.0.txt",
+      "sha256": "422292cfd3c37b46ae382419ee08d26cd4c91db54c3ec6d60b59a158e574c2b0"
+    },
+    {
+      "source": "build\\SHA256-0.6.0.txt",
+      "archive": "docs\\releases\\0.6.0\\delivery-root\\SHA256-0.6.0.txt",
+      "sha256": "9f5da8bc6a5180627ce8edea5e2a554857e605a7adceec60e60aa84a25206ba5"
+    },
+    {
+      "source": "build\\SHA256.txt",
+      "archive": "docs\\releases\\legacy\\delivery-root\\SHA256.txt",
+      "sha256": "c5de97564ee3b509c5f9b72ebf9fe920393ebc470a5a1a838d1f16a5babb6c46"
+    },
+    {
+      "source": "build\\XiangMeta-0.10.0-x64.sha256",
+      "archive": "docs\\releases\\0.10.0\\delivery-root\\XiangMeta-0.10.0-x64.sha256",
+      "sha256": "0a57cffed09229b2f8a46b15043a8a5ebf9f6ffa57540d78075237d824699049"
+    },
+    {
+      "source": "build\\XiangMeta-0.11.0-x64.sha256",
+      "archive": "docs\\releases\\0.11.0\\delivery-root\\XiangMeta-0.11.0-x64.sha256",
+      "sha256": "f3e9a0798e5f3da20541cb0258de4ea9da136ac570bf75c601ca54b54c1c5eb3"
+    },
+    {
+      "source": "build\\XiangMeta-0.7.0-x64.sha256",
+      "archive": "docs\\releases\\0.7.0\\delivery-root\\XiangMeta-0.7.0-x64.sha256",
+      "sha256": "06aea5c738b2cb1aa6d1ad939af1087b49681bd1932d030401bf9865a0f8aa8b"
+    },
+    {
+      "source": "build\\XiangMeta-0.8.0-x64.sha256",
+      "archive": "docs\\releases\\0.8.0\\delivery-root\\XiangMeta-0.8.0-x64.sha256",
+      "sha256": "1144b7f0e9f3930ff21937b1854e12f6d11be06f0c4b91467844ddfe425a9ba2"
+    },
+    {
+      "source": "build\\XiangMeta-0.9.0-x64.sha256",
+      "archive": "docs\\releases\\0.9.0\\delivery-root\\XiangMeta-0.9.0-x64.sha256",
+      "sha256": "2074b188e5c6d92674a946b88a32d802290e7aed0fc6b9a3acb154c074f51045"
+    },
+    {
+      "source": "build\\使用说明-v0.11.txt",
+      "archive": "docs\\releases\\0.11.0\\delivery-root\\使用说明-v0.11.txt",
+      "sha256": "15a45fb160403697df73b9c191f3962c2832f3d88874d2f0f4bbfd61492c4879"
+    },
+    {
+      "source": "build\\使用说明-v0.12.txt",
+      "archive": "docs\\releases\\0.12.0\\delivery-root\\使用说明-v0.12.txt",
+      "sha256": "11402d0ad8daef3a2204d832f43a3d757d0039edef9386355bf2ee21f63133c2"
+    },
+    {
+      "source": "build\\使用说明-v0.13.txt",
+      "archive": "docs\\releases\\0.13.0\\delivery-root\\使用说明-v0.13.txt",
+      "sha256": "57f1c70b5db5a2a9d85ee95b5e2efcc85bf9f15a74cac6a0e40b19150d025df5"
+    },
+    {
+      "source": "build\\使用说明-v0.7.txt",
+      "archive": "docs\\releases\\0.7.0\\delivery-root\\使用说明-v0.7.txt",
+      "sha256": "f68d4aa2b6ebe34cde9479347f94392c0ca96d52c053890e85298e1b281cf4a9"
+    },
+    {
+      "source": "build\\使用说明.txt",
+      "archive": "docs\\releases\\legacy\\delivery-root\\使用说明.txt",
+      "sha256": "3585eddcb3ac1ae8fd8ba7874c8b47929f167dc05296fb289a1e991b66773791"
+    },
+    {
+      "source": "data\\album-assets.json",
+      "archive": "asset-sources\\metadata\\album-assets.json",
+      "sha256": "44fbd83ca86bf56fb34ab970ae8dfb537bf84a4eb4fd67ba8eb2594abff42da3"
+    },
+    {
+      "source": "data\\personal-assets.json",
+      "archive": "asset-sources\\metadata\\personal-assets.json",
+      "sha256": "4116b62e5d68afd8801741d84120574a7a07abe75178d5f1167a94380dd42e46"
+    },
+    {
+      "source": "data\\media-normalization.json",
+      "archive": "asset-sources\\metadata\\media-normalization.json",
+      "sha256": "29c8a7c713555864bbafe89b2bdc4d544ea50129360960f12dc899e7adaa1fb0"
+    },
+    {
+      "source": "artifacts\\clearance-v19.json",
+      "archive": "artifacts\\current\\clearance-v19.json",
+      "sha256": "a5f12c4d9fb76471f0616064ba6168f46dd5883c1fe0d399b3fefa9a6e1e1d76"
+    },
+    {
+      "source": "artifacts\\mountain-report.json",
+      "archive": "artifacts\\current\\mountain-report.json",
+      "sha256": "8ea04a898cfc6973d5004f8320bebf1c3fb6ff80ce1494437845aac1d4c24488"
+    },
+    {
+      "source": "artifacts\\packed-media-0.19.0.json",
+      "archive": "artifacts\\current\\packed-media-0.19.0.json",
+      "sha256": "760f5f48193f33762db36340a1c7e5b168a44d6181f1d820734ecc6a8027b8fe"
+    },
+    {
+      "source": "artifacts\\portable-regression-0.19.0-content-only.json",
+      "archive": "artifacts\\current\\portable-regression-0.19.0-content-only.json",
+      "sha256": "f7a5fa602ff73e02608691c91028b35cca62fc5b8e1261cf3fa2859597e62bf6"
+    },
+    {
+      "source": "artifacts\\v0.19.0-harbor-native.png",
+      "archive": "artifacts\\current\\v0.19.0-harbor-native.png",
+      "sha256": "0a88ac27be955ff1b4f2cf676718202cc1d05e70f76baff773cc908a6187c965"
+    },
+    {
+      "source": "artifacts\\v0.19.0-personal-music-native.png",
+      "archive": "artifacts\\current\\v0.19.0-personal-music-native.png",
+      "sha256": "4274475dedc2bd472c54919eb6c90f59dc6c53699c4b7b5d120045e45aac34e7"
+    },
+    {
+      "source": "artifacts\\v0.19.0-photography-native.png",
+      "archive": "artifacts\\current\\v0.19.0-photography-native.png",
+      "sha256": "cf8a52f60bfe5a1d6668dbf3e452c2540ce7d304582b01b08e020fffb31d0cfe"
+    },
+    {
+      "source": "artifacts\\v19-clearance-ai-mountain-0.png",
+      "archive": "artifacts\\current\\v19-clearance-ai-mountain-0.png",
+      "sha256": "5e4378dfc85f05583c00526784451e1e1f9c9f2ced97210ae2f19f004408cb60"
+    },
+    {
+      "source": "artifacts\\v19-clearance-ai-mountain-1.png",
+      "archive": "artifacts\\current\\v19-clearance-ai-mountain-1.png",
+      "sha256": "f94b55059188629eae17aadb77b8acba5183d66a85914064ef4a51d3f83953b8"
+    },
+    {
+      "source": "artifacts\\v19-clearance-ai-mountain-2.png",
+      "archive": "artifacts\\current\\v19-clearance-ai-mountain-2.png",
+      "sha256": "5c3018f75466309f7bca9486520a689c9db27e3f215c6c2debe08e95c0f6da97"
+    },
+    {
+      "source": "artifacts\\v19-clearance-harbor.png",
+      "archive": "artifacts\\current\\v19-clearance-harbor.png",
+      "sha256": "074b12581ee83d9d66aca3cdfac174b38d4d9e4672b9bced60c82d585fd76f7e"
+    },
+    {
+      "source": "artifacts\\v19-clearance-hub.png",
+      "archive": "artifacts\\current\\v19-clearance-hub.png",
+      "sha256": "3ba16192a50c9f017eb6ff428be7fd864af6b06a93b43058ed36b49daa9d51a2"
+    },
+    {
+      "source": "artifacts\\v19-clearance-personal-museum-0.png",
+      "archive": "artifacts\\current\\v19-clearance-personal-museum-0.png",
+      "sha256": "60cf97a5195b0ae0855d73b3ea29bed3dae70632d171fe5a8ab5e6f576d83c1b"
+    },
+    {
+      "source": "artifacts\\v19-clearance-personal-museum-1.png",
+      "archive": "artifacts\\current\\v19-clearance-personal-museum-1.png",
+      "sha256": "bfff4850ceb29ec2b3f006db59b37844ad4d6df3a9387a049ccf45a29fae983c"
+    },
+    {
+      "source": "artifacts\\v19-clearance-personal-museum-2.png",
+      "archive": "artifacts\\current\\v19-clearance-personal-museum-2.png",
+      "sha256": "59d35f97ee9365d5d105f6361e15aa3580a529af43ad482208bfb83648577134"
+    },
+    {
+      "source": "artifacts\\v19-clearance-pier.png",
+      "archive": "artifacts\\current\\v19-clearance-pier.png",
+      "sha256": "2e4e2bde077bb6dee7a361b15c496d6d4f67942f216e3f02c9ca52092e172a02"
+    },
+    {
+      "source": "artifacts\\v19-clearance-science-valley-0.png",
+      "archive": "artifacts\\current\\v19-clearance-science-valley-0.png",
+      "sha256": "5ed70a82364034c208d416d77f023c14ef482127afae49115fa4fc9de1effcb0"
+    },
+    {
+      "source": "artifacts\\v19-clearance-science-valley-1.png",
+      "archive": "artifacts\\current\\v19-clearance-science-valley-1.png",
+      "sha256": "e39b34710796c84a2d3f9a4e436dee7fb47f051492b4f856a996682e8d1c8042"
+    },
+    {
+      "source": "artifacts\\v19-clearance-science-valley-2.png",
+      "archive": "artifacts\\current\\v19-clearance-science-valley-2.png",
+      "sha256": "f95eeafce4d10288ffbd5e55a4b55c9fcde23e4190c3af23a61db52740210e4e"
+    },
+    {
+      "source": "artifacts\\v19-clearance-weiming-studio-0.png",
+      "archive": "artifacts\\current\\v19-clearance-weiming-studio-0.png",
+      "sha256": "aa55af06eeec75c661c28623be16cec7d7c4a2477d8a6d3060d499378eec5c9f"
+    },
+    {
+      "source": "artifacts\\v19-clearance-weiming-studio-1.png",
+      "archive": "artifacts\\current\\v19-clearance-weiming-studio-1.png",
+      "sha256": "12331569e23d026ed424b4213bb95d8a76c868fd2b5ee7d796c2c72d5453abd9"
+    },
+    {
+      "source": "artifacts\\v19-clearance-weiming-studio-2.png",
+      "archive": "artifacts\\current\\v19-clearance-weiming-studio-2.png",
+      "sha256": "31535bf46f4a45cc022c30c6c232f860b29cacd60e0e7861e279cbeace2f5403"
+    },
+    {
+      "source": "artifacts\\v19-rain-0.png",
+      "archive": "artifacts\\current\\v19-rain-0.png",
+      "sha256": "d3808f852f29b83216c961cedf94c1ad4cb50cb92ef92f0c6babaf0ce20d9ea5"
+    },
+    {
+      "source": "artifacts\\v19-rain-1.png",
+      "archive": "artifacts\\current\\v19-rain-1.png",
+      "sha256": "513a6efa468ed0b1f99bc67782a1fc8f35e27cd09d1cf192f372406e61c896bb"
+    },
+    {
+      "source": "artifacts\\v19-rain-2.png",
+      "archive": "artifacts\\current\\v19-rain-2.png",
+      "sha256": "1da216ba208a31780de61d6875255cd5cf1855a9c5fd8fa7f39a2aae289d0488"
+    },
+    {
+      "source": "artifacts\\v19-rain-3.png",
+      "archive": "artifacts\\current\\v19-rain-3.png",
+      "sha256": "91bc5853d50c1c06ae427bfc48be299f9577cd963bc38db95df48e1b5ebb7089"
+    },
+    {
+      "source": "artifacts\\v19-rain-4.png",
+      "archive": "artifacts\\current\\v19-rain-4.png",
+      "sha256": "07bc07f9a7543e14eb1abc01b6b166aa6f380a66394d76ff1476e5a25dc76ae0"
+    }
+  ],
+  "remove": [
+    {
+      "path": "docs/v0.10-four-seasons.md",
+      "files": 1,
+      "bytes": 4503
+    },
+    {
+      "path": "docs/v0.11-galleries-and-starlight.md",
+      "files": 1,
+      "bytes": 4736
+    },
+    {
+      "path": "docs/v0.12-local-runtime.md",
+      "files": 1,
+      "bytes": 5699
+    },
+    {
+      "path": "docs/v0.13-weather-and-galleries.md",
+      "files": 1,
+      "bytes": 4520
+    },
+    {
+      "path": "docs/v0.13.1-reliability.md",
+      "files": 1,
+      "bytes": 3245
+    },
+    {
+      "path": "docs/v0.14-clouds-and-research.md",
+      "files": 1,
+      "bytes": 5412
+    },
+    {
+      "path": "docs/v0.15-harbor-and-materials.md",
+      "files": 1,
+      "bytes": 5775
+    },
+    {
+      "path": "docs/v0.16-seasonal-wonders.md",
+      "files": 1,
+      "bytes": 3872
+    },
+    {
+      "path": "docs/v0.17-island-curiosities.md",
+      "files": 1,
+      "bytes": 3201
+    },
+    {
+      "path": "docs/v0.18-gardens-and-horizons.md",
+      "files": 1,
+      "bytes": 3592
+    },
+    {
+      "path": "docs/v0.19-rain-and-clearance.md",
+      "files": 1,
+      "bytes": 2614
+    },
+    {
+      "path": "docs/v0.2-first-person.md",
+      "files": 1,
+      "bytes": 3451
+    },
+    {
+      "path": "docs/v0.3-macaron.md",
+      "files": 1,
+      "bytes": 2801
+    },
+    {
+      "path": "docs/v0.4-little-wonders.md",
+      "files": 1,
+      "bytes": 3380
+    },
+    {
+      "path": "docs/v0.5-jump-and-detail.md",
+      "files": 1,
+      "bytes": 3127
+    },
+    {
+      "path": "docs/v0.6-island-time.md",
+      "files": 1,
+      "bytes": 3601
+    },
+    {
+      "path": "docs/v0.7-growth-and-memory.md",
+      "files": 1,
+      "bytes": 4008
+    },
+    {
+      "path": "docs/v0.8-mountain-horizons.md",
+      "files": 1,
+      "bytes": 3629
+    },
+    {
+      "path": "docs/v0.9-mountain-garden.md",
+      "files": 1,
+      "bytes": 3463
+    },
+    {
+      "path": "docs/verification.md",
+      "files": 1,
+      "bytes": 2842
+    },
+    {
+      "path": ".venv",
+      "files": 27179,
+      "bytes": 1137652607
+    },
+    {
+      "path": "scripts/curate-world-v1.mjs",
+      "files": 1,
+      "bytes": 4155
+    },
+    {
+      "path": "scripts/localize-runtime.py",
+      "files": 1,
+      "bytes": 3760
+    },
+    {
+      "path": "scripts/import-personal-assets.py",
+      "files": 1,
+      "bytes": 4774
+    },
+    {
+      "path": "data/album-assets.json",
+      "files": 1,
+      "bytes": 5731
+    },
+    {
+      "path": "data/personal-assets.json",
+      "files": 1,
+      "bytes": 4243
+    },
+    {
+      "path": "data/media-normalization.json",
+      "files": 1,
+      "bytes": 1130
+    },
+    {
+      "path": "build/builder-debug.yml",
+      "files": 1,
+      "bytes": 6192
+    },
+    {
+      "path": "build/local.json",
+      "files": 1,
+      "bytes": 372
+    },
+    {
+      "path": "build/SHA256-0.12.0.txt",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/SHA256-0.13.0.txt",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/SHA256-0.13.1.txt",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/SHA256-0.2.0.txt",
+      "files": 1,
+      "bytes": 66
+    },
+    {
+      "path": "build/SHA256-0.3.0.txt",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/SHA256-0.4.0.txt",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/SHA256-0.5.0.txt",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/SHA256-0.6.0.txt",
+      "files": 1,
+      "bytes": 66
+    },
+    {
+      "path": "build/SHA256.txt",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/win-unpacked",
+      "files": 160,
+      "bytes": 752327597
+    },
+    {
+      "path": "build/XiangMeta-0.1.0-x64.exe",
+      "files": 1,
+      "bytes": 86529984
+    },
+    {
+      "path": "build/XiangMeta-0.10.0-x64.exe",
+      "files": 1,
+      "bytes": 239332281
+    },
+    {
+      "path": "build/XiangMeta-0.10.0-x64.sha256",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/XiangMeta-0.11.0-x64.exe",
+      "files": 1,
+      "bytes": 420370605
+    },
+    {
+      "path": "build/XiangMeta-0.11.0-x64.sha256",
+      "files": 1,
+      "bytes": 92
+    },
+    {
+      "path": "build/XiangMeta-0.12.0",
+      "files": 19467,
+      "bytes": 2895732588
+    },
+    {
+      "path": "build/XiangMeta-0.12.0-x64.exe",
+      "files": 1,
+      "bytes": 564289074
+    },
+    {
+      "path": "build/XiangMeta-0.13.0",
+      "files": 19467,
+      "bytes": 2895747048
+    },
+    {
+      "path": "build/XiangMeta-0.13.0-x64.exe",
+      "files": 1,
+      "bytes": 564303296
+    },
+    {
+      "path": "build/XiangMeta-0.13.1",
+      "files": 19467,
+      "bytes": 2895749108
+    },
+    {
+      "path": "build/XiangMeta-0.13.1-x64.exe",
+      "files": 1,
+      "bytes": 564305353
+    },
+    {
+      "path": "build/XiangMeta-0.14.0",
+      "files": 19467,
+      "bytes": 3081966499
+    },
+    {
+      "path": "build/XiangMeta-0.14.0-x64.exe",
+      "files": 1,
+      "bytes": 750522555
+    },
+    {
+      "path": "build/XiangMeta-0.15.0",
+      "files": 19469,
+      "bytes": 3081989989
+    },
+    {
+      "path": "build/XiangMeta-0.15.0-x64.exe",
+      "files": 1,
+      "bytes": 750538967
+    },
+    {
+      "path": "build/XiangMeta-0.16.0",
+      "files": 19469,
+      "bytes": 3084378039
+    },
+    {
+      "path": "build/XiangMeta-0.16.0-x64.exe",
+      "files": 1,
+      "bytes": 752929382
+    },
+    {
+      "path": "build/XiangMeta-0.17.0",
+      "files": 19469,
+      "bytes": 3084386693
+    },
+    {
+      "path": "build/XiangMeta-0.17.0-x64.exe",
+      "files": 1,
+      "bytes": 752938707
+    },
+    {
+      "path": "build/XiangMeta-0.18.0",
+      "files": 19469,
+      "bytes": 3084399792
+    },
+    {
+      "path": "build/XiangMeta-0.18.0-x64.exe",
+      "files": 1,
+      "bytes": 752951415
+    },
+    {
+      "path": "build/XiangMeta-0.19.0-x64.exe",
+      "files": 1,
+      "bytes": 752956733
+    },
+    {
+      "path": "build/XiangMeta-0.2.0-x64.exe",
+      "files": 1,
+      "bytes": 86612378
+    },
+    {
+      "path": "build/XiangMeta-0.3.0-x64.exe",
+      "files": 1,
+      "bytes": 86612462
+    },
+    {
+      "path": "build/XiangMeta-0.4.0-x64.exe",
+      "files": 1,
+      "bytes": 86616704
+    },
+    {
+      "path": "build/XiangMeta-0.5.0-x64.exe",
+      "files": 1,
+      "bytes": 86619458
+    },
+    {
+      "path": "build/XiangMeta-0.6.0-x64.exe",
+      "files": 1,
+      "bytes": 86625360
+    },
+    {
+      "path": "build/XiangMeta-0.7.0-x64.exe",
+      "files": 1,
+      "bytes": 86638225
+    },
+    {
+      "path": "build/XiangMeta-0.7.0-x64.sha256",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/XiangMeta-0.8.0-x64.exe",
+      "files": 1,
+      "bytes": 86640611
+    },
+    {
+      "path": "build/XiangMeta-0.8.0-x64.sha256",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/XiangMeta-0.9.0-x64.exe",
+      "files": 1,
+      "bytes": 86645973
+    },
+    {
+      "path": "build/XiangMeta-0.9.0-x64.sha256",
+      "files": 1,
+      "bytes": 91
+    },
+    {
+      "path": "build/使用说明-v0.11.txt",
+      "files": 1,
+      "bytes": 2207
+    },
+    {
+      "path": "build/使用说明-v0.12.txt",
+      "files": 1,
+      "bytes": 822
+    },
+    {
+      "path": "build/使用说明-v0.13.txt",
+      "files": 1,
+      "bytes": 1060
+    },
+    {
+      "path": "build/使用说明-v0.7.txt",
+      "files": 1,
+      "bytes": 1745
+    },
+    {
+      "path": "build/使用说明.txt",
+      "files": 1,
+      "bytes": 1437
+    },
+    {
+      "path": "artifacts/album-secret.png",
+      "files": 1,
+      "bytes": 540454
+    },
+    {
+      "path": "artifacts/album-team-credit.png",
+      "files": 1,
+      "bytes": 543215
+    },
+    {
+      "path": "artifacts/assets-validation.json",
+      "files": 1,
+      "bytes": 1637
+    },
+    {
+      "path": "artifacts/browser-failure.png",
+      "files": 1,
+      "bytes": 347746
+    },
+    {
+      "path": "artifacts/bubble-equations.xml",
+      "files": 1,
+      "bytes": 288103
+    },
+    {
+      "path": "artifacts/bubble-paper.txt",
+      "files": 1,
+      "bytes": 11288
+    },
+    {
+      "path": "artifacts/bundle-model-smoke.json",
+      "files": 1,
+      "bytes": 453
+    },
+    {
+      "path": "artifacts/cleanup-inventory-before.json",
+      "files": 1,
+      "bytes": 1974
+    },
+    {
+      "path": "artifacts/clearance-v19.json",
+      "files": 1,
+      "bytes": 7763
+    },
+    {
+      "path": "artifacts/compact-world.png",
+      "files": 1,
+      "bytes": 315009
+    },
+    {
+      "path": "artifacts/desktop-live-model.png",
+      "files": 1,
+      "bytes": 499760
+    },
+    {
+      "path": "artifacts/detail-cup-0.png",
+      "files": 1,
+      "bytes": 53293
+    },
+    {
+      "path": "artifacts/detail-cup-1.png",
+      "files": 1,
+      "bytes": 47740
+    },
+    {
+      "path": "artifacts/detail-hub-0.png",
+      "files": 1,
+      "bytes": 125667
+    },
+    {
+      "path": "artifacts/detail-hub-1.png",
+      "files": 1,
+      "bytes": 128852
+    },
+    {
+      "path": "artifacts/detail-hub-2.png",
+      "files": 1,
+      "bytes": 125512
+    },
+    {
+      "path": "artifacts/detail-hub-3.png",
+      "files": 1,
+      "bytes": 127048
+    },
+    {
+      "path": "artifacts/detail-sign-0.png",
+      "files": 1,
+      "bytes": 52154
+    },
+    {
+      "path": "artifacts/detail-sign-1.png",
+      "files": 1,
+      "bytes": 55400
+    },
+    {
+      "path": "artifacts/detail-sky-0.png",
+      "files": 1,
+      "bytes": 122159
+    },
+    {
+      "path": "artifacts/detail-sky-1.png",
+      "files": 1,
+      "bytes": 120064
+    },
+    {
+      "path": "artifacts/detail-sky-2.png",
+      "files": 1,
+      "bytes": 76632
+    },
+    {
+      "path": "artifacts/discoveries-failure.png",
+      "files": 1,
+      "bytes": 273533
+    },
+    {
+      "path": "artifacts/first-person-arrival.png",
+      "files": 1,
+      "bytes": 682501
+    },
+    {
+      "path": "artifacts/first-person-personal-museum.png",
+      "files": 1,
+      "bytes": 587550
+    },
+    {
+      "path": "artifacts/first-person-product.png",
+      "files": 1,
+      "bytes": 304032
+    },
+    {
+      "path": "artifacts/first-person-science-valley.png",
+      "files": 1,
+      "bytes": 338003
+    },
+    {
+      "path": "artifacts/first-person-weiming-studio.png",
+      "files": 1,
+      "bytes": 539161
+    },
+    {
+      "path": "artifacts/four-seasons-overview.png",
+      "files": 1,
+      "bytes": 676580
+    },
+    {
+      "path": "artifacts/future-quant-exchange.png",
+      "files": 1,
+      "bytes": 417463
+    },
+    {
+      "path": "artifacts/future-robot-island.png",
+      "files": 1,
+      "bytes": 453122
+    },
+    {
+      "path": "artifacts/gallery-v13-failure.png",
+      "files": 1,
+      "bytes": 890709
+    },
+    {
+      "path": "artifacts/garden-mountain-day.png",
+      "files": 1,
+      "bytes": 1385501
+    },
+    {
+      "path": "artifacts/garden-mountain-night.png",
+      "files": 1,
+      "bytes": 1505749
+    },
+    {
+      "path": "artifacts/garden-path-detail.png",
+      "files": 1,
+      "bytes": 1405836
+    },
+    {
+      "path": "artifacts/growth-path.png",
+      "files": 1,
+      "bytes": 453817
+    },
+    {
+      "path": "artifacts/immersive-gallery.png",
+      "files": 1,
+      "bytes": 621280
+    },
+    {
+      "path": "artifacts/jump-airborne.png",
+      "files": 1,
+      "bytes": 407022
+    },
+    {
+      "path": "artifacts/jump-stone-landing.png",
+      "files": 1,
+      "bytes": 391807
+    },
+    {
+      "path": "artifacts/live-recommendation.png",
+      "files": 1,
+      "bytes": 334523
+    },
+    {
+      "path": "artifacts/living-world-failure.png",
+      "files": 1,
+      "bytes": 298186
+    },
+    {
+      "path": "artifacts/loading-centered.png",
+      "files": 1,
+      "bytes": 9056
+    },
+    {
+      "path": "artifacts/memory-constellation.png",
+      "files": 1,
+      "bytes": 376338
+    },
+    {
+      "path": "artifacts/model-audit-v18.json",
+      "files": 1,
+      "bytes": 8245
+    },
+    {
+      "path": "artifacts/model-smoke.json",
+      "files": 1,
+      "bytes": 1758
+    },
+    {
+      "path": "artifacts/mountain-cat-recognition.png",
+      "files": 1,
+      "bytes": 645590
+    },
+    {
+      "path": "artifacts/mountain-emotion-recognition.png",
+      "files": 1,
+      "bytes": 793758
+    },
+    {
+      "path": "artifacts/mountain-failure.png",
+      "files": 1,
+      "bytes": 676873
+    },
+    {
+      "path": "artifacts/mountain-overview.png",
+      "files": 1,
+      "bytes": 670339
+    },
+    {
+      "path": "artifacts/mountain-poetry.png",
+      "files": 1,
+      "bytes": 723311
+    },
+    {
+      "path": "artifacts/mountain-recommendation.png",
+      "files": 1,
+      "bytes": 736987
+    },
+    {
+      "path": "artifacts/mountain-report.json",
+      "files": 1,
+      "bytes": 799
+    },
+    {
+      "path": "artifacts/mountain-xianglm.png",
+      "files": 1,
+      "bytes": 582580
+    },
+    {
+      "path": "artifacts/movement-report.json",
+      "files": 1,
+      "bytes": 2828
+    },
+    {
+      "path": "artifacts/native-escape-profile",
+      "files": 88,
+      "bytes": 19908301
+    },
+    {
+      "path": "artifacts/night-walk.png",
+      "files": 1,
+      "bytes": 633730
+    },
+    {
+      "path": "artifacts/packed-album-validation.json",
+      "files": 1,
+      "bytes": 1860
+    },
+    {
+      "path": "artifacts/packed-media-0.13.0.json",
+      "files": 1,
+      "bytes": 10540
+    },
+    {
+      "path": "artifacts/packed-media-0.13.1.json",
+      "files": 1,
+      "bytes": 10540
+    },
+    {
+      "path": "artifacts/packed-media-0.14.0.json",
+      "files": 1,
+      "bytes": 10896
+    },
+    {
+      "path": "artifacts/packed-media-0.15.0.json",
+      "files": 1,
+      "bytes": 10896
+    },
+    {
+      "path": "artifacts/packed-media-0.16.0.json",
+      "files": 1,
+      "bytes": 11069
+    },
+    {
+      "path": "artifacts/packed-media-0.17.0.json",
+      "files": 1,
+      "bytes": 11069
+    },
+    {
+      "path": "artifacts/packed-media-0.18.0.json",
+      "files": 1,
+      "bytes": 11069
+    },
+    {
+      "path": "artifacts/packed-media-0.19.0.json",
+      "files": 1,
+      "bytes": 11069
+    },
+    {
+      "path": "artifacts/packed-media-v12.json",
+      "files": 1,
+      "bytes": 10540
+    },
+    {
+      "path": "artifacts/performance-after.json",
+      "files": 1,
+      "bytes": 206
+    },
+    {
+      "path": "artifacts/performance-before.json",
+      "files": 1,
+      "bytes": 204
+    },
+    {
+      "path": "artifacts/performance-final.json",
+      "files": 1,
+      "bytes": 207
+    },
+    {
+      "path": "artifacts/performance-isolated.json",
+      "files": 1,
+      "bytes": 193
+    },
+    {
+      "path": "artifacts/performance-v0.10.json",
+      "files": 1,
+      "bytes": 179
+    },
+    {
+      "path": "artifacts/performance-v0.11.json",
+      "files": 1,
+      "bytes": 709
+    },
+    {
+      "path": "artifacts/performance-v0.12.json",
+      "files": 1,
+      "bytes": 760
+    },
+    {
+      "path": "artifacts/performance-v0.13.json",
+      "files": 1,
+      "bytes": 756
+    },
+    {
+      "path": "artifacts/performance-v0.14-isolated.json",
+      "files": 1,
+      "bytes": 747
+    },
+    {
+      "path": "artifacts/performance-v0.14.json",
+      "files": 1,
+      "bytes": 724
+    },
+    {
+      "path": "artifacts/performance-v0.15-optimized.json",
+      "files": 1,
+      "bytes": 705
+    },
+    {
+      "path": "artifacts/performance-v0.15.json",
+      "files": 1,
+      "bytes": 677
+    },
+    {
+      "path": "artifacts/performance-v0.16-final.json",
+      "files": 1,
+      "bytes": 764
+    },
+    {
+      "path": "artifacts/performance-v0.16.json",
+      "files": 1,
+      "bytes": 764
+    },
+    {
+      "path": "artifacts/performance-v0.17-final.json",
+      "files": 1,
+      "bytes": 750
+    },
+    {
+      "path": "artifacts/performance-v0.18-final.json",
+      "files": 1,
+      "bytes": 764
+    },
+    {
+      "path": "artifacts/performance-v0.7.json",
+      "files": 1,
+      "bytes": 208
+    },
+    {
+      "path": "artifacts/performance-v0.8.json",
+      "files": 1,
+      "bytes": 220
+    },
+    {
+      "path": "artifacts/performance-v0.9.json",
+      "files": 1,
+      "bytes": 233
+    },
+    {
+      "path": "artifacts/personal-photo-contact.jpg",
+      "files": 1,
+      "bytes": 129555
+    },
+    {
+      "path": "artifacts/photo-mode.png",
+      "files": 1,
+      "bytes": 543517
+    },
+    {
+      "path": "artifacts/photography-world-originals.png",
+      "files": 1,
+      "bytes": 720329
+    },
+    {
+      "path": "artifacts/placement-v17-before.json",
+      "files": 1,
+      "bytes": 63570
+    },
+    {
+      "path": "artifacts/placement-v17-candidates.json",
+      "files": 1,
+      "bytes": 48209
+    },
+    {
+      "path": "artifacts/poetry-unified-font.png",
+      "files": 1,
+      "bytes": 341515
+    },
+    {
+      "path": "artifacts/portable-albums-0.11.0.png",
+      "files": 1,
+      "bytes": 671790
+    },
+    {
+      "path": "artifacts/portable-albums-0.12.0.png",
+      "files": 1,
+      "bytes": 710510
+    },
+    {
+      "path": "artifacts/portable-albums-0.13.0.png",
+      "files": 1,
+      "bytes": 720374
+    },
+    {
+      "path": "artifacts/portable-failure.png",
+      "files": 1,
+      "bytes": 603696
+    },
+    {
+      "path": "artifacts/portable-poetry-0.12.0.png",
+      "files": 1,
+      "bytes": 582308
+    },
+    {
+      "path": "artifacts/portable-poetry-0.13.0.png",
+      "files": 1,
+      "bytes": 576597
+    },
+    {
+      "path": "artifacts/portable-product-0.10.0.png",
+      "files": 1,
+      "bytes": 610762
+    },
+    {
+      "path": "artifacts/portable-product-0.11.0.png",
+      "files": 1,
+      "bytes": 610719
+    },
+    {
+      "path": "artifacts/portable-product-0.12.0.png",
+      "files": 1,
+      "bytes": 604445
+    },
+    {
+      "path": "artifacts/portable-product-0.13.0.png",
+      "files": 1,
+      "bytes": 602920
+    },
+    {
+      "path": "artifacts/portable-product-0.3.0.png",
+      "files": 1,
+      "bytes": 571652
+    },
+    {
+      "path": "artifacts/portable-product-0.5.0.png",
+      "files": 1,
+      "bytes": 560320
+    },
+    {
+      "path": "artifacts/portable-product-0.6.0.png",
+      "files": 1,
+      "bytes": 562201
+    },
+    {
+      "path": "artifacts/portable-product-0.7.0.png",
+      "files": 1,
+      "bytes": 570126
+    },
+    {
+      "path": "artifacts/portable-product-0.8.0.png",
+      "files": 1,
+      "bytes": 579660
+    },
+    {
+      "path": "artifacts/portable-product-0.9.0.png",
+      "files": 1,
+      "bytes": 603444
+    },
+    {
+      "path": "artifacts/portable-product-v02.png",
+      "files": 1,
+      "bytes": 584683
+    },
+    {
+      "path": "artifacts/portable-regression-0.13.1.json",
+      "files": 1,
+      "bytes": 139
+    },
+    {
+      "path": "artifacts/portable-regression-0.14.0-content-only.json",
+      "files": 1,
+      "bytes": 208
+    },
+    {
+      "path": "artifacts/portable-regression-0.15.0-content-only.json",
+      "files": 1,
+      "bytes": 250
+    },
+    {
+      "path": "artifacts/portable-regression-0.16.0-content-only.json",
+      "files": 1,
+      "bytes": 293
+    },
+    {
+      "path": "artifacts/portable-regression-0.17.0-content-only.json",
+      "files": 1,
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/portable-regression-0.18.0-content-only.json",
+      "files": 1,
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/portable-regression-0.19.0-content-only.json",
+      "files": 1,
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/portable-regression-profile",
+      "files": 132,
+      "bytes": 36063388
+    },
+    {
+      "path": "artifacts/portable-world.png",
+      "files": 1,
+      "bytes": 1267238
+    },
+    {
+      "path": "artifacts/portable-xianglm-0.12.0.png",
+      "files": 1,
+      "bytes": 572846
+    },
+    {
+      "path": "artifacts/portable-xianglm-0.13.0.png",
+      "files": 1,
+      "bytes": 567859
+    },
+    {
+      "path": "artifacts/prepare-cleanup.py",
+      "files": 1,
+      "bytes": 4229
+    },
+    {
+      "path": "artifacts/real-photography.png",
+      "files": 1,
+      "bytes": 433045
+    },
+    {
+      "path": "artifacts/refined-arrival.png",
+      "files": 1,
+      "bytes": 700327
+    },
+    {
+      "path": "artifacts/refinement-failure.png",
+      "files": 1,
+      "bytes": 724336
+    },
+    {
+      "path": "artifacts/refinement-report.json",
+      "files": 1,
+      "bytes": 185
+    },
+    {
+      "path": "artifacts/refinement-v11-failure.png",
+      "files": 1,
+      "bytes": 545069
+    },
+    {
+      "path": "artifacts/release-v0.15.json",
+      "files": 1,
+      "bytes": 391
+    },
+    {
+      "path": "artifacts/science-lab.png",
+      "files": 1,
+      "bytes": 362866
+    },
+    {
+      "path": "artifacts/season-audio-failure.png",
+      "files": 1,
+      "bytes": 282422
+    },
+    {
+      "path": "artifacts/season-autumn.png",
+      "files": 1,
+      "bytes": 1233150
+    },
+    {
+      "path": "artifacts/season-spring.png",
+      "files": 1,
+      "bytes": 1542300
+    },
+    {
+      "path": "artifacts/season-summer.png",
+      "files": 1,
+      "bytes": 1065914
+    },
+    {
+      "path": "artifacts/season-winter.png",
+      "files": 1,
+      "bytes": 1080014
+    },
+    {
+      "path": "artifacts/sky-dawn.png",
+      "files": 1,
+      "bytes": 744643
+    },
+    {
+      "path": "artifacts/sky-day.png",
+      "files": 1,
+      "bytes": 689347
+    },
+    {
+      "path": "artifacts/sky-night.png",
+      "files": 1,
+      "bytes": 757079
+    },
+    {
+      "path": "artifacts/sky-sunset.png",
+      "files": 1,
+      "bytes": 708504
+    },
+    {
+      "path": "artifacts/sonoluminescence-equations.xml",
+      "files": 1,
+      "bytes": 288400
+    },
+    {
+      "path": "artifacts/sonoluminescence-paper.txt",
+      "files": 1,
+      "bytes": 16037
+    },
+    {
+      "path": "artifacts/stepping-garden.png",
+      "files": 1,
+      "bytes": 318938
+    },
+    {
+      "path": "artifacts/streaming-browser-report.json",
+      "files": 1,
+      "bytes": 700
+    },
+    {
+      "path": "artifacts/streaming-poetry.png",
+      "files": 1,
+      "bytes": 278020
+    },
+    {
+      "path": "artifacts/streaming-xianglm.png",
+      "files": 1,
+      "bytes": 267796
+    },
+    {
+      "path": "artifacts/titlebar-v17-profile",
+      "files": 80,
+      "bytes": 18599878
+    },
+    {
+      "path": "artifacts/travel-stamps.png",
+      "files": 1,
+      "bytes": 558115
+    },
+    {
+      "path": "artifacts/v0.14.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1077934
+    },
+    {
+      "path": "artifacts/v0.14.0-photography-native.png",
+      "files": 1,
+      "bytes": 1249187
+    },
+    {
+      "path": "artifacts/v0.15.0-harbor-native.png",
+      "files": 1,
+      "bytes": 793706
+    },
+    {
+      "path": "artifacts/v0.15.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1472916
+    },
+    {
+      "path": "artifacts/v0.15.0-photography-native.png",
+      "files": 1,
+      "bytes": 1629512
+    },
+    {
+      "path": "artifacts/v0.16.0-harbor-native.png",
+      "files": 1,
+      "bytes": 749669
+    },
+    {
+      "path": "artifacts/v0.16.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1541986
+    },
+    {
+      "path": "artifacts/v0.16.0-photography-native.png",
+      "files": 1,
+      "bytes": 1635095
+    },
+    {
+      "path": "artifacts/v0.17.0-harbor-native.png",
+      "files": 1,
+      "bytes": 724480
+    },
+    {
+      "path": "artifacts/v0.17.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1551851
+    },
+    {
+      "path": "artifacts/v0.17.0-photography-native.png",
+      "files": 1,
+      "bytes": 1660561
+    },
+    {
+      "path": "artifacts/v0.18.0-harbor-native.png",
+      "files": 1,
+      "bytes": 733119
+    },
+    {
+      "path": "artifacts/v0.18.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1469172
+    },
+    {
+      "path": "artifacts/v0.18.0-photography-native.png",
+      "files": 1,
+      "bytes": 1654763
+    },
+    {
+      "path": "artifacts/v0.19.0-harbor-native.png",
+      "files": 1,
+      "bytes": 741980
+    },
+    {
+      "path": "artifacts/v0.19.0-personal-music-native.png",
+      "files": 1,
+      "bytes": 1560556
+    },
+    {
+      "path": "artifacts/v0.19.0-photography-native.png",
+      "files": 1,
+      "bytes": 1654868
+    },
+    {
+      "path": "artifacts/v11-bubble-lab.png",
+      "files": 1,
+      "bytes": 409837
+    },
+    {
+      "path": "artifacts/v11-personal-music.png",
+      "files": 1,
+      "bytes": 814346
+    },
+    {
+      "path": "artifacts/v11-photography.png",
+      "files": 1,
+      "bytes": 864264
+    },
+    {
+      "path": "artifacts/v11-sonoluminescence.png",
+      "files": 1,
+      "bytes": 464328
+    },
+    {
+      "path": "artifacts/v12-central-hub-day.png",
+      "files": 1,
+      "bytes": 525867
+    },
+    {
+      "path": "artifacts/v12-central-hub-night.png",
+      "files": 1,
+      "bytes": 528310
+    },
+    {
+      "path": "artifacts/v12-central-hub.png",
+      "files": 1,
+      "bytes": 486510
+    },
+    {
+      "path": "artifacts/v12-entrance-personal-music.png",
+      "files": 1,
+      "bytes": 593163
+    },
+    {
+      "path": "artifacts/v12-entrance-photography.png",
+      "files": 1,
+      "bytes": 675156
+    },
+    {
+      "path": "artifacts/v12-entrance-weiming.png",
+      "files": 1,
+      "bytes": 420720
+    },
+    {
+      "path": "artifacts/v13-memory-atlas.png",
+      "files": 1,
+      "bytes": 436681
+    },
+    {
+      "path": "artifacts/v13-memory-detail.png",
+      "files": 1,
+      "bytes": 527349
+    },
+    {
+      "path": "artifacts/v13-weather-cloudy.png",
+      "files": 1,
+      "bytes": 734053
+    },
+    {
+      "path": "artifacts/v13-weather-overcast.png",
+      "files": 1,
+      "bytes": 737391
+    },
+    {
+      "path": "artifacts/v13-weather-rain.png",
+      "files": 1,
+      "bytes": 750362
+    },
+    {
+      "path": "artifacts/v13-weather-snow.png",
+      "files": 1,
+      "bytes": 698826
+    },
+    {
+      "path": "artifacts/v13-work-personal-music.png",
+      "files": 1,
+      "bytes": 527944
+    },
+    {
+      "path": "artifacts/v13-work-photography.png",
+      "files": 1,
+      "bytes": 642186
+    },
+    {
+      "path": "artifacts/v13.1-personal-music-native.png",
+      "files": 1,
+      "bytes": 1052516
+    },
+    {
+      "path": "artifacts/v13.1-photography-native.png",
+      "files": 1,
+      "bytes": 1247972
+    },
+    {
+      "path": "artifacts/v14-bubble-lab-curves.png",
+      "files": 1,
+      "bytes": 380102
+    },
+    {
+      "path": "artifacts/v14-bubble-lab-equations.png",
+      "files": 1,
+      "bytes": 403014
+    },
+    {
+      "path": "artifacts/v14-mv.png",
+      "files": 1,
+      "bytes": 626168
+    },
+    {
+      "path": "artifacts/v14-sonoluminescence-curves.png",
+      "files": 1,
+      "bytes": 397503
+    },
+    {
+      "path": "artifacts/v14-sonoluminescence-equations.png",
+      "files": 1,
+      "bytes": 378634
+    },
+    {
+      "path": "artifacts/v15-cloud-depth.png",
+      "files": 1,
+      "bytes": 77485
+    },
+    {
+      "path": "artifacts/v15-harbor-760.png",
+      "files": 1,
+      "bytes": 71974
+    },
+    {
+      "path": "artifacts/v15-harbor-900.png",
+      "files": 1,
+      "bytes": 178305
+    },
+    {
+      "path": "artifacts/v15-harbor-pier.png",
+      "files": 1,
+      "bytes": 455216
+    },
+    {
+      "path": "artifacts/v15-harbor-ticket.png",
+      "files": 1,
+      "bytes": 479767
+    },
+    {
+      "path": "artifacts/v15-team-timeline.png",
+      "files": 1,
+      "bytes": 338267
+    },
+    {
+      "path": "artifacts/v15-world-overview.png",
+      "files": 1,
+      "bytes": 686660
+    },
+    {
+      "path": "artifacts/v16-bloom.png",
+      "files": 1,
+      "bytes": 682591
+    },
+    {
+      "path": "artifacts/v16-boat-0.6.png",
+      "files": 1,
+      "bytes": 463870
+    },
+    {
+      "path": "artifacts/v16-boat-1.55.png",
+      "files": 1,
+      "bytes": 436716
+    },
+    {
+      "path": "artifacts/v16-boat-2.7.png",
+      "files": 1,
+      "bytes": 378177
+    },
+    {
+      "path": "artifacts/v16-bubbles.png",
+      "files": 1,
+      "bytes": 474866
+    },
+    {
+      "path": "artifacts/v16-butterflies.png",
+      "files": 1,
+      "bytes": 613450
+    },
+    {
+      "path": "artifacts/v16-chimes.png",
+      "files": 1,
+      "bytes": 506734
+    },
+    {
+      "path": "artifacts/v16-clouds.png",
+      "files": 1,
+      "bytes": 166415
+    },
+    {
+      "path": "artifacts/v16-leaves.png",
+      "files": 1,
+      "bytes": 700502
+    },
+    {
+      "path": "artifacts/v16-orrery.png",
+      "files": 1,
+      "bytes": 553996
+    },
+    {
+      "path": "artifacts/v16-prism.png",
+      "files": 1,
+      "bytes": 647028
+    },
+    {
+      "path": "artifacts/v16-sidebar-1500.png",
+      "files": 1,
+      "bytes": 683183
+    },
+    {
+      "path": "artifacts/v16-sidebar-760.png",
+      "files": 1,
+      "bytes": 497934
+    },
+    {
+      "path": "artifacts/v16-sidebar-initial.png",
+      "files": 1,
+      "bytes": 730541
+    },
+    {
+      "path": "artifacts/v16-studio-0.2.png",
+      "files": 1,
+      "bytes": 476521
+    },
+    {
+      "path": "artifacts/v16-studio-1.48.png",
+      "files": 1,
+      "bytes": 274790
+    },
+    {
+      "path": "artifacts/v16-studio-2.7.png",
+      "files": 1,
+      "bytes": 339736
+    },
+    {
+      "path": "artifacts/v16-tides.png",
+      "files": 1,
+      "bytes": 653975
+    },
+    {
+      "path": "artifacts/v16-wonders-failure.png",
+      "files": 1,
+      "bytes": 562283
+    },
+    {
+      "path": "artifacts/v17-bloom.png",
+      "files": 1,
+      "bytes": 743079
+    },
+    {
+      "path": "artifacts/v17-bubbles.png",
+      "files": 1,
+      "bytes": 459419
+    },
+    {
+      "path": "artifacts/v17-butterflies.png",
+      "files": 1,
+      "bytes": 845432
+    },
+    {
+      "path": "artifacts/v17-cat-0.9.png",
+      "files": 1,
+      "bytes": 376296
+    },
+    {
+      "path": "artifacts/v17-cat-0.png",
+      "files": 1,
+      "bytes": 452440
+    },
+    {
+      "path": "artifacts/v17-cat-2.4.png",
+      "files": 1,
+      "bytes": 231491
+    },
+    {
+      "path": "artifacts/v17-chimes.png",
+      "files": 1,
+      "bytes": 476014
+    },
+    {
+      "path": "artifacts/v17-cloudbell.png",
+      "files": 1,
+      "bytes": 788505
+    },
+    {
+      "path": "artifacts/v17-desktop-1500.png",
+      "files": 1,
+      "bytes": 1232496
+    },
+    {
+      "path": "artifacts/v17-desktop-900.png",
+      "files": 1,
+      "bytes": 543495
+    },
+    {
+      "path": "artifacts/v17-detail-cloudbell.png",
+      "files": 1,
+      "bytes": 47377
+    },
+    {
+      "path": "artifacts/v17-detail-kaleidoscope.png",
+      "files": 1,
+      "bytes": 75532
+    },
+    {
+      "path": "artifacts/v17-detail-lighthouse.png",
+      "files": 1,
+      "bytes": 53842
+    },
+    {
+      "path": "artifacts/v17-detail-pendulum.png",
+      "files": 1,
+      "bytes": 65470
+    },
+    {
+      "path": "artifacts/v17-detail-shell.png",
+      "files": 1,
+      "bytes": 50197
+    },
+    {
+      "path": "artifacts/v17-detail-snowglobe.png",
+      "files": 1,
+      "bytes": 37402
+    },
+    {
+      "path": "artifacts/v17-detail-tokenloom.png",
+      "files": 1,
+      "bytes": 34337
+    },
+    {
+      "path": "artifacts/v17-detail-vinyl.png",
+      "files": 1,
+      "bytes": 55571
+    },
+    {
+      "path": "artifacts/v17-kaleidoscope.png",
+      "files": 1,
+      "bytes": 556072
+    },
+    {
+      "path": "artifacts/v17-leaves.png",
+      "files": 1,
+      "bytes": 615982
+    },
+    {
+      "path": "artifacts/v17-lighthouse.png",
+      "files": 1,
+      "bytes": 572455
+    },
+    {
+      "path": "artifacts/v17-orrery.png",
+      "files": 1,
+      "bytes": 544520
+    },
+    {
+      "path": "artifacts/v17-pendulum.png",
+      "files": 1,
+      "bytes": 507923
+    },
+    {
+      "path": "artifacts/v17-photography-footer-1500.png",
+      "files": 1,
+      "bytes": 887294
+    },
+    {
+      "path": "artifacts/v17-photography-footer-760.png",
+      "files": 1,
+      "bytes": 441916
+    },
+    {
+      "path": "artifacts/v17-photography-footer-900.png",
+      "files": 1,
+      "bytes": 631597
+    },
+    {
+      "path": "artifacts/v17-photos-1500.png",
+      "files": 1,
+      "bytes": 887504
+    },
+    {
+      "path": "artifacts/v17-photos-760.png",
+      "files": 1,
+      "bytes": 441988
+    },
+    {
+      "path": "artifacts/v17-photos-900.png",
+      "files": 1,
+      "bytes": 631687
+    },
+    {
+      "path": "artifacts/v17-poetry-footer-1500.png",
+      "files": 1,
+      "bytes": 193834
+    },
+    {
+      "path": "artifacts/v17-poetry-footer-760.png",
+      "files": 1,
+      "bytes": 47314
+    },
+    {
+      "path": "artifacts/v17-poetry-footer-900.png",
+      "files": 1,
+      "bytes": 78461
+    },
+    {
+      "path": "artifacts/v17-prism.png",
+      "files": 1,
+      "bytes": 569917
+    },
+    {
+      "path": "artifacts/v17-shell.png",
+      "files": 1,
+      "bytes": 444437
+    },
+    {
+      "path": "artifacts/v17-sidebar-1500.png",
+      "files": 1,
+      "bytes": 639646
+    },
+    {
+      "path": "artifacts/v17-sidebar-760.png",
+      "files": 1,
+      "bytes": 462979
+    },
+    {
+      "path": "artifacts/v17-snowglobe.png",
+      "files": 1,
+      "bytes": 612128
+    },
+    {
+      "path": "artifacts/v17-tides.png",
+      "files": 1,
+      "bytes": 604067
+    },
+    {
+      "path": "artifacts/v17-tokenloom.png",
+      "files": 1,
+      "bytes": 844608
+    },
+    {
+      "path": "artifacts/v17-vinyl.png",
+      "files": 1,
+      "bytes": 951394
+    },
+    {
+      "path": "artifacts/v17-wonders-failure.png",
+      "files": 1,
+      "bytes": 773523
+    },
+    {
+      "path": "artifacts/v18-garden-ai-mountain.png",
+      "files": 1,
+      "bytes": 621136
+    },
+    {
+      "path": "artifacts/v18-garden-personal-museum.png",
+      "files": 1,
+      "bytes": 892841
+    },
+    {
+      "path": "artifacts/v18-garden-science-valley.png",
+      "files": 1,
+      "bytes": 443397
+    },
+    {
+      "path": "artifacts/v18-garden-weiming-studio.png",
+      "files": 1,
+      "bytes": 809635
+    },
+    {
+      "path": "artifacts/v18-horizon-ai-institute.png",
+      "files": 1,
+      "bytes": 416278
+    },
+    {
+      "path": "artifacts/v18-horizon-debug.png",
+      "files": 1,
+      "bytes": 279620
+    },
+    {
+      "path": "artifacts/v18-horizon-quant-exchange.png",
+      "files": 1,
+      "bytes": 397258
+    },
+    {
+      "path": "artifacts/v18-horizon-robot-island.png",
+      "files": 1,
+      "bytes": 433302
+    },
+    {
+      "path": "artifacts/v18-model-bubble-lab-0.45.png",
+      "files": 1,
+      "bytes": 226689
+    },
+    {
+      "path": "artifacts/v18-model-bubble-lab-2.4.png",
+      "files": 1,
+      "bytes": 272209
+    },
+    {
+      "path": "artifacts/v18-model-cat-0.85.png",
+      "files": 1,
+      "bytes": 102308
+    },
+    {
+      "path": "artifacts/v18-model-cat-0.png",
+      "files": 1,
+      "bytes": 105144
+    },
+    {
+      "path": "artifacts/v18-model-cat-2.6.png",
+      "files": 1,
+      "bytes": 83728
+    },
+    {
+      "path": "artifacts/v18-model-cat-recognition-0.45.png",
+      "files": 1,
+      "bytes": 186682
+    },
+    {
+      "path": "artifacts/v18-model-cat-recognition-2.4.png",
+      "files": 1,
+      "bytes": 182405
+    },
+    {
+      "path": "artifacts/v18-model-emotion-recognition-0.45.png",
+      "files": 1,
+      "bytes": 155845
+    },
+    {
+      "path": "artifacts/v18-model-emotion-recognition-2.4.png",
+      "files": 1,
+      "bytes": 152898
+    },
+    {
+      "path": "artifacts/v18-model-exchange-0.85.png",
+      "files": 1,
+      "bytes": 139880
+    },
+    {
+      "path": "artifacts/v18-model-exchange-0.png",
+      "files": 1,
+      "bytes": 116308
+    },
+    {
+      "path": "artifacts/v18-model-exchange-2.6.png",
+      "files": 1,
+      "bytes": 127431
+    },
+    {
+      "path": "artifacts/v18-model-institute-0.85.png",
+      "files": 1,
+      "bytes": 130751
+    },
+    {
+      "path": "artifacts/v18-model-institute-0.png",
+      "files": 1,
+      "bytes": 118153
+    },
+    {
+      "path": "artifacts/v18-model-institute-2.6.png",
+      "files": 1,
+      "bytes": 126193
+    },
+    {
+      "path": "artifacts/v18-model-personal-music-0.45.png",
+      "files": 1,
+      "bytes": 284962
+    },
+    {
+      "path": "artifacts/v18-model-personal-music-2.4.png",
+      "files": 1,
+      "bytes": 274401
+    },
+    {
+      "path": "artifacts/v18-model-photography-0.45.png",
+      "files": 1,
+      "bytes": 279970
+    },
+    {
+      "path": "artifacts/v18-model-photography-2.4.png",
+      "files": 1,
+      "bytes": 276288
+    },
+    {
+      "path": "artifacts/v18-model-poetry-0.45.png",
+      "files": 1,
+      "bytes": 130663
+    },
+    {
+      "path": "artifacts/v18-model-poetry-2.4.png",
+      "files": 1,
+      "bytes": 137583
+    },
+    {
+      "path": "artifacts/v18-model-recommendation-0.45.png",
+      "files": 1,
+      "bytes": 115841
+    },
+    {
+      "path": "artifacts/v18-model-recommendation-2.4.png",
+      "files": 1,
+      "bytes": 117699
+    },
+    {
+      "path": "artifacts/v18-model-robot-0.85.png",
+      "files": 1,
+      "bytes": 135034
+    },
+    {
+      "path": "artifacts/v18-model-robot-0.png",
+      "files": 1,
+      "bytes": 124758
+    },
+    {
+      "path": "artifacts/v18-model-robot-2.6.png",
+      "files": 1,
+      "bytes": 130458
+    },
+    {
+      "path": "artifacts/v18-model-sonoluminescence-0.45.png",
+      "files": 1,
+      "bytes": 228097
+    },
+    {
+      "path": "artifacts/v18-model-sonoluminescence-2.4.png",
+      "files": 1,
+      "bytes": 212882
+    },
+    {
+      "path": "artifacts/v18-model-weiming-0.45.png",
+      "files": 1,
+      "bytes": 332309
+    },
+    {
+      "path": "artifacts/v18-model-weiming-2.4.png",
+      "files": 1,
+      "bytes": 189226
+    },
+    {
+      "path": "artifacts/v18-model-xianglm-0.45.png",
+      "files": 1,
+      "bytes": 132518
+    },
+    {
+      "path": "artifacts/v18-model-xianglm-2.4.png",
+      "files": 1,
+      "bytes": 131125
+    },
+    {
+      "path": "artifacts/v18-ui-gallery.png",
+      "files": 1,
+      "bytes": 777182
+    },
+    {
+      "path": "artifacts/v18-world-ai-mountain.png",
+      "files": 1,
+      "bytes": 753143
+    },
+    {
+      "path": "artifacts/v18-world-personal-museum.png",
+      "files": 1,
+      "bytes": 788182
+    },
+    {
+      "path": "artifacts/v18-world-science-valley.png",
+      "files": 1,
+      "bytes": 368622
+    },
+    {
+      "path": "artifacts/v18-world-weiming-studio.png",
+      "files": 1,
+      "bytes": 689906
+    },
+    {
+      "path": "artifacts/v19-clearance-ai-mountain-0.png",
+      "files": 1,
+      "bytes": 834447
+    },
+    {
+      "path": "artifacts/v19-clearance-ai-mountain-1.png",
+      "files": 1,
+      "bytes": 779256
+    },
+    {
+      "path": "artifacts/v19-clearance-ai-mountain-2.png",
+      "files": 1,
+      "bytes": 876300
+    },
+    {
+      "path": "artifacts/v19-clearance-harbor.png",
+      "files": 1,
+      "bytes": 714269
+    },
+    {
+      "path": "artifacts/v19-clearance-hub.png",
+      "files": 1,
+      "bytes": 703591
+    },
+    {
+      "path": "artifacts/v19-clearance-personal-museum-0.png",
+      "files": 1,
+      "bytes": 675327
+    },
+    {
+      "path": "artifacts/v19-clearance-personal-museum-1.png",
+      "files": 1,
+      "bytes": 553375
+    },
+    {
+      "path": "artifacts/v19-clearance-personal-museum-2.png",
+      "files": 1,
+      "bytes": 579384
+    },
+    {
+      "path": "artifacts/v19-clearance-pier.png",
+      "files": 1,
+      "bytes": 793016
+    },
+    {
+      "path": "artifacts/v19-clearance-science-valley-0.png",
+      "files": 1,
+      "bytes": 478582
+    },
+    {
+      "path": "artifacts/v19-clearance-science-valley-1.png",
+      "files": 1,
+      "bytes": 540631
+    },
+    {
+      "path": "artifacts/v19-clearance-science-valley-2.png",
+      "files": 1,
+      "bytes": 398572
+    },
+    {
+      "path": "artifacts/v19-clearance-weiming-studio-0.png",
+      "files": 1,
+      "bytes": 631164
+    },
+    {
+      "path": "artifacts/v19-clearance-weiming-studio-1.png",
+      "files": 1,
+      "bytes": 540319
+    },
+    {
+      "path": "artifacts/v19-clearance-weiming-studio-2.png",
+      "files": 1,
+      "bytes": 465456
+    },
+    {
+      "path": "artifacts/v19-rain-0.png",
+      "files": 1,
+      "bytes": 539772
+    },
+    {
+      "path": "artifacts/v19-rain-1.png",
+      "files": 1,
+      "bytes": 438455
+    },
+    {
+      "path": "artifacts/v19-rain-2.png",
+      "files": 1,
+      "bytes": 415423
+    },
+    {
+      "path": "artifacts/v19-rain-3.png",
+      "files": 1,
+      "bytes": 433399
+    },
+    {
+      "path": "artifacts/v19-rain-4.png",
+      "files": 1,
+      "bytes": 337436
+    },
+    {
+      "path": "artifacts/walk-ground-0.png",
+      "files": 1,
+      "bytes": 505759
+    },
+    {
+      "path": "artifacts/walk-ground-1.png",
+      "files": 1,
+      "bytes": 589511
+    },
+    {
+      "path": "artifacts/walk-ground-2.png",
+      "files": 1,
+      "bytes": 576265
+    },
+    {
+      "path": "artifacts/walk-ground-3.png",
+      "files": 1,
+      "bytes": 579144
+    },
+    {
+      "path": "artifacts/wonder-bubbles.png",
+      "files": 1,
+      "bytes": 367231
+    },
+    {
+      "path": "artifacts/wonder-butterflies.png",
+      "files": 1,
+      "bytes": 757885
+    },
+    {
+      "path": "artifacts/wonder-chimes.png",
+      "files": 1,
+      "bytes": 404347
+    },
+    {
+      "path": "artifacts/wonder-prism.png",
+      "files": 1,
+      "bytes": 430601
+    },
+    {
+      "path": "artifacts/world-overview.png",
+      "files": 1,
+      "bytes": 682997
+    },
+    {
+      "path": "artifacts/world-review-v18.json",
+      "files": 1,
+      "bytes": 2353
+    },
+    {
+      "path": "artifacts/world-v16-placement.json",
+      "files": 1,
+      "bytes": 61353
+    },
+    {
+      "path": "artifacts/xianglm-story.png",
+      "files": 1,
+      "bytes": 472055
+    },
+    {
+      "path": "artifacts/xianglm-tower.png",
+      "files": 1,
+      "bytes": 510182
+    },
+    {
+      "path": "artifacts/XiangMeta-Postcard.png",
+      "files": 1,
+      "bytes": 985100
+    },
+    {
+      "path": "artifacts/XiangMeta-v0.7-postcard.png",
+      "files": 1,
+      "bytes": 917212
+    }
+  ],
+  "totalFiles": 183780,
+  "totalBytes": 33864277920
+}

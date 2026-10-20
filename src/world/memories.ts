@@ -6,7 +6,9 @@ import {groundHeight} from '../../shared/terrain-height.mjs';
 import {hillsidePath} from './mountain';
 import {findTrail} from '../../shared/trail.mjs';
 import {walkable} from '../../shared/navigation.mjs';
-import {material,mesh} from './architecture';
+import {mesh} from './architecture';
+import {kit} from './vernacular';
+import {pigmentAccent} from './ink';
 import {sign,type Obstacle} from './scenery';
 import {batchStatic} from './optimizer';
 import type {Catalog,MemoryFragment} from '../core/types';
@@ -29,10 +31,11 @@ export class Memories {
       const safe=this.safePoint(entry.x,entry.z);entry.x=safe.x;entry.z=safe.z;
       const group=new T.Group();group.position.set(entry.x,groundHeight(entry.x,entry.z,catalog.regions),entry.z);frames.add(group);
       const h=.12+(entry.growth?entry.growth.order/100:0);
-      mesh(group,new T.CylinderGeometry(.48,.58,.16,8),material('#d7d1c2',.9,0,'stone'),0,.08);
-      mesh(group,new T.CylinderGeometry(.29,.4,.63,6),material('#c3c9bf',.85,.04,'stone'),0,.47);
-      mesh(group,new T.CylinderGeometry(.4,.32,.09,6),material('#eee4d0'),0,.82);
-      const ring=mesh(group,new T.TorusGeometry(.29,.018,6,36),new T.MeshBasicMaterial({color:entry.color}),0,.88);ring.rotation.x=Math.PI/2;
+      // A small hexagonal stone lantern-base holds each memory's star.
+      mesh(group,new T.CylinderGeometry(.48,.58,.16,6),kit.stone(),0,.08);
+      mesh(group,new T.CylinderGeometry(.24,.34,.63,6),kit.stoneDark(),0,.47);
+      mesh(group,new T.CylinderGeometry(.42,.3,.09,6),kit.marble(),0,.82);
+      const ring=mesh(group,new T.TorusGeometry(.29,.018,6,36),new T.MeshBasicMaterial({color:pigmentAccent(entry.color)}),0,.88);ring.rotation.x=Math.PI/2;
       const ground=mesh(scene,new T.OctahedronGeometry(.23,0),new T.MeshBasicMaterial({color:'#f9dfa2'}),entry.x,groundHeight(entry.x,entry.z,catalog.regions)+1.22+h,entry.z);ground.scale.set(.72,1.65,.72);ground.castShadow=false;ground.name='starlight-shard';
       const halo=new T.Sprite(new T.SpriteMaterial({map:haloMap,transparent:true,opacity:.52,depthWrite:false}));halo.name='memory-soft-halo';halo.scale.set(1.6/.72,1.6/1.65,1);ground.add(halo);ground.userData.energy=found.has(entry.id)?0:1;
       const star=starPosition(entry.id,this.entries),sky=mesh(scene,new T.SphereGeometry(.075,10,8),new T.MeshBasicMaterial({color:'#ffe5b0'}),(star.x-100)/27,6.3+(95-star.y)/65,(star.y-95)/30);sky.castShadow=false;
@@ -43,21 +46,22 @@ export class Memories {
     (this.sparks.material as T.PointsMaterial).onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','diffuseColor.a *= vColor.r;');};
     (this.sparks.material as T.PointsMaterial).customProgramCacheKey=()=> 'memory-spark-opacity-v1';
     const atlas=new T.Group();atlas.position.set(0,0,4.55);frames.add(atlas);
-    mesh(atlas,new T.CylinderGeometry(.65,.83,.22,32),material('#e5dccb',.85,0,'stone'),0,.11);
-    mesh(atlas,new T.CylinderGeometry(.44,.62,.6,12),material('#afc5ca'),0,.52);
-    const constellation=[[-.55,1.25,0],[-.22,1.58,.12],[.18,1.47,-.12],[.48,1.86,.06],[.7,1.52,.08]],starlight=new T.MeshBasicMaterial({color:'#e8d6fa'}),segments:number[]=[];
+    // The star-chart table: a bronze drum on a stone foot, its constellation drawn in gold.
+    mesh(atlas,new T.CylinderGeometry(.65,.83,.22,16),kit.stone(),0,.11);
+    mesh(atlas,new T.CylinderGeometry(.44,.62,.6,12),kit.bronze(),0,.52);
+    const constellation=[[-.55,1.25,0],[-.22,1.58,.12],[.18,1.47,-.12],[.48,1.86,.06],[.7,1.52,.08]],starlight=new T.MeshBasicMaterial({color:'#f2d58e'}),segments:number[]=[];
     constellation.forEach((p,i)=>{mesh(atlas,new T.OctahedronGeometry(.09,0),starlight,...p as [number,number,number]);if(i)segments.push(...constellation[i-1],...p);});
-    const chart=new T.BufferGeometry();chart.setAttribute('position',new T.Float32BufferAttribute(segments,3));atlas.add(new T.LineSegments(chart,new T.LineBasicMaterial({color:'#badfe5',transparent:true,opacity:.8})));
+    const chart=new T.BufferGeometry();chart.setAttribute('position',new T.Float32BufferAttribute(segments,3));atlas.add(new T.LineSegments(chart,new T.LineBasicMaterial({color:'#caa04f',transparent:true,opacity:.85})));
     obstacles.push({x:0,z:4.55,radius:.65,height:1.85});
-    const orbit=mesh(frames,new T.TorusGeometry(3.1,.018,6,96),material('#b9c9ba'),0,6.3);orbit.rotation.x=Math.PI/2;
+    // The stars hang inside the hub's armillary sphere; its rings replace a separate orbit.
     const lines:number[]=[],ordered=growthEntries(this.entries) as MemoryFragment[];
     for(let i=1;i<this.entries.length;i++){
       const a=this.stars.get(this.entries[i-1].id)!.sky.position,b=this.stars.get(this.entries[i].id)!.sky.position;lines.push(...a.toArray(),...b.toArray());
     }
-    const network=new T.BufferGeometry();network.setAttribute('position',new T.Float32BufferAttribute(lines,3));scene.add(new T.LineSegments(network,new T.LineBasicMaterial({color:'#bcc9c2',transparent:true,opacity:.4})));
+    const network=new T.BufferGeometry();network.setAttribute('position',new T.Float32BufferAttribute(lines,3));scene.add(new T.LineSegments(network,new T.LineBasicMaterial({color:'#caa04f',transparent:true,opacity:.45})));
     const dots:number[]=[];
-    const pathLight=new T.MeshStandardMaterial({color:'#f3e5bb',emissive:'#efd49c',emissiveIntensity:.12});pathLight.userData.nightGlow=true;
-    const finishPath=(path:{x:number;z:number}[])=>{for(let i=3;i<path.length;i+=9){const a=path[i-1],b=path[i],d=Math.hypot(b.x-a.x,b.z-a.z);if(d<.1)continue;const x=b.x-(b.z-a.z)/d*.95,z=b.z+(b.x-a.x)/d*.95;if(!walkable(x,z,catalog.regions,obstacles))continue;const y=groundHeight(x,z,catalog.regions);mesh(frames,new T.CylinderGeometry(.06,.09,.55,8),material('#a6b5a2'),x,y+.275,z);const lamp=mesh(frames,new T.SphereGeometry(.12,10,8),pathLight,x,y+.61,z);lamp.castShadow=false;}};
+    const pathLight=kit.lamp();
+    const finishPath=(path:{x:number;z:number}[])=>{for(let i=3;i<path.length;i+=9){const a=path[i-1],b=path[i],d=Math.hypot(b.x-a.x,b.z-a.z);if(d<.1)continue;const x=b.x-(b.z-a.z)/d*.95,z=b.z+(b.x-a.x)/d*.95;if(!walkable(x,z,catalog.regions,obstacles))continue;const y=groundHeight(x,z,catalog.regions);mesh(frames,new T.BoxGeometry(.1,.55,.1),kit.timber(),x,y+.275,z);const lamp=mesh(frames,new T.CylinderGeometry(.1,.1,.18,6),pathLight,x,y+.64,z);lamp.castShadow=false;mesh(frames,new T.ConeGeometry(.15,.08,6),kit.stoneDark(),x,y+.77,z).castShadow=false;}};
     for(let i=1;i<ordered.length;i++){
       if(ordered[i].regionId!==ordered[i-1].regionId)continue;
       const path=findTrail(ordered[i-1],ordered[i],catalog.regions,obstacles);

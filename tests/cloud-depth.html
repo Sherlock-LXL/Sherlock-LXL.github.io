@@ -1,0 +1,15 @@
+<!doctype html><html><body style="margin:0"><script type="module">
+import * as T from 'three';import {Weather} from '/src/world/weather.ts';
+const renderer=new T.WebGLRenderer({antialias:false});renderer.setSize(640,480);document.body.append(renderer.domElement);
+const scene=new T.Scene();scene.background=new T.Color('#a9c6d1');scene.add(new T.HemisphereLight(0xffffff,0x668899,2));
+const weather=new Weather(scene);weather.cycle.automatic=false;weather.cycle.select('overcast');weather.update(13,false,new T.Vector3(),1);
+const puffs=scene.getObjectByName('drifting-clouds'),canopy=scene.getObjectByName('weather-cloud-canopy');
+puffs.count=1;puffs.setMatrixAt(0,new T.Matrix4().compose(new T.Vector3(0,42,0),new T.Quaternion(),new T.Vector3(9,4,9)));puffs.instanceMatrix.needsUpdate=true;
+const target=new T.WebGLRenderTarget(640,480),camera=new T.PerspectiveCamera(55,640/480,.1,900);
+window.checkCloudDepth=()=>{
+ const results=[];
+ for(const x of [-40,0,40]){camera.position.set(x,1.7,12);camera.lookAt(0,42,0);const sample=show=>{canopy.visible=show;renderer.setRenderTarget(target);renderer.render(scene,camera);const pixel=new Uint8Array(4);renderer.readRenderTargetPixels(target,320,240,1,1,pixel);return [...pixel];};results.push({x,withCanopy:sample(true),withoutCanopy:sample(false)});}
+ canopy.visible=true;renderer.setRenderTarget(null);renderer.render(scene,camera);
+ const before=canopy.position.toArray();weather.update(0,true,new T.Vector3(30,1.7,24),1);return {results,before,after:canopy.position.toArray(),opaque:!puffs.material.transparent,depthWrite:puffs.material.depthWrite};
+};
+</script></body></html>

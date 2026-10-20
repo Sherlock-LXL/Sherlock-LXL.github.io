@@ -18,7 +18,7 @@ export class WorldResonance{
     this.nodes=new T.InstancedMesh(new T.OctahedronGeometry(.18,1),nodeMaterial,this.coreRegions.length);this.nodes.name='resonance-nodes';this.nodes.frustumCulled=false;hub.add(this.nodes);
     this.motes=new T.InstancedMesh(new T.OctahedronGeometry(.055,0),new T.MeshBasicMaterial({color:'#f7e4ad',transparent:true,opacity:.8,depthWrite:false}),12);this.motes.name='resonance-crown';this.motes.frustumCulled=false;hub.add(this.motes);
     this.pulse=new T.Mesh(new T.RingGeometry(2.3,2.37,64),new T.MeshBasicMaterial({color:'#d7f0ef',transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide}));
-    this.pulse.rotation.x=-Math.PI/2;this.pulse.position.y=.5;this.pulse.visible=false;hub.add(this.pulse);
+    this.pulse.rotation.x=-Math.PI/2;this.pulse.position.y=.64;this.pulse.visible=false;hub.add(this.pulse);
     this.refresh(0,true);
     this.unsubscribe=bus.on('discover',entry=>{
       const before=this.active.size;if(entry.regionId)this.active.add(entry.regionId);
@@ -33,14 +33,15 @@ export class WorldResonance{
     if(progress<1){this.pulse.scale.setScalar(.8+progress*2.5);this.pulse.material.opacity=(1-progress)*.45;}
   }
   private refresh(time:number,reduced:boolean){
+    // Each domain's light hangs on its bracket beside the dragon pillar that faces that island.
     this.coreRegions.forEach((region,i)=>{
-      const a=i/this.coreRegions.length*Math.PI*2+Math.PI/4,on=this.active.has(region.id),pulse=reduced?0:Math.sin(time*1.4+i)*.08;
-      this.pose.position.set(Math.sin(a)*2.48,4.25+pulse,Math.cos(a)*2.48);this.pose.rotation.set(a*.3,a,time*.18+i);this.pose.scale.setScalar(on ? .95 : .38);this.pose.updateMatrix();
+      const a=Math.atan2(region.position[0],region.position[1]),on=this.active.has(region.id),pulse=reduced?0:Math.sin(time*1.4+i)*.06;
+      this.pose.position.set(Math.sin(a)*2.86,4.12+pulse,Math.cos(a)*2.86);this.pose.rotation.set(a*.3,a,time*.18+i);this.pose.scale.setScalar(on ? .95 : .38);this.pose.updateMatrix();
       this.nodes.setMatrixAt(i,this.pose.matrix);this.nodes.setColorAt(i,new T.Color(on?region.color:'#6c7771'));
     });
     const complete=this.active.size===this.coreRegions.length;
     for(let i=0;i<12;i++){
-      if(complete){const a=i/12*Math.PI*2+time*.22;this.pose.position.set(Math.cos(a)*3.2,5.1+Math.sin(a*3+time)*.28,Math.sin(a)*3.2);this.pose.rotation.set(a,time*.4,a*.5);this.pose.scale.setScalar(.75);}
+      if(complete){const a=i/12*Math.PI*2+time*.22;this.pose.position.set(Math.cos(a)*4.1,6.3+Math.sin(a*3+time)*.35,Math.sin(a)*4.1);this.pose.rotation.set(a,time*.4,a*.5);this.pose.scale.setScalar(.75);}
       else this.pose.scale.setScalar(0);
       this.pose.updateMatrix();this.motes.setMatrixAt(i,this.pose.matrix);
     }

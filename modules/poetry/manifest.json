@@ -1,9 +1,22 @@
 {
   "schemaVersion": 1,
   "id": "poetry",
+  "portfolio": {
+    "name": "Blind Verse",
+    "category": "AI",
+    "summary": "字符级 LSTM 从两个独立起点采样，让不共享上下文的两句诗偶然相遇。",
+    "technologies": ["PyTorch", "LSTM", "Generative Art"],
+    "github": "https://github.com/Sherlock-LXL/blind-verse-rnn",
+    "order": 4
+  },
   "title": "双盲诗花园",
   "subtitle": "让两个互不相识的句子相遇",
   "region": "ai-mountain",
+  "visual": "garden",
+  "position": [
+    8,
+    -2
+  ],
   "owner": "personal",
   "category": "AI PROJECT",
   "description": "同一个字符级 LSTM，从两个独立的起点采样。两句诗不共享上下文，让偶然也成为创作的一部分。",
@@ -12,11 +25,77 @@
     "生成艺术",
     "中文诗歌"
   ],
-  "position": [
-    8,
-    -2
+  "facts": [
+    {
+      "label": "词表",
+      "value": "5,160"
+    },
+    {
+      "label": "隐藏维度",
+      "value": "1,536"
+    },
+    {
+      "label": "生成方式",
+      "value": "独立 A / B"
+    }
   ],
-  "visual": "garden",
+  "story": [
+    {
+      "title": "01 / 学习文字的相邻关系",
+      "body": "Embedding → 单层 LSTM → Linear。经历语料整理、外部预训练与目标诗歌微调。"
+    },
+    {
+      "title": "02 / 两次独立的开始",
+      "body": "A/B 都从 <BOS> 和全新 hidden state 出发，第二句不会看到第一句。"
+    },
+    {
+      "title": "03 / 给偶然一点方向",
+      "body": "在自由采样之外，从一至三个汉字出发续写，让偶然出现的词句逐渐长成诗意。"
+    }
+  ],
+  "media": [],
+  "interface": {
+    "action": "生成诗句",
+    "fields": [
+      {
+        "key": "mode",
+        "label": "创作方式",
+        "type": "select",
+        "default": "双盲生成",
+        "options": [
+          "双盲生成",
+          "前缀续写"
+        ]
+      },
+      {
+        "key": "prefix",
+        "label": "续写前缀（双盲生成时忽略）",
+        "type": "text",
+        "default": "山月",
+        "max": 3
+      },
+      {
+        "key": "temperature",
+        "label": "采样温度",
+        "type": "number",
+        "default": 0.7,
+        "min": 0.3,
+        "max": 1.2,
+        "step": 0.05
+      }
+    ]
+  },
+  "runtime": {
+    "kind": "python",
+    "sourceKey": "poetry",
+    "entry": "worker.py",
+    "requires": [
+      "checkpoints/best_finetuned_model.pth",
+      "src/model.py",
+      "src/__init__.py",
+      "data/processed/vocab_benchmark.json"
+    ]
+  },
   "world": {
     "version": 1,
     "capabilities": [
@@ -49,48 +128,5 @@
   "wayfinding": {
     "title": "03 双盲诗花园",
     "subtitle": "RNN · 双盲诗"
-  },
-  "portfolio": {
-    "name": "Blind Verse",
-    "category": "AI",
-    "summary": "字符级 LSTM 从两个独立起点采样，让不共享上下文的两句诗偶然相遇。",
-    "technologies": [
-      "PyTorch",
-      "LSTM",
-      "Generative Art"
-    ],
-    "github": "https://github.com/Sherlock-LXL/blind-verse-rnn",
-    "featured": false,
-    "order": 4,
-    "screenshots": []
-  },
-  "facts": [
-    {
-      "label": "词表",
-      "value": "5,160"
-    },
-    {
-      "label": "隐藏维度",
-      "value": "1,536"
-    },
-    {
-      "label": "生成方式",
-      "value": "独立 A / B"
-    }
-  ],
-  "story": [
-    {
-      "title": "01 / 学习文字的相邻关系",
-      "body": "Embedding → 单层 LSTM → Linear。经历语料整理、外部预训练与目标诗歌微调。"
-    },
-    {
-      "title": "02 / 两次独立的开始",
-      "body": "A/B 都从 <BOS> 和全新 hidden state 出发，第二句不会看到第一句。"
-    },
-    {
-      "title": "03 / 给偶然一点方向",
-      "body": "在自由采样之外，从一至三个汉字出发续写，让偶然出现的词句逐渐长成诗意。"
-    }
-  ],
-  "media": []
+  }
 }

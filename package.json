@@ -1,23 +1,27 @@
 {
-  "name": "xiangmeta-portfolio",
+  "name": "xiangmeta",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "description": "XiangMeta — Interactive 3D developer portfolio",
-  "author": "李湘伦 / Sherlock-LXL",
-  "license": "MIT",
-  "engines": {
-    "node": ">=22.14.0"
-  },
+  "author": "XiangMeta",
+  "type": "module",
+  "main": "desktop/main.cjs",
   "scripts": {
     "dev": "vite",
+    "dev:legacy": "node scripts/dev.mjs",
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
+    "export:pages": "node scripts/export-pages.mjs",
+    "start": "node backend/server.mjs",
+    "desktop": "electron .",
+    "dist:win": "npm run build && electron-builder --win portable --x64",
     "test": "node --test tests/web-portfolio.test.mjs tests/jump.test.mjs tests/terrain.test.mjs tests/research-physics.test.mjs tests/garden-route.test.mjs tests/discovery-focus.test.mjs tests/music.test.mjs tests/ambient-response.test.mjs",
     "test:smoke": "node tests/web-smoke.mjs",
+    "test:legacy": "node --test tests/*.test.mjs",
     "test:ui": "node tests/web-browser.mjs",
-    "export:pages": "node scripts/export-pages.mjs"
+    "doctor": "node scripts/doctor.mjs",
+    "module:new": "node scripts/new-module.mjs"
   },
   "dependencies": {
     "three": "^0.180.0",
@@ -27,6 +31,45 @@
     "@types/three": "^0.180.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.12",
     "playwright": "^1.55.0"
+  },
+  "build": {
+    "appId": "world.xiangmeta.desktop",
+    "productName": "XiangMeta",
+    "directories": {
+      "output": "build/staging"
+    },
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "backend/**/*",
+      "shared/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "modules",
+        "to": "modules"
+      },
+      {
+        "from": "data",
+        "to": "data",
+        "filter": [
+          "**/*",
+          "!local.json"
+        ]
+      }
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "desktop/icon.ico",
+      "signExecutable": false
+    },
+    "portable": {
+      "unpackDirName": true
+    },
+    "artifactName": "XiangMeta-${version}-${arch}.${ext}"
   }
 }

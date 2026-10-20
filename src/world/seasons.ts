@@ -2,6 +2,7 @@ import * as T from 'three';
 import {exhibitLocal} from '../../shared/exhibit-layout.mjs';
 import {onRegionRoute} from '../../shared/region-routes.mjs';
 import {material,mesh,softBox,tree} from './architecture';
+import {kit,paintedTree} from './vernacular';
 import {flowerDrifts,type FlowerPoint} from './garden-details';
 import {batchStatic} from './optimizer';
 import {groundHeight} from '../../shared/terrain-height.mjs';
@@ -28,17 +29,18 @@ export class Seasons {
         root.add(flowerDrifts(flowers));
       }
       if(r.season==='summer'){
-        const grass=new T.InstancedMesh(new T.ConeGeometry(.065,.22,3),material('#91b48d',1,0,'foliage'),650),pose=new T.Object3D();let blades=0;
+        const grass=new T.InstancedMesh(new T.ConeGeometry(.065,.22,3),material('#6f9a62',1,0,'foliage'),650),pose=new T.Object3D();let blades=0;
         for(let i=0;i<4500&&blades<650;i++){const x=(random()*2-1)*(r.radius-3),z=(random()*2-1)*(r.radius-3);if(!clear(x,z,.35)||Math.hypot(x-11.2,z+2.3)<2.8)continue;pose.position.set(x,.08,z);pose.rotation.set(0,random()*6,.18);pose.scale.set(1,.5+random()*.5,1);pose.updateMatrix();grass.setMatrixAt(blades++,pose.matrix);}grass.count=blades;grass.receiveShadow=true;root.add(grass);
         // A contained lotus pool beside the studio, away from its approach and the shore rail.
         const x=11.2,z=-2.3;
-        mesh(root,new T.CylinderGeometry(2.35,2.5,.28,64),material('#e6d7b8',.9,0,'stone'),x,.14,z);
-        mesh(root,new T.CylinderGeometry(2.19,2.19,.035,64),new T.MeshStandardMaterial({color:'#78bab4',roughness:.3,metalness:.12}),x,.30,z);
-        const rim=mesh(root,new T.TorusGeometry(2.28,.07,8,64),material('#f2e2c2',.9,0,'stone'),x,.31,z);rim.rotation.x=Math.PI/2;
+        mesh(root,new T.CylinderGeometry(2.35,2.5,.28,24),kit.stone(),x,.14,z);
+        mesh(root,new T.CylinderGeometry(2.19,2.19,.035,48),new T.MeshStandardMaterial({color:'#4f8a80',roughness:.25,metalness:.12}),x,.30,z);
+        const rim=mesh(root,new T.TorusGeometry(2.28,.07,6,24),kit.marble(),x,.31,z);rim.rotation.x=Math.PI/2;
+        for(let i=0;i<8;i++){const a=i/8*Math.PI*2;mesh(root,new T.BoxGeometry(.2,.16,.2),kit.marble(),x+Math.cos(a)*2.3,.36,z+Math.sin(a)*2.3).rotation.y=-a;}
         for(let i=0;i<17;i++){
           const a=i*2.4,rad=.25+Math.sqrt(i)*.42,px=x+Math.cos(a)*rad,pz=z+Math.sin(a)*rad;
-          const leaf=mesh(root,new T.CircleGeometry(.25+(i%3)*.07,18,.12,Math.PI*2-.3),material(i%2?'#80b88e':'#a4c696',.85,0,'foliage'),px,.34+(i%2)*.016,pz);leaf.rotation.x=-Math.PI/2;leaf.rotation.z=a;leaf.castShadow=false;
-          if(i%4===0){const flower=new T.Group();flower.position.set(px,.42,pz);root.add(flower);for(let n=0;n<7;n++){const t=n*Math.PI*2/7,p=mesh(flower,new T.SphereGeometry(1,8,6),material('#edb5cf',.85,0,'foliage'),Math.cos(t)*.12,.07,Math.sin(t)*.12);p.scale.set(.085,.18,.07);p.rotation.z=Math.cos(t)*.4;p.rotation.x=Math.sin(t)*.4;}mesh(flower,new T.SphereGeometry(.07,8,6),material('#e4cb86'),0,.16);}
+          const leaf=mesh(root,new T.CircleGeometry(.25+(i%3)*.07,18,.12,Math.PI*2-.3),material(i%2?'#4f8a62':'#6f9d6a',.85,0,'foliage'),px,.34+(i%2)*.016,pz);leaf.rotation.x=-Math.PI/2;leaf.rotation.z=a;leaf.castShadow=false;
+          if(i%4===0){const flower=new T.Group();flower.position.set(px,.42,pz);root.add(flower);for(let n=0;n<7;n++){const t=n*Math.PI*2/7,p=mesh(flower,new T.SphereGeometry(1,8,6),material('#e7a4b6',.85,0,'foliage'),Math.cos(t)*.12,.07,Math.sin(t)*.12);p.scale.set(.085,.18,.07);p.rotation.z=Math.cos(t)*.4;p.rotation.x=Math.sin(t)*.4;}mesh(flower,new T.SphereGeometry(.07,8,6),material('#dcb04c'),0,.16);}
         }
         obstacles.push({x:r.position[0]+x,z:r.position[1]+z,radius:2.4,height:.4});
         for(let i=0;i<24;i++){const a=i*2.4,rad=r.radius-1.2,x=Math.cos(a)*rad,z=Math.sin(a)*rad;if(pointSegmentDistance(x,z,0,0,-r.position[0],-r.position[1])<3)continue;const shell=mesh(root,new T.SphereGeometry(1,8,6),material('#f4e5cf',.95,0),x,.04,z);shell.scale.set(.11,.045,.15);shell.rotation.y=a;shell.castShadow=false;}
@@ -59,10 +61,9 @@ export class Seasons {
         leaves.count=count;leaves.receiveShadow=true;root.add(leaves);
       }
       if(r.season==='winter'){
-        const snow=material('#f5f7f5',1,0),bark=material('#90a3a8',.9,0,'wood');
+        const snow=material('#f5f7f5',1,0);
         for(const [x,z] of [[-12,-5],[12,3],[-9,6]])if(clear(x,z,1)){
-          mesh(root,new T.CylinderGeometry(.09,.17,2.7,8),bark,x,1.35,z);
-          for(let i=0;i<3;i++)mesh(root,new T.ConeGeometry(1.1-i*.23,1.65,10),snow,x,1.4+i*.68,z);
+          paintedTree(root,x,z,1.05,'snowpine',height(x,z));
           obstacles.push({x:r.position[0]+x,z:r.position[1]+z,radius:.17,height:3.7});
         }
         let snowmen=0;
@@ -70,11 +71,13 @@ export class Seasons {
         for(const [x,z] of candidates){if(snowmen>=2||!clear(x,z,1))continue;snowmen++;
           const man=new T.Group();man.name='snowman';man.position.set(x,0,z);man.rotation.y=Math.atan2(-x,7-z);root.add(man);
           mesh(man,new T.SphereGeometry(.52,20,14),snow,0,.47);mesh(man,new T.SphereGeometry(.36,20,14),snow,0,1.12);
-          const coal=material('#62737c'),scarf=material('#bc8b9b',.9,0);
+          const coal=kit.ink(),scarf=material('#b8432f',.9,0);
           for(const side of [-1,1])mesh(man,new T.SphereGeometry(.035,8,6),coal,side*.105,1.21,.325);
-          const nose=mesh(man,new T.ConeGeometry(.06,.27,8),material('#d8a47a'),0,1.12,.41);nose.rotation.x=Math.PI/2;
+          const nose=mesh(man,new T.ConeGeometry(.06,.27,8),material('#c98a4c'),0,1.12,.41);nose.rotation.x=Math.PI/2;
           mesh(man,new T.CylinderGeometry(.38,.38,.12,24),scarf,0,.96);mesh(man,softBox(.12,.36,.055),scarf,.21,.79,.39);
-          mesh(man,new T.CylinderGeometry(.35,.35,.045,24),coal,0,1.43);mesh(man,new T.CylinderGeometry(.22,.25,.25,24),coal,0,1.55);
+          // A woven straw hat (douli) instead of a top hat.
+          const hat=new T.LatheGeometry([[0,.32],[.08,.3],[.3,.12],[.5,.02],[.52,0],[0,0]].map(([w,h])=>new T.Vector2(w,h)),20);
+          mesh(man,hat,kit.straw(),0,1.38);mesh(man,new T.TorusGeometry(.51,.018,4,24),kit.timber(),0,1.385).rotation.x=Math.PI/2;
           for(let i=0;i<3;i++)mesh(man,new T.SphereGeometry(.033,8,6),coal,0,.41+i*.13,.5);
           obstacles.push({x:r.position[0]+x,z:r.position[1]+z,radius:.53,height:1.7});
         }

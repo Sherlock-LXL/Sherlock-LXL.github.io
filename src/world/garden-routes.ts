@@ -6,7 +6,8 @@ import {groundHeight,regionHeight} from '../../shared/terrain-height.mjs';
 import {walkable} from '../../shared/navigation.mjs';
 import {footprintsOverlap} from '../../shared/decoration-clearance.mjs';
 import {memoryEntries} from '../../shared/memories.mjs';
-import {material,mesh,softBox} from './architecture';
+import {mesh,softBox} from './architecture';
+import {kit} from './vernacular';
 import type {Obstacle} from './scenery';
 import {flowerDrifts,type FlowerPoint} from './garden-details';
 import {batchStatic} from './optimizer';
@@ -16,8 +17,8 @@ export function buildGardenRoutes(scene:T.Scene,catalog:Catalog,obstacles:Obstac
   const group=new T.Group();group.name='mountain-garden';scene.add(group);
   const rails:{x:number;y:number;z:number}[][]=[];const flowers:FlowerPoint[]=[],roads:{kind:string;points:{x:number;y:number;z:number}[];width:number}[]=[];
   const benches:{x:number;y:number;z:number;halfX:number;halfZ:number}[]=[],walls:{x:number;z:number;halfX:number;halfZ:number}[]=[],memories:{x:number;z:number}[]=memoryEntries(catalog);
-  const stone=material('#d7c9af',.95,.02,'stone'),wood=material('#a5b6a1',.8,.02,'wood'),cap=material('#e8dfc9',.9,.02,'stone');
-  const glow=new T.MeshStandardMaterial({color:'#f1deaf',emissive:'#efd09a',emissiveIntensity:.12});glow.userData.nightGlow=true;
+  const stone=kit.stone(),wood=kit.timber(),cap=kit.stoneDark();
+  const glow=kit.lamp();
   const beam=(a:T.Vector3,b:T.Vector3,r:number,mat:T.Material)=>{const delta=b.clone().sub(a),part=mesh(group,new T.CylinderGeometry(r,r,delta.length(),8),mat,...a.clone().add(b).multiplyScalar(.5).toArray() as [number,number,number]);part.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());return part;};
   for(const region of catalog.regions){
     const prepared=mountainRoutes(region);if(!prepared.length)continue;
@@ -54,8 +55,9 @@ export function buildGardenRoutes(scene:T.Scene,catalog:Catalog,obstacles:Obstac
          rails.push(run.map(({x,y,z})=>({x,y,z})));let previous:T.Vector3|null=null;
          for(const {x,z,y,rootY,j,a,b,p,d,nx,nz} of run){
           const foot=new T.Vector3(x,y,z);
-          mesh(group,new T.CylinderGeometry(.065,.085,y+1.2-rootY,8),wood,x,(y+1.2+rootY)/2,z);mesh(group,new T.SphereGeometry(.108,10,8),cap,x,y+1.22,z);
-          if(j%4===0){const light=mesh(group,new T.SphereGeometry(.09,10,8),glow,x,y+1.32,z);light.castShadow=false;}
+          // Square timber posts with a dark stone cap; every fourth carries a small paper lamp.
+          mesh(group,new T.BoxGeometry(.13,y+1.2-rootY,.13),wood,x,(y+1.2+rootY)/2,z);mesh(group,new T.BoxGeometry(.19,.09,.19),cap,x,y+1.245,z);
+          if(j%4===0){const light=mesh(group,new T.CylinderGeometry(.08,.08,.16,6),glow,x,y+1.37,z);light.castShadow=false;}
           if(previous&&previous.distanceTo(foot)<2.8){
             for(const h of [.5,1.08])beam(previous.clone().add(new T.Vector3(0,h,0)),foot.clone().add(new T.Vector3(0,h,0)),h>.6?.052:.032,wood);
             obstacles.push({x:(x+previous.x)/2,z:(z+previous.z)/2,radius:.065,height:Math.min(y,previous.y)+1.2,segment:[previous.x,previous.z,x,z]});
@@ -85,7 +87,7 @@ export function buildGardenRoutes(scene:T.Scene,catalog:Catalog,obstacles:Obstac
           if(prepared.some(r=>closestRoute(bx-rx,bz-rz,r).distance<r.width/2+1.25))continue;
           const heights=[[-.95,-.4],[-.95,.4],[.95,-.4],[.95,.4],[0,0]].map(([dx,dz])=>groundHeight(bx+dx,bz+dz,catalog.regions));
           if(Math.max(...heights)-Math.min(...heights)>.12)continue;
-          const floor=Math.max(...heights);mesh(group,softBox(1.9,.13,.6),material('#c5ad8d',.8,.02,'wood'),bx,floor+.56,bz);mesh(group,softBox(1.9,.5,.1),wood,bx,floor+.86,bz+.28);
+          const floor=Math.max(...heights);mesh(group,softBox(1.9,.13,.6),kit.timberLight(),bx,floor+.56,bz);mesh(group,softBox(1.9,.5,.1),wood,bx,floor+.86,bz+.28);
           for(const side of [-1,1]){const foot=groundHeight(bx+side*.7,bz,catalog.regions),h=floor+.52-foot;mesh(group,softBox(.13,h,.48),stone,bx+side*.7,foot+h/2,bz);}
           obstacles.push({...footprint,radius:0,height:floor+1.15});benches.push({...footprint,y:floor});break;
         }

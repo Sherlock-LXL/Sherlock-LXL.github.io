@@ -1,9 +1,21 @@
 {
   "schemaVersion": 1,
   "id": "bubble-lab",
+  "portfolio": {
+    "name": "Wall-Attached Bubble Growth",
+    "category": "Research",
+    "summary": "研究电解质溶液中壁面气泡的几何、扩散与生长，用交互数值模型连接方程和观测。",
+    "technologies": ["Fluid Dynamics", "Numerical Simulation", "SAM2"],
+    "order": 6
+  },
   "title": "Bubble Laboratory",
   "subtitle": "微小气泡里的流体世界",
   "region": "science-valley",
+  "visual": "bubble",
+  "position": [
+    -6,
+    0
+  ],
   "owner": "personal",
   "category": "RESEARCH",
   "description": "基于论文 Wall-Attached Bubble Growth in Electrolyte Solutions，探索壁面球冠气泡的几何、扩散通量与生长速率。拖动参数，查看半径和生长率的数值解。",
@@ -12,42 +24,6 @@
     "图像分析",
     "SAM2"
   ],
-  "position": [
-    -6,
-    0
-  ],
-  "visual": "bubble",
-  "world": {
-    "version": 1,
-    "capabilities": [
-      "simulation"
-    ],
-    "fragments": [
-      {
-        "id": "observe",
-        "title": "把观察留在曲线里",
-        "body": "气泡生长、图像分析与 SAM2 辅助识别，把实验影像连接到定量分析。世界中的气泡与曲线仍是解释概念的示意动画，不是实验结果。",
-        "position": [
-          -3,
-          9
-        ]
-      }
-    ],
-    "connections": []
-  },
-  "portfolio": {
-    "name": "Wall-Attached Bubble Growth",
-    "category": "Research",
-    "summary": "研究电解质溶液中壁面气泡的几何、扩散与生长，用交互数值模型连接方程和观测。",
-    "technologies": [
-      "Fluid Dynamics",
-      "Numerical Simulation",
-      "SAM2"
-    ],
-    "featured": false,
-    "order": 6,
-    "screenshots": []
-  },
   "facts": [
     {
       "label": "研究对象",
@@ -76,6 +52,37 @@
       "body": "式 (23) 将气体积累与扩散通量耦合，把气泡生长写成可以求解、可以与观测比较的方程。"
     }
   ],
+  "media": [],
   "simulation": "bubble",
-  "media": []
+  "interface": {
+    "action": "调整参数",
+    "fields": [
+      {
+        "key": "concentration",
+        "label": "盐浓度示意值（无量纲）",
+        "type": "number",
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "step": 0.01
+      }
+    ]
+  },
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "simulation"
+    ],
+    "fragments": [
+      {
+        "id": "observe",
+        "title": "把观察留在曲线里",
+        "body": "气泡生长、图像分析与 SAM2 辅助识别，把实验影像连接到定量分析。世界中的气泡与曲线仍是解释概念的示意动画，不是实验结果。",
+        "position": [
+          -3,
+          9
+        ]
+      }
+    ]
+  }
 }

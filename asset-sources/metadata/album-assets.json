@@ -1,0 +1,90 @@
+[
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\单衣.mp3",
+    "delivered": "album-01-track-01.mp3",
+    "sha256": "b0e6a97b11012f59b4abfa64051c3be2b7c64654391068a40e956ca17c07f990",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\单衣 歌词.txt",
+    "lyricsSha256": "d51bbcb31f63edf7278991e050ce7ff4b25f1eeeedb06353fdece2899c746c3f"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\走失迷雾.mp3",
+    "delivered": "album-01-track-02.mp3",
+    "sha256": "b958230db9db123f57e6dff60f3b6f0f3858c627ae2187794d5d09975d37414f",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\走失迷雾 歌词.txt",
+    "lyricsSha256": "602b61b675e8385edca52cb058e409601eb124ec81bdfa4d690de11835ce1fcd"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\问.mp3",
+    "delivered": "album-01-track-03.mp3",
+    "sha256": "da4ebc1b0f8bf215df46741a17496c15f6cc56e522d2fb20a343e58d13fa1bd9",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\1.Secret\\问 歌词.txt",
+    "lyricsSha256": "2c96949e495a0c827d76a21cdca09c664bb310fd709e8e1fe1e638231a4f1a63"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\2.星辰代我想你\\星辰代我想你.wav",
+    "delivered": "album-02-track-01.mp3",
+    "sha256": "db4521e7d69a9af442a26be81c3a316bd11212f5e0c6950444de191e1220db18",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\2.星辰代我想你\\星辰代我想你 歌词.txt",
+    "lyricsSha256": "78f646ff689788fa3f1901ae3539b732c0d630b2df96886472eaf1f2301cd7d4",
+    "originalSha256": "cf1db26939cdf1d8e9f1962c7e7e67a8b3e532323d361e316f8cd3e67547b718",
+    "codec": "MP3 320 kbps"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\云歌行.mp3",
+    "delivered": "album-03-track-01.mp3",
+    "sha256": "6ee8937b03d9358905914eb7b7e2d916f09ecf68e96e2c11a9df45e73ed69f0a",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\云歌行 歌词.txt",
+    "lyricsSha256": "08d5aaa73b9f1d9010cfb9210571b9e98e579e6e8b690d1d21ec6c460cd8d4c7"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\北大猫咪图鉴.mp3",
+    "delivered": "album-03-track-02.mp3",
+    "sha256": "b423bfbc8e6903b0c28028523547c67311ad94f60abb0e38a34b0f63bb9d0352",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\北大猫咪图鉴 歌词.txt",
+    "lyricsSha256": "fd184543c0dce4f1343f820beb3b35945cc419d8fbc6b83d7c6ef8f04bbc7435"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\厄洛斯.mp3",
+    "delivered": "album-03-track-03.mp3",
+    "sha256": "c8f674becb968f262fc33e5931a71b54f953b75069fcc94819df0515d2fcc520",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\3.近地轨道\\厄洛斯 歌词.txt",
+    "lyricsSha256": "124f521579c5579c907411426ee740d51986b72d651aebf42e5fb87e3b6e0b2d"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\夏日信.mp3",
+    "delivered": "album-04-track-01.mp3",
+    "sha256": "7521d7c4a55adccc3fdab9204419c15b48e0a49ba4227bddbf7eced3a11ee752",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\夏日信 歌词.txt",
+    "lyricsSha256": "022e24fe3faf8d73e06e6ebcf2ec68f339bc0f2a6380d5fa35542b020d5b61d3"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\情书.wav",
+    "delivered": "album-04-track-02.mp3",
+    "sha256": "23600d0e47b1cfaa81ee97a4891143d5144bc7dd3cf4e7045f8cd21f28ead094",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\情书 歌词.txt",
+    "lyricsSha256": "2a450b7c22748915ac12660d08be6114433fec19475cc64bb348a01a718c933f",
+    "originalSha256": "867d688e634cf9a26fdec161d401ea9cd474dff9ed384eacfae545fb72cb1c88",
+    "codec": "MP3 320 kbps"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\海市蜃楼.mp3",
+    "delivered": "album-04-track-03.mp3",
+    "sha256": "0e3d318c502934f3ee0662135a97deebf28f3e3957bfaf892415516f132f19bc",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\海市蜃楼 歌词.txt",
+    "lyricsSha256": "3c646271117bf73c51096be85ed5ec9c6058ee6ddb9aa57500113411ff0bddfc"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\风和日记.mp3",
+    "delivered": "album-04-track-04.mp3",
+    "sha256": "ad87adaddba06d93ca7f1ed3947f1daa62e949ca50378f9cf92cf4f20eae6c53",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\4.二分之一星球\\风和日记 歌词.txt",
+    "lyricsSha256": "733e06b567b0b4c8297b0c0c134f5d0552c6a03775b5cdf0dc55f7ac0fabb7e2"
+  },
+  {
+    "source": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\5.燕来有声\\燕来有声.mp3",
+    "delivered": "album-05-track-01.mp3",
+    "sha256": "d34d7a1eb478a8f15675ae869c29e1af8d8abb88a175248720a9c06a674fe035",
+    "lyricsSource": "C:\\Users\\18616\\Pictures\\音乐素材\\音乐档案库\\5.燕来有声\\燕来有声 歌词.txt",
+    "lyricsSha256": "b4e8167d19257ece653e69782bb65461f03d5a1aa0da5ce1dc03329d3545389c"
+  }
+]

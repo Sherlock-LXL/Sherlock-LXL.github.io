@@ -1,9 +1,22 @@
 {
   "schemaVersion": 1,
   "id": "sonoluminescence",
+  "portfolio": {
+    "name": "Single-Bubble Sonoluminescence",
+    "category": "Research",
+    "summary": "从盐浓度与水活度，到声驱动下的气泡振荡，探索声音成为微弱光信号的过程。",
+    "technologies": ["Bubble Dynamics", "Rayleigh–Plesset", "Acoustics"],
+    "featured": true,
+    "order": 7
+  },
   "title": "Sonoluminescence",
   "subtitle": "当声音，成为一束光",
   "region": "science-valley",
+  "visual": "light",
+  "position": [
+    7,
+    -4
+  ],
   "owner": "personal",
   "category": "RESEARCH",
   "description": "基于论文 Effects of salt concentration on single-bubble sonoluminescence，计算声驱动下的单气泡半径波形，并展示水活度、蒸气压与气泡动力学的联系。",
@@ -12,32 +25,6 @@
     "气泡动力学",
     "数值模拟"
   ],
-  "position": [
-    7,
-    -4
-  ],
-  "visual": "light",
-  "world": {
-    "version": 1,
-    "capabilities": [
-      "simulation"
-    ],
-    "fragments": [],
-    "connections": []
-  },
-  "portfolio": {
-    "name": "Single-Bubble Sonoluminescence",
-    "category": "Research",
-    "summary": "从盐浓度与水活度，到声驱动下的气泡振荡，探索声音成为微弱光信号的过程。",
-    "technologies": [
-      "Bubble Dynamics",
-      "Rayleigh–Plesset",
-      "Acoustics"
-    ],
-    "featured": true,
-    "order": 7,
-    "screenshots": []
-  },
   "facts": [
     {
       "label": "研究尺度",
@@ -66,6 +53,27 @@
       "body": "连接 PZT 声学谐振腔、PLL/PI 共振跟踪与 PMT、光谱仪测量，在半径振荡和微弱光信号之间寻找联系。"
     }
   ],
+  "media": [],
   "simulation": "sonoluminescence",
-  "media": []
+  "interface": {
+    "action": "调整参数",
+    "fields": [
+      {
+        "key": "drive",
+        "label": "声驱动示意值（无量纲）",
+        "type": "number",
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "step": 0.01
+      }
+    ]
+  },
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "simulation"
+    ],
+    "fragments": []
+  }
 }

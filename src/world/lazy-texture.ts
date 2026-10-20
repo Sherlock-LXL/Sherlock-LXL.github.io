@@ -27,9 +27,12 @@ export function textureStatus(){
 export function regionTexture(src:string,region:string){
   const texture=new Texture();texture.colorSpace=SRGBColorSpace;texture.anisotropy=4;
   texture.name=src;textures.add(texture);
-  let disposed=false,detail=false,started=false;
+  let disposed=false,detail=false,started=false,resizing=false;
   const assign=(loaded:HTMLImageElement,full:boolean)=>{
     if(disposed||(!full&&detail))return;
+    // WebGL2 storage is immutable: a sharper image needs a fresh GPU texture, never a sub-upload into the preview's.
+    const current=texture.image as HTMLImageElement|null;
+    if(current&&(current.width!==loaded.width||current.height!==loaded.height)){resizing=true;texture.dispose();resizing=false;}
     texture.image=loaded;texture.needsUpdate=true;detail=full;texture.userData.detail=full;
   };
   const preview=previews.get(src)??src;
@@ -40,7 +43,7 @@ export function regionTexture(src:string,region:string){
     if(disposed||started)return;started=true;
     void image(src).then(loaded=>assign(loaded,true)).catch(()=>console.warn(`Keeping artwork preview: ${src}`));
   };
-  texture.addEventListener('dispose',()=>{disposed=true;textures.delete(texture);waiting.get(region)?.delete(load);});
+  texture.addEventListener('dispose',()=>{if(resizing)return;disposed=true;textures.delete(texture);waiting.get(region)?.delete(load);});
   if(active.has(region))load();
   else{if(!waiting.has(region))waiting.set(region,new Set());waiting.get(region)!.add(load);}
   return texture;

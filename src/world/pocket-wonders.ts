@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {material,mesh,softBox} from './architecture';
-const colors=['#b7d8c5','#e7bacd','#d6c397','#abc7e2','#c6b5de'];
+const colors=['#5f9f85','#c0584a','#d6a948','#4f7f9f','#8d6f9f'];
 export function pocketWonder(kind:string,g:T.Group,stone:T.Material,metal:T.Material,glow:T.Material){
  const parts:T.Object3D[]=[];
  const box=(w:number,h:number,d:number,x:number,y:number,z:number,m=metal)=>mesh(g,softBox(w,h,d),m,x,y,z);
@@ -24,7 +24,7 @@ export function pocketWonder(kind:string,g:T.Group,stone:T.Material,metal:T.Mate
   case 'snowglobe':{
    const glass=new T.MeshPhysicalMaterial({color:'#c7e0ee',transparent:true,opacity:.22,roughness:.1,depthWrite:false});sphere(.7,0,1.47,0,glass);
    const hill=sphere(.38,0,.94,0);hill.scale.y=.25;
-   mesh(g,new T.ConeGeometry(.25,.65,12),material('#afcfc5'),0,1.2,0);sphere(.055,0,1.55,0,glow);
+   mesh(g,new T.ConeGeometry(.25,.65,12),material('#3f6a58'),0,1.2,0);sphere(.055,0,1.55,0,glow);
    const flakes=new T.InstancedMesh(new T.SphereGeometry(.025,6,4),stone,36);flakes.userData.dynamic=true;g.add(flakes);const pose=new T.Object3D();parts.push(flakes);
    let fall=0,swirl=0;animate=(t,e,dt)=>{fall+=dt*(.05+e*.25);swirl+=dt*e*.5;for(let i=0;i<36;i++){const y=.95+((i*.193-fall)%1+1)%1,rr=Math.sqrt(Math.max(0,.58**2-(y-1.47)**2))*.8,a=i*2.4+swirl;pose.position.set(Math.cos(a)*rr,y,Math.sin(a)*rr);pose.updateMatrix();flakes.setMatrixAt(i,pose.matrix);}flakes.instanceMatrix.needsUpdate=true;};break;
   }
@@ -39,21 +39,21 @@ export function pocketWonder(kind:string,g:T.Group,stone:T.Material,metal:T.Mate
    mesh(petals,new T.OctahedronGeometry(.16),glow);animate=(t,e)=>{petals.rotation.z=t*.08+e*Math.sin(t*.55)*1.6;};break;
   }
   case 'vinyl':{
-   box(1.35,.2,1.05,0,.89,0,material('#bc9f8b',.8,0,'wood'));const record=floating(-.12,1.01,0);mesh(record,new T.CylinderGeometry(.44,.44,.025,40),material('#53686b'));mesh(record,new T.CylinderGeometry(.14,.14,.03,24),material('#deb6c2'));
+   box(1.35,.2,1.05,0,.89,0,material('#6f4a33',.8,0,'wood'));const record=floating(-.12,1.01,0);mesh(record,new T.CylinderGeometry(.44,.44,.025,40),material('#2b2824'));mesh(record,new T.CylinderGeometry(.14,.14,.03,24),material('#b8432f'));
    for(const r of [.24,.3,.37]){const groove=mesh(record,new T.TorusGeometry(r,.006,4,40),metal);groove.rotation.x=Math.PI/2;groove.position.y=.02;}mesh(record,new T.SphereGeometry(.025,8,6),glow,.08,.045,0);
    box(.035,.035,.58,.49,1.12,.06);sphere(.055,.49,1.12,-.24,metal);
    animate=(t,e,dt)=>{record.rotation.y+=dt*(.15+e*1.1);};break;
   }
   case 'shell':{
-   const base=sphere(.62,0,.91,0,material('#edc6b4'));base.scale.set(1,.22,.8);
-   const lid=floating(0,.98,-.44),top=mesh(lid,new T.SphereGeometry(1,24,12),material('#f1dacc'),0,0,.42);top.scale.set(.62,.1,.5);
-   for(let i=0;i<9;i++){const a=(i-4)*.3,points=[];for(let j=0;j<14;j++){const u=j/13,r=.15+u*.8;points.push(new T.Vector3(Math.sin(a)*.62*r,.1*Math.sqrt(1-r*r)+.012,.42+Math.cos(a)*.5*r));}mesh(lid,new T.TubeGeometry(new T.CatmullRomCurve3(points),16,.012,5,false),material('#d8b5a6'));}
+   const base=sphere(.62,0,.91,0,material('#d9b49c'));base.scale.set(1,.22,.8);
+   const lid=floating(0,.98,-.44),top=mesh(lid,new T.SphereGeometry(1,24,12),material('#ead2bf'),0,0,.42);top.scale.set(.62,.1,.5);
+   for(let i=0;i<9;i++){const a=(i-4)*.3,points=[];for(let j=0;j<14;j++){const u=j/13,r=.15+u*.8;points.push(new T.Vector3(Math.sin(a)*.62*r,.1*Math.sqrt(1-r*r)+.012,.42+Math.cos(a)*.5*r));}mesh(lid,new T.TubeGeometry(new T.CatmullRomCurve3(points),16,.012,5,false),material('#b8917c'));}
    sphere(.17,0,1.04,.05,glow);animate=(t,e)=>lid.rotation.x=-.08-e*.95;break;
   }
   case 'lighthouse':{
    mesh(g,new T.CylinderGeometry(.22,.38,1.1,24),stone,0,1.24);mesh(g,new T.CylinderGeometry(.4,.4,.09,24),metal,0,1.82);
    sphere(.15,0,2.08,0,glow);for(let i=0;i<6;i++){const a=i*Math.PI/3;box(.025,.46,.025,Math.cos(a)*.28,2.07,Math.sin(a)*.28);}
-   mesh(g,new T.ConeGeometry(.43,.3,24),material('#93bdb9'),0,2.45);
+   mesh(g,new T.ConeGeometry(.43,.3,24),material('#3d6584'),0,2.45);
    const beacon=floating(0,2.08,0);const beam=mesh(beacon,new T.ConeGeometry(.2,1.3,20,1,true),new T.MeshBasicMaterial({color:'#f6dfac',transparent:true,opacity:.1,depthWrite:false,side:T.DoubleSide}),0,0,.85);beam.rotation.x=-Math.PI/2;
    animate=(t,e)=>{beacon.rotation.y=t*.3+e*Math.sin(t*.4)*2;(beam.material as T.MeshBasicMaterial).opacity=.06+e*.18;};break;
   }

@@ -5,54 +5,68 @@ import {onRegionRoute} from '../../shared/region-routes.mjs';
 import { shoreLayout } from '../../shared/shore-layout.mjs';
 import {flowerDrifts,type FlowerPoint} from './garden-details';
 import {seasonalColors,palm} from './season-style';
+import {kit,place,beam,roof,lantern,paifang,drumStone,drumStool,fenceSection,scholarRock,paintedTree} from './vernacular';
+import {pigmentAccent} from './ink';
 export type Obstacle={x:number;z:number;radius:number;halfX?:number;halfZ?:number;height?:number;segment?:[number,number,number,number]};
 const cube=(g:T.Object3D,m:T.Material,w:number,h:number,d:number,x=0,y=0,z=0)=>mesh(g,softBox(w,h,d),m,x,y,z);
+const serif='"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun","Times New Roman",serif';
+const sans='"PingFang SC","Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif';
+/** Every island stamps its signs with its season. */
+const seals:Record<string,string>={'#ebbdcf':'春','#cbdde9':'冬','#e3c385':'秋','#acd9c5':'夏'};
+let frameMaterial:T.Material|undefined;
+const frame=()=>frameMaterial??=material('#3d3029',.72,.02,'wood');
 
+/** A title slip: aged paper in a lacquered frame, ruled in the island's pigment and sealed in cinnabar. */
 export function sign(g:T.Object3D,title:string,subtitle:string,color:string,width=2.3,height=0.8){
   const canvas=document.createElement('canvas');const w=1536;canvas.width=w;canvas.height=Math.max(192,Math.round(w*height/width));
-  const ctx=canvas.getContext('2d')!,h=canvas.height;
-  ctx.fillStyle='#f2f3ec';ctx.fillRect(0,0,w,h);
-  ctx.fillStyle=color;ctx.fillRect(w*.045,h*.17,w*.008,h*.66);
-  const stack='"Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif';
+  const ctx=canvas.getContext('2d')!,h=canvas.height,accent=pigmentAccent(color),seal=seals['#'+new T.Color(color).getHexString()];
+  ctx.fillStyle='#f1e8d4';ctx.fillRect(0,0,w,h);
+  let seed=title.length*131+h;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+  for(let i=0;i<240;i++){ctx.strokeStyle=`rgba(122,96,58,${.025+random()*.04})`;ctx.lineWidth=1+random()*2.2;const x=random()*w,y=random()*h;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+24+random()*70,y+(random()-.5)*5);ctx.stroke();}
+  const inset=Math.min(h*.075,w*.018);
+  ctx.strokeStyle=accent;ctx.lineWidth=Math.max(3,h*.02);ctx.strokeRect(inset,inset,w-inset*2,h-inset*2);
+  ctx.lineWidth=Math.max(1.5,h*.007);ctx.strokeRect(inset*1.75,inset*1.75,w-inset*3.5,h-inset*3.5);
+  const stamp=seal&&w/h>2.4&&height>=.5?h*.34:0,left=inset*1.75+w*.035,room=w-left-inset*1.75-(stamp?stamp+w*.05:w*.03);
   ctx.textAlign='left';ctx.textBaseline='middle';
-  const write=(text:string,size:number,y:number,weight:number,color:string)=>{ctx.font=`${weight} ${size}px ${stack}`;const room=w*.85;size*=Math.min(1,room/Math.max(1,ctx.measureText(text).width));ctx.font=`${weight} ${size}px ${stack}`;ctx.fillStyle=color;ctx.fillText(text,w*.085,y);};
-  write(title,h*(subtitle?.29:.42),h*(subtitle?.4:.5),600,'#354d4e');
-  if(subtitle)write(subtitle,h*.17,h*.74,400,'#647a79');
+  const write=(text:string,size:number,y:number,weight:number,fill:string,font:string)=>{ctx.font=`${weight} ${size}px ${font}`;size*=Math.min(1,room/Math.max(1,ctx.measureText(text).width));ctx.font=`${weight} ${size}px ${font}`;ctx.fillStyle=fill;ctx.fillText(text,left,y);};
+  write(title,h*(subtitle?.3:.43),h*(subtitle?.4:.52),600,'#2b2824',serif);
+  if(subtitle)write(subtitle,h*.165,h*.735,400,'#5d5447',sans);
+  if(stamp){
+    const x=w-inset*1.75-w*.03-stamp,y=(h-stamp)/2;ctx.fillStyle='#b23e2c';ctx.fillRect(x,y,stamp,stamp);
+    ctx.strokeStyle='#f1e8d4';ctx.lineWidth=stamp*.05;ctx.strokeRect(x+stamp*.1,y+stamp*.1,stamp*.8,stamp*.8);
+    ctx.fillStyle='#f6eedc';ctx.textAlign='center';ctx.font=`700 ${stamp*.6}px ${serif}`;ctx.fillText(seal,x+stamp/2,y+stamp*.53);
+  }
   const texture=new T.CanvasTexture(canvas);texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;texture.minFilter=T.LinearMipmapLinearFilter;
   texture.name='clear-sign-text';
   const plaque=new T.Group();plaque.name='solid-sign';plaque.userData={title,subtitle};g.add(plaque);
-  cube(plaque,material('#b4bbaa',.55,.12),width+.10,height+.10,.14);
+  cube(plaque,frame(),width+.10,height+.10,.14);
   const ink=new T.MeshBasicMaterial({map:texture,toneMapped:false});
   for(const side of [-1,1]){
     const face=mesh(plaque,new T.PlaneGeometry(width,height),ink,0,0,side*.076);face.rotation.y=side===1?0:Math.PI;face.castShadow=false;
   }
   return plaque;
 }
+/** A notice board: one timber post on a stone footing, braced crossbeam and small roof, the slip hung in front. */
 export function terminal(title:string,color:string,subtitle='F  /  OPEN EXPERIENCE'){
-  const g=new T.Group(),dark=material('#91aaa7',.5,.08),edge=material(color,.4,.1);
-  mesh(g,new T.CylinderGeometry(0.55,0.7,0.12,24),dark,0,0.06);
-  const post=cube(g,dark,.34,.78,.32,0,.5);post.name='terminal-post';
-  cube(g,edge,.055,.65,.34,.2,.49);
-  cube(g,dark,.5,.03,.18,0,.905,.055);
-  const head=new T.Group();head.position.set(0,1.32,0);head.rotation.x=-0.18;g.add(head);
-  sign(head,title,subtitle,color,1.7,0.69);
-  const led=mesh(g,new T.TorusGeometry(0.6,0.028,6,40),new T.MeshBasicMaterial({color}),0,0.14);led.rotation.x=Math.PI/2;
+  const g=new T.Group();
+  place(g,new T.BoxGeometry(.66,.22,.46),kit.stone(),0,.11,-.14);
+  place(g,new T.BoxGeometry(.74,.06,.54),kit.marble(),0,.25,-.14);
+  const post=place(g,new T.BoxGeometry(.15,1.615,.15),kit.timber(),0,.28+1.615/2,-.145);post.name='terminal-post';
+  for(const s of [-1,1]){const strut=place(g,new T.BoxGeometry(.56,.07,.07),kit.timber(),s*.24,1.76,-.145);strut.rotation.z=s*.55;}
+  beam(g,2,0,1.97,-.12,0,.15,.16);
+  roof(g,{width:1.9,depth:.26,height:.22,overhang:.22,lift:.08,thickness:.05,y:2.045,z:-.12});
+  for(const s of [-1,1])place(g,new T.CylinderGeometry(.014,.014,.18,5),kit.bronze(),s*.62,1.805,-.05).castShadow=false;
+  const board=sign(g,title,subtitle,color,1.7,.69);board.position.y=1.32;
   return g;
 }
-function lamp(g:T.Object3D,x:number,z:number,color:string){
-  const post=material('#9ca99c',.5,.15),light=new T.MeshStandardMaterial({color:'#fff3d7',emissive:color,emissiveIntensity:.25});
-  light.userData.nightGlow=true;
-  mesh(g,new T.CylinderGeometry(.045,.075,2.6,12),post,x,1.3,z);
-  mesh(g,new T.SphereGeometry(.24,16,12),light,x,2.68,z).castShadow=false;
-  const cap=mesh(g,new T.SphereGeometry(.29,16,8,0,Math.PI*2,0,Math.PI/2),post,x,2.77,z);cap.scale.y=.38;
-  mesh(g,new T.CylinderGeometry(.17,.21,.12,16),post,x,.06,z);
-}
 function flowerBed(g:T.Group,color:string){
-  const bed=new T.Group();bed.position.set(-5,0,11);g.add(bed);
-  mesh(bed,new T.CylinderGeometry(1.25,1.35,.3,48),material('#fff0dc'),0,.15);
-  mesh(bed,new T.CylinderGeometry(1.13,1.13,.04,48),material('#a4b99b'),0,.33);
+  const bed=new T.Group();bed.position.set(-5,0,11);bed.rotation.y=Math.PI/8;g.add(bed);
+  // An octagonal stone planter; coping and soil overlap so no two caps share a plane.
+  mesh(bed,new T.CylinderGeometry(1.25,1.35,.28,8),kit.stone(),0,.14);
+  mesh(bed,new T.CylinderGeometry(1.31,1.31,.05,8),kit.marble(),0,.295);
+  mesh(bed,new T.CylinderGeometry(1.13,1.13,.04,8),kit.soil(),0,.33);
   const petals=new T.InstancedMesh(new T.SphereGeometry(1,10,8),material('#ffffff',.8,0),88);
-  const stems=new T.InstancedMesh(new T.CylinderGeometry(.016,.023,1,6),material('#86aa8b'),11);
+  const stems=new T.InstancedMesh(new T.CylinderGeometry(.016,.023,1,6),material('#5f7f5c'),11);
   const transform=new T.Object3D();let index=0;
   for(let i=0;i<11;i++){
     const a=i*2.4,r=.22+Math.sqrt(i)*.22,x=Math.cos(a)*r,z=Math.sin(a)*r,h=.35+(i%3)*.1;
@@ -62,100 +76,89 @@ function flowerBed(g:T.Group,color:string){
       if(n<5){transform.position.set(x+Math.cos(theta)*.115,.35+h,z+Math.sin(theta)*.115);transform.scale.set(.14,.055,.09);transform.rotation.set(0,-theta,0);}
       else if(n===5){transform.position.set(x,.38+h,z);transform.scale.set(.07,.06,.07);}
       else{const side=n===6?-1:1;transform.position.set(x+side*.095,.44,z);transform.scale.set(.16,.035,.06);transform.rotation.set(0,side*.6,side*.4);}
-      transform.updateMatrix();petals.setMatrixAt(index,transform.matrix);petals.setColorAt(index++,new T.Color(n===5?'#efd59e':n>5?'#9bb99b':i%3===0?'#f4bfd0':i%3===1?'#fff1d2':color));
+      transform.updateMatrix();petals.setMatrixAt(index,transform.matrix);petals.setColorAt(index++,new T.Color(n===5?'#dcb04c':n>5?'#6f9a6c':i%3===0?'#e6a0ad':i%3===1?'#f3ead6':pigmentAccent(color)));
     }
   }
   petals.castShadow=true;petals.receiveShadow=true;bed.add(petals,stems);
-
+}
+/** A garden rest: timber seat with a leaning back rail on stone blocks, a planter behind, a book and tea left out. */
+function restCorner(g:T.Group,x:number,flowers:FlowerPoint[]){
+  for(const leg of [-.8,.8])place(g,new T.BoxGeometry(.5,.47,.58),kit.stone(),x+leg,.235,9);
+  place(g,new T.BoxGeometry(2.4,.1,.62),kit.timberLight(),x,.52,9);
+  for(let i=0;i<10;i++){const spindle=place(g,new T.BoxGeometry(.035,.42,.035),kit.timber(),x-1.08+i*.24,.78,9.33);spindle.rotation.x=-.25;}
+  place(g,new T.BoxGeometry(2.4,.07,.08),kit.timber(),x,.99,9.42);
+  for(const side of [-1,1])place(g,new T.BoxGeometry(.08,.46,.08),kit.timber(),x+side*1.16,.78,9.36).rotation.x=-.25;
+  const planter=place(g,new T.BoxGeometry(1.6,.5,1.2),kit.stone(),x,.25,11);planter.castShadow=false;
+  place(g,new T.BoxGeometry(1.72,.09,1.32),kit.marble(),x,.52,11);place(g,new T.BoxGeometry(1.45,.04,1.05),kit.soil(),x,.57,11);
+  for(let n=0;n<18;n++)flowers.push({x:x+Math.sin(n*2.4)*(.15+Math.sqrt(n)*.12),y:.60,z:11+Math.cos(n*2.4)*.4});
+  // Thread-bound volumes: indigo boards around paper blocks.
+  const indigo=material('#34495a',.85,0,'wood');
+  for(let page=0;page<3;page++){const book=place(g,new T.BoxGeometry(.46,.045,.32),page%2?kit.paper():indigo,x-.65,.5925+page*.045,9);book.rotation.y=.12+page*.05;}
+  const cup=teacup();cup.position.set(x+.8,.57,9);g.add(cup);
 }
 export function dressRegion(region:Region,exhibits:Exhibit[],obstacles:Obstacle[]){
   const g=new T.Group();const [rx,rz]=region.position;g.position.set(rx,0,rz);
-  const stone=material('#fff0dc',.9,.02,'stone'),dark=material('#9cb1a6',.8,.02,'wood'),tint=material(region.color),metal=material('#97b7c6',.4,.18,'metal');
   const gardenFlowers:FlowerPoint[]=[];
   const block=(x:number,z:number,radius:number,height=Infinity)=>obstacles.push({x:rx+x,z:rz+z,radius,height});
   const onPath=(x:number,z:number,margin=0)=>onRegionRoute(x,z,region,exhibits,margin);
   const nearDiscovery=(x:number,z:number)=>!!region.discovery&&Math.hypot(x-region.discovery.position[0],z-region.discovery.position[1])<3.1;
   if(region.season!=='winter'&&!onPath(-5,11,1.5)){flowerBed(g,region.color);block(-5,11,1.25,.85);}
-  // A small, optional stepping-stone route behind the arrival gate.
+  // An optional route of carved drum stones behind the arrival garden.
   for(const [i,x,z,h] of [[0,-3.8,13.1,.28],[1,-1.8,14.2,.5],[2,.4,14.5,.76],[3,2.6,13.8,.46]]){
     if(onPath(x,z,1))continue;
-    const plinth=mesh(g,new T.CylinderGeometry(.7,.8,h,48),i%2?stone:tint,x,h/2,z);
-    const cap=mesh(g,new T.CylinderGeometry(.57,.57,.035,48),i%2?tint:stone,x,h+.018,z);cap.castShadow=false;
-    plinth.receiveShadow=true;block(x,z,.8,h+.035);
+    drumStool(g,x,z,.72,h+.035,i%2?kit.marble():kit.stone());block(x,z,.8,h+.035);
   }
-
   // Paths are painted by terrain.ts; this group contains only raised furnishings.
-  for(const x of [-3.2,3.2]){if(onPath(x,10,.4)||nearDiscovery(x,10))continue;lamp(g,x,10,region.color);block(x,10,.15);}
+  for(const x of [-3.2,3.2]){if(onPath(x,10,.4)||nearDiscovery(x,10))continue;lantern(g,x,10);block(x,10,.25);}
   if(!region.arrivalPath){
-  const distance=Math.hypot(rx,rz),gateway=new T.Group();gateway.position.set(-rx/distance*(region.radius-2),0,-rz/distance*(region.radius-2));gateway.rotation.y=Math.atan2(-rx,-rz);g.add(gateway);
-  const entrance=sign(gateway,region.title,region.scenery==='laboratory'?'观察 · 建模 · 探索':region.english,region.color,3.4,.8);entrance.position.set(0,4.1,.13);
-  for(const x of [-3.1,3.1]){cube(gateway,stone,.55,.25,.55,x,.125,0);cube(gateway,dark,.22,4.48,.24,x,2.46,0);const p=new T.Vector3(x,0,0).applyAxisAngle(new T.Vector3(0,1,0),gateway.rotation.y).add(gateway.position);block(p.x,p.z,.3);}
-  cube(gateway,tint,6.55,.2,.5,0,4.64,0);
-  cube(gateway,stone,6.75,.09,.66,0,4.785,0);
-  for(const x of [-1.45,1.45])cube(gateway,dark,.07,.18,.08,x,4.56,.13);
-  if(region.scenery==='laboratory'){
-    for(const x of [-3.1,3.1]){cube(gateway,tint,.34,.1,.37,x,3.25,0);cube(gateway,metal,.04,2.5,.04,x,1.65,.145);}
+    const distance=Math.hypot(rx,rz),gx=-rx/distance*(region.radius-2),gz=-rz/distance*(region.radius-2),rotation=Math.atan2(-rx,-rz);
+    const arch=paifang(g,6.2,4.2,{x:gx,z:gz,rotation,tiles:region.season==='winter'?kit.tileSnow():kit.tile()});
+    const entrance=sign(arch.group,region.title,region.scenery==='laboratory'?'观察 · 建模 · 探索':'',region.color,3,.62);entrance.position.set(0,arch.plaqueY,0);
+    for(const x of [-3.1,3.1])for(const z of [0,-.58,.58]){const p=new T.Vector3(x,0,z).applyAxisAngle(new T.Vector3(0,1,0),rotation).add(new T.Vector3(gx,0,gz));block(p.x,p.z,z?.26:.3,z?1:Infinity);}
   }
-  }
-  // Perimeter seating, plants and rails leave the radial bridges open.
+  const fence=region.season==='winter'?'stone':region.season==='summer'?'bamboo':'timber';
+  // Perimeter planting, lanterns and fence runs leave the radial bridges open.
   for(const entry of shoreLayout(region,exhibits)){
     const {angle:a,fence:{x,z},plant,index:i}=entry;
     if(plant&&!onPath(plant.x,plant.z,1.6)&&!nearDiscovery(plant.x,plant.z)){
-      if(entry.kind==='lamp'){lamp(g,plant.x,plant.z,region.color);block(plant.x,plant.z,.15);}
-      else {const foliage=region.season?seasonalColors[region.season].trees[i%3]:i%5===0?'#edc2ce':new T.Color(region.color).lerp(new T.Color('#aed5ba'),.4).getStyle();if(region.season==='summer')palm(g,plant.x,plant.z,.9+(i%3)*.12);else tree(g,plant.x,plant.z,.8+(i%3)*.24,foliage);block(plant.x,plant.z,.25);}
+      if(entry.kind==='lamp'){lantern(g,plant.x,plant.z,.9);block(plant.x,plant.z,.25);}
+      else {const foliage=region.season?seasonalColors[region.season].trees[i%3]:i%5===0?'#edc2ce':'#5d8d63';if(region.season==='summer')palm(g,plant.x,plant.z,.9+(i%3)*.12);else tree(g,plant.x,plant.z,.8+(i%3)*.24,foliage);block(plant.x,plant.z,.25);}
     }
-    // Short fence sections punctuate the shoreline without sealing entrances.
     if(!entry.fenceClear||onPath(x,z,1.1))continue;
-    const fence=new T.Group();fence.position.set(x,0,z);fence.rotation.y=-a;g.add(fence);
-    for(const b of [-.7,.7])cube(fence,dark,.06,.85,.06,0,.42,b);
-    cube(fence,tint,.055,.045,1.5,0,.8);
+    const run=fenceSection(g,1.5,fence);run.position.set(x,0,z);run.rotation.y=-a;
   }
   for(const x of [-10,10]){
     if(onPath(x,9,1.7)||onPath(x,11,1.7))continue;
-    cube(g,stone,2.5,.17,.75,x,.55,9);for(const leg of [-.85,.85])cube(g,dark,.15,.5,.6,x+leg,.25,9);
+    restCorner(g,x,gardenFlowers);
     obstacles.push({x:rx+x,z:rz+9,radius:0,halfX:1.25,halfZ:.4,height:.72});
-    const planter=cube(g,dark,1.6,.5,1.2,x,.25,11);planter.castShadow=false;
-    for(let n=0;n<18;n++)gardenFlowers.push({x:x+Math.sin(n*2.4)*(.15+Math.sqrt(n)*.12),y:.60,z:11+Math.cos(n*2.4)*.4});
-    cube(g,stone,1.72,.09,1.32,x,.52,11);cube(g,material('#938a72',1,0,'stone'),1.45,.04,1.05,x,.57,11);
-    cube(g,dark,2.5,.38,.12,x,1.04,9.34);for(const side of [-1,1])cube(g,dark,.08,.54,.08,x+side*1.05,.79,9.3);
-    for(let slat=0;slat<4;slat++)cube(g,tint,2.3,.075,.11,x,.675,8.73+slat*.18);
-    // A book and cup make the resting corners feel inhabited.
-    for(let page=0;page<3;page++){const book=cube(g,page%2?stone:tint,.48,.045,.34,x-.65,.76+page*.045,9);book.rotation.y=.12;}
-    const cup=teacup();cup.position.set(x+.8,.714,9);g.add(cup);
     obstacles.push({x:rx+x,z:rz+11,radius:0,halfX:.8,halfZ:.6,height:.95});
   }
   g.add(flowerDrifts(gardenFlowers));
   const themes:Record<string,()=>void>={
     woodland:()=>{
-      // Rounded hills and cloud-like tree canopies give the AI district a garden silhouette.
-      for(let i=0;i<7;i++){
-        const x=-16+i*5.5,z=-region.radius-3-(i%2)*3,h=7+(i%3)*3;
-        const peak=mesh(g,new T.SphereGeometry(1,24,18),material(i%2?'#b1cfcb':'#c6d9bb'),x,-2,z);peak.scale.set(4.7,h,4.2);
-        const crest=mesh(g,new T.SphereGeometry(1,20,14),stone,x,h-2.55,z);crest.scale.set(1.7,.85,1.5);
-      }
-      for(const x of [-11.5,11.5]){cube(g,stone,.24,4,.24,x,2,2);cube(g,tint,2.2,.13,1.2,x,4,2);block(x,2,.2);}
-      for(let i=0;i<16;i++){const x=Math.sin(i*4)*13,z=Math.cos(i*4)*12;if(exhibits.some(m=>Math.hypot(x-m.position[0],z-m.position[1])<5)||Math.abs(x)<3)continue;
-        for(let n=0;n<3;n++){mesh(g,new T.CylinderGeometry(.018,.018,.4,6),dark,x+n*.22,.2,z);mesh(g,new T.SphereGeometry(.14,12,8),material('#efb7c4'),x+n*.22,.46,z);}}
+      // Flowering trees and upright scholar's rocks: a garden, not a forest.
+      for(let i=0;i<16;i++){const x=Math.sin(i*4)*13,z=Math.cos(i*4)*12;if(exhibits.some(m=>Math.hypot(x-m.position[0],z-m.position[1])<5)||Math.abs(x)<3||onPath(x,z,1.2))continue;
+        if(i%3===0){scholarRock(g,x,z,1.2+(i%2)*.4);block(x,z,.45);}else{paintedTree(g,x,z,.85,i%2?'blossom':'pine');block(x,z,.25);}}
     },
     laboratory:()=>{
-      // The domed research station is built by region-landmarks; keep this forecourt open.
+      // The observatory is built by region-landmarks; keep this forecourt open.
     },
     museum:()=>{
-      // Both galleries own their architecture; this shared forecourt stays open.
-      for(const x of [-3,3]){cube(g,stone,.36,.5,.36,x,.25,7);mesh(g,new T.SphereGeometry(.17,12,8),tint,x,.6,7);}
+      // A pair of drum stones marks the forecourt threshold.
+      for(const x of [-3,3]){drumStone(g,x,7,Math.PI/2);block(x,7,.35,1);}
     },
     studio:()=>{}
   };
   (themes[region.scenery]??themes.woodland)();return g;
 }
 export function teacup(){
-  const cup=new T.Group();cup.name='teacup';const ceramic=material('#fff0dc',.32,.04);
+  const cup=new T.Group();cup.name='teacup';const ceramic=kit.celadon();
   const profile=[[0,.012],[.06,.012],[.068,.02],[.087,.18],[.084,.195],[.073,.195],[.07,.18],[.055,.034],[0,.034]].map(([x,y])=>new T.Vector2(x,y));
   mesh(cup,new T.LatheGeometry(profile,32),ceramic);
   // The C-shaped handle lies in the XY plane; both ends penetrate the sidewall.
   const curve=new T.CatmullRomCurve3([[.079,.164,0],[.15,.17,0],[.176,.105,0],[.144,.049,0],[.068,.052,0]].map(p=>new T.Vector3(...p)));
   mesh(cup,new T.TubeGeometry(curve,24,.013,8,false),ceramic).name='cup-handle';
-  const tea=mesh(cup,new T.CircleGeometry(.071,32),material('#957051',.25,0),0,.159);tea.rotation.x=-Math.PI/2;tea.castShadow=false;
+  const tea=mesh(cup,new T.CircleGeometry(.071,32),material('#8a7a44',.25,0),0,.159);tea.rotation.x=-Math.PI/2;tea.castShadow=false;
   mesh(cup,new T.CylinderGeometry(.125,.11,.012,32),ceramic,0,.006);
   return cup;
 }

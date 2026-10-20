@@ -1,0 +1,602 @@
+[
+  {
+    "path": "build/XiangMeta-0.19.0",
+    "bytes": 3084404132.0,
+    "files": 19469
+  },
+  {
+    "path": "build/XiangMeta-0.20.0",
+    "bytes": 3093439005.0,
+    "files": 19647
+  },
+  {
+    "path": "build/XiangMeta-0.21.0",
+    "bytes": 3093441909.0,
+    "files": 19647
+  },
+  {
+    "path": "build/XiangMeta-0.22.0",
+    "bytes": 3093447122.0,
+    "files": 19647
+  },
+  {
+    "path": "build/staging",
+    "bytes": 1505387076.0,
+    "files": 159
+  },
+  {
+    "path": "artifacts/tmp",
+    "bytes": 27237696.0,
+    "files": 114
+  },
+  {
+    "path": "artifacts\\current\\clearance-v19.json",
+    "bytes": 7763.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\mountain-report.json",
+    "bytes": 799.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\packed-media-0.19.0.json",
+    "bytes": 11069.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\packed-media-0.20.0.json",
+    "bytes": 11069.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\packed-media-0.21.0.json",
+    "bytes": 11069.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\packed-media-0.22.0.json",
+    "bytes": 11069.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\polish-v22.json",
+    "bytes": 1337.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\portable-regression-0.19.0-content-only.json",
+    "bytes": 294.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\portable-regression-0.20.0-content-only.json",
+    "bytes": 294.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\portable-regression-0.21.0-content-only.json",
+    "bytes": 294.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\portable-regression-0.22.0-content-only.json",
+    "bytes": 294.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\research-reimport.json",
+    "bytes": 7603.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.19.0-harbor-native.png",
+    "bytes": 742009.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.19.0-personal-music-native.png",
+    "bytes": 1497242.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.19.0-photography-native.png",
+    "bytes": 1655718.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.20.0-harbor-native.png",
+    "bytes": 720775.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.20.0-personal-music-native.png",
+    "bytes": 1559095.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.20.0-photography-native.png",
+    "bytes": 1656642.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.21.0-harbor-native.png",
+    "bytes": 742480.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.21.0-personal-music-native.png",
+    "bytes": 1559169.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.21.0-photography-native.png",
+    "bytes": 1654442.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.22.0-harbor-native.png",
+    "bytes": 729503.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.22.0-personal-music-native.png",
+    "bytes": 1496701.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v0.22.0-photography-native.png",
+    "bytes": 1656762.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-ai-mountain-0.png",
+    "bytes": 834447.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-ai-mountain-1.png",
+    "bytes": 779256.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-ai-mountain-2.png",
+    "bytes": 876300.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-harbor.png",
+    "bytes": 714269.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-hub.png",
+    "bytes": 703591.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-personal-museum-0.png",
+    "bytes": 675327.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-personal-museum-1.png",
+    "bytes": 553375.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-personal-museum-2.png",
+    "bytes": 579384.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-pier.png",
+    "bytes": 793016.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-science-valley-0.png",
+    "bytes": 478582.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-science-valley-1.png",
+    "bytes": 540631.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-science-valley-2.png",
+    "bytes": 398572.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-weiming-studio-0.png",
+    "bytes": 631164.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-weiming-studio-1.png",
+    "bytes": 540319.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-clearance-weiming-studio-2.png",
+    "bytes": 465456.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-rain-0.png",
+    "bytes": 539772.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-rain-1.png",
+    "bytes": 438455.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-rain-2.png",
+    "bytes": 415423.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-rain-3.png",
+    "bytes": 433399.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v19-rain-4.png",
+    "bytes": 337436.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-future-quant-exchange.png",
+    "bytes": 418609.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-future-robot-island.png",
+    "bytes": 452777.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-cat-recognition.png",
+    "bytes": 647997.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-emotion-recognition.png",
+    "bytes": 700504.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-overview.png",
+    "bytes": 672349.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-poetry.png",
+    "bytes": 725175.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-recommendation.png",
+    "bytes": 735959.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-report.json",
+    "bytes": 799.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v20-mountain-xianglm.png",
+    "bytes": 584021.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-future-quant-exchange.png",
+    "bytes": 416862.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-future-robot-island.png",
+    "bytes": 451923.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-cat-recognition.png",
+    "bytes": 636835.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-emotion-recognition.png",
+    "bytes": 649391.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-overview.png",
+    "bytes": 655571.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-poetry.png",
+    "bytes": 690818.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-recommendation.png",
+    "bytes": 691045.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-report.json",
+    "bytes": 799.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-mountain-xianglm.png",
+    "bytes": 582545.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-bloom.png",
+    "bytes": 699920.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-bubbles.png",
+    "bytes": 438097.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-butterflies.png",
+    "bytes": 855646.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-chimes.png",
+    "bytes": 475345.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-cloudbell.png",
+    "bytes": 797049.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-kaleidoscope.png",
+    "bytes": 548211.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-leaves.png",
+    "bytes": 596023.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-lighthouse.png",
+    "bytes": 520983.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-orrery.png",
+    "bytes": 552616.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-pendulum.png",
+    "bytes": 509428.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-prism.png",
+    "bytes": 566248.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-shell.png",
+    "bytes": 445068.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-sidebar-1500.png",
+    "bytes": 623994.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-sidebar-760.png",
+    "bytes": 443218.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-snowglobe.png",
+    "bytes": 557611.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-tides.png",
+    "bytes": 572001.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-tokenloom.png",
+    "bytes": 834753.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v21-v17-vinyl.png",
+    "bytes": 946671.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-camp-front.png",
+    "bytes": 300038.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-camp-rear.png",
+    "bytes": 668278.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-f-prompt.png",
+    "bytes": 306562.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-gate.png",
+    "bytes": 403912.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-green-mountain.png",
+    "bytes": 614534.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-lab-0.png",
+    "bytes": 305094.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-lab-1.png",
+    "bytes": 400756.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-lab-2.png",
+    "bytes": 392967.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-lab-3.png",
+    "bytes": 404745.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-lab-4.png",
+    "bytes": 395012.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-memory-collected.png",
+    "bytes": 322647.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-memory-new.png",
+    "bytes": 324860.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-bloom.png",
+    "bytes": 716371.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-bubbles.png",
+    "bytes": 445725.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-butterflies.png",
+    "bytes": 863896.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-chimes.png",
+    "bytes": 500389.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-cloudbell.png",
+    "bytes": 813015.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-kaleidoscope.png",
+    "bytes": 497873.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-leaves.png",
+    "bytes": 553658.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-lighthouse.png",
+    "bytes": 644173.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-orrery.png",
+    "bytes": 559387.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-pendulum.png",
+    "bytes": 489597.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-prism.png",
+    "bytes": 516738.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-shell.png",
+    "bytes": 499461.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-sidebar-1500.png",
+    "bytes": 584553.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-sidebar-760.png",
+    "bytes": 405909.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-snowglobe.png",
+    "bytes": 610104.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-tides.png",
+    "bytes": 584926.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-tokenloom.png",
+    "bytes": 843692.0,
+    "files": 1
+  },
+  {
+    "path": "artifacts\\current\\v22-wonder-vinyl.png",
+    "bytes": 925868.0,
+    "files": 1
+  },
+  {
+    "path": "runtime\\models\\poetry\\src\\__pycache__",
+    "bytes": 1798.0,
+    "files": 2
+  },
+  {
+    "path": "runtime\\models\\xianglm\\__pycache__",
+    "bytes": 11939.0,
+    "files": 1
+  },
+  {
+    "path": "runtime\\models\\xianglm\\src\\__pycache__",
+    "bytes": 33819.0,
+    "files": 3
+  },
+  {
+    "path": "artifacts\\living-world-failure.png",
+    "bytes": 547228.0,
+    "files": 1
+  }
+]

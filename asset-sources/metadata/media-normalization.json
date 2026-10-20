@@ -1,0 +1,30 @@
+[
+  {
+    "source": "modules\\personal-music\\assets\\album-02-track-01.wav",
+    "file": "modules\\personal-music\\assets\\album-02-track-01.mp3",
+    "sourceBytes": 50950572,
+    "bytes": 10616735,
+    "sha256": "db4521e7d69a9af442a26be81c3a316bd11212f5e0c6950444de191e1220db18"
+  },
+  {
+    "source": "modules\\personal-music\\assets\\album-04-track-02.wav",
+    "file": "modules\\personal-music\\assets\\album-04-track-02.mp3",
+    "sourceBytes": 46755530,
+    "bytes": 6496365,
+    "sha256": "23600d0e47b1cfaa81ee97a4891143d5144bc7dd3cf4e7045f8cd21f28ead094"
+  },
+  {
+    "source": "modules\\personal-music\\assets\\backing-05.wav",
+    "file": "modules\\personal-music\\assets\\backing-05.mp3",
+    "sourceBytes": 68818386,
+    "bytes": 9548205,
+    "sha256": "7d2e2313ae9e1f89a71c1a13091dff78b31189f4b724ae2135a15df6419fa51b"
+  },
+  {
+    "source": "modules\\personal-music\\assets\\winter.wav",
+    "file": "modules\\personal-music\\assets\\winter.mp3",
+    "sourceBytes": 34562102,
+    "bytes": 4801965,
+    "sha256": "a97555c32c9fa35fb815292c00b262d1938b3276c115da81a7dd1d1b156aa7af"
+  }
+]

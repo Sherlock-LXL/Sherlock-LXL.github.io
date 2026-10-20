@@ -1,9 +1,22 @@
 {
   "schemaVersion": 1,
   "id": "weiming",
+  "portfolio": {
+    "name": "未名拾音 · 燕来有声",
+    "category": "Creative",
+    "summary": "连接校园、音乐与影像的团队创作。《燕来有声》完整 MV 可在哔哩哔哩观看。",
+    "technologies": ["Music", "Film", "Collaboration"],
+    "demo": "https://www.bilibili.com/video/BV1kCTX6uEf7/",
+    "order": 9
+  },
   "title": "未名拾音 Studio",
   "subtitle": "共同创作，让燕来有声",
   "region": "weiming-studio",
+  "visual": "studio",
+  "position": [
+    0,
+    -2
+  ],
   "owner": "team",
   "category": "COLLECTION",
   "description": "未名拾音的品牌与团队空间。从第一场共同创作出发，连接校园、音乐与影像，让更多声音在这里相遇。",
@@ -12,45 +25,6 @@
     "燕来有声",
     "音乐影像"
   ],
-  "position": [
-    0,
-    -2
-  ],
-  "rotation": 180,
-  "visual": "studio",
-  "world": {
-    "version": 1,
-    "capabilities": [
-      "listening"
-    ],
-    "ambience": "stage",
-    "fragments": [
-      {
-        "id": "together",
-        "title": "共同的声音",
-        "body": "《燕来有声》属于未名拾音的团队空间。这里保留品牌项目与共同创作的故事，个人音乐历史则在个人博物馆独立展示。",
-        "position": [
-          -3,
-          8
-        ]
-      }
-    ],
-    "connections": []
-  },
-  "portfolio": {
-    "name": "未名拾音 · 燕来有声",
-    "category": "Creative",
-    "summary": "连接校园、音乐与影像的团队创作。《燕来有声》完整 MV 可在哔哩哔哩观看。",
-    "technologies": [
-      "Music",
-      "Film",
-      "Collaboration"
-    ],
-    "demo": "https://www.bilibili.com/video/BV1kCTX6uEf7/",
-    "featured": false,
-    "order": 9,
-    "screenshots": []
-  },
   "facts": [
     {
       "label": "成立日期",
@@ -91,5 +65,24 @@
       "thumbnail": "/assets/modules/weiming/yan-lai-you-sheng.webp"
     }
   ],
-  "link": "https://www.bilibili.com/video/BV1kCTX6uEf7/"
+  "link": "https://www.bilibili.com/video/BV1kCTX6uEf7/",
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "listening"
+    ],
+    "ambience": "stage",
+    "fragments": [
+      {
+        "id": "together",
+        "title": "共同的声音",
+        "body": "《燕来有声》属于未名拾音的团队空间。这里保留品牌项目与共同创作的故事，个人音乐历史则在个人博物馆独立展示。",
+        "position": [
+          -3,
+          8
+        ]
+      }
+    ]
+  },
+  "rotation": 180
 }

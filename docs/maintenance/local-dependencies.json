@@ -1,0 +1,376 @@
+{
+  "version": "1.0.0",
+  "models": [
+    {
+      "kind": "development",
+      "id": "cat-recognition",
+      "python": "runtime\\python\\python.exe",
+      "source": "runtime\\models\\cat-recognition",
+      "requiredFiles": 8
+    },
+    {
+      "kind": "development",
+      "id": "emotion-recognition",
+      "python": "runtime\\python\\python.exe",
+      "source": "runtime\\models\\emotion-recognition",
+      "requiredFiles": 6
+    },
+    {
+      "kind": "development",
+      "id": "poetry",
+      "python": "runtime\\python\\python.exe",
+      "source": "runtime\\models\\poetry",
+      "requiredFiles": 4
+    },
+    {
+      "kind": "development",
+      "id": "recommendation",
+      "python": "runtime\\python\\python.exe",
+      "source": "runtime\\models\\recommendation",
+      "requiredFiles": 4
+    },
+    {
+      "kind": "development",
+      "id": "xianglm",
+      "python": "runtime\\python\\python.exe",
+      "source": "runtime\\models\\xianglm",
+      "requiredFiles": 6
+    },
+    {
+      "kind": "portable",
+      "id": "cat-recognition",
+      "python": "build\\XiangMeta-1.0.0\\runtime\\python\\python.exe",
+      "source": "build\\XiangMeta-1.0.0\\runtime\\models\\cat-recognition",
+      "requiredFiles": 8
+    },
+    {
+      "kind": "portable",
+      "id": "emotion-recognition",
+      "python": "build\\XiangMeta-1.0.0\\runtime\\python\\python.exe",
+      "source": "build\\XiangMeta-1.0.0\\runtime\\models\\emotion-recognition",
+      "requiredFiles": 6
+    },
+    {
+      "kind": "portable",
+      "id": "poetry",
+      "python": "build\\XiangMeta-1.0.0\\runtime\\python\\python.exe",
+      "source": "build\\XiangMeta-1.0.0\\runtime\\models\\poetry",
+      "requiredFiles": 4
+    },
+    {
+      "kind": "portable",
+      "id": "recommendation",
+      "python": "build\\XiangMeta-1.0.0\\runtime\\python\\python.exe",
+      "source": "build\\XiangMeta-1.0.0\\runtime\\models\\recommendation",
+      "requiredFiles": 4
+    },
+    {
+      "kind": "portable",
+      "id": "xianglm",
+      "python": "build\\XiangMeta-1.0.0\\runtime\\python\\python.exe",
+      "source": "build\\XiangMeta-1.0.0\\runtime\\models\\xianglm",
+      "requiredFiles": 6
+    }
+  ],
+  "assets": [
+    {
+      "url": "/assets/modules/personal-music/album-01.webp",
+      "file": "modules\\personal-music\\assets\\album-01.webp",
+      "bytes": 407946
+    },
+    {
+      "url": "/assets/modules/personal-music/album-01-track-01.mp3",
+      "file": "modules\\personal-music\\assets\\album-01-track-01.mp3",
+      "bytes": 10511386
+    },
+    {
+      "url": "/assets/modules/personal-music/album-01-track-02.mp3",
+      "file": "modules\\personal-music\\assets\\album-01-track-02.mp3",
+      "bytes": 9065626
+    },
+    {
+      "url": "/assets/modules/personal-music/album-01-track-03.mp3",
+      "file": "modules\\personal-music\\assets\\album-01-track-03.mp3",
+      "bytes": 11332186
+    },
+    {
+      "url": "/assets/modules/personal-music/album-02.webp",
+      "file": "modules\\personal-music\\assets\\album-02.webp",
+      "bytes": 186960
+    },
+    {
+      "url": "/assets/modules/personal-music/album-02-track-01.mp3",
+      "file": "modules\\personal-music\\assets\\album-02-track-01.mp3",
+      "bytes": 10616735
+    },
+    {
+      "url": "/assets/modules/personal-music/album-03.webp",
+      "file": "modules\\personal-music\\assets\\album-03.webp",
+      "bytes": 178946
+    },
+    {
+      "url": "/assets/modules/personal-music/album-03-track-01.mp3",
+      "file": "modules\\personal-music\\assets\\album-03-track-01.mp3",
+      "bytes": 11308608
+    },
+    {
+      "url": "/assets/modules/personal-music/album-03-track-02.mp3",
+      "file": "modules\\personal-music\\assets\\album-03-track-02.mp3",
+      "bytes": 5597928
+    },
+    {
+      "url": "/assets/modules/personal-music/album-03-track-03.mp3",
+      "file": "modules\\personal-music\\assets\\album-03-track-03.mp3",
+      "bytes": 9835524
+    },
+    {
+      "url": "/assets/modules/personal-music/album-04.webp",
+      "file": "modules\\personal-music\\assets\\album-04.webp",
+      "bytes": 371576
+    },
+    {
+      "url": "/assets/modules/personal-music/album-04-track-01.mp3",
+      "file": "modules\\personal-music\\assets\\album-04-track-01.mp3",
+      "bytes": 10717934
+    },
+    {
+      "url": "/assets/modules/personal-music/album-04-track-02.mp3",
+      "file": "modules\\personal-music\\assets\\album-04-track-02.mp3",
+      "bytes": 6496365
+    },
+    {
+      "url": "/assets/modules/personal-music/album-04-track-03.mp3",
+      "file": "modules\\personal-music\\assets\\album-04-track-03.mp3",
+      "bytes": 10444936
+    },
+    {
+      "url": "/assets/modules/personal-music/album-04-track-04.mp3",
+      "file": "modules\\personal-music\\assets\\album-04-track-04.mp3",
+      "bytes": 7339550
+    },
+    {
+      "url": "/assets/modules/personal-music/album-05.webp",
+      "file": "modules\\personal-music\\assets\\album-05.webp",
+      "bytes": 430644
+    },
+    {
+      "url": "/assets/modules/personal-music/album-05-track-01.mp3",
+      "file": "modules\\personal-music\\assets\\album-05-track-01.mp3",
+      "bytes": 9486976
+    },
+    {
+      "url": "/assets/modules/photography/photo-01.webp",
+      "file": "modules\\photography\\assets\\photo-01.webp",
+      "bytes": 136070
+    },
+    {
+      "url": "/assets/modules/photography/photo-01-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-01-thumb.webp",
+      "bytes": 15160
+    },
+    {
+      "url": "/assets/modules/photography/photo-02.webp",
+      "file": "modules\\photography\\assets\\photo-02.webp",
+      "bytes": 165042
+    },
+    {
+      "url": "/assets/modules/photography/photo-02-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-02-thumb.webp",
+      "bytes": 6544
+    },
+    {
+      "url": "/assets/modules/photography/photo-03.webp",
+      "file": "modules\\photography\\assets\\photo-03.webp",
+      "bytes": 241642
+    },
+    {
+      "url": "/assets/modules/photography/photo-03-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-03-thumb.webp",
+      "bytes": 25490
+    },
+    {
+      "url": "/assets/modules/photography/photo-04.webp",
+      "file": "modules\\photography\\assets\\photo-04.webp",
+      "bytes": 537620
+    },
+    {
+      "url": "/assets/modules/photography/photo-04-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-04-thumb.webp",
+      "bytes": 41616
+    },
+    {
+      "url": "/assets/modules/photography/photo-05.webp",
+      "file": "modules\\photography\\assets\\photo-05.webp",
+      "bytes": 749748
+    },
+    {
+      "url": "/assets/modules/photography/photo-05-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-05-thumb.webp",
+      "bytes": 52518
+    },
+    {
+      "url": "/assets/modules/photography/photo-06.webp",
+      "file": "modules\\photography\\assets\\photo-06.webp",
+      "bytes": 126092
+    },
+    {
+      "url": "/assets/modules/photography/photo-06-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-06-thumb.webp",
+      "bytes": 13340
+    },
+    {
+      "url": "/assets/modules/photography/photo-07.webp",
+      "file": "modules\\photography\\assets\\photo-07.webp",
+      "bytes": 464892
+    },
+    {
+      "url": "/assets/modules/photography/photo-07-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-07-thumb.webp",
+      "bytes": 43578
+    },
+    {
+      "url": "/assets/modules/photography/photo-08.webp",
+      "file": "modules\\photography\\assets\\photo-08.webp",
+      "bytes": 116328
+    },
+    {
+      "url": "/assets/modules/photography/photo-08-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-08-thumb.webp",
+      "bytes": 10208
+    },
+    {
+      "url": "/assets/modules/photography/photo-09.webp",
+      "file": "modules\\photography\\assets\\photo-09.webp",
+      "bytes": 1713752
+    },
+    {
+      "url": "/assets/modules/photography/photo-09-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-09-thumb.webp",
+      "bytes": 99254
+    },
+    {
+      "url": "/assets/modules/photography/photo-10.webp",
+      "file": "modules\\photography\\assets\\photo-10.webp",
+      "bytes": 623108
+    },
+    {
+      "url": "/assets/modules/photography/photo-10-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-10-thumb.webp",
+      "bytes": 50854
+    },
+    {
+      "url": "/assets/modules/photography/photo-11.webp",
+      "file": "modules\\photography\\assets\\photo-11.webp",
+      "bytes": 620452
+    },
+    {
+      "url": "/assets/modules/photography/photo-11-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-11-thumb.webp",
+      "bytes": 50370
+    },
+    {
+      "url": "/assets/modules/photography/photo-12.webp",
+      "file": "modules\\photography\\assets\\photo-12.webp",
+      "bytes": 421892
+    },
+    {
+      "url": "/assets/modules/photography/photo-12-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-12-thumb.webp",
+      "bytes": 32606
+    },
+    {
+      "url": "/assets/modules/photography/photo-13.webp",
+      "file": "modules\\photography\\assets\\photo-13.webp",
+      "bytes": 91734
+    },
+    {
+      "url": "/assets/modules/photography/photo-13-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-13-thumb.webp",
+      "bytes": 8010
+    },
+    {
+      "url": "/assets/modules/photography/photo-14.webp",
+      "file": "modules\\photography\\assets\\photo-14.webp",
+      "bytes": 1567786
+    },
+    {
+      "url": "/assets/modules/photography/photo-14-thumb.webp",
+      "file": "modules\\photography\\assets\\photo-14-thumb.webp",
+      "bytes": 100026
+    },
+    {
+      "url": "/assets/modules/weiming/yan-lai-you-sheng.mp4",
+      "file": "modules\\weiming\\assets\\yan-lai-you-sheng.mp4",
+      "bytes": 185658179
+    },
+    {
+      "url": "/assets/modules/weiming/yan-lai-you-sheng.webp",
+      "file": "modules\\weiming\\assets\\yan-lai-you-sheng.webp",
+      "bytes": 537344
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-01.mp3",
+      "file": "modules\\personal-music\\assets\\backing-01.mp3",
+      "bytes": 9162144
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-02.mp3",
+      "file": "modules\\personal-music\\assets\\backing-02.mp3",
+      "bytes": 11308608
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-03.mp3",
+      "file": "modules\\personal-music\\assets\\backing-03.mp3",
+      "bytes": 9017028
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-04.mp3",
+      "file": "modules\\personal-music\\assets\\backing-04.mp3",
+      "bytes": 10246860
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-05.mp3",
+      "file": "modules\\personal-music\\assets\\backing-05.mp3",
+      "bytes": 9548205
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-06.mp3",
+      "file": "modules\\personal-music\\assets\\backing-06.mp3",
+      "bytes": 6490548
+    },
+    {
+      "url": "/assets/modules/personal-music/backing-07.mp3",
+      "file": "modules\\personal-music\\assets\\backing-07.mp3",
+      "bytes": 9370944
+    },
+    {
+      "url": "/assets/modules/personal-music/summer.mp3",
+      "file": "modules\\personal-music\\assets\\summer.mp3",
+      "bytes": 3969288
+    },
+    {
+      "url": "/assets/modules/personal-music/autumn.mp3",
+      "file": "modules\\personal-music\\assets\\autumn.mp3",
+      "bytes": 6761988
+    },
+    {
+      "url": "/assets/modules/personal-music/winter.mp3",
+      "file": "modules\\personal-music\\assets\\winter.mp3",
+      "bytes": 4801965
+    },
+    {
+      "url": "/assets/modules/personal-music/spring.mp3",
+      "file": "modules\\personal-music\\assets\\spring.mp3",
+      "bytes": 2370924
+    }
+  ],
+  "manuscripts": [
+    "wall-attached-bubble-growth.docx",
+    "salt-single-bubble-sonoluminescence.docx"
+  ],
+  "maintenanceTools": [
+    "runtime/tools/ffmpeg/ffmpeg.exe",
+    "runtime/python/Lib/site-packages/lxml/__init__.py"
+  ],
+  "externalDependencies": []
+}

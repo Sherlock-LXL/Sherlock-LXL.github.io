@@ -1,0 +1,121 @@
+[
+  {
+    "directory": ".venv",
+    "files": 27179,
+    "bytes": 1137652607,
+    "GiB": 1.06,
+    "links": []
+  },
+  {
+    "directory": "artifacts",
+    "files": 628,
+    "bytes": 224845905,
+    "GiB": 0.209,
+    "links": []
+  },
+  {
+    "directory": "asset-sources",
+    "files": 7,
+    "bytes": 201165380,
+    "GiB": 0.187,
+    "links": []
+  },
+  {
+    "directory": "backend",
+    "files": 5,
+    "bytes": 15489,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "build",
+    "files": 175414,
+    "bytes": 35586076073,
+    "GiB": 33.142,
+    "links": []
+  },
+  {
+    "directory": "data",
+    "files": 6,
+    "bytes": 22968,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "desktop",
+    "files": 2,
+    "bytes": 4567,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "dist",
+    "files": 9,
+    "bytes": 919274,
+    "GiB": 0.001,
+    "links": []
+  },
+  {
+    "directory": "docs",
+    "files": 25,
+    "bytes": 114956,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "modules",
+    "files": 78,
+    "bytes": 391765852,
+    "GiB": 0.365,
+    "links": []
+  },
+  {
+    "directory": "node_modules",
+    "files": 11246,
+    "bytes": 533932123,
+    "GiB": 0.497,
+    "links": []
+  },
+  {
+    "directory": "public",
+    "files": 4,
+    "bytes": 2240,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "runtime",
+    "files": 20508,
+    "bytes": 2455662503,
+    "GiB": 2.287,
+    "links": []
+  },
+  {
+    "directory": "scripts",
+    "files": 13,
+    "bytes": 32323,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "shared",
+    "files": 21,
+    "bytes": 33647,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "src",
+    "files": 44,
+    "bytes": 318146,
+    "GiB": 0.0,
+    "links": []
+  },
+  {
+    "directory": "tests",
+    "files": 61,
+    "bytes": 201396,
+    "GiB": 0.0,
+    "links": []
+  }
+]

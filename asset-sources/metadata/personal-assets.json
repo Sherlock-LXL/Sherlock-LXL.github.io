@@ -1,0 +1,126 @@
+{
+  "photos": 14,
+  "music": 10,
+  "files": [
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\上海-城市呼吸.jpg",
+      "delivered": "photo-01.webp",
+      "title": "上海-城市呼吸"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\上海-晨曦.jpg",
+      "delivered": "photo-02.webp",
+      "title": "上海-晨曦"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\上海-朝霞.jpg",
+      "delivered": "photo-03.webp",
+      "title": "上海-朝霞"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\乌兰察布-辽阔.jpg",
+      "delivered": "photo-04.webp",
+      "title": "乌兰察布-辽阔"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\九寨沟-晨光.jpg",
+      "delivered": "photo-05.webp",
+      "title": "九寨沟-晨光"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\南澳岛-风与自由.jpg",
+      "delivered": "photo-06.webp",
+      "title": "南澳岛-风与自由"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\川西-肃穆.jpg",
+      "delivered": "photo-07.webp",
+      "title": "川西-肃穆"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\庐山-雾中舞.jpg",
+      "delivered": "photo-08.webp",
+      "title": "庐山-雾中舞"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\深圳-盛夏.jpg",
+      "delivered": "photo-09.webp",
+      "title": "深圳-盛夏"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\都江堰-水纹.jpg",
+      "delivered": "photo-10.webp",
+      "title": "都江堰-水纹"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\阳澄湖-夕阳.jpg",
+      "delivered": "photo-11.webp",
+      "title": "阳澄湖-夕阳"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\香格里拉-天真.jpg",
+      "delivered": "photo-12.webp",
+      "title": "香格里拉-天真"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\香港-余晖.jpg",
+      "delivered": "photo-13.webp",
+      "title": "香港-余晖"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\摄影素材\\黄龙-调色盘.jpg",
+      "delivered": "photo-14.webp",
+      "title": "黄龙-调色盘"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\二分之一星球.mp3",
+      "delivered": "backing-01.mp3",
+      "title": "二分之一星球"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\云歌行.mp3",
+      "delivered": "backing-02.mp3",
+      "title": "云歌行"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\再见.mp3",
+      "delivered": "backing-03.mp3",
+      "title": "再见"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\夏日信.mp3",
+      "delivered": "backing-04.mp3",
+      "title": "夏日信"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\如梦令.wav",
+      "delivered": "backing-05.wav",
+      "title": "如梦令"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\情书.mp3",
+      "delivered": "backing-06.mp3",
+      "title": "情书"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\流行歌伴奏\\未央.mp3",
+      "delivered": "backing-07.mp3",
+      "title": "未央"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\纯音乐\\星河（适合夏天风格的，热烈美丽）.mp3",
+      "delivered": "summer.mp3",
+      "title": "星河"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\纯音乐\\四季（适合秋天风格的沉静）.mp3",
+      "delivered": "autumn.mp3",
+      "title": "四季"
+    },
+    {
+      "source": "C:\\Users\\18616\\Pictures\\音乐素材\\纯音乐\\初雪（适合冬天风格的静谧空灵）.wav",
+      "delivered": "winter.wav",
+      "title": "初雪"
+    }
+  ]
+}

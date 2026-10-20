@@ -1,0 +1,179 @@
+/* 山海册页 · Album of Mountains and Seas — the interface is mounted like an album leaf:
+ * silk paper, ink rules, mineral accents and a cinnabar seal. Loaded last; it only restyles. */
+:root{--paper:#f6f0e3;--silk:#efe6d2;--mount:#e6dac0;--ink:#2b2824;--ink-soft:#5d5447;--ink-faint:#8b8170;--seal:#a34a35;--seal-deep:#7f3324;--malachite:#3d7560;--azurite:#355f7a;--ochre:#93652c;--rule:rgba(58,48,38,.22);--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif;--muted:#7a705f;--border:rgba(58,48,38,.16);color:var(--ink);background:var(--silk)}
+body{background:var(--silk)}
+::selection{background:#e7c9a8;color:var(--ink)}
+.main-world{background:linear-gradient(180deg,#efe7d5,#e4dcc7)}
+/* Paper fibre: two faint crossing hatches shared by every mounted surface. */
+.sidebar,.topbar,dialog,.interaction-prompt,.guide-card,.controls-pill,.toast,#photo-toolbar,.web-loading,.view-badge,#trail-guide,.music-caption{background-image:repeating-linear-gradient(90deg,rgba(120,96,58,.025) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(120,96,58,.02) 0 1px,transparent 1px 11px)}
+/* Album spine: the sidebar is the mounted cover, its edge a double ink rule. */
+.sidebar{background-color:#f3ebdb;border-right:0;box-shadow:inset -1px 0 0 var(--rule),inset -5px 0 0 #ebe1cc,inset -6px 0 0 rgba(58,48,38,.12)}
+.brand{color:var(--ink);font-family:var(--serif);letter-spacing:.5px}
+.brand-symbol{display:inline-grid;place-items:center;width:42px;height:42px;font-size:30px;color:#f7efdf;background:var(--seal);border-radius:4px;box-shadow:inset 0 0 0 2px #f2e3cc,inset 0 0 0 3px var(--seal)}
+.brand small{color:var(--ink-faint);font-family:inherit}
+.portfolio-home{color:var(--ink-soft)}
+.side-caption,.nav-section-label{color:var(--ink-faint);font-family:var(--serif)}
+.nav-overview,.region-nav,.secondary-nav{color:var(--ink);border-radius:3px}
+.nav-overview.active,.region-nav.active{background:linear-gradient(90deg,rgba(163,74,53,.12),rgba(163,74,53,0));color:var(--ink);box-shadow:inset 3px 0 0 var(--seal)}
+.region-nav:hover,.nav-overview:hover,.secondary-nav:hover{background:rgba(58,48,38,.06)}
+.region-nav>span:nth-child(2){font-family:var(--serif);font-weight:600}
+.region-nav small,.secondary-nav b{color:var(--ink-faint)}
+.secondary-nav b{background:transparent;border:1px solid var(--rule)}
+.progress-track{background:rgba(58,48,38,.12);height:2px}.progress-track div{background:var(--seal)}
+.status-dot{background:var(--malachite)}
+button:hover:not(:disabled){color:var(--seal)}
+button:focus-visible,a:focus-visible{outline-color:var(--seal)}
+/* Top band: a translucent sheet of paper ruled underneath. */
+.topbar{background-color:rgba(246,240,227,.86);border-bottom:1px solid var(--rule);color:var(--ink)}
+.breadcrumb,.slash{color:var(--ink-faint)}#current-region{font-family:var(--serif);font-weight:600;color:var(--ink)}
+.icon-button,.journal-button,.sky-clock{color:var(--ink);border-color:var(--rule);background:rgba(250,246,236,.7)}
+.icon-button:hover,.journal-button:hover,.sky-clock:hover{background:#efe3cb;color:var(--seal)}
+.local-badge a{color:var(--ink)}
+/* Headings and captions are set like a colophon. */
+.world-heading h1,dialog h2,.panel-top .eyebrow,.eyebrow{font-family:var(--serif)}
+.first-person .world-heading{background:linear-gradient(90deg,rgba(246,240,227,.92),rgba(246,240,227,0));border-left:3px solid var(--seal);border-radius:0}
+.world-heading h1{color:var(--ink)}.world-heading h1 span{color:var(--seal)}.eyebrow{color:var(--ink-faint)}.line{background:var(--seal)}
+/* Walking HUD: a paper slip with an ink border; keys are carved tablets. */
+.controls-pill{background-color:rgba(246,240,227,.94);color:var(--ink);border:1px solid rgba(58,48,38,.3);box-shadow:0 6px 18px rgba(70,52,30,.12);border-radius:4px}
+.controls-pill i{background:var(--rule)}.controls-pill button:disabled{color:var(--ink-soft)}
+.controls-pill kbd{color:#173327;background:#fbf7ec;border:1px solid rgba(58,48,38,.35);border-bottom-width:3px}
+kbd{background:#fbf7ec;color:var(--ink);border-color:rgba(58,48,38,.3)}
+.overview-small{background:rgba(246,240,227,.94);color:var(--ink);border-color:rgba(58,48,38,.3)}
+.crosshair{background:var(--seal);box-shadow:0 0 0 3px rgba(246,240,227,.7)}
+.view-badge{background-color:rgba(246,240,227,.92);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
+.view-badge button{color:var(--seal);border-left-color:var(--rule)}
+.compass{color:var(--ink-soft);font-family:var(--serif)}.compass span{color:var(--seal)}
+/* Nearby slip: title in serif, actions as ink buttons with tablet keys. */
+.interaction-prompt{background-color:rgba(248,243,232,.97);color:var(--ink);border:1px solid rgba(58,48,38,.34);border-radius:4px;box-shadow:0 10px 30px rgba(70,52,30,.16),inset 0 0 0 4px #f8f3e8,inset 0 0 0 5px rgba(163,74,53,.18)}
+.nearby-copy b,.interaction-prompt b{font-family:var(--serif);color:var(--ink)}
+.interaction-prompt small,.nearby-copy small{color:var(--ink-soft)}
+#interaction-prompt .nearby-actions a,#interaction-prompt .nearby-actions button{color:var(--ink);background:#fbf7ec;border-color:rgba(58,48,38,.32);border-radius:3px}
+#interaction-prompt .nearby-actions a:hover,#interaction-prompt .nearby-actions button:hover{color:var(--seal-deep);background:#f3e4cf;border-color:var(--seal)}
+.interaction-prompt .prompt-art{background:#f3e9d6;border-color:var(--rule);color:var(--seal)}
+.discovery-prompt,.interaction-prompt.memory-prompt{border-color:rgba(147,101,44,.45)}
+.guide-card{background-color:rgba(246,240,227,.95);border:1px solid rgba(58,48,38,.3);border-radius:4px;color:var(--ink);box-shadow:0 8px 24px rgba(70,52,30,.12)}
+.guide-card b{font-family:var(--serif)}.guide-card small{color:var(--ink-soft)}
+.guide-orb{color:#f7efdf;background:var(--seal);border:0;border-radius:4px;box-shadow:inset 0 0 0 2px #f2e3cc,inset 0 0 0 3px var(--seal)}
+.toast{background-color:#f8f3e8;color:var(--ink);border:1px solid rgba(58,48,38,.3);border-left:3px solid var(--seal);border-radius:3px;box-shadow:0 8px 24px rgba(70,52,30,.14)}
+.music-caption{background-color:rgba(246,240,227,.9);color:var(--ink-soft);border:1px solid var(--rule);border-radius:3px}
+.music-caption[data-playing="true"]::before{color:var(--seal)}
+#trail-guide{background-color:#f8f3e8;color:var(--ochre);border-color:rgba(147,101,44,.4)}
+/* Floating labels: paper tags on the painting; region names in widely set serif. */
+.exhibit-label,.first-person .exhibit-label{background:rgba(248,243,232,.95);color:var(--ink);border:1px solid rgba(58,48,38,.3);border-radius:2px;box-shadow:0 2px 8px rgba(70,52,30,.12);font-family:var(--serif)}
+.exhibit-label:before{background:var(--seal);border-radius:1px}
+.exhibit-label:hover,.exhibit-label.selected{background:#f3e4cf;color:var(--seal-deep);border-color:var(--seal)}
+.region-label{font-family:var(--serif);color:var(--ink);background:rgba(248,243,232,.9);border:1px solid rgba(58,48,38,.28);border-radius:2px;letter-spacing:4px}
+.guide-label,.harbor-label{background:rgba(248,243,232,.95);color:var(--ink);border:1px solid rgba(58,48,38,.3);font-family:var(--serif)}
+.future-label{background:rgba(239,230,210,.9)!important;color:var(--azurite)!important;border-color:rgba(53,95,122,.5)!important;font-family:var(--serif)}
+/* Mini atlas: a round fan painting of the archipelago. */
+.mini-atlas{background:radial-gradient(circle at 50% 45%,#f6efe0,#e9dfc8 72%,#dccfb3);border:1px solid rgba(58,48,38,.4);box-shadow:0 8px 24px rgba(70,52,30,.18),inset 0 0 0 5px #f3ead8,inset 0 0 0 6px rgba(58,48,38,.22)}
+.mini-atlas .atlas-sea{fill:#d9e2d6;stroke:rgba(53,95,122,.3)}
+.mini-atlas .atlas-region circle{fill-opacity:.9;stroke:rgba(43,40,36,.55)}
+.mini-atlas text{fill:var(--ink);stroke:#f3ead8;font-family:var(--serif)}
+.mini-atlas .atlas-hub{fill:var(--seal);stroke:#f3ead8}
+.mini-atlas #atlas-player circle:first-child{fill:var(--seal);stroke:#f8f3e8}.mini-atlas #atlas-player .atlas-pulse{stroke:var(--seal)}
+/* Panels open like a mounted hanging scroll: silk border, ink frame, a seal-red heading rule. */
+dialog,dialog.product-mode{--panel-surface:#f8f3e8;color:var(--ink);background:var(--panel-surface);border:1px solid rgba(58,48,38,.38);border-radius:3px;box-shadow:0 24px 70px rgba(60,44,24,.28),inset 0 0 0 6px #efe5d0,inset 0 0 0 7px rgba(58,48,38,.18)}
+dialog::backdrop,.product-mode::backdrop{background:rgba(60,48,32,.18)}
+dialog h2{color:var(--ink);font-weight:600;letter-spacing:.5px}
+#panel-title{border-bottom:1px solid var(--rule);padding-bottom:.35em;box-shadow:0 1px 0 #f8f3e8,0 3px 0 rgba(163,74,53,.18)}
+.panel-top .icon-button{color:var(--ink-soft)}
+.panel-description,.panel-subtitle,.timeline p,.help-grid,.growth-list p{color:var(--ink-soft)}
+.tag-row span{color:var(--malachite);border-color:rgba(61,117,96,.35);background:rgba(61,117,96,.06);border-radius:2px}
+.fact-grid{border-color:var(--rule);background:rgba(239,229,208,.35)}.fact-grid div{border-color:var(--rule)}
+.fact-grid b{color:var(--ink);font-family:var(--serif)}.fact-grid span{color:var(--ink-faint)}
+.panel-tabs{border-color:var(--rule)}.panel-tabs button{color:var(--ink-faint)}.panel-tabs .active{color:var(--seal);border-bottom-color:var(--seal)}
+.primary-button,.product-mode .primary-button{background:var(--ink);color:#f6efe0;border-radius:3px}
+.primary-button:hover:not(:disabled){background:var(--seal);color:#fbf4e6}
+.quiet-button{color:var(--ink);border-color:rgba(58,48,38,.32);background:transparent;border-radius:3px}
+.quiet-button:hover{background:#efe3cb;color:var(--seal-deep)}
+textarea,input:not([type=range]):not([type=checkbox]):not([type=file]),select{color:var(--ink);background:#fbf8f0;border-color:rgba(58,48,38,.28);border-radius:3px}
+input::placeholder,textarea::placeholder{color:var(--ink-faint)}
+label{color:var(--ink-soft)}
+.collection-item b,.timeline h3,.growth-list h3,.stamp-card h3,.harbor-route h3,.connection-card b{color:var(--ink);font-family:var(--serif)}
+.collection-symbol{background:#efe3cb;color:var(--seal);border-radius:3px}
+.collection-item small,.collection-item>span:last-child{color:var(--ink-faint)}
+.memory-atlas{background:radial-gradient(ellipse at 50% 55%,#2f4a56,#1d2f3a 64%,#17252f);border-color:rgba(58,48,38,.4)}
+.memory-index button,.stamp-card{background:rgba(239,229,208,.45);border-color:var(--rule)}
+.stamp-card.found{background:linear-gradient(130deg,rgba(163,74,53,.1),rgba(239,229,208,.5));border-color:rgba(163,74,53,.35)}
+.found .stamp-symbol{color:#f7efdf;background:var(--seal);border-color:var(--seal);border-radius:4px}
+.harbor-ticket{background:linear-gradient(120deg,rgba(53,95,122,.08),rgba(147,101,44,.08));border-color:rgba(58,48,38,.25);border-radius:4px}
+.harbor-route{background:rgba(255,252,244,.5);border-color:var(--rule);border-radius:4px}.route-number{color:var(--seal)}
+.harbor-status{background:rgba(147,101,44,.12);color:var(--ochre)}
+.time-presets button{background:#fbf7ec;color:var(--ink);border-color:var(--rule)}
+.time-presets button:hover{background:#efe3cb;border-color:var(--seal)}
+.album-detail,.album-cover.active{background:#f3ead8;border-color:var(--rule)}
+.album-tracks button.active{background:var(--ink);color:#f6efe0}
+.immersive-mode{background:#f4ede0}
+.photo-collection .media-card{background:#efe5d0}
+.research-equation{color:var(--ink)}.research-chart text{fill:var(--ink-soft)}.research-chart .chart-grid{stroke:var(--rule)}
+::-webkit-scrollbar-track,::-webkit-scrollbar-corner{background:#efe6d3}
+::-webkit-scrollbar-thumb{background:#c9bba0;border-color:#efe6d3}
+/* Photo mode: the toolbar is a strip of mount at the foot of the picture. */
+#photo-toolbar{background-color:rgba(246,240,227,.95);border:1px solid rgba(58,48,38,.32);border-radius:3px;color:var(--ink);box-shadow:0 10px 30px rgba(70,52,30,.18)}
+#photo-toolbar b{color:var(--ink);font-family:var(--serif)}#photo-toolbar small,#photo-status{color:var(--ink-soft)}
+#photo-toolbar>button{background:var(--ink);color:#f6efe0;border-radius:3px}#photo-toolbar #photo-exit{background:transparent;color:var(--ink);border:1px solid rgba(58,48,38,.32)}
+#world.arriving::after{background:#f3ead8}
+.render-error{background:#f8f3e8;color:var(--ink)}.render-error p{color:var(--ink-soft)}.render-error a{color:var(--seal)}
+.desktop-titlebar{background:#efe6d2;color:var(--ink)}
+@media (max-width:900px) and (pointer:coarse){
+  html.touch-experience .sidebar{background-color:#f3ebdb;box-shadow:24px 0 60px rgba(60,44,24,.28)}
+  html.touch-experience .mobile-nav-dismiss{background:rgba(60,48,32,.3)}
+  html.touch-experience .mobile-tools button{background:#fbf7ec;color:var(--ink);border-color:var(--rule);border-radius:3px}
+  html.touch-experience .touch-joystick{background:radial-gradient(circle,rgba(246,240,227,.5) 0 30%,rgba(246,240,227,.82) 31% 100%);border-color:rgba(58,48,38,.35)}
+  html.touch-experience .touch-joystick-knob{background:var(--ink);border-color:#f3ead8}
+  html.touch-experience .touch-joystick small,html.touch-experience .touch-look-hint{color:var(--ink);text-shadow:0 1px 6px #f6f0e3}
+  html.touch-experience .touch-jump{background:rgba(246,240,227,.9);color:var(--ink);border-color:rgba(58,48,38,.35)}
+  html.touch-experience .touch-jump:active{background:var(--seal);color:#fbf4e6}
+  html.touch-experience .overview-small{background:rgba(246,240,227,.92)}
+}
+/* The seal glyph in the brand and loading leaf is carved, not drawn. */
+.brand-symbol,.web-loading .loading-symbol,.guide-orb{font-family:var(--serif);font-weight:700}
+.brand-symbol{font-size:24px}
+/* Mini atlas: islands are laid in their mineral pigment, as on the painted map. */
+.mini-atlas .atlas-region circle{fill:var(--pigment,var(--accent));fill-opacity:.42;stroke:rgba(43,40,36,.6);stroke-width:.6}
+.mini-atlas .atlas-region:hover circle,.mini-atlas .atlas-region:focus circle{fill-opacity:.7;stroke:var(--seal)}
+.mini-atlas text{fill:var(--ink);stroke:#f3ead8;stroke-width:1.4;font-family:var(--serif);letter-spacing:.4px}
+.mini-atlas .atlas-sea{fill:#dfe4d6;stroke:rgba(53,95,122,.32)}
+/* The view badge hangs beneath the fan map like a tag, never under it (narrow screens keep their own placement). */
+@media(min-width:761px){.first-person .view-badge{top:282px;right:28px}}
+@media(min-width:761px) and (max-width:1180px){.first-person .view-badge{top:236px;right:20px}}
+/* Memory constellation: a night leaf of indigo silk, stars laid in gold leaf; collected stars glow, waiting ones are faint outlines. */
+.memory-atlas{border-radius:3px;background-color:#24394a;background-image:radial-gradient(ellipse at 50% 42%,#33505e 0%,#24394a 55%,#1b2b39 100%);border:1px solid rgba(58,48,38,.5);box-shadow:inset 0 0 0 5px rgba(246,240,227,.08),inset 0 0 0 6px rgba(201,170,108,.32)}
+.memory-atlas::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 30% at 50% 108%,rgba(111,147,163,.35),transparent 70%);pointer-events:none}
+.memory-atlas line{stroke:#c9aa6c;opacity:.35}
+.memory-star{color:rgba(232,214,170,.42)}.memory-star>.action-icon{filter:none}
+.memory-star.found{color:#e9c77f}.memory-star.found>.action-icon{filter:drop-shadow(0 0 7px rgba(255,214,140,.65))}
+.memory-star:hover{color:#f3dba3}
+.memory-star small{color:rgba(239,230,210,.62)}
+.memory-index button{border-radius:3px;border:1px solid var(--rule)}
+.memory-index span{font-family:var(--serif);color:var(--seal)}
+/* Square, mounted corners everywhere the old rounded cards remain. */
+.stamp-card,.harbor-route,.album-cover,.album-detail,.media-card,.connection-card,.product-output,.fact-grid,.time-presets button,.memory-index button,.harbor-route button:disabled{border-radius:3px}
+.album-cover img{border-radius:2px}
+.album-cover.active{border-color:var(--seal);box-shadow:inset 0 0 0 1px var(--seal)}
+.connection-card{background:linear-gradient(115deg,rgba(239,229,208,.5),rgba(248,243,232,.7));border-color:var(--rule)}
+.connection-card:hover{border-color:var(--seal)}
+.stamp-symbol{border-radius:3px;border-color:rgba(58,48,38,.32);color:var(--ink-faint)}
+.found .stamp-symbol{color:#f7efdf}
+.growth-list article:before{background:var(--seal);box-shadow:0 0 0 4px #f8f3e8,0 0 0 5px rgba(163,74,53,.3);border-radius:1px;transform:rotate(45deg);width:8px;height:8px;left:-28px}
+.time-presets button.active,.time-presets button[aria-pressed=true]{border-color:var(--seal);background:#f3e4cf}
+/* Product mode: tabs and controls take the island's pigment; the inactive tab stays legible. */
+.product-mode .panel-tabs button{color:var(--ink-faint)}
+.product-mode .panel-tabs .active{color:var(--product-accent);border-bottom-color:var(--product-accent)}
+.panel-tabs button span{color:inherit;opacity:.7}
+input[type=checkbox]{accent-color:var(--seal)}
+input[type=range]{accent-color:var(--seal)}
+/* Toast: a slip hung from the top band, clear of the heading, map and the nearby slip. */
+.toast{bottom:auto;top:92px;left:50%;transform:translateX(-50%);max-width:min(400px,calc(100% - 520px));text-align:center}
+@media(max-width:1180px){.toast{max-width:min(360px,calc(100% - 420px))}}
+@media(max-width:900px){.toast{top:auto;bottom:132px;left:15px;right:15px;transform:none;max-width:none}}
+/* Topbar glyph buttons share one optical size. */
+.journal-button,.sky-clock{border-radius:3px;font-family:var(--serif)}
+.journal-button span,.sky-clock span{font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink-soft)}
+.icon-button{border-radius:3px}
+#photo-open svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round}
+@media (max-width:900px) and (pointer:coarse){
+  html.touch-experience .toast,html.touch-experience #trail-guide{top:188px;bottom:auto;left:14px;right:14px;transform:none;max-width:none}
+  html.touch-experience .icon-button{border-radius:50%}
+}

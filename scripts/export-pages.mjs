@@ -10,7 +10,8 @@ catch(error){if(error.code!=='ENOENT')throw error;}
 const {catalog,assets}=await webContent(root);
 await mkdir(destination,{recursive:true});
 const copy=async relative=>{await mkdir(path.dirname(path.join(destination,relative)),{recursive:true});await cp(path.join(root,relative),path.join(destination,relative),{recursive:true,filter:file=>file!==path.join(root,'src/audio/media-mixer.ts')});};
-for(const file of ['src','shared','index.html','projects','world','vite.config.ts','tsconfig.json','README.md','LICENSE','CREDITS.md','.gitignore','.github','data/profile.json','data/world.json','data/audio.json','data/image-previews.json','data/media-sizes.json','backend/catalog.mjs','scripts/web-content.mjs','scripts/export-pages.mjs','docs/web-migration.md','docs/web-portfolio-audit.md','docs/images'])await copy(file);
+for(const file of ['src','shared','index.html','projects','world','vite.config.ts','tsconfig.json','README.md','LICENSE','CREDITS.md','.gitignore','.github/workflows/e2e.yml','data/profile.json','data/world.json','data/audio.json','data/image-previews.json','data/media-sizes.json','backend/catalog.mjs','scripts/web-content.mjs','scripts/export-pages.mjs','scripts/pages-workflow.yml','docs/web-migration.md','docs/web-portfolio-audit.md','docs/images'])await copy(file);
+await cp(path.join(root,'scripts/pages-workflow.yml'),path.join(destination,'.github/workflows/pages.yml'));
 const pkg=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
 const tests=pkg.scripts.test.match(/tests\/[\w.-]+\.mjs/g);
 for(const file of [...tests,'tests/web-smoke.mjs','tests/web-browser.mjs'])await copy(file);

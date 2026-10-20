@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="icon" href="data:,"><style>body{margin:0;background:#cbd9d6}canvas{display:block}</style></head><body><script type="module">
+import * as T from 'three';
+import { buildHub } from '/src/world/hub.ts';
+import { teacup,sign } from '/src/world/scenery.ts';
+import { Environment } from '/src/world/environment.ts';
+import { Discoveries } from '/src/world/discoveries.ts';
+import { EventBus } from '/src/core/events.ts';
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(1200,850);renderer.setPixelRatio(1);renderer.toneMapping=T.ACESFilmicToneMapping;document.body.append(renderer.domElement);
+window.fixture=async(kind,angle=0)=>{
+  const scene=new T.Scene(),camera=new T.PerspectiveCamera(45,1200/850,.01,900);scene.background=new T.Color('#cbd9d6');
+  scene.add(new T.HemisphereLight('#f1f4f7','#aea78c',1.8));const sun=new T.DirectionalLight('#fff1d8',1.8);sun.position.set(-8,10,10);scene.add(sun);
+  if(kind==='hub'){scene.add(buildHub());camera.position.set(Math.sin(angle)*11,6,Math.cos(angle)*11);camera.lookAt(0,1.8,0);}
+  if(kind==='cup'){scene.add(teacup());camera.position.set(Math.sin(angle)*.7,.5,Math.cos(angle)*.7);camera.lookAt(.04,.1,0);}
+  if(kind==='sign'){sign(scene,'XiangMeta · 双面标牌','YOUR WORLD, ALWAYS GROWING.','#b7d8bf',3.4,1);camera.position.set(Math.sin(angle)*5,1,Math.cos(angle)*5);camera.lookAt(0,0,0);}
+  if(kind==='sky'){
+    scene.clear();scene.background=null;const environment=new Environment(scene,[]);environment.hour=angle;environment.cycling=false;environment.update(0);
+    const a=(angle-6)/24*Math.PI*2,side=Math.sin(a)>=0?1:-1;camera.position.set(0,1.7,0);camera.lookAt(Math.cos(a)*145*side,Math.sin(a)*145*side,Math.cos(a)*-40*side);
+  }
+  renderer.render(scene,camera);
+  const stats={calls:renderer.info.render.calls,sun:scene.getObjectByName('orbit-sun')?.position.toArray(),moon:scene.getObjectByName('orbit-moon')?.position.toArray()};
+  scene.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
+  return stats;
+};
+window.flight=()=>{
+  const scene=new T.Scene(),info={id:'a',title:'纸蝶来信',action:'唤起纸蝶',description:'',regionTitle:'AI',kind:'butterflies',color:'#bcdeca',position:[5,11],x:0,z:0};
+  const wonders=new Discoveries(scene,[info],[],new EventBus(),new Set());
+  for(let i=0;i<240;i++)wonders.update(1/60,0,0,true,false);
+  const parts=()=>scene.children[0].children.filter(o=>o.name==='paper-butterfly');
+  const poses=()=>parts().map(o=>({p:o.position.toArray(),w:o.children[0].rotation.y,s:o.scale.x}));
+  const initial=poses(),frames=[];wonders.update(0,0,0,true,false);wonders.interact();
+  for(let i=0;i<600;i++){wonders.update(1/60,0,0,true,false);frames.push(poses());if(i===180)wonders.update(0,0,0,true,false);wonders.interact();}
+  return {initial,frames};
+};
+</script></body></html>
+

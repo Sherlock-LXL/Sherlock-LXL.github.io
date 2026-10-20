@@ -5,6 +5,7 @@ import './style.css';
 import './refined-ui.css';
 import './web-world.css';
 import './mobile.css';
+import './album.css';
 import {sitePath,projectLinks,externalAttrs} from './core/portfolio';
 import {nearbyActions,type InteractionKey} from './core/nearby-actions';
 import {mountAlbumGallery} from './core/album-gallery';
@@ -14,6 +15,7 @@ import { EventBus } from './core/events';
 import { VisitorStore } from './core/storage';
 import { discoveries,type Exhibit } from './core/types';
 import { World } from './world/world';
+import {pigmentAccent} from './world/ink';
 import { AudioSystem } from './audio/audio';
 import { guide } from './agents/guide';
 import {mountResearch} from './core/research-lab';
@@ -30,19 +32,20 @@ const app=document.querySelector<HTMLDivElement>('#app')!;
 const touchExperience=document.documentElement.classList.contains('touch-experience');
 const escape=(value:unknown)=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const icon=(name:string)=>({world:'◈',mountain:'△',science:'◌',museum:'▥',studio:'♫',guide:'✦',arrow:diagonalArrow,sound:'♪',map:'⌖',close:'×',star:'☆'}[name]??'◈');
-app.innerHTML='<div class="web-loading"><span class="loading-symbol">✳</span><h1>XiangMeta</h1><p>正在读取项目与世界档案…</p><progress aria-label="读取世界档案"></progress></div>';
+app.innerHTML='<div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">想</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p>正在读取项目与世界档案…</p><progress aria-label="读取世界档案"></progress></div>';
 async function boot(){
   const data=await catalog();const bus=new EventBus(),store=new VisitorStore(),audio=new AudioSystem(bus,data.audio,(text,playing)=>{
     const caption=document.querySelector<HTMLElement>('#music-caption');if(caption){caption.textContent='♫ '+text;caption.dataset.playing=String(playing);}
   });
   if(new URLSearchParams(location.search).has('inspect'))Object.assign(window,{__xiangmetaAudio:()=>audio.snapshot});
+  app.classList.add('world-booting');
   app.innerHTML=`
     <aside class="sidebar">
-      <a class="brand" href="#" aria-label="返回世界总览"><span class="brand-symbol">✳</span><span>XiangMeta<small>A PERSONAL UNIVERSE</small></span></a>
+      <a class="brand" href="#" aria-label="返回世界总览"><span class="brand-symbol xiang-logo" aria-hidden="true">想</span><span>XiangMeta<small>A PERSONAL UNIVERSE</small></span></a>
       <div class="side-caption">EXPLORATION <span>探索无界</span></div>
       <button class="nav-overview active" id="overview" aria-label="世界总览" title="世界总览">${navIcon('world')} <span>世界总览</span><span class="nav-end">⌘</span></button>
       <div class="nav-section-label">探索大陆</div>
-      <nav id="regions">${data.regions.map((r,i)=>`<button class="region-nav" data-region="${r.id}" aria-label="${escape(r.title)}" title="${escape(r.title)}" style="--accent:${r.color}">${navIcon(['mountain','science','museum','studio'][i])}<span>${escape(r.title)}<small>${escape(r.english)}</small></span><span class="nav-end">${diagonalArrow}</span></button>`).join('')}</nav>
+      <nav id="regions">${data.regions.map((r,i)=>`<button class="region-nav" data-region="${r.id}" aria-label="${escape(r.title)}" title="${escape(r.title)}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}">${navIcon(['mountain','science','museum','studio'][i])}<span>${escape(r.title)}<small>${escape(r.english)}</small></span><span class="nav-end">${diagonalArrow}</span></button>`).join('')}</nav>
       <div class="side-divider"></div>
       <button class="secondary-nav" id="collections" aria-label="展品索引" title="展品索引">${navIcon('collections')} <span>展品索引</span><b>${String(data.modules.length).padStart(2,'0')}</b></button>
       <button class="secondary-nav" id="favorites" aria-label="我的收藏" title="我的收藏">${navIcon('favorites')} <span>我的收藏</span><b id="favorite-count">${store.favorites.size}</b></button>
@@ -52,7 +55,7 @@ async function boot(){
     <main class="main-world first-person">
       <header class="topbar"><div class="topbar-location">${touchExperience?'<button class="icon-button mobile-menu-button" id="mobile-menu" aria-label="打开探索菜单" aria-expanded="false">☰</button>':''}<span class="breadcrumb">我的数字宇宙</span><span class="slash">/</span><span id="current-region">世界总览</span></div><div class="top-actions"><span class="local-badge"><span class="status-dot"></span> 本地世界</span><button class="icon-button" id="sound" aria-label="开启声音" title="开启声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-3v13M9 9l11-3"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg><span class="muted-slash" aria-hidden="true"></span></button><button class="journal-button" id="journal" aria-label="旅行印记" title="旅行印记">✧ <span id="stamp-count"></span></button><button class="icon-button" id="help" aria-label="操作指南">?</button></div></header>
       <section id="world" aria-label="可探索的 3D 世界"></section>
-      <div class="world-heading"><div class="eyebrow"><span class="line"></span> THE LIVING ATLAS</div><h1>一个世界，无限可能<span>。</span></h1><p>让好奇心带路，让每一次创造成为新的大陆。</p></div>
+      <div class="world-heading"><div class="eyebrow"><span class="line"></span> 山海册页 · ALBUM OF MOUNTAINS AND SEAS</div><h1>一卷山海，无限可能<span>。</span></h1><p>让好奇心带路，让每一次创造成为画卷中新的岛屿。</p></div>
       <div class="world-meta"><span class="status-dot"></span> ${data.regions.length} REGIONS <span class="meta-divider">/</span> ${String(data.modules.length).padStart(2,'0')} EXHIBITS <span class="meta-divider">/</span> ALWAYS GROWING</div>
       <div class="crosshair" aria-hidden="true"></div>
       <div class="interaction-prompt" id="interaction-prompt" hidden></div>
@@ -62,10 +65,11 @@ async function boot(){
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>${diagonalArrow}</span></button>
       ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
-      <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-100 -100 200 200" role="img" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="99"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+6}">${escape(r.english)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
+      <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-100 -100 200 200" role="img" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="99"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+6}">${escape(r.english)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
-    <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div></dialog>`;
+    <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div></dialog>
+    <div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">想</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p id="load-label" role="status">正在构建群岛…</p><progress id="world-progress" max="100" value="0" aria-label="构建世界"></progress><small id="load-percent">0%</small><a href="${sitePath('projects/')}">浏览项目 →</a></div>`;
   const $=<T extends HTMLElement=HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
   const dialog=$<HTMLDialogElement>('#inspector');let world:World|undefined;let current:Exhibit|undefined;let abort:AbortController|undefined;
   $('.local-badge').innerHTML=`<a href="${sitePath('projects/')}">Projects ${diagonalArrow}</a>`;
@@ -74,7 +78,7 @@ async function boot(){
   const seasons={spring:'春 · 桃花山径',summer:'夏 · 海风绿洲',autumn:'秋 · 金色回忆',winter:'冬 · 初雪实验室'};
   data.regions.forEach(r=>{const small=document.querySelector(`[data-region="${r.id}"] small`);if(small&&r.season)small.textContent=seasons[r.season];});
   $('.top-actions').insertAdjacentHTML('afterbegin','<button id="sky-settings" class="sky-clock" title="调整海岛时光" aria-label="海岛时光">◒ <span id="sky-clock">09:00</span></button>');
-  $('.top-actions').insertAdjacentHTML('afterbegin','<button id="memory-open" class="journal-button" aria-label="记忆星图" title="记忆星图">✶ <span id="memory-count">0</span></button><button id="photo-open" class="icon-button" aria-label="摄影模式" title="摄影模式 · P">▧</button>');
+  $('.top-actions').insertAdjacentHTML('afterbegin','<button id="memory-open" class="journal-button" aria-label="记忆星图" title="记忆星图">✶ <span id="memory-count">0</span></button><button id="photo-open" class="icon-button" aria-label="摄影模式" title="摄影模式 · P"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3v11H4Z"/><circle cx="12" cy="13" r="3.4"/></svg></button>');
   $('#collections').insertAdjacentHTML('beforebegin','<button id="growth-open" aria-label="成长路径" title="成长路径" class="secondary-nav">'+navIcon('growth')+' <span>成长路径</span><b>EXPLORE</b></button>');
   if(touchExperience){
     $('.side-bottom').insertAdjacentHTML('beforebegin','<div class="mobile-tools"><span>探索工具</span><button data-mobile-tool="sky-settings">海岛时光</button><button data-mobile-tool="memory-open">记忆星图</button><button data-mobile-tool="photo-open">摄影模式</button><button data-mobile-tool="journal">旅行印记</button><button data-mobile-tool="guide">世界向导</button><button data-mobile-tool="help">操作指南</button></div>');
@@ -141,7 +145,7 @@ async function boot(){
       </section>
       <section id="story" hidden><div class="timeline">${m.story.map(s=>`<article><h3>${escape(s.title)}</h3><p>${escape(s.body)}</p></article>`).join('')}</div></section>
       <footer class="panel-footer"><button class="quiet-button" id="visit">${actionIcon('visit')}<span>抵达展台</span></button><button class="quiet-button" id="favorite" aria-pressed="${store.favorites.has(m.id)}">${actionIcon('favorite',store.favorites.has(m.id))}<span>${store.favorites.has(m.id)?'已收藏':'收藏'}</span></button><button class="quiet-button back-world" id="back-world">${actionIcon('back')}<span>返回 · Esc</span></button></footer>`);
-    dialog.classList.toggle('product-mode',product);dialog.dataset.kind=m.visual;dialog.style.setProperty('--product-accent',region.color);mountAlbumGallery($('#experience'),m,albumId);
+    dialog.classList.toggle('product-mode',product);dialog.dataset.kind=m.visual;dialog.style.setProperty('--product-accent',pigmentAccent(region.color));mountAlbumGallery($('#experience'),m,albumId);
     if(m.world?.connections.length){$('#experience').insertAdjacentHTML('beforeend',`<div class="connection-list"><small>另一条线索 / THREADS</small>${m.world.connections.map(link=>`<button class="connection-card" data-connection="${link.target}"><b>${escape(link.title)} ${diagonalArrow}</b><span>${escape(link.body)}</span></button>`).join('')}</div>`);dialog.querySelectorAll<HTMLButtonElement>('[data-connection]').forEach(b=>b.onclick=()=>{world?.visit(data.modules.find(m=>m.id===b.dataset.connection)!);closePanel();});}
     if(m.world?.capabilities.includes('gallery'))dialog.querySelectorAll<HTMLElement>('.media-card').forEach((card,i)=>{if(m.media[i].kind!=='image')return;const imageIndex=m.media.slice(0,i).filter(item=>item.kind==='image').length;const b=document.createElement('button');b.className='quiet-button';b.innerHTML=`沉浸观看 ${diagonalArrow}`;b.dataset.immerse=String(imageIndex);b.onclick=()=>immerse(m,imageIndex);card.append(b);});
     $('#use-product').onclick=()=>openExhibit(m,true);$('#back-world').onclick=closePanel;
@@ -225,12 +229,12 @@ async function boot(){
     const route=(q:string)=>{const answer=guide(q,data);$('#guide-results').innerHTML=`<p class="panel-description">${escape(answer.text)}</p>${answer.exhibits.map(m=>`<button class="collection-item" data-exhibit="${m.id}"><span><b>${escape(m.title)}</b><small>${escape(m.subtitle)}</small></span><span>${diagonalArrow}</span></button>`).join('')}`;wireExhibits();};
     $<HTMLFormElement>('#guide-form').onsubmit=e=>{e.preventDefault();route($<HTMLInputElement>('#guide-query').value);};wireExhibits();
   }
-  app.insertAdjacentHTML('beforeend',`<div class="web-loading" id="world-loading"><span class="loading-symbol">✳</span><h1>XiangMeta</h1><p id="load-label" role="status">正在构建群岛…</p><progress id="world-progress" max="100" value="0" aria-label="构建世界"></progress><small id="load-percent">0%</small><a href="${sitePath('projects/')}">浏览项目 →</a></div>`);
   try{
     world=await World.create($('#world'),data,bus,store.discoveries,store.memories,(done,total,label)=>{
       const percent=Math.round(done/total*100);$<HTMLProgressElement>('#world-progress').value=percent;$('#load-percent').textContent=`${percent}%`;$('#load-label').textContent=`正在准备 · ${label}`;
     });
     $('#world-loading').remove();
+    app.classList.remove('world-booting');
     if(touchExperience){
       const joystick=$('#touch-joystick'),knob=$('.touch-joystick-knob');let joystickPointer:number|null=null;
       const moveJoystick=(event:PointerEvent)=>{
@@ -245,6 +249,7 @@ async function boot(){
     }
   }catch(error){
     $('#world-loading').remove();
+    app.classList.remove('world-booting');
     document.querySelector('#touch-controls')?.remove();
     $('#world').innerHTML=`<div class="render-error"><b>3D 渲染暂时不可用</b><p>请使用支持 WebGL2 的浏览器并开启硬件加速。</p><a href="${sitePath('projects/')}">继续浏览全部项目 →</a></div>`;console.error(error);
   }
@@ -307,4 +312,4 @@ async function boot(){
   window.addEventListener('pagehide',event=>{if(event.persisted){world?.setPaused(true);return;}cleanup();world?.dispose();audio.dispose();});
   window.addEventListener('pageshow',event=>{if(event.persisted)world?.setPaused(false);});
 }
-boot().catch(error=>{app.innerHTML=`<div class="web-loading"><h1>世界暂时未能加载</h1><p>${escape(error.message)}</p><div class="loading-actions"><button id="retry">重新加载</button><a href="${sitePath('projects/')}">View Projects →</a></div></div>`;document.querySelector<HTMLButtonElement>('#retry')!.onclick=()=>location.reload();});
+boot().catch(error=>{app.classList.remove('world-booting');app.innerHTML=`<div class="web-loading"><h1>世界暂时未能加载</h1><p>${escape(error.message)}</p><div class="loading-actions"><button id="retry">重新加载</button><a href="${sitePath('projects/')}">View Projects →</a></div></div>`;document.querySelector<HTMLButtonElement>('#retry')!.onclick=()=>location.reload();});

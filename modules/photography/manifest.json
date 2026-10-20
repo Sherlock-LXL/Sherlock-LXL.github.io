@@ -1,9 +1,21 @@
 {
   "schemaVersion": 1,
   "id": "photography",
+  "portfolio": {
+    "name": "光影长廊",
+    "category": "Creative",
+    "summary": "14 幅个人摄影原作，把山川湖海、城市晨昏与旅途中看见的光留在这里。",
+    "technologies": ["Photography", "Visual Storytelling"],
+    "order": 10
+  },
   "title": "光影长廊",
   "subtitle": "把曾经看见的，留在这里",
   "region": "personal-museum",
+  "visual": "gallery",
+  "position": [
+    -5.2,
+    -3.6
+  ],
   "owner": "personal",
   "category": "COLLECTION",
   "description": "14 幅个人摄影原作：从山川、湖海到城市晨昏，把旅途中看见的光留在这里。",
@@ -12,48 +24,6 @@
     "摄影",
     "视觉记忆"
   ],
-  "position": [
-    -5.2,
-    -3.6
-  ],
-  "rotation": 180,
-  "visual": "gallery",
-  "world": {
-    "version": 1,
-    "capabilities": [
-      "gallery"
-    ],
-    "fragments": [
-      {
-        "id": "seeing",
-        "title": "看见，才有下一次相遇",
-        "body": "旅途中的山川、海风与城市光影，成为个人博物馆里的十四扇窗。继续走进视觉 AI 展区，看看“看见”如何变成“认出”。",
-        "position": [
-          -3,
-          9
-        ]
-      }
-    ],
-    "connections": [
-      {
-        "target": "cat-recognition",
-        "title": "从“看见”到“认出”",
-        "body": "换一个视角看校园猫咪：到 Vision Forest 体验个体识别，了解真实数据集和 session 划分。"
-      }
-    ]
-  },
-  "portfolio": {
-    "name": "光影长廊",
-    "category": "Creative",
-    "summary": "14 幅个人摄影原作，把山川湖海、城市晨昏与旅途中看见的光留在这里。",
-    "technologies": [
-      "Photography",
-      "Visual Storytelling"
-    ],
-    "featured": false,
-    "order": 10,
-    "screenshots": []
-  },
   "facts": [
     {
       "label": "收藏类型",
@@ -86,128 +56,153 @@
     {
       "kind": "image",
       "title": "城市呼吸",
-      "location": "上海",
       "src": "/assets/modules/photography/photo-01.webp",
       "thumbnail": "/assets/modules/photography/photo-01-thumb.webp",
       "width": 2400,
-      "height": 1600
+      "height": 1600,
+      "location": "上海"
     },
     {
       "kind": "image",
       "title": "晨曦",
-      "location": "上海",
       "src": "/assets/modules/photography/photo-02.webp",
       "thumbnail": "/assets/modules/photography/photo-02-thumb.webp",
       "width": 2400,
-      "height": 1601
+      "height": 1601,
+      "location": "上海"
     },
     {
       "kind": "image",
       "title": "朝霞",
-      "location": "上海",
       "src": "/assets/modules/photography/photo-03.webp",
       "thumbnail": "/assets/modules/photography/photo-03-thumb.webp",
       "width": 1600,
-      "height": 2400
+      "height": 2400,
+      "location": "上海"
     },
     {
       "kind": "image",
       "title": "辽阔",
-      "location": "乌兰察布",
       "src": "/assets/modules/photography/photo-04.webp",
       "thumbnail": "/assets/modules/photography/photo-04-thumb.webp",
       "width": 2400,
-      "height": 1350
+      "height": 1350,
+      "location": "乌兰察布"
     },
     {
       "kind": "image",
       "title": "晨光",
-      "location": "九寨沟",
       "src": "/assets/modules/photography/photo-05.webp",
       "thumbnail": "/assets/modules/photography/photo-05-thumb.webp",
       "width": 1800,
-      "height": 2400
+      "height": 2400,
+      "location": "九寨沟"
     },
     {
       "kind": "image",
       "title": "风与自由",
-      "location": "南澳岛",
       "src": "/assets/modules/photography/photo-06.webp",
       "thumbnail": "/assets/modules/photography/photo-06-thumb.webp",
       "width": 2400,
-      "height": 1350
+      "height": 1350,
+      "location": "南澳岛"
     },
     {
       "kind": "image",
       "title": "肃穆",
-      "location": "川西",
       "src": "/assets/modules/photography/photo-07.webp",
       "thumbnail": "/assets/modules/photography/photo-07-thumb.webp",
       "width": 1800,
-      "height": 2400
+      "height": 2400,
+      "location": "川西"
     },
     {
       "kind": "image",
       "title": "雾中舞",
-      "location": "庐山",
       "src": "/assets/modules/photography/photo-08.webp",
       "thumbnail": "/assets/modules/photography/photo-08-thumb.webp",
       "width": 1799,
-      "height": 2400
+      "height": 2400,
+      "location": "庐山"
     },
     {
       "kind": "image",
       "title": "盛夏",
-      "location": "深圳",
       "src": "/assets/modules/photography/photo-09.webp",
       "thumbnail": "/assets/modules/photography/photo-09-thumb.webp",
       "width": 2400,
-      "height": 1800
+      "height": 1800,
+      "location": "深圳"
     },
     {
       "kind": "image",
       "title": "水纹",
-      "location": "都江堰",
       "src": "/assets/modules/photography/photo-10.webp",
       "thumbnail": "/assets/modules/photography/photo-10-thumb.webp",
       "width": 2400,
-      "height": 1800
+      "height": 1800,
+      "location": "都江堰"
     },
     {
       "kind": "image",
       "title": "夕阳",
-      "location": "阳澄湖",
       "src": "/assets/modules/photography/photo-11.webp",
       "thumbnail": "/assets/modules/photography/photo-11-thumb.webp",
       "width": 2400,
-      "height": 1800
+      "height": 1800,
+      "location": "阳澄湖"
     },
     {
       "kind": "image",
       "title": "天真",
-      "location": "香格里拉",
       "src": "/assets/modules/photography/photo-12.webp",
       "thumbnail": "/assets/modules/photography/photo-12-thumb.webp",
       "width": 2400,
-      "height": 1601
+      "height": 1601,
+      "location": "香格里拉"
     },
     {
       "kind": "image",
       "title": "余晖",
-      "location": "香港",
       "src": "/assets/modules/photography/photo-13.webp",
       "thumbnail": "/assets/modules/photography/photo-13-thumb.webp",
       "width": 2400,
-      "height": 1350
+      "height": 1350,
+      "location": "香港"
     },
     {
       "kind": "image",
       "title": "调色盘",
-      "location": "黄龙",
       "src": "/assets/modules/photography/photo-14.webp",
       "thumbnail": "/assets/modules/photography/photo-14-thumb.webp",
       "width": 2400,
-      "height": 1800
+      "height": 1800,
+      "location": "黄龙"
     }
-  ]
+  ],
+  "world": {
+    "version": 1,
+    "capabilities": [
+      "gallery"
+    ],
+    "fragments": [
+      {
+        "id": "seeing",
+        "title": "看见，才有下一次相遇",
+        "body": "旅途中的山川、海风与城市光影，成为个人博物馆里的十四扇窗。继续走进视觉 AI 展区，看看“看见”如何变成“认出”。",
+        "position": [
+          -3,
+          9
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "target": "cat-recognition",
+        "title": "从“看见”到“认出”",
+        "body": "换一个视角看校园猫咪：到 Vision Forest 体验个体识别，了解真实数据集和 session 划分。"
+      }
+    ]
+  },
+  "rotation": 180
 }

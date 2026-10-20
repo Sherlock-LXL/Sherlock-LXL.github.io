@@ -6,7 +6,13 @@ export function surfaceMap(kind:Finish){
   const existing=maps.get(kind);if(existing)return existing;
   const canvas=document.createElement('canvas');canvas.width=canvas.height=512;const c=canvas.getContext('2d')!;
   let seed=71423;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-  c.fillStyle={plaster:'#f5f3ee',stone:'#e9e6dc',wood:'#f3e8d5',metal:'#f2f3f1',grass:'#d6e0bd',paving:'#f2ebdc',foliage:'#f1f4e6',cliff:'#f0e5c9',sand:'#fff1d5',snow:'#fafcff'}[kind];c.fillRect(0,0,512,512);
+  c.fillStyle={plaster:'#f3efe6',stone:'#ebe6da',wood:'#efe5d4',metal:'#f0efe9',grass:'#dfe3c6',paving:'#efe8da',foliage:'#eef0e2',cliff:'#efe6d0',sand:'#f7eedb',snow:'#fafcff'}[kind];c.fillRect(0,0,512,512);
+  // Texture strokes (cun): short dry-brush hatching that gives rock its painted grain.
+  if(kind==='cliff'||kind==='stone')for(let i=0;i<(kind==='cliff'?260:120);i++){
+    const x=random()*512,y=random()*512,len=10+random()*(kind==='cliff'?34:18),angle=(kind==='cliff'?-.25:.1)+(random()-.5)*.5;
+    c.strokeStyle=`rgba(${kind==='cliff'?'96,82,62':'110,102,88'},${.05+random()*.08})`;c.lineWidth=.8+random()*1.8;c.lineCap='round';
+    c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+Math.cos(angle)*len*.5+random()*3,y+Math.sin(angle)*len*.5+random()*3,x+Math.cos(angle)*len,y+Math.sin(angle)*len);c.stroke();
+  }
   if(kind==='cliff')for(let i=0;i<32;i++){const y=i*16;c.strokeStyle='rgba(170,158,137,.035)';c.lineWidth=3;c.beginPath();for(let x=0;x<=512;x+=8){const v=y+Math.sin(x*Math.PI/256+i*.7)*3;if(x)c.lineTo(x,v);else c.moveTo(x,v);}c.stroke();}
   if(kind==='paving'){
     for(let row=0;row<8;row++)for(let col=-1;col<5;col++){

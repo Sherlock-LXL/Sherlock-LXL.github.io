@@ -1,71 +1,99 @@
 import * as T from 'three';
 import {material,mesh} from './architecture';
-import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {kit,place,lantern} from './vernacular';
+import type {Region} from '../core/types';
+import type {Obstacle} from './scenery';
 export function nightLight(color:string){const m=new T.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.14,roughness:.55});m.userData.nightGlow=true;return m;}
-/** Celestial Spire: tiered stone plinth, oculus arcade, bronze orrery, crystal lantern. */
-export function buildHub(){
-  const hub=new T.Group();hub.name='celestial-hub';
-  const limestone=material('#f3e5c6',.9,.03,'stone'),travertine=material('#e2d1a9',.85,.04,'stone'),deep=material('#2f4e4d',.5,.22,'stone'),brass=material('#c8a764',.3,.65,'metal'),copper=material('#8c6a40',.42,.55,'metal'),glow=nightLight('#d7f0ef'),emberGlow=nightLight('#f6d08a'),crystal=new T.MeshPhysicalMaterial({color:'#d4f1ec',metalness:.1,roughness:.08,transmission:.75,ior:1.42,thickness:1.1,clearcoat:1,attenuationColor:'#8fc9c6',attenuationDistance:3.5});
-  // Stepped plinth with inlaid bronze zodiac.
-  mesh(hub,new T.CylinderGeometry(2.6,2.95,.25,96),limestone,0,.125);
-  mesh(hub,new T.CylinderGeometry(2.3,2.55,.18,96),travertine,0,.34);
-  const compass=mesh(hub,new T.CylinderGeometry(2.08,2.08,.03,96),brass,0,.44);compass.castShadow=false;
-  for(let i=0;i<32;i++){const a=i/32*Math.PI*2,tick=mesh(hub,new T.BoxGeometry(.035,.035,i%4===0?.4:.14),copper,Math.sin(a)*1.96,.46,Math.cos(a)*1.96);tick.rotation.y=a;tick.castShadow=false;}
-  // Oculus arcade: four open arches around a hollow drum.
-  const drum=new T.Group();drum.position.y=.44;hub.add(drum);
-  for(let i=0;i<4;i++){
-    const a=i/4*Math.PI*2;
-    // Pier
-    const pier=mesh(drum,new T.BoxGeometry(.52,2.6,.52),limestone,Math.sin(a)*1.78,1.3,Math.cos(a)*1.78);pier.rotation.y=a;
-    // Shaft fluting lines
-    for(const side of [-1,1]){const flute=mesh(drum,new T.BoxGeometry(.04,2.3,.04),deep,Math.sin(a)*1.78+Math.cos(a)*.18*side,1.3,Math.cos(a)*1.78-Math.sin(a)*.18*side);flute.rotation.y=a;flute.castShadow=false;}
-    // Capital
-    mesh(drum,new T.BoxGeometry(.72,.12,.72),travertine,Math.sin(a)*1.78,2.66,Math.cos(a)*1.78).rotation.y=a;
-    mesh(drum,new T.BoxGeometry(.9,.09,.9),limestone,Math.sin(a)*1.78,2.78,Math.cos(a)*1.78).rotation.y=a;
+
+/** Hub proportions shared with the world: altar tiers, sphere centre, guide star, star-chart table. */
+export const hubLayout={tiers:[[3.7,.2],[3,.4],[2.3,.6]] as [number,number][],sphere:{y:6.3,radius:3.4},guideY:10.9,atlas:{x:0,z:5.25},rail:8.55};
+const LATITUDE=40*Math.PI/180;
+/** Flat ring with a rectangular section, revolved about Y. */
+const band=(radius:number,width:number,thickness:number,segments=128)=>new T.LatheGeometry([[radius-width/2,-thickness/2],[radius+width/2,-thickness/2],[radius+width/2,thickness/2],[radius-width/2,thickness/2],[radius-width/2,-thickness/2]].map(([x,y])=>new T.Vector2(x,y)),segments);
+
+/** The Altar of the Armillary: round marble tiers (heaven), a square plinth (earth), dragon pillars that
+ * face the four island bridges, and rotating rings around the constellation of memories. */
+export function buildHub(regions:Region[]){
+  const root=new T.Group();root.name='celestial-hub';const colliders:Obstacle[]=[];
+  const marble=kit.marble(),stone=kit.stone(),bronze=kit.bronze(),patina=kit.patina(),gold=kit.gold();
+  // Three round tiers, each a 20 cm step: visitors may climb straight up from any side.
+  let base=0;
+  for(const [i,[radius,top]] of hubLayout.tiers.entries()){
+    const h=top-base;
+    place(root,new T.CylinderGeometry(radius,radius+.05,h-.05,96),stone,0,base+(h-.05)/2);
+    place(root,new T.CylinderGeometry(radius+.06,radius+.06,.05,96),marble,0,top-.025);
+    // Carved risers: shallow panels between pilasters, every ninth of the circle.
+    for(let k=0;k<(i+1)*9;k++){const a=k/((i+1)*9)*Math.PI*2;place(root,new T.BoxGeometry(.1,h-.07,.06),marble,Math.sin(a)*(radius+.04),base+(h-.07)/2,Math.cos(a)*(radius+.04)).rotation.y=a;}
+    // The felt edge of an obstacle includes the walker's 0.35 m margin.
+    colliders.push({x:0,z:0,radius:radius-.35,height:top});
+    base=top;
   }
-  // Arches between the piers.
-  for(let i=0;i<4;i++){const a=i/4*Math.PI*2+Math.PI/4;
-    const archPoints=Array.from({length:17},(_,j)=>{const t=j/16;const r=1.78;return new T.Vector3(Math.sin(a-.7+t*1.4)*r,1.78+Math.sin(t*Math.PI)*.72,Math.cos(a-.7+t*1.4)*r);});
-    mesh(drum,new T.TubeGeometry(new T.CatmullRomCurve3(archPoints),20,.09,8,false),travertine);
-    mesh(drum,new T.CylinderGeometry(.018,.018,.52,6),copper,Math.sin(a)*1.08,2.25,Math.cos(a)*1.08).castShadow=false;
-    mesh(drum,new T.ConeGeometry(.19,.16,12),copper,Math.sin(a)*1.08,1.98,Math.cos(a)*1.08).rotation.x=Math.PI;
-    mesh(drum,new T.SphereGeometry(.105,12,8),emberGlow,Math.sin(a)*1.08,1.91,Math.cos(a)*1.08).castShadow=false;
+  // Earth: a square plinth on the top tier with a bronze cross-shaped water level.
+  place(root,new T.BoxGeometry(1.9,.95,1.9),stone,0,.6+.475);
+  place(root,new T.BoxGeometry(2.05,.08,2.05),marble,0,1.59);
+  for(const r of [0,Math.PI/2])place(root,new T.BoxGeometry(2.7,.16,.42),bronze,0,1.71,0).rotation.y=r;
+  for(const [x,z] of [[1.35,0],[-1.35,0],[0,1.35],[0,-1.35]]){place(root,new T.CylinderGeometry(.24,.28,.16,12),bronze,x,1.71,z);}
+  colliders.push({x:0,z:0,radius:0,halfX:.95,halfZ:.95,height:1.8});
+  // Cloud column: a fluted bronze cradle wrapped by one rising scroll; the meridian ring rests in it.
+  const shaft=new T.LatheGeometry([[0,0],[.34,0],[.3,.1],[.2,.24],[.22,.57],[.18,.89],[.26,1.01],[.34,1.07],[0,1.07]].map(([x,y])=>new T.Vector2(x,y)),16);
+  place(root,shaft,bronze,0,1.79);
+  const scroll=Array.from({length:30},(_,k)=>{const t=k/29,a=t*Math.PI*4.5;return new T.Vector3(Math.cos(a)*(.27+.06*Math.sin(t*9)),1.84+t*.96,Math.sin(a)*(.27+.06*Math.sin(t*9)));});
+  place(root,new T.TubeGeometry(new T.CatmullRomCurve3(scroll),60,.05,6,false),patina);
+  const {y:cy,radius:R}=hubLayout.sphere;
+  // Four dragon pillars stand toward the four island bridges and carry the horizon ring.
+  for(const region of regions){
+    const a=Math.atan2(region.position[0],region.position[1]),dx=Math.sin(a),dz=Math.cos(a);
+    const path=[[2.02,.6],[1.95,1.6],[2.25,2.8],[2.85,4],[3.05,5.1],[R,cy-.12]].map(([r,y])=>new T.Vector3(dx*r,y,dz*r));
+    const curve=new T.CatmullRomCurve3(path),geo=new T.TubeGeometry(curve,48,1,10,false),p=geo.attributes.position;
+    for(let i=0;i<=48;i++){const c=curve.getPointAt(i/48),r=.2-.1*i/48;for(let j=0;j<=10;j++){const k=i*11+j;p.setXYZ(k,c.x+(p.getX(k)-c.x)*r,c.y+(p.getY(k)-c.y)*r,c.z+(p.getZ(k)-c.z)*r);}}
+    geo.computeVertexNormals();place(root,geo,patina);
+    place(root,new T.CylinderGeometry(.32,.38,.18,12),bronze,dx*2.02,.69,dz*2.02);
+    // Cloud scrolls cling to the pillar; a gilded pearl crowns it where the ring rests.
+    for(const t of [.28,.52,.74]){const c=curve.getPointAt(t),ring=place(root,new T.TorusGeometry(.2,.055,6,16,Math.PI*1.4),bronze,c.x,c.y,c.z);ring.rotation.set(Math.PI/2,0,a+t*4);}
+    place(root,new T.SphereGeometry(.17,14,10),gold,dx*R,cy+.2,dz*R);
+    // A bracket for this domain's resonance light.
+    place(root,new T.BoxGeometry(.05,.05,.55),bronze,dx*2.6,4.3,dz*2.6).rotation.y=a;
+    colliders.push({x:dx*2.1,z:dz*2.1,radius:.32,height:7});
   }
-  // Entablature: thick stone cornice above the arcade.
-  mesh(drum,new T.CylinderGeometry(2.08,2.08,.24,64),limestone,0,2.95);
-  mesh(drum,new T.CylinderGeometry(2.0,2.08,.1,64),travertine,0,3.07);
-  const bronzeBelt=mesh(drum,new T.TorusGeometry(2.04,.045,8,96),brass,0,3.13);bronzeBelt.rotation.x=Math.PI/2;
-  for(let i=0;i<24;i++){const a=i/24*Math.PI*2;const dentil=mesh(drum,new T.BoxGeometry(.11,.11,.14),copper,Math.sin(a)*2.03,3.0,Math.cos(a)*2.03);dentil.rotation.y=a;dentil.castShadow=false;}
-  // Observation balcony with railing posts.
-  mesh(drum,new T.CylinderGeometry(1.95,1.98,.08,64),travertine,0,3.22);
-  for(let i=0;i<16;i++){const a=i/16*Math.PI*2;mesh(drum,new T.CylinderGeometry(.03,.03,.6,8),copper,Math.sin(a)*1.92,3.52,Math.cos(a)*1.92).castShadow=false;}
-  const railRing=mesh(drum,new T.TorusGeometry(1.92,.025,6,96),copper,0,3.84);railRing.rotation.x=Math.PI/2;railRing.castShadow=false;
-  // Second tier: narrower lantern drum.
-  const lantern=new T.Group();lantern.position.y=4.0;hub.add(lantern);
-  mesh(lantern,new T.CylinderGeometry(1.3,1.4,.22,48),limestone,0,.11);
-  for(let i=0;i<8;i++){const a=i/8*Math.PI*2;mesh(lantern,new T.CylinderGeometry(.13,.13,2.6,16),limestone,Math.sin(a)*1.12,1.42,Math.cos(a)*1.12);}
-  mesh(lantern,new T.CylinderGeometry(1.3,1.3,.14,48),travertine,0,2.8);
-  // Octagonal copper roof with ribs.
-  for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const rib=Array.from({length:16},(_,j)=>{const t=j/15;return new T.Vector3(Math.sin(a)*1.3*(1-t*.95),2.9+t*t*2.3,Math.cos(a)*1.3*(1-t*.95));});
-    mesh(lantern,new T.TubeGeometry(new T.CatmullRomCurve3(rib),20,.055,8,false),copper);}
-  // Roof surface — a smooth cone sitting on the ribs.
-  const roof=new T.ConeGeometry(1.3,2.4,32,1,false);mesh(lantern,roof,copper,0,4.1).castShadow=true;
-  // Crystal lantern suspended inside the drum.
-  const crystalShape=mergeGeometries([new T.ConeGeometry(.42,.56,10).translate(0,.28,0),new T.CylinderGeometry(.42,.42,.6,10).translate(0,-.3,0),new T.ConeGeometry(.42,.4,10).rotateZ(Math.PI).translate(0,-.8,0)])!;
-  const beacon=mesh(lantern,crystalShape,crystal,0,1.55);beacon.name='celestial-beacon';
-  mesh(lantern,new T.SphereGeometry(.28,20,14),glow,0,1.55).castShadow=false;
-  // Bronze orrery crowning the roof — raised to clear the cone peak.
-  const orrery=new T.Group();orrery.position.set(0,6.9,0);hub.add(orrery);
-  // Spire + weathervane base.
-  mesh(orrery,new T.CylinderGeometry(.07,.14,.9,10),copper,0,-.4);
-  mesh(orrery,new T.CylinderGeometry(.17,.22,.42,16),brass,0,.1);
-  mesh(orrery,new T.SphereGeometry(.3,20,14),material('#e8c88a',.4,.5,'metal'),0,.42);
-  for(let i=0;i<3;i++){const r=.6+i*.14,ring=mesh(orrery,new T.TorusGeometry(r,.022,6,72),i===1?emberGlow:brass,0,.42);ring.rotation.set(.4+i*.6,i*.9,.3);}
-  for(let i=0;i<4;i++){const a=i/4*Math.PI*2;mesh(orrery,new T.SphereGeometry(.07,10,8),emberGlow,Math.sin(a)*.78,.42+Math.sin(a*2)*.14,Math.cos(a)*.78).castShadow=false;}
-  // Antenna spike with pennant beacon.
-  mesh(orrery,new T.CylinderGeometry(.02,.04,1.2,8),copper,0,1.1);
-  mesh(orrery,new T.SphereGeometry(.14,16,12),glow,0,1.8).castShadow=false;
-  // Decorative ground rings reach outward.
-  for(const radius of [3.4,5.6,8.1]){const ring=mesh(hub,new T.TorusGeometry(radius,.03,6,120),glow,0,.03);ring.rotation.x=-Math.PI/2;ring.castShadow=false;}
-  return hub;
+  // Fixed rings: horizon (graduated) and the meridian that holds the polar axis.
+  place(root,band(R,.2,.12),gold,0,cy);
+  for(let k=0;k<36;k++){const a=k/36*Math.PI*2;place(root,new T.BoxGeometry(.04,.03,k%3?.12:.2),bronze,Math.sin(a)*R,cy+.075,Math.cos(a)*R).rotation.y=a;}
+  const meridian=place(root,band(R-.02,.16,.1),gold,0,cy);meridian.rotation.z=Math.PI/2;
+  const axis=new T.Vector3(0,Math.sin(LATITUDE),-Math.cos(LATITUDE));
+  const rod=place(root,new T.CylinderGeometry(.035,.035,R*2,8),bronze,0,cy);rod.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),axis);
+  for(const s of [-1,1])place(root,new T.SphereGeometry(.12,12,8),gold,axis.x*R*s,cy+axis.y*R*s,axis.z*R*s);
+  // Turning rings: the equator and the ecliptic with a sighting tube, revolving about the pole.
+  const turning=new T.Group();turning.position.y=cy;turning.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),axis);turning.userData.dynamic=true;turning.name='armillary-turning';root.add(turning);
+  place(turning,band(R*.88,.15,.08),bronze);
+  const ecliptic=place(turning,band(R*.82,.12,.07),gold);ecliptic.rotation.x=23.4*Math.PI/180;
+  for(let k=0;k<28;k++){const a=k/28*Math.PI*2;place(ecliptic,new T.SphereGeometry(.045,8,6),patina,Math.sin(a)*R*.82,.06,Math.cos(a)*R*.82).castShadow=false;}
+  const sight=new T.Group();sight.rotation.z=.35;turning.add(sight);
+  const tube=place(sight,new T.CylinderGeometry(.07,.07,R*1.5,10),bronze);tube.rotation.x=Math.PI/2;
+  place(sight,band(R*.74,.1,.06),bronze).rotation.z=Math.PI/2;
+  // The perimeter balustrade opens for each bridge and the harbour ramp; a lantern terminates every run.
+  const openings=[...regions.map(r=>({angle:Math.atan2(r.position[1],r.position[0]),half:2.9})),{angle:Math.PI/2,half:2.4}];
+  const gaps=openings.map(o=>({angle:o.angle,half:Math.asin(o.half/hubLayout.rail)})).sort((p,q)=>p.angle-q.angle);
+  const railH=.95;
+  gaps.forEach((gap,i)=>{
+    const next=gaps[(i+1)%gaps.length],from=gap.angle+gap.half,to=next.angle-next.half+(i===gaps.length-1?Math.PI*2:0);
+    const count=Math.max(1,Math.round((to-from)*hubLayout.rail/1.55)),posts=Array.from({length:count+1},(_,k)=>{const a=from+(to-from)*k/count;return new T.Vector3(Math.cos(a)*hubLayout.rail,0,Math.sin(a)*hubLayout.rail);});
+    posts.forEach((p,k)=>{
+      if(k===0||k===count){lantern(root,p.x,p.z,1.1);colliders.push({x:p.x,z:p.z,radius:.42,height:2.1});}
+      else{place(root,new T.BoxGeometry(.22,railH,.22),marble,p.x,railH/2,p.z).rotation.y=-Math.atan2(p.z,p.x);place(root,new T.CylinderGeometry(.1,.13,.16,8),marble,p.x,railH+.08,p.z);place(root,new T.SphereGeometry(.11,10,8),marble,p.x,railH+.24,p.z);}
+      const q=posts[k+1];if(!q)return;
+      const mid=p.clone().add(q).multiplyScalar(.5),length=p.distanceTo(q)-.2,rot=-Math.atan2(q.z-p.z,q.x-p.x);
+      place(root,new T.BoxGeometry(length,.12,.15),marble,mid.x,railH-.12,mid.z).rotation.y=rot;
+      place(root,new T.BoxGeometry(length,.36,.1),marble,mid.x,.3,mid.z).rotation.y=rot;
+      place(root,new T.BoxGeometry(length,.08,.2),marble,mid.x,.05,mid.z).rotation.y=rot;
+      for(const s of [-.25,.25]){const v=p.clone().lerp(q,.5+s);place(root,new T.CylinderGeometry(.05,.07,.35,6),marble,v.x,.66,v.z);}
+      colliders.push({x:mid.x,z:mid.z,radius:.12,height:railH+.3,segment:[p.x,p.z,q.x,q.z]});
+    });
+  });
+  // The world guide floats above the meridian as the pole star; a gilded spire points to it.
+  place(root,new T.ConeGeometry(.07,.65,8),gold,0,cy+R+.32);
+  let time=0;
+  return {root,colliders,update(dt:number){time+=dt;turning.rotateY(dt*.05);sight.rotation.y=Math.sin(time*.07)*.6;}};
 }
+/** Material helper kept for modules that import it from the hub. */
+export const hubStone=()=>material('#e7e1d2',.86,.02,'stone');
+export {mesh};

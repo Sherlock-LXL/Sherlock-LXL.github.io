@@ -4,12 +4,15 @@ import { material,mesh,softBox } from './architecture';
 import { type Obstacle } from './scenery';
 import {batchStatic} from './optimizer';
 import {pocketWonder} from './pocket-wonders';
+import {kit,drumStool} from './vernacular';
+import {pigmentAccent} from './ink';
 import type { Discovery } from '../core/types';
 import type { EventBus } from '../core/events';
 import { advanceFlight } from '../../shared/atmosphere.mjs';
 
 type Installation={info:Discovery;group:T.Group;parts:T.Object3D[];animate?:(time:number,energy:number)=>void;glints:T.Points;halo:T.MeshStandardMaterial;triggered:number;energy:number;phase:number};
-const pastel=['#b8dcca','#ecc3d1','#e6d7a9','#bdcee9','#d6c2e5'];
+/** Mineral pigments: malachite, cinnabar, gamboge, azurite, and a mauve from the lacquer box. */
+const pastel=['#5f9f85','#c0584a','#d6a948','#4f7f9f','#8d6f9f'];
 const box=(g:T.Object3D,m:T.Material,w:number,h:number,d:number,x=0,y=0,z=0)=>mesh(g,softBox(w,h,d),m,x,y,z);
 
 /** Small, data-driven installations; geometry is owned and disposed by the world scene. */
@@ -18,13 +21,16 @@ export class Discoveries {
   private releases:(()=>void)[]=[];
   private reduced=matchMedia('(prefers-reduced-motion: reduce)');
   constructor(scene:T.Scene,entries:Discovery[],obstacles:Obstacle[],private bus:EventBus,found:ReadonlySet<string>){
-    const stone=material('#fff0dc'),metal=material('#9aafa9',.45,.12);
+    const stone=kit.paper(),metal=kit.bronze();
     const sprite=document.createElement('canvas');sprite.width=sprite.height=32;const ink=sprite.getContext('2d')!,gradient=ink.createRadialGradient(16,16,0,16,16,16);gradient.addColorStop(0,'#fff');gradient.addColorStop(.2,'#ffffffe0');gradient.addColorStop(1,'#ffffff00');ink.fillStyle=gradient;ink.fillRect(0,0,32,32);const sparkle=new T.CanvasTexture(sprite);this.releases.push(()=>sparkle.dispose());
     for(const info of entries){
       const group=new T.Group();group.name='discovery-'+info.id;group.position.set(info.x,info.y??0,info.z);group.scale.setScalar(info.scale??1);group.rotation.y=Math.atan2(-info.position[0],10-info.position[1]);scene.add(group);
-      const halo=new T.MeshStandardMaterial({color:info.color,emissive:info.color,emissiveIntensity:found.has(info.id)?.5:.05});
-      mesh(group,new T.CylinderGeometry(.95,1.08,.22,48),stone,0,.11);
-      mesh(group,new T.CylinderGeometry(.72,.86,.5,48),material(info.color),0,.43);
+      const accent=pigmentAccent(info.color);
+      const halo=new T.MeshStandardMaterial({color:accent,emissive:accent,emissiveIntensity:found.has(info.id)?.5:.05});
+      // A carved drum stone, banded in the island's pigment, carries every wonder.
+      drumStool(group,0,0,1,.22,kit.stone());
+      mesh(group,new T.CylinderGeometry(.72,.86,.5,24),kit.stoneDark(),0,.43);
+      mesh(group,new T.CylinderGeometry(.74,.74,.08,24),material(accent,.6,.04),0,.62);
       const rim=mesh(group,new T.TorusGeometry(.9,.035,8,64),halo,0,.25);rim.rotation.x=Math.PI/2;
       const dust=new T.BufferGeometry();dust.setAttribute('position',new T.BufferAttribute(new Float32Array(16*3),3));
       const glints=new T.Points(dust,new T.PointsMaterial({map:sparkle,color:info.color,size:.12,transparent:true,opacity:.5,depthWrite:false}));glints.name='discovery-glints';glints.frustumCulled=false;group.add(glints);
@@ -99,14 +105,14 @@ export class Discoveries {
           const leafGeometry=new T.ExtrudeGeometry(outline,{depth:.012,bevelEnabled:true,bevelThickness:.006,bevelSize:.007,bevelSegments:1});leafGeometry.rotateX(-Math.PI/2);
           for(let i=0;i<8;i++){
             const leaf=new T.Group();group.add(leaf);item.parts.push(leaf);
-            mesh(leaf,leafGeometry,material(['#d7aa65','#c78e70','#e3bf83'][i%3]));
+            mesh(leaf,leafGeometry,material(['#c0584a','#d6a948','#b07a45'][i%3]));
             box(leaf,metal,.009,.006,.48,0,.025,-.02);
           }
         },
         tides:()=>{
-          mesh(group,new T.CylinderGeometry(.73,.64,.12,40),material('#88c6c7',.23,.15),0,.78);
+          mesh(group,new T.CylinderGeometry(.73,.64,.12,40),material('#4f8a80',.23,.15),0,.78);
           for(let i=0;i<4;i++){const ring=mesh(group,new T.TorusGeometry(1,.028,8,48),halo,0,.88);ring.rotation.x=Math.PI/2;item.parts.push(ring);}
-          const pearl=mesh(group,new T.SphereGeometry(.2,20,14),material('#f8e5cd',.18,.25),0,1.05);pearl.name='tide-pearl';
+          const pearl=mesh(group,new T.SphereGeometry(.2,20,14),material('#f3ecdc',.18,.25),0,1.05);pearl.name='tide-pearl';
         }
       };
       const build=builders[info.kind];if(build)build();else{const pocket=pocketWonder(info.kind,group,stone,metal,halo);if(pocket){item.parts=pocket.parts;item.animate=pocket.animate;}}

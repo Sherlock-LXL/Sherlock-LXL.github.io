@@ -1,0 +1,134 @@
+[
+  {
+    "source": "D:\\GitHub\\gift-chooser\\src\\model.py",
+    "file": "runtime/models/recommendation/src/model.py",
+    "bytes": 5746,
+    "sha256": "25a13dedcaddb68f0363a1efe8c2830ef3360a9d6b7c32ed26af1800d480442a"
+  },
+  {
+    "source": "D:\\GitHub\\gift-chooser\\models\\final_model.npz",
+    "file": "runtime/models/recommendation/models/final_model.npz",
+    "bytes": 1998,
+    "sha256": "3db4ed8006271dba430d938efd13a4276461fb4d62cf0ac62e92343bfd4b34cf"
+  },
+  {
+    "source": "D:\\GitHub\\expression-recognition-cnn\\src\\model.py",
+    "file": "runtime/models/emotion-recognition/src/model.py",
+    "bytes": 2023,
+    "sha256": "be5fb71b3cd071ba5443fa7c90025938bf25353432965452c784c28102b2a83b"
+  },
+  {
+    "source": "D:\\GitHub\\expression-recognition-cnn\\src\\config.py",
+    "file": "runtime/models/emotion-recognition/src/config.py",
+    "bytes": 187,
+    "sha256": "b3481a7edcc9b7f3e8b2e90629856f297e5299ccffaa1872640af646b2d22fa1"
+  },
+  {
+    "source": "D:\\GitHub\\expression-recognition-cnn\\checkpoints\\best_model_res_1.pth",
+    "file": "runtime/models/emotion-recognition/checkpoints/best_model_res_1.pth",
+    "bytes": 1846197,
+    "sha256": "9703be9df90b28457e13aed9455d1593cb6eba4d579e18bec5b3caf5024596ec"
+  },
+  {
+    "source": "D:\\GitHub\\expression-recognition-cnn\\checkpoints\\best_model_res_2.pth",
+    "file": "runtime/models/emotion-recognition/checkpoints/best_model_res_2.pth",
+    "bytes": 1846197,
+    "sha256": "71f302e80d83256ff995044735a4e4a788431c727428aca1ffa45f5bda86bf64"
+  },
+  {
+    "source": "D:\\GitHub\\expression-recognition-cnn\\checkpoints\\best_model_res_3.pth",
+    "file": "runtime/models/emotion-recognition/checkpoints/best_model_res_3.pth",
+    "bytes": 1846197,
+    "sha256": "1add8f94a45e6985e2a7089e9411b776e9b33144957f5fe7713fc8ceb56a1279"
+  },
+  {
+    "source": "D:\\GitHub\\blind-verse-rnn\\src\\model.py",
+    "file": "runtime/models/poetry/src/model.py",
+    "bytes": 956,
+    "sha256": "f2823ede10f9c6ab4de2f05de12369c244a320244519a3d170fdb9e536fcc1b3"
+  },
+  {
+    "source": "D:\\GitHub\\blind-verse-rnn\\checkpoints\\best_finetuned_model.pth",
+    "file": "runtime/models/poetry/checkpoints/best_finetuned_model.pth",
+    "bytes": 138976287,
+    "sha256": "76ba8ffc97af8302d8cec64ffc5b04e2f7934414097935150eca95b399a5d754"
+  },
+  {
+    "source": "D:\\GitHub\\blind-verse-rnn\\data\\processed\\vocab_benchmark.json",
+    "file": "runtime/models/poetry/data/processed/vocab_benchmark.json",
+    "bytes": 76300,
+    "sha256": "7a7e3a11df1be662bcdf31e1fc07b5656feb587638fda15d2a0112fa1f09f798"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\src\\model.py",
+    "file": "runtime/models/cat-recognition/src/model.py",
+    "bytes": 2597,
+    "sha256": "c4c331d2fdc3020fa6a0f8a61bd7d49dbf77b8e11b169af46a25eebeeac670b1"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\src\\detect_crop.py",
+    "file": "runtime/models/cat-recognition/src/detect_crop.py",
+    "bytes": 3972,
+    "sha256": "c24b14567dad882ef2d4b31c9f340b065a5913b864141898811cb598ae97302c"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\classes.txt",
+    "file": "runtime/models/cat-recognition/classes.txt",
+    "bytes": 871,
+    "sha256": "a1092adfcbcfb07ee0b15403fac6f07eecf5d265ee682db602813d9b7af7102e"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\models\\yolo26s.pt",
+    "file": "runtime/models/cat-recognition/models/yolo26s.pt",
+    "bytes": 20422725,
+    "sha256": "646f8bc3fe0a656803d95c294f7852321748cb29d13466a1af8862e2db384a1b"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\checkpoints\\resnet50_finetuned.pth",
+    "file": "runtime/models/cat-recognition/checkpoints/resnet50_finetuned.pth",
+    "bytes": 95168897,
+    "sha256": "25be2ab9d96e9803e04faac2ad5e474c33b9b3dae0900461347dd7800f015dfe"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\checkpoints\\resnet101_finetuned.pth",
+    "file": "runtime/models/cat-recognition/checkpoints/resnet101_finetuned.pth",
+    "bytes": 171453763,
+    "sha256": "31ddb98b5a00c12868ca859a197a7d606db5808ae8f4bf83f9761bb50a32e490"
+  },
+  {
+    "source": "D:\\GitHub\\pku-cat-recognition\\checkpoints\\convnexttiny_finetuned.pth",
+    "file": "runtime/models/cat-recognition/checkpoints/convnexttiny_finetuned.pth",
+    "bytes": 111656935,
+    "sha256": "f820711e2314c79e5df0d44b2296e0caa2342e57204dab12a7fab93cd3d5dab0"
+  },
+  {
+    "source": "D:\\GitHub\\xianglm\\src\\model.py",
+    "file": "runtime/models/xianglm/src/model.py",
+    "bytes": 9366,
+    "sha256": "6ba1789c116dcd7c0b7899cf2fcfa963063e8be1fedbd44581c24d6d3c921fe0"
+  },
+  {
+    "source": "D:\\GitHub\\xianglm\\src\\config.py",
+    "file": "runtime/models/xianglm/src/config.py",
+    "bytes": 11077,
+    "sha256": "83c3a85e817d3dba394b780e0a733774e95b47fb9019ccb4f3c1ea809f1c2abe"
+  },
+  {
+    "source": "D:\\GitHub\\exe-builder\\projects\\xianglm\\assets\\xianglm-200m-chat.pt",
+    "file": "runtime/models/xianglm/xianglm-200m-chat.pt",
+    "bytes": 801296040,
+    "sha256": "d13addcb4669970ff6a6b18dc3d25b0007b9eba0d6518faa72dbeb465ecaeede"
+  },
+  {
+    "source": "D:\\GitHub\\exe-builder\\projects\\xianglm\\assets\\tokenizer.json",
+    "file": "runtime/models/xianglm/tokenizer.json",
+    "bytes": 2541612,
+    "sha256": "295100933a548c5215124664b5b5c00ecaead3b55a418c5eebf5968e06fb582a"
+  },
+  {
+    "source": "D:\\GitHub\\gift-chooser\\src\\config.py",
+    "file": "runtime/models/recommendation/src/config.py",
+    "bytes": 279,
+    "sha256": "3c7684dbbaf5cbdf7e64a67946124fc51b22f8427797ae099a4286a3ed5bc76b"
+  }
+]

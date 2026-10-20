@@ -58,9 +58,22 @@ try{
   await page.locator('#world canvas').waitFor({state:'visible',timeout:15000});
   await page.waitForFunction(()=>Number(document.querySelector('#world')?.dataset.previewReady)>0,null,{timeout:30000});
   await page.locator('#interaction-prompt a[href="https://github.com/Sherlock-LXL/xianglm"]').waitFor({timeout:30000});
+  assert.equal(await page.locator('.brand-symbol').textContent(),'想');
+  assert.equal(await page.locator('#app').evaluate(element=>element.classList.contains('world-booting')),false);
   assert.equal(await page.locator('[data-park],[data-mini-park]').count(),0);
-  assert.equal(await page.evaluate(()=>window.__xiangmetaInspect().foundations),5);
-  assert.equal(await page.evaluate(()=>window.__xiangmetaInspect().resonance.total),4);
+  const inspected=await page.evaluate(()=>window.__xiangmetaInspect());
+  assert.equal(inspected.foundations,5);
+  assert.equal(inspected.resonance.total,4);
+  assert.deepEqual({birds:inspected.ambient.flyingBirds,perched:inspected.ambient.perchedBirds,fish:inspected.ambient.fish,boats:inspected.ambient.boats},{birds:10,perched:3,fish:4,boats:3});
+  assert.ok(inspected.ambient.fishBoatBuffer>7);
+  assert.ok(inspected.ambient.routeGap>6);
+  assert.ok(inspected.ambient.minBoatSeparation>12);
+  assert.ok(Math.max(...inspected.ambient.boatScales)>=1.5);
+  assert.ok(inspected.harbor.boatPosition[2]>inspected.harbor.deckEnd+3);
+  assert.ok(inspected.harbor.boatScale>1);
+  assert.ok(inspected.harbor.tenderScale>=1);
+  assert.ok(inspected.harbor.tenderPosition[2]>inspected.harbor.deckEnd+2);
+  assert.ok(Math.abs(inspected.harbor.boatYaw)<.01);
   await page.waitForFunction(()=>window.__xiangmetaInspect().signatures.some(effect=>effect.kind==='tokens'&&effect.activity>.4));
   await context.close();
 

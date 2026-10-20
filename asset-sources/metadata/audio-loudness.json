@@ -1,0 +1,146 @@
+{
+  "modules/personal-music/assets/album-01-track-01.mp3": {
+    "sha256": "b0e6a97b11012f59b4abfa64051c3be2b7c64654391068a40e956ca17c07f990",
+    "lufs": -9.58,
+    "truePeakDb": -0.01,
+    "rangeLu": 4.7
+  },
+  "modules/personal-music/assets/album-01-track-02.mp3": {
+    "sha256": "b958230db9db123f57e6dff60f3b6f0f3858c627ae2187794d5d09975d37414f",
+    "lufs": -11.26,
+    "truePeakDb": 0.0,
+    "rangeLu": 12.9
+  },
+  "modules/personal-music/assets/album-01-track-03.mp3": {
+    "sha256": "da4ebc1b0f8bf215df46741a17496c15f6cc56e522d2fb20a343e58d13fa1bd9",
+    "lufs": -11.87,
+    "truePeakDb": -0.16,
+    "rangeLu": 10.9
+  },
+  "modules/personal-music/assets/album-02-track-01.mp3": {
+    "sha256": "db4521e7d69a9af442a26be81c3a316bd11212f5e0c6950444de191e1220db18",
+    "lufs": -10.26,
+    "truePeakDb": 0.42,
+    "rangeLu": 14.0
+  },
+  "modules/personal-music/assets/album-03-track-01.mp3": {
+    "sha256": "6ee8937b03d9358905914eb7b7e2d916f09ecf68e96e2c11a9df45e73ed69f0a",
+    "lufs": -15.31,
+    "truePeakDb": 1.03,
+    "rangeLu": 11.6
+  },
+  "modules/personal-music/assets/album-03-track-02.mp3": {
+    "sha256": "b423bfbc8e6903b0c28028523547c67311ad94f60abb0e38a34b0f63bb9d0352",
+    "lufs": -13.43,
+    "truePeakDb": 1.93,
+    "rangeLu": 6.7
+  },
+  "modules/personal-music/assets/album-03-track-03.mp3": {
+    "sha256": "c8f674becb968f262fc33e5931a71b54f953b75069fcc94819df0515d2fcc520",
+    "lufs": -13.66,
+    "truePeakDb": 4.01,
+    "rangeLu": 13.0
+  },
+  "modules/personal-music/assets/album-04-track-01.mp3": {
+    "sha256": "7521d7c4a55adccc3fdab9204419c15b48e0a49ba4227bddbf7eced3a11ee752",
+    "lufs": -14.54,
+    "truePeakDb": -1.92,
+    "rangeLu": 11.0
+  },
+  "modules/personal-music/assets/album-04-track-02.mp3": {
+    "sha256": "23600d0e47b1cfaa81ee97a4891143d5144bc7dd3cf4e7045f8cd21f28ead094",
+    "lufs": -11.35,
+    "truePeakDb": -0.04,
+    "rangeLu": 11.0
+  },
+  "modules/personal-music/assets/album-04-track-03.mp3": {
+    "sha256": "0e3d318c502934f3ee0662135a97deebf28f3e3957bfaf892415516f132f19bc",
+    "lufs": -12.91,
+    "truePeakDb": -0.04,
+    "rangeLu": 11.3
+  },
+  "modules/personal-music/assets/album-04-track-04.mp3": {
+    "sha256": "ad87adaddba06d93ca7f1ed3947f1daa62e949ca50378f9cf92cf4f20eae6c53",
+    "lufs": -13.18,
+    "truePeakDb": -2.02,
+    "rangeLu": 11.0
+  },
+  "modules/personal-music/assets/album-05-track-01.mp3": {
+    "sha256": "d34d7a1eb478a8f15675ae869c29e1af8d8abb88a175248720a9c06a674fe035",
+    "lufs": -10.64,
+    "truePeakDb": 0.09,
+    "rangeLu": 7.8
+  },
+  "modules/personal-music/assets/autumn.mp3": {
+    "sha256": "5af8eaf752dad88bb6fac2a2569e6a0b92d7c332206b878221cc1a988c375fb9",
+    "lufs": -19.22,
+    "truePeakDb": -2.63,
+    "rangeLu": 20.0
+  },
+  "modules/personal-music/assets/backing-01.mp3": {
+    "sha256": "b7115d6f9b0cf015cb4a82a58956d7bbffa97c2ae596ed7db4006efa5c38cfe2",
+    "lufs": -12.25,
+    "truePeakDb": 3.76,
+    "rangeLu": 8.0
+  },
+  "modules/personal-music/assets/backing-02.mp3": {
+    "sha256": "621e7a1f8a5d46a275bb9640f2ecf757aa353f2d3a8d63fe3d7d40f13e287b59",
+    "lufs": -15.99,
+    "truePeakDb": 1.52,
+    "rangeLu": 9.8
+  },
+  "modules/personal-music/assets/backing-03.mp3": {
+    "sha256": "32c991b32a5608c2d5dbd0aec8dbc1f69b985f35a03c3568342a55f28104e831",
+    "lufs": -13.9,
+    "truePeakDb": 4.24,
+    "rangeLu": 13.8
+  },
+  "modules/personal-music/assets/backing-04.mp3": {
+    "sha256": "bf91a4097d0cfac619f1405330223da5083ef6c289abe8b36082b4a55e8d497f",
+    "lufs": -13.85,
+    "truePeakDb": 4.33,
+    "rangeLu": 10.3
+  },
+  "modules/personal-music/assets/backing-05.mp3": {
+    "sha256": "7d2e2313ae9e1f89a71c1a13091dff78b31189f4b724ae2135a15df6419fa51b",
+    "lufs": -19.48,
+    "truePeakDb": -1.44,
+    "rangeLu": 12.8
+  },
+  "modules/personal-music/assets/backing-06.mp3": {
+    "sha256": "a3c3bf227389ecb3ebc5746c95b62b8c8f57a50a2e412ecffe7ef4f65e542533",
+    "lufs": -15.72,
+    "truePeakDb": -0.03,
+    "rangeLu": 10.9
+  },
+  "modules/personal-music/assets/backing-07.mp3": {
+    "sha256": "4ed576ad3b30496c8f60a97d95d4eb991a36699886824a562824333e43ad8cd8",
+    "lufs": -16.43,
+    "truePeakDb": 1.16,
+    "rangeLu": 15.9
+  },
+  "modules/personal-music/assets/spring.mp3": {
+    "sha256": "798610465104148be4b318d923f91447e18704f1183c467429ac1037d06c877b",
+    "lufs": -28.34,
+    "truePeakDb": -14.13,
+    "rangeLu": 4.8
+  },
+  "modules/personal-music/assets/summer.mp3": {
+    "sha256": "2d2b0c9b4e12836a507b75be5c7aa8b364a4690cf8d2645cc72cdb91f544c5cc",
+    "lufs": -21.76,
+    "truePeakDb": -5.43,
+    "rangeLu": 12.0
+  },
+  "modules/personal-music/assets/winter.mp3": {
+    "sha256": "a97555c32c9fa35fb815292c00b262d1938b3276c115da81a7dd1d1b156aa7af",
+    "lufs": -17.82,
+    "truePeakDb": -3.05,
+    "rangeLu": 13.1
+  },
+  "modules/weiming/assets/yan-lai-you-sheng.mp4": {
+    "sha256": "1b9d967e22413aca9d7049d735a0c465a65395bfdc1206bc83e77079fc2006cf",
+    "lufs": -10.32,
+    "truePeakDb": 0.88,
+    "rangeLu": 5.9
+  }
+}

@@ -1,9 +1,9 @@
 import * as T from 'three';
 
-/** A resting cat: rear legs tucked into one body silhouette, two visible forepaws. */
+/** A resting cat: rear legs tucked into one body silhouette, two visible forepaws. Painted in paper white and ink. */
 export function catSculpture(){
  const cat=new T.Group();cat.name='resting-cat';
- const fur=new T.MeshStandardMaterial({color:'#eadcc6',roughness:.86}),cream=new T.MeshStandardMaterial({color:'#fff1dc',roughness:.88}),pink=new T.MeshStandardMaterial({color:'#d4a3a2',roughness:.8}),ink=new T.MeshStandardMaterial({color:'#465d5a',roughness:.65});
+ const fur=new T.MeshStandardMaterial({color:'#ebe3d3',roughness:.86}),cream=new T.MeshStandardMaterial({color:'#f7f1e4',roughness:.88}),pink=new T.MeshStandardMaterial({color:'#c98f86',roughness:.8}),ink=new T.MeshStandardMaterial({color:'#2b2824',roughness:.65});
  const ball=(name:string,m:T.Material,x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{const o=new T.Mesh(new T.SphereGeometry(1,32,24),m);o.name=name;o.position.set(x,y,z);o.scale.set(sx,sy,sz);o.castShadow=o.receiveShadow=true;cat.add(o);return o;};
  ball('cat-body',fur,0,.63,.91,.7,.51,.87);
  ball('cat-head',fur,0,1.48,1.42,.56,.5,.47);

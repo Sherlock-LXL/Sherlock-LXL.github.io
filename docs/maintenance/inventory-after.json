@@ -1,0 +1,98 @@
+[
+  {
+    "directory": "artifacts",
+    "files": 30,
+    "bytes": 15653343,
+    "GiB": 0.015
+  },
+  {
+    "directory": "asset-sources",
+    "files": 11,
+    "bytes": 201176964,
+    "GiB": 0.187
+  },
+  {
+    "directory": "backend",
+    "files": 5,
+    "bytes": 15502,
+    "GiB": 0.0
+  },
+  {
+    "directory": "build",
+    "files": 19469,
+    "bytes": 3084404132,
+    "GiB": 2.873
+  },
+  {
+    "directory": "data",
+    "files": 3,
+    "bytes": 11864,
+    "GiB": 0.0
+  },
+  {
+    "directory": "desktop",
+    "files": 2,
+    "bytes": 4567,
+    "GiB": 0.0
+  },
+  {
+    "directory": "dist",
+    "files": 9,
+    "bytes": 919274,
+    "GiB": 0.001
+  },
+  {
+    "directory": "docs",
+    "files": 80,
+    "bytes": 326729,
+    "GiB": 0.0
+  },
+  {
+    "directory": "modules",
+    "files": 78,
+    "bytes": 391765852,
+    "GiB": 0.365
+  },
+  {
+    "directory": "node_modules",
+    "files": 11246,
+    "bytes": 533932123,
+    "GiB": 0.497
+  },
+  {
+    "directory": "public",
+    "files": 4,
+    "bytes": 2240,
+    "GiB": 0.0
+  },
+  {
+    "directory": "runtime",
+    "files": 20717,
+    "bytes": 2465041206,
+    "GiB": 2.296
+  },
+  {
+    "directory": "scripts",
+    "files": 12,
+    "bytes": 25420,
+    "GiB": 0.0
+  },
+  {
+    "directory": "shared",
+    "files": 21,
+    "bytes": 33647,
+    "GiB": 0.0
+  },
+  {
+    "directory": "src",
+    "files": 44,
+    "bytes": 318146,
+    "GiB": 0.0
+  },
+  {
+    "directory": "tests",
+    "files": 61,
+    "bytes": 201453,
+    "GiB": 0.0
+  }
+]

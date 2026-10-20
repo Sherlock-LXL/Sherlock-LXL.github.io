@@ -1,0 +1,1256 @@
+[
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/apihelpers.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\apihelpers.pxi",
+    "bytes": 66423,
+    "sha256": "01292f57660258f0e31216a4c1541409ccd62c57da2cdce88c4b593a2c43dde1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/builder.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\builder.cp312-win_amd64.pyd",
+    "bytes": 101680,
+    "sha256": "0a144f744e9e7ba679e7abbb964445dbe3048a5dddf44d596d32c793856a984b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/builder.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\builder.py",
+    "bytes": 8730,
+    "sha256": "f81232503933a46193fff0ca3848179083cf59b096f3876627d76d63efd4b811"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/classlookup.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\classlookup.pxi",
+    "bytes": 23015,
+    "sha256": "ad1b561f3f406a332a926ed1886fcf90e0ac6904d19202bbe7ba518f746f0b10"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/cleanup.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\cleanup.pxi",
+    "bytes": 8669,
+    "sha256": "66597fc5072630191442d916ba0889ed30d058f4742072a30f939eb26434741f"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/cssselect.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\cssselect.py",
+    "bytes": 3407,
+    "sha256": "babefb355b13936e3eb7fd40168e448df12aca17aec34d41446fbf39be430d06"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/debug.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\debug.pxi",
+    "bytes": 1161,
+    "sha256": "aada27ef0676e616b42a7b8210fac4bdc3e8c30ef6c8861a738b82c06a921163"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/docloader.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\docloader.pxi",
+    "bytes": 5969,
+    "sha256": "426c365a2130520eeec0e12b59e6cfaa407ffcf5045073dea53388a7bd7d78e8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/doctestcompare.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\doctestcompare.py",
+    "bytes": 18219,
+    "sha256": "d6bdb73b72a2d41ca9ab39155a1f7b144751abe10dbe61445ae001396744d0ba"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/dtd.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\dtd.pxi",
+    "bytes": 15760,
+    "sha256": "84ee14d10977c73a6ab55f170d95e426770d11b6ff30bf1091a60bf120434c3d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/ElementInclude.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\ElementInclude.py",
+    "bytes": 8804,
+    "sha256": "a44bcb292ca1356b594d1afa9625090fed6622a99bc5b72eaf172a66feef3478"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/etree.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\etree.cp312-win_amd64.pyd",
+    "bytes": 4049200,
+    "sha256": "6082ab5b6160af68eb4ba71258440488ba3ba04f45530187bebb4933cc2a94f7"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/etree.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\etree.h",
+    "bytes": 10036,
+    "sha256": "beeff4f2fc475215bf132979cff0da396f8cc73082ca40aca2a6c8f20c974906"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/etree.pyx",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\etree.pyx",
+    "bytes": 142074,
+    "sha256": "f4456b48914cfb0ab283aab793596ac5804af7f45eb5d1797d548f2cf496756e"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/etree_api.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\etree_api.h",
+    "bytes": 17924,
+    "sha256": "6caf2baa71609993cc2eb819a40d5bcc82ee1b8d7416986f9a6176e20169f559"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/extensions.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\extensions.pxi",
+    "bytes": 33086,
+    "sha256": "529f5e687a0aab00786da6451291d9f0709b54745f096ce0e2036de9bcfe14a1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/iterparse.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\iterparse.pxi",
+    "bytes": 17288,
+    "sha256": "750640ed62c9376a5b1a8af43dbcb89e8182b1702946446368fb13bc8d434113"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/lxml.etree.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\lxml.etree.h",
+    "bytes": 10036,
+    "sha256": "beeff4f2fc475215bf132979cff0da396f8cc73082ca40aca2a6c8f20c974906"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/lxml.etree_api.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\lxml.etree_api.h",
+    "bytes": 17929,
+    "sha256": "51912f7f276d755fab75c67cd8052910add400f0c876c60a176a5cd2e5ebe41f"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/nsclasses.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\nsclasses.pxi",
+    "bytes": 9410,
+    "sha256": "f538998cf6cfef71fc54dd17bb5466b9107b1be0f4a534d2a8b3db753250b795"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/objectify.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\objectify.cp312-win_amd64.pyd",
+    "bytes": 1759024,
+    "sha256": "6ea203ae913619022bdf31f7c1946efe414faa6a80f2402ba45bc318276f17e7"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/objectify.pyx",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\objectify.pyx",
+    "bytes": 77999,
+    "sha256": "72c98557ecc1179982364fbf247367db1afed691b24f178178eaccbbff892d77"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/objectpath.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\objectpath.pxi",
+    "bytes": 11782,
+    "sha256": "a20ecb5fe6bcf11ae0248de5500b6e27c1efc7846935fe7b93ba6669fcc2b820"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/parser.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\parser.pxi",
+    "bytes": 87905,
+    "sha256": "bee04140a98d4aab9856ecd01d0b5b180f4af5b17111078e8ae7f7e220d60ea8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/parsertarget.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\parsertarget.pxi",
+    "bytes": 6506,
+    "sha256": "d2067978b276850f2d480a45110c753dfcda88fa91b9a4710ff1b028e0c8cc47"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/proxy.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\proxy.pxi",
+    "bytes": 24639,
+    "sha256": "9db6859c842366e8f8cb07113275430a1ea8bf134542461442d64cabc8c138cc"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/public-api.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\public-api.pxi",
+    "bytes": 6934,
+    "sha256": "65daf1e031d52348155e3cf65f237e4e58edb9e8b5dc11fe16e38de017f23876"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/pyclasslookup.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\pyclasslookup.py",
+    "bytes": 95,
+    "sha256": "8c3198adbc6e284dc7974ecf6c82d7fe9b4b91069762ba494a0be2978848b37b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/readonlytree.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\readonlytree.pxi",
+    "bytes": 19573,
+    "sha256": "b07e6ad697eb432c013c6e199404e1fdde20ca2701d18c01a367336cf2e85151"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/relaxng.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\relaxng.pxi",
+    "bytes": 6504,
+    "sha256": "ae34df97eac16251ea42fe277f154af0a651e7d2aa296429f6566fdda2985d59"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/sax.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\sax.cp312-win_amd64.pyd",
+    "bytes": 134440,
+    "sha256": "fb2fb490a8b3cd41bfefcbb1325a60e26b0d302e8c6615dac075480fe28b527a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/sax.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\sax.py",
+    "bytes": 9993,
+    "sha256": "8942f8f94931d8cbbc8cefbd8e49edcd35a5e7b99de00164c8d04f701a803e21"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/saxparser.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\saxparser.pxi",
+    "bytes": 34413,
+    "sha256": "1c0b9abf29b17707a3500df64a9499fac94b450de297eb8f34b5f2cd165cedb5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/schematron.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\schematron.pxi",
+    "bytes": 6237,
+    "sha256": "145db64342a826e5f641c6f6eab2f560ef50a454e79aa4524ba93c47f1b98f6f"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/serializer.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\serializer.pxi",
+    "bytes": 69912,
+    "sha256": "068957cb242ab9010c2481be2ec14db5cfdc7241872bfb71bf346ddf43798b9a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/usedoctest.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\usedoctest.py",
+    "bytes": 243,
+    "sha256": "727deb5de2f717e2128fe1d734bf60e04c1c887eb46fd35c6635c8440177d623"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xinclude.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xinclude.pxi",
+    "bytes": 2523,
+    "sha256": "0d3adefca6084add6bcdb7ffa92ef98b1f996ebb9206779f21f36ce00aaf17e3"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xmlerror.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xmlerror.pxi",
+    "bytes": 51900,
+    "sha256": "ff2fd4ea06e15f832aa571e51f5422e7fb38299c3f7ff27bff0cd6b32c55fdd1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xmlid.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xmlid.pxi",
+    "bytes": 6252,
+    "sha256": "360ed689fbf45d79278cf30eea495d82b3877c2b08238e9404f0a451393de909"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xmlschema.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xmlschema.pxi",
+    "bytes": 8705,
+    "sha256": "b09ba61046e4b91faf8f6bc3004f2f0ef6e3061833b7f2d15fe2304111602d35"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xpath.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xpath.pxi",
+    "bytes": 19619,
+    "sha256": "893d52ec2068d9d067d7dcbddba92dc0f800286442e56167460ae7700e86c293"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xslt.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xslt.pxi",
+    "bytes": 37315,
+    "sha256": "3d33cf8ac13119d314cf100b9abc27ba0f13cb675f3646420936f0324389c053"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/xsltext.pxi",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\xsltext.pxi",
+    "bytes": 11330,
+    "sha256": "b322a4988e8633013f7fe5cf602f2b1855c9e45f4a7908a0c73e760ac6c5e0f0"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/_elementpath.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\_elementpath.cp312-win_amd64.pyd",
+    "bytes": 160560,
+    "sha256": "bf5149b1ac231c852e67e0d684048700ceff36f38686e423967481f1042ac54e"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/_elementpath.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\_elementpath.py",
+    "bytes": 11302,
+    "sha256": "9a9867ec70c6849c9fa885e158b10b5885717fdc02e6e748d47e772aa9118009"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__init__.py",
+    "bytes": 596,
+    "sha256": "6aa181c6c2b59070e3397155e29f1eeb8dec232ac3705133a94c6f573c2a962c"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/builder.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\builder.py",
+    "bytes": 6360,
+    "sha256": "abe059d788feb2a4972ff1759d09f3c41d7306109d477689ec5fbe2f118c6216"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/clean.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\clean.py",
+    "bytes": 524,
+    "sha256": "8f44b41d9f98487a1d4d3cdf0ae26e81ceb24c83c0592ebbd68c176f17de5d63"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/defs.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\defs.py",
+    "bytes": 5551,
+    "sha256": "b938a7566f5fc6e10a45ae6a2a7f87f7b9dd3846d8399ec471a36f9c24b5d454"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/diff.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\diff.cp312-win_amd64.pyd",
+    "bytes": 242480,
+    "sha256": "c02a3cff7251a8704f9d6d74a5e8a3bf2425ff259ee7c9edd32df9ad958c94fc"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/diff.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\diff.py",
+    "bytes": 33961,
+    "sha256": "ed16a1e874c2796711207fda2334f05dfe56208d5cc4f890d5f7488dec25e5c2"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/ElementSoup.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\ElementSoup.py",
+    "bytes": 330,
+    "sha256": "7504a9ceecd44f72ca08687bd47e2b71c079442c28329c9ac9163ea9bb5604cd"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/formfill.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\formfill.py",
+    "bytes": 9980,
+    "sha256": "f325c520ee0335563e1c6f2ae0ee0eb71210f2a98ba57610f13d6b1544e42bc7"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/html5parser.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\html5parser.py",
+    "bytes": 8894,
+    "sha256": "8aea425433bfe88d4f356b2d904ea899d0e1fab11cd0a31a217a353823fd9e83"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/soupparser.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\soupparser.py",
+    "bytes": 10511,
+    "sha256": "7d0fd98d6717c0a4eb6cf0fc96c3def5834fb109a4da8f7309dd5f246157d336"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/usedoctest.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\usedoctest.py",
+    "bytes": 262,
+    "sha256": "78fd129cb2d915f6073487a07cb58f781a8efb8cb228a8d2b63b5401418937ac"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/_diffcommand.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\_diffcommand.py",
+    "bytes": 2167,
+    "sha256": "31f71c698000282b730917bf3025e2842def9ee3d42a225b98ec7ce43b77ed3a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/_difflib.cp312-win_amd64.pyd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\_difflib.cp312-win_amd64.pyd",
+    "bytes": 378672,
+    "sha256": "a3e0b11fd70c8c5ea4003a5684eec1cb13e0f2cd4b6ba72933f1f21ec88096da"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/_difflib.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\_difflib.py",
+    "bytes": 87060,
+    "sha256": "ac51a4e0e6d368808081db95a384c027255d89c07a5ae5178231f7c699b4fe24"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/_html5builder.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\_html5builder.py",
+    "bytes": 3330,
+    "sha256": "5dfa8d1434391d43964eab9b78e7b59b9aa622eb7a23fdc48327bbe707abeed1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/_setmixin.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\_setmixin.py",
+    "bytes": 1244,
+    "sha256": "e9c53221e88c227e73532b5c587b1d5995f23095d5b1f255550a002087bd87b4"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__init__.py",
+    "bytes": 66352,
+    "sha256": "cd067080a1fc73f4016055f3baaf12f8aba00452ea2c5b7bbd000eb1e1d1211a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/c14n.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\c14n.pxd",
+    "bytes": 1135,
+    "sha256": "b0eda0e0782774d1a586c4a6308efaed3f0a7d970db63a458a5cd9dce0f87aa5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/config.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\config.pxd",
+    "bytes": 99,
+    "sha256": "1022b08446b1e485b62859f505077047633415b59c8954453095bba47c494aa2"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/dtdvalid.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\dtdvalid.pxd",
+    "bytes": 707,
+    "sha256": "54eb7de1ba9ee35edbc6f7e47dbb5bb1de64567c108f8a1848731f9d5da972c3"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/etreepublic.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\etreepublic.pxd",
+    "bytes": 10421,
+    "sha256": "b361d1252b998709438b7a07b1204f0a10387604e75a359633305bdd5c6bb49c"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/etree_defs.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\etree_defs.h",
+    "bytes": 14914,
+    "sha256": "811241253c157d0b78f73229c31140f3d8db3f4a92c859a7c4feae49bed1cb0f"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/htmlparser.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\htmlparser.pxd",
+    "bytes": 2858,
+    "sha256": "504576c08a7c4477a4c1401c3d63107bc2817c4bf7f6ed1cdcb1ceb1dbd1af49"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/lxml-version.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\lxml-version.h",
+    "bytes": 74,
+    "sha256": "5582e28732c4b659850afe0217f189de1cb73500e99ec82c5ee95a77637ba230"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/relaxng.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\relaxng.pxd",
+    "bytes": 2679,
+    "sha256": "1f95b95ce6c8e58b51a542de891cba2ba95d5190b4b4341ab80159ecf252a84e"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/schematron.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\schematron.pxd",
+    "bytes": 1638,
+    "sha256": "2662831bd12534f5c9eeb6733a94233da21dcc8675a73304393fc68d944af7c5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/tree.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\tree.pxd",
+    "bytes": 20671,
+    "sha256": "e3fb6d4138a08502623f1b7715af4527cf8187132d647570e033eb75a67a90a1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/uri.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\uri.pxd",
+    "bytes": 150,
+    "sha256": "51b4c6e1fbc76aaea390d9302f2c7a68c6db0825c60e6ac4dca8cf8ab0ad5b7d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xinclude.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xinclude.pxd",
+    "bytes": 826,
+    "sha256": "9f749dcf1c1d730271797f13408459ffaa33001c20ea6acc10e5c3173b397f9d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xmlerror.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xmlerror.pxd",
+    "bytes": 59697,
+    "sha256": "c3f4b1217f16924416d6223e621927948f4de427c4bad85e5157e6e17599093d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xmlparser.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xmlparser.pxd",
+    "bytes": 14048,
+    "sha256": "ecfe9bbfefc23ba2031bd095713b4192c280b65489a63871aabb875fd795843c"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xmlschema.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xmlschema.pxd",
+    "bytes": 1737,
+    "sha256": "aba7073c9a62dee8647f630b5147768779c20c1ff86b507c71e8bc6931db37ce"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xpath.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xpath.pxd",
+    "bytes": 5739,
+    "sha256": "2ec0e85a33b9c49501fb3d3f05db08b4458784b80ba57e3421d3666d8ce976fe"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/xslt.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\xslt.pxd",
+    "bytes": 8431,
+    "sha256": "18cfc7924eef1a758c95694b33d602a6451e1a05a4f0bbe6af5294cb991b67ee"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/__init__.pxd",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\__init__.pxd",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\__init__.py",
+    "bytes": 13622,
+    "sha256": "0a2f0989a2b17efbbe84c461ec83f6ed3161334de2110f0226836c7578cba0cf"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/builder.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\builder.cpython-312.pyc",
+    "bytes": 8118,
+    "sha256": "001c1577ba8f79f1d6641edf99ef6f378162f36915f482f60e39d7fcbd6e7881"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/cssselect.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\cssselect.cpython-312.pyc",
+    "bytes": 4615,
+    "sha256": "a2f80dbc9a198819c26ece5907be9818635a4239af001f3f4dccab8ece641982"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/doctestcompare.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\doctestcompare.cpython-312.pyc",
+    "bytes": 24312,
+    "sha256": "e2179895719ff62c8eab5da334beb779ae067e301d07b9ff894637924837d6df"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/ElementInclude.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\ElementInclude.cpython-312.pyc",
+    "bytes": 6119,
+    "sha256": "26a3f6406648a86769792d7f43f955837cc8759ccb3082d2fb3260e2108a5e58"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/pyclasslookup.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\pyclasslookup.cpython-312.pyc",
+    "bytes": 296,
+    "sha256": "9339b8ad636152883ade6c1d361c1bd859a115a196ff1c04729bf1c326910e96"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/sax.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\sax.cpython-312.pyc",
+    "bytes": 12938,
+    "sha256": "b1270b434440dd8a5e916e5a1e0ebb40813c2711f7f23231b7e597b2c8d98d74"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/usedoctest.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\usedoctest.cpython-312.pyc",
+    "bytes": 529,
+    "sha256": "c6f0875ac60ecb79efb952e17f50c4e2abf814d3be6e096f385088058b3db8e9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/_elementpath.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\_elementpath.cpython-312.pyc",
+    "bytes": 10471,
+    "sha256": "3130c736250fa0cbd61f3d7dd065b701719e0231ac63e0e5ceab741199e7ac04"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 1054,
+    "sha256": "9659f03acbddca1f6ed77af8fb9ba51f4cb4791e4c9976e75934640c540c42ae"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/builder.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\builder.cpython-312.pyc",
+    "bytes": 7421,
+    "sha256": "24e4fb54d87a9e099717bb5a410acc46ecfaf192a20bd5325bf1252c3812a25d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/clean.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\clean.cpython-312.pyc",
+    "bytes": 669,
+    "sha256": "7438c77f10d1e8c6343941de5f771b672f2b509fabca734bbde2c5fe3187f2e8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/defs.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\defs.cpython-312.pyc",
+    "bytes": 4255,
+    "sha256": "5ee0f16eebbeb4ea07b5002e74b4aaca8d352493bd67ee7b31f828ac5525de50"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/diff.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\diff.cpython-312.pyc",
+    "bytes": 35024,
+    "sha256": "00af39cc19ab995d1066d2bc59f4e0b2eaaeca86a9e4469a331ac0a67342b0df"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/ElementSoup.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\ElementSoup.cpython-312.pyc",
+    "bytes": 665,
+    "sha256": "9bd03082b88f3b053b467e30b7631f48a08954116c41cb09ab1c939c9554b5f9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/formfill.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\formfill.cpython-312.pyc",
+    "bytes": 12203,
+    "sha256": "867763d30916879ebd0f68b08d5d4d9c91c539dee27a8ce718000f95ebc5b29f"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/html5parser.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\html5parser.cpython-312.pyc",
+    "bytes": 9038,
+    "sha256": "7d754d45dae44fada3a4f68d16c1b092c23264535974bce255ec0076fb149eff"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/soupparser.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\soupparser.cpython-312.pyc",
+    "bytes": 11634,
+    "sha256": "8555323da1b928558e027d18e46aa4f1af1c32e9548f61b57c3de11410a733ae"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/usedoctest.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\usedoctest.cpython-312.pyc",
+    "bytes": 553,
+    "sha256": "9ffcb699fef851b72a278b4e8248e97bc2f911c841d07da5c4f8f2607b1ace0b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/_diffcommand.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\_diffcommand.cpython-312.pyc",
+    "bytes": 3929,
+    "sha256": "c9185da0a89f7578058cfce966194f2ad3691814a07dedd4ebc17fd294eb3607"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/_difflib.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\_difflib.cpython-312.pyc",
+    "bytes": 77025,
+    "sha256": "24f71db204da78533407a903c9b2aa45546efde822acb85dd41e4b670ce1e005"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/_html5builder.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\_html5builder.cpython-312.pyc",
+    "bytes": 5861,
+    "sha256": "7f222ded750838ce37a1156b4d28cf553c42c4595625fa5e9936f1c9a1665b2e"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/_setmixin.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\_setmixin.cpython-312.pyc",
+    "bytes": 2569,
+    "sha256": "16589ddffa841d3c603ce63c1116cb31e2ae20ecff5e1e926a5656cfa3911cc1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/html/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\html\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 80795,
+    "sha256": "19293fb7b50142bbe409d1230b41fa4af4b9fbd458f356f21934fb334b66d639"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/extlibs/zconf.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\extlibs\\zconf.h",
+    "bytes": 17506,
+    "sha256": "c67a074a7930587fd2a4a16361e3890e9ac691187e57dd5b7a137f3e1a55b8e3"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/extlibs/zlib.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\extlibs\\zlib.h",
+    "bytes": 105905,
+    "sha256": "aa5d046fe1c26c0fce240ebfe014d2110a447a49e59ad5ff83975143d17a46ad"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/extlibs/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\extlibs\\__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/exslt.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\exslt.h",
+    "bytes": 3222,
+    "sha256": "2b1557d027828743297d37064abddfe7c322263c771ac2480b932fcebc67e518"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/exsltconfig.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\exsltconfig.h",
+    "bytes": 1242,
+    "sha256": "b7a12fdc986ad665460018c17829739d0ad093edd14b00ae2271c0f4c9fc0e95"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/exsltexports.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\exsltexports.h",
+    "bytes": 1140,
+    "sha256": "fe575d2e85233976b5ef668061215f417929f31bfc436599c642804fae04bfb8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/libexslt.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\libexslt.h",
+    "bytes": 789,
+    "sha256": "af2a7010263592192e2ef39d1b62483f5ce173612f6f50cf17db3e064c357f2a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/c14n.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\c14n.h",
+    "bytes": 3213,
+    "sha256": "b35701c3b9f12c6947afacb30aefcf2c94d8bd17e8925a8218b55be35ec6a222"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/catalog.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\catalog.h",
+    "bytes": 4800,
+    "sha256": "b1eea28570d1332c02f1cae75fe249d2fce0492c7741b6c101bb5941b2511751"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/chvalid.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\chvalid.h",
+    "bytes": 5317,
+    "sha256": "128277df76c4c544e503fb8640e7bca8e9c9c9a2db7274111eb90c7fa7e328b8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/debugXML.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\debugXML.h",
+    "bytes": 5145,
+    "sha256": "b39ada080f4d2eccdca6b66c06eb5ffbee49c934a80857d7ebdd8846c43ab8b5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/dict.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\dict.h",
+    "bytes": 1821,
+    "sha256": "3e1388cbabc743ec67295023ab68aca0546a23cf3d4c22b5ad8d90a80fdddfaf"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/encoding.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\encoding.h",
+    "bytes": 8142,
+    "sha256": "0f406ac3c778320769e255da2d647d127d1d75ff265e9c89e06a0c670d26d1ff"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/entities.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\entities.h",
+    "bytes": 4701,
+    "sha256": "8743a6cb60d0edb1041f8358ad6d62f614a99f3a78e3036069f924f38658b7f7"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/globals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\globals.h",
+    "bytes": 14931,
+    "sha256": "afe42f083955f894b6680ca0f9f5e95e04e88ce14752ae495f12b9e66c970dd4"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/hash.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\hash.h",
+    "bytes": 6637,
+    "sha256": "a1c3d51abf465456624e2161c9fa5761632d075486862b1922b9332fd2e2273d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/HTMLparser.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\HTMLparser.h",
+    "bytes": 9809,
+    "sha256": "e4e336f03a97988e8bde6992c7a93892156e299ae6f846d79a16347f85d6fa60"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/HTMLtree.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\HTMLtree.h",
+    "bytes": 3649,
+    "sha256": "2dfb7212eaceaab78966de01e462b6a6abd8fdb636b9be1352309f71c84f15ac"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/list.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\list.h",
+    "bytes": 3277,
+    "sha256": "ebb5c39b95b44cd8f213d3a75dde88b36f98cb4ff8e3d67a46907dc27415ec85"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/nanoftp.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\nanoftp.h",
+    "bytes": 4150,
+    "sha256": "d636a53b03a091eea457c69e64f73d5b16671b0bca55743c79967e6700ebccc2"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/nanohttp.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\nanohttp.h",
+    "bytes": 1950,
+    "sha256": "c2ee36e6212b675c51dc76d0c8c651d8483d9293bc305124fc2c74ec04b41651"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/parser.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\parser.h",
+    "bytes": 40871,
+    "sha256": "a78f4353d83352b98d89ed7264e3c03610ac40486d1e76132e0e4d6c120c4bab"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/parserInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\parserInternals.h",
+    "bytes": 17241,
+    "sha256": "e8d4129d00d5cebd57ce73511a8a65c0447f1ed4ee28afc2d91a38e2fe83f001"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/pattern.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\pattern.h",
+    "bytes": 2566,
+    "sha256": "8c8b9d4c1de8c1659d4feeeaadbe37f3ec2db9b6522b8d92bc97474e7e495856"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/relaxng.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\relaxng.h",
+    "bytes": 6019,
+    "sha256": "91ab9aefb2446dee4c138274e745418c22331e7f7359119cf2c17e33a6e18c87"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/SAX.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\SAX.h",
+    "bytes": 4661,
+    "sha256": "9abfb9b68dcd8878100251381b85b837f86de08fe74efb406131a944cbbfefb3"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/SAX2.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\SAX2.h",
+    "bytes": 4642,
+    "sha256": "1d9a51932c85447ab964b0e53f0341e0c19651f5b091313f4e5d684fc7ba40f7"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/schemasInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\schemasInternals.h",
+    "bytes": 27166,
+    "sha256": "96a936ad44b6b6c05deeda264e1cb2297408812eff3d7578e15a5e1467b86d98"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/schematron.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\schematron.h",
+    "bytes": 4368,
+    "sha256": "1ef0b8eb0dd4036443a96b11c8c38838eab056fc433ed5e5761f9064caf60a96"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/threads.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\threads.h",
+    "bytes": 1969,
+    "sha256": "cf2e0afb6bb068654ba19225d6e18c9d16695b924c9bdc174a2ce1cab89bc217"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/tree.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\tree.h",
+    "bytes": 38200,
+    "sha256": "7eb7b8723816475eecb533de35c514df39609907b3947c675603708460030a8d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/uri.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\uri.h",
+    "bytes": 2638,
+    "sha256": "3b4935caba2cf6e3c2ea2b19f93c70cf93004ad39c69defcaf2ff6e99991bc1d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/valid.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\valid.h",
+    "bytes": 13229,
+    "sha256": "974b0e8030c87b14577399809d897a7edd9e10c4a2876deea34326774e6d1e13"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xinclude.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xinclude.h",
+    "bytes": 3016,
+    "sha256": "d6ee718e32faee5fddfc05e31a6b860b3d5974ff681deb06998c7c38ef9c250b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xlink.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xlink.h",
+    "bytes": 5191,
+    "sha256": "4c2fab5d35a6d0a17a1bc132f418b1cdc7a46981e9c8470a697c1d293f5a2bf2"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlautomata.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlautomata.h",
+    "bytes": 3933,
+    "sha256": "baba4de8d314e9eeee2ed87ba9957ee56c53f4cb8213a8f08509e2ee9f0e1156"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlerror.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlerror.h",
+    "bytes": 37020,
+    "sha256": "aa4da3fbb088906315ad72627f71000c56fd4e6b4246affc3570040dbd902ab9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlexports.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlexports.h",
+    "bytes": 1042,
+    "sha256": "18bdfbc4c2dcdae8577ef9165abb79b88bd293146f9abf57a4746f916ca7a77b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlIO.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlIO.h",
+    "bytes": 10572,
+    "sha256": "6f3b641373701ac6178518c864891a03578fb73d076e9c09c324f15654e998d8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlmemory.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlmemory.h",
+    "bytes": 6053,
+    "sha256": "80a31580f2e4d7a8f7b046d83bffed8c9f8a874a299f95d8b6a8a0706e116789"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlmodule.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlmodule.h",
+    "bytes": 1195,
+    "sha256": "23972e1c296f2fc233de2071017f1ef38c9a829186083b92628510a99d96a885"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlreader.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlreader.h",
+    "bytes": 12339,
+    "sha256": "5ca4bdbcfd32749219788eca3bac504e08e61bfc606036b20b9a4c3fd9e614a0"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlregexp.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlregexp.h",
+    "bytes": 5440,
+    "sha256": "85c33692cca84f488fa94659314311668452d56bb1b4fb22ebcaf574181a76a6"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlsave.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlsave.h",
+    "bytes": 2345,
+    "sha256": "8669cc43726a00ce7c273fac3920d2e05013e4291f690f2f2674715b0642f8f4"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlschemas.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlschemas.h",
+    "bytes": 7071,
+    "sha256": "6e30499a3a1c2fb1454ee938f760088ab5f48df40a1d384797ac0cba4ec4fa82"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlschemastypes.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlschemastypes.h",
+    "bytes": 4735,
+    "sha256": "3e3db170a2091bb28e089186718689ffb233262753ead3de3b43422a4b0708e9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlstring.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlstring.h",
+    "bytes": 5411,
+    "sha256": "d4b4dcd798b2e6c953faf87cdd857caa87976ae5ddcd8f02fd4a836f94d0ffb9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlunicode.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlunicode.h",
+    "bytes": 8867,
+    "sha256": "a6d84c5d5b3799fb168202890c0256f6f0e8a25eaf6a4a04a4bb429bae4f4129"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlversion.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlversion.h",
+    "bytes": 9833,
+    "sha256": "0d8266c772dedb12e43e3f5d4607fa14053e2f4f3d26f8a72a2d2cdf3379f664"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xmlwriter.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xmlwriter.h",
+    "bytes": 21113,
+    "sha256": "ea13171e0ee45f317140d59a72f8a274e653e027e15178cf8951e492fc394188"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xpath.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xpath.h",
+    "bytes": 16994,
+    "sha256": "a48816eca97627ed0f5926ea08e0749cf46632c09ecf61710600e9b726b3f87d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xpathInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xpathInternals.h",
+    "bytes": 19049,
+    "sha256": "d5877832f2f8537c0fc2e7aa262b1d652873c54cb2b85eb63816b3550334f407"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/xpointer.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\xpointer.h",
+    "bytes": 3753,
+    "sha256": "3a4a6fe62c1c837a320f9a478988ad60f56e3e7f77ef62f859b8a63b6f982fed"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/attributes.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\attributes.h",
+    "bytes": 996,
+    "sha256": "0b25dbe19567255c3bff43077075cf70d4642c05434d34aeeb3a0b2994035a66"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/documents.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\documents.h",
+    "bytes": 2797,
+    "sha256": "e86512f622144b5a7fe6f7837c5d549b1d71b07c4d853bb72a71158019cd76a5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/extensions.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\extensions.h",
+    "bytes": 7161,
+    "sha256": "889c4f87028da917e2227de2dcbf2d2a27c2f2e2013e7d75b78eaafa3e97cc1a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/extra.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\extra.h",
+    "bytes": 1712,
+    "sha256": "88eba11a314b8b4b1c9b679b800d3b111f851f5ffa1e63de1df4a08665eee57c"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/functions.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\functions.h",
+    "bytes": 2050,
+    "sha256": "24ae67cda07c3ab082425c4172de8c310a7c2bc73f19deb5e0eabcd9f706bda5"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/imports.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\imports.h",
+    "bytes": 1915,
+    "sha256": "b9d1abdd45bd760dde12275d4835563940afc258c6c9f339ed11f6420bd9c35b"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/keys.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\keys.h",
+    "bytes": 1208,
+    "sha256": "cb7758fe567791f61407a5f0f373919c3a12ebc789a74a065047c3b61616b4c2"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/libxslt.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\libxslt.h",
+    "bytes": 1296,
+    "sha256": "4f1a6bd0c7e5cfbefe48e23e32e5cc7904b2333b41e734db691f6b81204e6300"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/namespaces.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\namespaces.h",
+    "bytes": 1734,
+    "sha256": "93bf040f57d40dee06df9b9586ba396aa27bdda4df43ec67e39cfe4248d9a169"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/numbersInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\numbersInternals.h",
+    "bytes": 2092,
+    "sha256": "dbc67f04e1c29c9113efa4c7697b1692dfdd47c2bffd838881d62f73843cfe10"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/preproc.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\preproc.h",
+    "bytes": 939,
+    "sha256": "c619d35c85cce823483f84ac5c9abdcebaaa60e638ae7ac3527cb88d6bd5b7a8"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/security.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\security.h",
+    "bytes": 2756,
+    "sha256": "d5a4874189c34ea95807bdd10286ea7dc2d6b2608245be7617fc879b235c0d9d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/templates.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\templates.h",
+    "bytes": 2345,
+    "sha256": "08c65b6e2b2a5a6f72994f87469da18dad0cdaac318808158f00636521780427"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/transform.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\transform.h",
+    "bytes": 6518,
+    "sha256": "0e250989ca2697443181d6d709eac29ca42ec9b7a7e8f882cba546f6742b86ca"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/transformInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\transformInternals.h",
+    "bytes": 246,
+    "sha256": "4d4b41f558649662a6b8d365801ec21691bb2745404ecad9502114a2c16a2c9e"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/trio.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\trio.h",
+    "bytes": 7415,
+    "sha256": "927fbdf0db0953dfe143c23c976fa7f09e4b9961ffd0ad249571d1de12ad734a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/triodef.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\triodef.h",
+    "bytes": 6912,
+    "sha256": "5e06d45ce738e3bd9109c987aa1f8d32030c2dcca4aee6ee23ef6b34491fdc9a"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/variables.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\variables.h",
+    "bytes": 3261,
+    "sha256": "edc2f510ea73a61cd9243dfd427f5e9c76736a47b2130ec77f3f67d48790d1c6"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/win32config.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\win32config.h",
+    "bytes": 1199,
+    "sha256": "f8e19b571db9936dea60a13e12520fb94823a90ec6631a377ced0913a6d4f399"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xslt.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xslt.h",
+    "bytes": 2074,
+    "sha256": "8fa9d91f1c98dd4e74e466ed3bf69e2ccac9f71136baec78e573a5c93d287986"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xsltconfig.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xsltconfig.h",
+    "bytes": 3060,
+    "sha256": "2b9b220fc3c4f7b0923f8982725641094bfbb9ffee54284dced9283d5c405e71"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xsltexports.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xsltexports.h",
+    "bytes": 1188,
+    "sha256": "19d7092f6a078b7e381a8ae7b86da2013dbbcaa238f0bf5e8a6d127008fdcb08"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xsltInternals.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xsltInternals.h",
+    "bytes": 59944,
+    "sha256": "c3f0d01d1ba5a55a58a20c4a3284ad7452fe02147e7edabb30ef4fae3e005b70"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xsltlocale.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xsltlocale.h",
+    "bytes": 986,
+    "sha256": "b8019effbde1bc264fe660ef1c21e070cbdb749ec56c71d2cc20c89dfb83b9bf"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/xsltutils.h",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\xsltutils.h",
+    "bytes": 9428,
+    "sha256": "283db4f29b6c407ac70750eee1b89953689933461be8cedcd923c9b63a38e891"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/__init__.py",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\__init__.py",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 236,
+    "sha256": "9bee62dcfd7e5698af0aa58a804729c5bcb3fafbc6e870818ce93ed9b1f07b64"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/extlibs/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\extlibs\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 244,
+    "sha256": "d6957f5baf93a941ec98215836f9aa339c7fa48d5c8de4e3f525659e4851d6dd"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libexslt/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libexslt\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 245,
+    "sha256": "fe9bc3369727e3e7cf66590f883aaa1403880b72523f259ca746abde6fcea9eb"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxml/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxml\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 243,
+    "sha256": "09ffa876a7a510c9b94d6bfe36e9488a5c4fd5c3233a8dc2470bad06976e0705"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/includes/libxslt/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\includes\\libxslt\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 244,
+    "sha256": "d7ed79f08e4975d29e6e78704496a8a2e09f2d41b4ab3278f9cd645f854e6247"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/__pycache__/__init__.cpython-312.pyc",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\__pycache__\\__init__.cpython-312.pyc",
+    "bytes": 14249,
+    "sha256": "c7df951e353290e49ef4d1148d70f2322f993b0d1c11cf3ae127b376f6bb0709"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/rng/iso-schematron.rng",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\rng\\iso-schematron.rng",
+    "bytes": 19046,
+    "sha256": "702338aa97ee4d8015b6e923c65a1b3cc949f2767e6aeec380e352da0e2b60ee"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/RNG2Schtrn.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\RNG2Schtrn.xsl",
+    "bytes": 3247,
+    "sha256": "832f84eb1476a77e522bdc1715386b68f24423d35da084cd1dde319aacbba316"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/XSD2Schtrn.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\XSD2Schtrn.xsl",
+    "bytes": 4563,
+    "sha256": "430791ac820cfb315c820f7c19703609a59f21b8151345ca11e6127efbfaec0d"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_abstract_expand.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_abstract_expand.xsl",
+    "bytes": 12015,
+    "sha256": "492519900916845606fd8347bd6f5453a5fcb6630e1f5bdda519b3aaed25e103"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_dsdl_include.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_dsdl_include.xsl",
+    "bytes": 41116,
+    "sha256": "659f9def6af14250027ebb381266836316916f177480f6be0cf2d195557a4118"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_schematron_message.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_message.xsl",
+    "bytes": 2069,
+    "sha256": "3506a5e33dc4b99ff9415a0c15b26a99ad922a0e3e8739bf0dbdbcdfed25d245"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_schematron_skeleton_for_xslt1.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_schematron_skeleton_for_xslt1.xsl",
+    "bytes": 73560,
+    "sha256": "568d45e7bea875191d2c19ae1045ab2dae4b17748c4d7f41e841069f151bbfff"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/iso_svrl_for_xslt1.xsl",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\iso_svrl_for_xslt1.xsl",
+    "bytes": 20970,
+    "sha256": "508ef11f1d2578d5d2f41694e9cc90e021de7e5b9f2a6004fb38ceae286e1fe1"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml/isoschematron/resources/xsl/iso-schematron-xslt1/readme.txt",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml\\isoschematron\\resources\\xsl\\iso-schematron-xslt1\\readme.txt",
+    "bytes": 3310,
+    "sha256": "3862e216cc2e2c9116e443d828e7a86aeb8224512d55aea3cb3044d4e70923df"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/INSTALLER",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\INSTALLER",
+    "bytes": 4,
+    "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/METADATA",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\METADATA",
+    "bytes": 3610,
+    "sha256": "0b6279dfca6a89d340c72bfdec06aac78e9879845ac900d043ed65d0b9648bae"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/RECORD",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\RECORD",
+    "bytes": 17087,
+    "sha256": "f445b213a033ee0ea09dadea3d20c791c4399f0026e62c2e02266ed12cdc69af"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/REQUESTED",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\REQUESTED",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/top_level.txt",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\top_level.txt",
+    "bytes": 5,
+    "sha256": "3630fdf3cc2a68aab9d769ec84d74bb7eb83c6c8e4a78061e759ba37e76152b9"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/WHEEL",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\WHEEL",
+    "bytes": 101,
+    "sha256": "ad1e507ec59c665de6adae409920fb15dd1dcd0c59de51c2a43a3bd0891f0cae"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/licenses/LICENSE.txt",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\licenses\\LICENSE.txt",
+    "bytes": 1538,
+    "sha256": "e7c3ce8d76331b0101cc46790ab43958ea90a364bcf962ed8763d5a818340e69"
+  },
+  {
+    "file": "runtime/python/Lib/site-packages/lxml-6.1.1.dist-info/licenses/LICENSES.txt",
+    "source": "C:\\Users\\18616\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\site-packages\\lxml-6.1.1.dist-info\\licenses\\LICENSES.txt",
+    "bytes": 1543,
+    "sha256": "ce53f508d0cb88bdb4621e236ca34881a3fa1805f97dfccf38960128a4e2ead9"
+  }
+]

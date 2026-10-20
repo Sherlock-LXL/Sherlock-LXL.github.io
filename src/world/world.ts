@@ -7,7 +7,7 @@ import {TravelerEffects} from './traveler-effects';
 import {WorldResonance} from './world-resonance';
 import {WorldWhispers} from './world-whispers';
 import {worldFeatures} from './features';
-import {bridgeLightSpan} from '../../shared/bridge-joints.mjs';
+import {InkPipeline,installInkShading} from './ink';
 import * as T from 'three';
 import {exhibitPoint,placedCollider} from '../../shared/exhibit-layout.mjs';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -19,7 +19,8 @@ import {buildHarbor} from './harbor';
 import {harbor} from '../../shared/harbor.mjs';
 import {surfaceDetail} from './surfaces';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-import { buildHub,nightLight } from './hub';
+import { buildHub,hubLayout } from './hub';
+import {buildBridge} from './bridges';
 import { batchStatic } from './optimizer';
 import { Memories } from './memories';
 import { Signatures } from './signatures';
@@ -41,11 +42,12 @@ import { EYE_HEIGHT,nearestStation,lookAngles } from '../../shared/interaction.m
 import {nearbyActions,actionHint,type InteractionKey} from '../core/nearby-actions';
 import type { Catalog,Exhibit,ArtworkInteraction } from '../core/types';
 import type { EventBus } from '../core/events';
+import {AmbientLife} from './ambient-life';
 type Station={id:string;x:number;z:number;approach:{x:number;z:number}};
 export class World {
   private scene=new T.Scene();private camera=new T.PerspectiveCamera(68,1,.08,900);
   private mapCamera=new T.PerspectiveCamera(43,1,.1,900);
-  private renderer!:T.WebGLRenderer;private orbit!:OrbitControls;private look!:LookControls;
+  private renderer!:T.WebGLRenderer;private ink!:InkPipeline;private orbit!:OrbitControls;private look!:LookControls;
   private player=createWalker();private jumpRequested=false;private mode:'first-person'|'map'='first-person';
   private objects=new Map<string,T.Group>();private obstacles:Obstacle[]=[];private stations:Station[]=[];
   private artworks:ArtworkInteraction[]=[];private nearArtwork:ArtworkInteraction|null=null;
@@ -58,7 +60,8 @@ export class World {
   private observer!:ResizeObserver;private events=new AbortController();private disposers:(()=>void)[]=[];
   private parameters=new Map<string,number>();private mixers:T.AnimationMixer[]=[];private projected=new T.Vector3();
   private wonders!:Discoveries;
-  private traveler?:TravelerEffects;private resonance?:WorldResonance;private whispers?:WorldWhispers;
+  private traveler?:TravelerEffects;private resonance?:WorldResonance;private whispers?:WorldWhispers;private hubMotion=(dt:number)=>{void dt;};
+  private ambient!:AmbientLife;
   private seasons!:Seasons;
   private memories!:Memories;private signatures!:Signatures;private photo!:PhotoCamera;private photoTime={hour:9,cycling:true};private reduced=matchMedia('(prefers-reduced-motion: reduce)');
   private extensions=new Map<string,ReturnType<typeof moduleExtensions>>();
@@ -81,76 +84,38 @@ export class World {
   }
   private *build(found:ReadonlySet<string>,memories:ReadonlySet<string>){
     const host=this.host,data=this.data,bus=this.bus;
-    this.renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+    installInkShading();
+    this.renderer=new T.WebGLRenderer({antialias:false,alpha:false,powerPreference:'high-performance',preserveDrawingBuffer:false});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.autoUpdate=false;
-    this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.0;
+    this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.toneMapping=T.NoToneMapping;this.renderer.info.autoReset=false;
+    this.ink=new InkPipeline(this.renderer);
     const canvas=this.renderer.domElement;canvas.tabIndex=0;canvas.setAttribute('aria-label',matchMedia('(pointer: coarse)').matches?'第一人称世界。使用左下方向键移动，拖动画面环顾，右下按钮跳跃，靠近展台后点击浮窗交互。':'第一人称世界。WASD 行走，空格跳跃，点击或拖动环顾，F 打开 GitHub 或展览，E 查看项目，R 打开 Demo、音乐或 MV，G 探索装置。');host.append(canvas);
     canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();this.setPaused(true);host.dispatchEvent(new CustomEvent('world-context-lost'));});
     this.photo=new PhotoCamera(canvas);
     host.dataset.view=this.mode;host.dataset.eyeHeight=String(EYE_HEIGHT);
     this.environment=new Environment(this.scene,data.regions);
-    const lightRoom=new RoomEnvironment(),pmrem=new T.PMREMGenerator(this.renderer),reflection=pmrem.fromScene(lightRoom,.06);
+    const lightRoom=new RoomEnvironment(),pmrem=new T.PMREMGenerator(this.renderer),reflection=pmrem.fromScene(lightRoom,.04);
     this.scene.environment=reflection.texture;this.scene.environmentIntensity=.24;lightRoom.dispose();pmrem.dispose();this.disposers.push(()=>reflection.dispose());
     for(const place of horizons)this.label('◇ '+place.title,new T.Vector3(...place.target),()=>bus.emit('horizon',place.id),'future-label',place.id);
     // Map inertia and pointer handlers can never write into the walking camera.
     this.orbit=new OrbitControls(this.mapCamera,canvas);this.orbit.enabled=false;this.orbit.enableDamping=true;
     this.orbit.minDistance=25;this.orbit.maxDistance=180;this.orbit.maxPolarAngle=Math.PI/2.25;
     this.look=new LookControls(canvas,()=>this.mode==='first-person'&&!this.paused,bus);
-    this.island(0,0,9,'#e6d5b8');
+    this.island(0,0,9,'#e6d5b8',[],undefined,[...data.regions.map(r=>({angle:Math.atan2(r.position[1],r.position[0]),half:.42})),{angle:Math.PI/2,half:.3}]);
     yield '中央枢纽与海面';
     for(const r of data.regions){
       const exhibits=data.modules.filter(m=>m.region===r.id);
-      const [x,z]=r.position;this.island(x,z,r.radius,r.color,exhibits,r);
-      // Bridge ends tuck below the island surface, never sharing its depth.
-      const distance=Math.hypot(x,z),start=8.4,end=distance-r.radius+.6,length=end-start,mid=(start+end)/2;
-      const bridge=mesh(this.scene,new T.BoxGeometry(5.6,.4,length),material('#efdfc2',.82,.03,'wood'),x/distance*mid,-.24,z/distance*mid);bridge.rotation.y=Math.atan2(x,z);
-      // Plank seams: subtle grooves along the deck.
-      const seamsPlank=material('#ba9f78',.9,0,'wood');
-      for(let p=.45;p<length-.35;p+=.7)mesh(bridge,new T.BoxGeometry(5.36,.006,.025),seamsPlank,0,.203,p-length/2).castShadow=false;
-      const rail=material('#a3bbb0',.5,.1),iron=material('#5c6b70',.5,.2,'metal'),glow=nightLight(r.color),stoneLight=material('#dfd2b3',.9,.02,'stone');
-      // Supporting piers (down into the sea).  Keep clear of the island edge so the arches
-      // never slice through the shoreline terrain.
-      const safeMargin=2.4;
-      const spanStart=-length/2+safeMargin,spanEnd=length/2-safeMargin,span=Math.max(0,spanEnd-spanStart);
-      const pierCount=Math.max(0,Math.floor(span/4.5));
-      for(let i=1;i<=pierCount;i++){
-        const pz=spanStart+span*(i/(pierCount+1));
-        for(const side of [-1,1]){
-          mesh(bridge,new T.CylinderGeometry(.26,.36,6.4,10),stoneLight,side*2.5,-3.2,pz);
-          mesh(bridge,new T.CylinderGeometry(.38,.42,.3,12),iron,side*2.5,-.4,pz).castShadow=false;
-        }
-        const archPoints=Array.from({length:17},(_,j)=>{const u=j/16;return new T.Vector3((u-.5)*5,-Math.sin(u*Math.PI)*2.0-.4,pz);});
-        mesh(bridge,new T.TubeGeometry(new T.CatmullRomCurve3(archPoints),22,.09,8,false),iron);
-      }
-      for(const side of [-1,1]){
-        const line=bridgeLightSpan(distance,r.radius);
-        // Top handrail.
-        mesh(bridge,new T.BoxGeometry(.09,.09,line.length),rail,side*2.65,1.15,line.mid-mid);
-        // Mid rail for safer silhouette.
-        mesh(bridge,new T.BoxGeometry(.045,.045,line.length),rail,side*2.65,.78,line.mid-mid).castShadow=false;
-        const seam=mesh(bridge,new T.BoxGeometry(.035,.024,line.length),glow,side*2.65,.285,line.mid-mid);seam.name='bridge-light-seam';seam.castShadow=false;
-        // Balusters, denser.
-        for(let p=line.start+.55;p<line.end-.55;p+=1.1){
-          mesh(bridge,new T.CylinderGeometry(.038,.04,.95,10),rail,side*2.65,.67,p-mid);
-          // Topping bronze cap.
-          mesh(bridge,new T.SphereGeometry(.055,8,6),iron,side*2.65,1.17,p-mid).castShadow=false;
-        }
-        // Lamp posts every 5m.
-        for(let p=line.start+1.5;p<line.end-1.5;p+=5){
-          mesh(bridge,new T.CylinderGeometry(.06,.09,1.7,10),iron,side*2.78,.72,p-mid);
-          mesh(bridge,new T.BoxGeometry(.5,.05,.05),iron,side*(2.78-.25),1.6,p-mid);
-          mesh(bridge,new T.SphereGeometry(.14,12,10),glow,side*(2.78-.5),1.6,p-mid).castShadow=false;
-          mesh(bridge,new T.ConeGeometry(.17,.12,10),iron,side*(2.78-.5),1.74,p-mid);
-        }
-      }
-      this.disposers.push(batchStatic(bridge));
+      const [x,z]=r.position,openings=[{angle:Math.atan2(-z,-x),half:4/r.radius}];
+      // Keep the harbour mouth between the two northern islands free of shoreline boulders.
+      if(z>0)openings.push({angle:Math.atan2(31-z,-x),half:.32});
+      this.island(x,z,r.radius,r.color,exhibits,r,openings);
+      const bridge=buildBridge(r);this.scene.add(bridge);this.disposers.push(batchStatic(bridge));
       const scenery=r.terrain?mountainScenery(r,exhibits,this.obstacles):dressRegion(r,exhibits,this.obstacles);this.scene.add(scenery);this.disposers.push(batchStatic(scenery));
       const landmark=regionLandmark(r);
       if(landmark){
         landmark.root.position.set(r.position[0],0,r.position[1]);this.scene.add(landmark.root);this.disposers.push(batchStatic(landmark.root));
         for(const c of landmark.colliders)this.obstacles.push({...c,x:r.position[0]+c.x,z:r.position[1]+c.z});
       }
-      const strip=mesh(this.scene,new T.TorusGeometry(r.radius-.28,.027,6,96),glow,x,.045,z);strip.rotation.x=-Math.PI/2;strip.castShadow=false;
       this.label(r.english,new T.Vector3(x,1,z+12),()=>this.focusRegion(r.id),'region-label');
       yield r.title;
     }
@@ -175,21 +140,22 @@ export class World {
     }
     this.harborScene=buildHarbor(this.scene,this.obstacles);this.disposers.push(()=>this.harborScene.dispose());
     this.label('⚓ 海风港口',new T.Vector3(0,-1.7,26.5),()=>bus.emit('harbor',undefined),'harbor-label','harbor');
-    const hub=buildHub();this.scene.add(hub);this.disposers.push(batchStatic(hub));
-    this.obstacles.push({x:0,z:0,radius:2.6,height:3.1});
-    // Four hub piers at distance ~1.78 — slender pillars, not full-radius wall.
-    for(let i=0;i<4;i++){const a=i/4*Math.PI*2;this.obstacles.push({x:Math.sin(a)*1.78,z:Math.cos(a)*1.78,radius:.42,height:2.9});}
-    mesh(this.guide,new T.SphereGeometry(.42,32,20),nightLight('#bae3d1'));this.guide.position.set(0,9.5,0);this.scene.add(this.guide);
-    for(const angle of [-.45,.45]){const orbit=mesh(this.guide,new T.TorusGeometry(.82,.027,8,64),material('#c8b690',.3,.3));orbit.rotation.x=Math.PI/2;orbit.rotation.y=angle;}
-    this.label('✦ 世界向导',new T.Vector3(0,10.4,0),()=>document.dispatchEvent(new CustomEvent('open-guide')),'guide-label');
-    this.selected=mesh(this.scene,new T.TorusGeometry(.87,.045,6,48),new T.MeshBasicMaterial({color:'#ddffc3'}),0,.13);this.selected.rotation.x=-Math.PI/2;this.selected.visible=false;
+    const hub=buildHub(data.regions);this.scene.add(hub.root);this.hubMotion=hub.update;this.disposers.push(batchStatic(hub.root));
+    this.obstacles.push(...hub.colliders);
+    // The guide is the pole star of the armillary: a lantern-pearl held in two gilded rings.
+    const pearl=new T.MeshStandardMaterial({color:'#fff3d6',emissive:'#f6d48c',emissiveIntensity:.55,roughness:.4});
+    mesh(this.guide,new T.IcosahedronGeometry(.36,3),pearl);this.guide.position.set(0,hubLayout.guideY,0);this.scene.add(this.guide);
+    for(const angle of [-.45,.45]){const orbit=mesh(this.guide,new T.TorusGeometry(.72,.026,8,64),material('#caa04f',.42,.45,'metal'));orbit.rotation.x=Math.PI/2;orbit.rotation.y=angle;}
+    this.label('✦ 世界向导',new T.Vector3(0,hubLayout.guideY+.9,0),()=>document.dispatchEvent(new CustomEvent('open-guide')),'guide-label');
+    this.selected=mesh(this.scene,new T.TorusGeometry(.87,.04,6,48),new T.MeshBasicMaterial({color:'#c4553a'}),0,.13);this.selected.rotation.x=-Math.PI/2;this.selected.visible=false;
     const wonderEntries=discoveries(data.regions);
-    if(worldFeatures.worldResonance){this.resonance=new WorldResonance(hub,data.regions,wonderEntries,bus,found);this.disposers.push(()=>this.resonance?.dispose());}
+    if(worldFeatures.worldResonance){this.resonance=new WorldResonance(hub.root,data.regions,wonderEntries,bus,found);this.disposers.push(()=>this.resonance?.dispose());}
     if(worldFeatures.travelerEffects){this.traveler=new TravelerEffects(this.scene,data);this.disposers.push(()=>this.traveler?.dispose());}
     if(worldFeatures.worldWhispers)this.whispers=new WorldWhispers(bus);
     this.wonders=new Discoveries(this.scene,wonderEntries,this.obstacles,bus,found);this.disposers.push(()=>this.wonders.dispose());
     const garden=buildGardenRoutes(this.scene,data,this.obstacles);this.disposers.push(garden.release);
     this.seasons=new Seasons(this.scene,data,this.obstacles);this.disposers.push(()=>this.seasons.dispose());
+    this.ambient=new AmbientLife(this.scene);this.disposers.push(()=>this.ambient.dispose());
     this.memories=new Memories(this.scene,data,this.obstacles,bus,memories);this.signatures=new Signatures(this.scene,data);
     const accents=gardenAccents(this.scene,data,this.obstacles,[...this.memories.entries,...this.artworks.map(a=>a.approach),...this.stations.map(s=>s.approach)]);this.disposers.push(accents.release);
     this.seasons.settleSnow(data,this.obstacles,[...this.memories.entries,...this.artworks.map(a=>a.approach),...this.stations.map(s=>s.approach)]);
@@ -211,15 +177,19 @@ export class World {
     window.addEventListener('keyup',e=>this.keys.delete(e.code),options);window.addEventListener('blur',()=>{this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;},options);
     document.addEventListener('visibilitychange',()=>{if(document.hidden){this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.look.release();}},options);
     if(new URLSearchParams(location.search).has('inspect')){
-      const inspect=()=>({benches:garden.benches,walls:garden.walls,snowDrifts:this.seasons.snowDrifts,accents:accents.entries,discoveries:wonderEntries,rails:garden.rails,resonance:this.resonance?.snapshot??null,traveler:this.traveler?.snapshot??null,whispers:this.whispers?.snapshot??null,signatures:this.signatures?.snapshot??[],harbor:{near:this.nearHarbor,...harbor},clouds:{canopyPosition:this.scene.getObjectByName('weather-cloud-canopy')?.position.toArray(),canopyOrder:this.scene.getObjectByName('weather-cloud-canopy')?.renderOrder,puffsOpaque:!((this.scene.getObjectByName('drifting-clouds') as T.Mesh).material as T.Material).transparent},nearArtwork:this.nearArtwork?.id??null,artworks:this.artworks.map(({module,...a})=>({...a,moduleId:module.id})),weather:this.environment.weatherState,snowmen:this.scene.getObjectsByProperty('name','snowman').length,player:{...this.player},camera:this.camera.position.toArray(),yaw:this.look.yaw,pitch:this.look.pitch,mode:this.mode,calls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,hour:this.environment.hour,photo:this.photo.active,photoCamera:this.photo.camera.position.toArray(),gardenRoads:garden.roads,flowerCount:garden.flowerCount,flowerRoots:garden.flowerRoots,shortcuts:this.memories.shortcutPaths,obstacles:this.obstacles,memories:this.memories.entries.map(e=>({id:e.id,x:e.x,z:e.z})),trails:[...this.memories.trailPaths]});
-      Object.assign(window,{__xiangmetaInspect:()=>({...inspect(),stations:this.stations.map(s=>({...s,hint:this.scene.getObjectByName(`station-${s.id}`)?.getObjectByName('solid-sign')?.userData.subtitle})),textures:textureStatus(),render:{pixelRatio:this.renderer.getPixelRatio(),shadowSize:renderSettings.shadowSize},foundations:this.scene.getObjectsByProperty('name','stratified-island').length})});this.disposers.push(()=>{delete (window as unknown as Record<string,unknown>).__xiangmetaInspect;});
+      const inspect=()=>({benches:garden.benches,walls:garden.walls,snowDrifts:this.seasons.snowDrifts,accents:accents.entries,discoveries:wonderEntries,rails:garden.rails,resonance:this.resonance?.snapshot??null,traveler:this.traveler?.snapshot??null,whispers:this.whispers?.snapshot??null,ambient:this.ambient.snapshot,signatures:this.signatures?.snapshot??[],harbor:{near:this.nearHarbor,...harbor,boatPosition:this.harborScene.boat.position.toArray(),boatScale:this.harborScene.boat.scale.x,boatYaw:this.harborScene.boat.rotation.y,tenderPosition:this.harborScene.tender.position.toArray(),tenderScale:this.harborScene.tender.scale.x},clouds:{canopyPosition:this.scene.getObjectByName('weather-cloud-canopy')?.position.toArray(),canopyOrder:this.scene.getObjectByName('weather-cloud-canopy')?.renderOrder,puffsOpaque:!((this.scene.getObjectByName('drifting-clouds') as T.Mesh).material as T.Material).transparent},nearArtwork:this.nearArtwork?.id??null,artworks:this.artworks.map(({module,...a})=>({...a,moduleId:module.id})),weather:this.environment.weatherState,snowmen:this.scene.getObjectsByProperty('name','snowman').length,player:{...this.player},camera:this.camera.position.toArray(),yaw:this.look.yaw,pitch:this.look.pitch,mode:this.mode,calls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,hour:this.environment.hour,photo:this.photo.active,photoCamera:this.photo.camera.position.toArray(),gardenRoads:garden.roads,flowerCount:garden.flowerCount,flowerRoots:garden.flowerRoots,shortcuts:this.memories.shortcutPaths,obstacles:this.obstacles,memories:this.memories.entries.map(e=>({id:e.id,x:e.x,z:e.z})),trails:[...this.memories.trailPaths]});
+      Object.assign(window,{__xiangmetaInspect:()=>({...inspect(),stations:this.stations.map(s=>({...s,hint:this.scene.getObjectByName(`station-${s.id}`)?.getObjectByName('solid-sign')?.userData.subtitle})),textures:textureStatus(),render:{pixelRatio:this.renderer.getPixelRatio(),shadowSize:renderSettings.shadowSize},foundations:this.scene.getObjectsByProperty('name','stratified-island').length}),
+        // Review helpers: a framed still (photo camera) or a first-person arrival.
+        __xiangmetaFrame:(p:[number,number,number],t:[number,number,number],hour?:number)=>{this.photoMode(true);const camera=this.camera.clone();camera.position.set(...p);camera.lookAt(...t);this.photo.enter(camera);if(hour!==undefined){this.environment.hour=hour;this.environment.update(0,true);}this.renderer.shadowMap.needsUpdate=true;},
+        __xiangmetaWalk:(x:number,z:number,tx:number,tz:number)=>{if(this.photo.active)this.photoMode(false);this.teleport(x,z,tx,tz);}});
+      this.disposers.push(()=>{for(const key of ['__xiangmetaInspect','__xiangmetaFrame','__xiangmetaWalk'])delete (window as unknown as Record<string,unknown>)[key];});
     }
     this.frame=requestAnimationFrame(this.animate);
     yield '光照与首帧渲染';
   }
-  private island(x:number,z:number,r:number,color:string,exhibits:Exhibit[]=[],region?:Catalog['regions'][number]){
-    const foundation=islandFoundation(r,x,z);this.scene.add(foundation.group);this.disposers.push(foundation.release);
-    mesh(this.scene,new T.CylinderGeometry(r,r,.22,96),material('#f7e6d3'),x,-.14,z);
+  private island(x:number,z:number,r:number,color:string,exhibits:Exhibit[]=[],region?:Catalog['regions'][number],openings:{angle:number;half:number}[]=[]){
+    const foundation=islandFoundation(r,x,z,openings);this.scene.add(foundation.group);this.disposers.push(foundation.release);
+    mesh(this.scene,new T.CylinderGeometry(r,r,.22,96),material('#d9cfb9',.95,0,'stone'),x,-.14,z);
     if(region?.terrain){this.scene.add(mountainSurface(region));return;}
     const surface=new T.MeshStandardMaterial({map:groundTexture(r,color,exhibits,Math.min(8,this.renderer.capabilities.getMaxAnisotropy()),region?.season,region),roughness:1,metalness:0});
     const finish=region?.season==='winter'?'snow':region?.season==='summer'?'sand':region?'grass':'paving',detail=surfaceDetail(finish);
@@ -245,7 +215,9 @@ export class World {
       const ratio=(image.width??1.34)/(image.height??2.29),width=Math.min(1.34,2.29*ratio),height=width/ratio;frame.geometry.dispose();frame.geometry=new T.PlaneGeometry(width,height);
     }
   }
-  private resize(){const w=this.width=this.host.clientWidth,h=this.height=Math.max(1,this.host.clientHeight);this.renderer.setSize(w,h);for(const camera of [this.camera,this.mapCamera]){camera.aspect=w/h;camera.updateProjectionMatrix();}this.photo.resize(w,h);this.renderer.render(this.scene,this.photo.active?this.photo.camera:this.mode==='map'?this.mapCamera:this.camera);}
+  private resize(){const w=this.width=this.host.clientWidth,h=this.height=Math.max(1,this.host.clientHeight);this.renderer.setSize(w,h);this.ink.setSize(w,h,this.renderer.getPixelRatio());for(const camera of [this.camera,this.mapCamera]){camera.aspect=w/h;camera.updateProjectionMatrix();}this.photo.resize(w,h);this.draw();}
+  /** Every frame, still and postcard passes through the same painted resolve. */
+  private draw(){this.renderer.info.reset();this.ink.render(this.scene,this.photo.active?this.photo.camera:this.mode==='map'?this.mapCamera:this.camera);}
   setPaused(value:boolean){value=value||this.photo.active;this.paused=value;if(value){this.keys.clear();this.touchSide=this.touchForward=0;this.jumpRequested=false;this.look.release();this.wonders.clear();}this.orbit.enabled=!value&&this.mode==='map';}
   interactExhibit(key:InteractionKey='F'){
     if(this.paused||this.mode!=='first-person'||!nearbyActions(this.near,this.nearArtwork,this.nearHarbor).some(a=>a.key===key))return;
@@ -265,8 +237,8 @@ export class World {
   viewHorizon(id:string){const place=horizons.find(p=>p.id===id);if(!place)return;this.photoMode(true);const camera=this.camera.clone();camera.position.set(place.camera[0],place.camera[1],place.camera[2]);camera.lookAt(place.target[0],place.target[1],place.target[2]);this.photo.enter(camera);}
   photoMode(value:boolean){if(value===this.photo.active)return;if(value){loadRegionTextures();this.photoTime={hour:this.environment.hour,cycling:this.environment.cycling};this.environment.cycling=false;this.setPaused(true);this.photo.enter(this.mode==='map'?this.mapCamera:this.camera);this.labels.forEach(l=>l.element.hidden=true);}else{this.photo.exit();this.environment.restoreTime(this.photoTime.hour,this.photoTime.cycling);this.setPaused(false);this.syncCamera();}this.bus.emit('photo',value);}
   photoFov(value:number){this.photo.fov(value);}
-  async photograph(postcard:boolean){if(!this.photo.active)return;const p=this.photo.camera.position,r=this.data.regions.find(r=>Math.hypot(p.x-r.position[0],p.z-r.position[1])<r.radius);await exportPostcard(this.renderer,this.scene,this.photo.camera,r?.title??horizons.find(h=>Math.hypot(p.x-h.target[0],p.z-h.target[2])<50)?.title??(Math.hypot(p.x,p.z)<10?'记忆星图 · 中央枢纽':'群岛之间'),this.environment.hour,postcard);}
-  quality(low:boolean){this.lowQuality=low;this.renderer.setPixelRatio(low?1:Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=!low;this.renderer.shadowMap.needsUpdate=true;this.resize();}
+  async photograph(postcard:boolean){if(!this.photo.active)return;const p=this.photo.camera.position,r=this.data.regions.find(r=>Math.hypot(p.x-r.position[0],p.z-r.position[1])<r.radius);await exportPostcard(this.renderer.domElement,()=>this.draw(),r?.title??horizons.find(h=>Math.hypot(p.x-h.target[0],p.z-h.target[2])<50)?.title??(Math.hypot(p.x,p.z)<10?'记忆星图 · 中央枢纽':'群岛之间'),this.environment.hour,postcard);}
+  quality(low:boolean){this.lowQuality=low;this.renderer.setPixelRatio(low?1:Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=!low;this.renderer.shadowMap.needsUpdate=true;this.ink.quality=low;this.resize();}
   setTouchMove(side:number,forward:number){if(this.mode==='first-person'&&!this.paused){this.touchSide=Math.max(-1,Math.min(1,side));this.touchForward=Math.max(-1,Math.min(1,forward));}else this.touchSide=this.touchForward=0;}
   requestJump(){if(this.mode==='first-person'&&!this.paused)this.jumpRequested=true;}
   get isLowQuality(){return this.lowQuality;}
@@ -338,9 +310,12 @@ export class World {
     this.traveler?.update(motion,this.player.x,this.player.z,this.player.y,this.look.yaw,moving,this.player.grounded,this.reduced.matches,this.region||'nexus');
     this.whispers?.update(motion,this.region||'nexus',moving,this.mode!=='first-person'||this.paused||!!this.near||!!this.nearArtwork||this.nearHarbor,this.environment.hour,this.resonance?.snapshot.complete);
     this.resonance?.update(motion,this.reduced.matches);
-    this.guide.position.y=9.5+Math.sin(this.time*1.2)*.1;this.guide.rotation.y+=motion*.35;
+    this.guide.position.y=hubLayout.guideY+Math.sin(this.time*1.2)*.1;this.guide.rotation.y+=motion*.35;this.hubMotion(this.reduced.matches?0:motion);
     this.harborScene.update(motion);
-    this.environment.update(dt,this.photo.active,this.photo.active?this.photo.camera.position:this.camera.position);this.signatures.update(motion,this.environment.hour,this.reduced.matches,this.player.x,this.player.z,worldFeatures.responsiveSignatures);
+    // Sky, stars and cloud parting follow the eye that is actually drawing the frame.
+    const camera=this.photo.active?this.photo.camera:this.mode==='map'?this.mapCamera:this.camera;
+    this.environment.update(dt,this.photo.active,camera.position);this.signatures.update(motion,this.environment.hour,this.reduced.matches,this.player.x,this.player.z,worldFeatures.responsiveSignatures);
+    this.ambient.update(motion,this.reduced.matches,this.environment.hour);
     this.seasons.update(motion,this.reduced.matches);
     for(const [id,e] of this.extensions)if(e.scene?.update)try{e.scene.update(motion,this.environment.hour);}catch(error){console.warn(`Module animation ${id} stopped`,error);e.scene.update=undefined;}
     for(const [id,obj] of this.objects){const pulse=obj.getObjectByName('pulse');if(pulse){const value=this.parameters.get(id)??.5;pulse.scale.setScalar(.7+value*.35+Math.sin(this.time*(1+value*4))*.15);}}
@@ -352,8 +327,7 @@ export class World {
     // The sun completes an orbit in 16 minutes; three shadow updates per second retain its motion
     // without redrawing every static island at the same rate as the first-person camera.
     this.shadowTime+=dt;if(this.shadowTime>=renderSettings.shadowInterval){this.renderer.shadowMap.needsUpdate=true;this.shadowTime=0;}
-    const camera=this.photo.active?this.photo.camera:this.mode==='map'?this.mapCamera:this.camera;
-    this.renderer.render(this.scene,camera);
+    this.draw();
     this.labelTime+=dt;
     if(!this.photo.active&&this.labelTime>=1/30){this.labelTime=0;for(const l of this.labels){
       this.projected.copy(l.position).project(camera);const v=this.projected;const distance=l.position.distanceTo(camera.position);
@@ -364,5 +338,5 @@ export class World {
     if(!this.region)this.updateLocation();this.updateNearby();
   };
   private disposeObject(object:T.Object3D){const materials=new Set<T.Material>();object.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Points||o instanceof T.Line||o instanceof T.Sprite){if('geometry' in o)o.geometry.dispose();(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));}});materials.forEach(m=>{for(const v of Object.values(m))if(v instanceof T.Texture)v.dispose();m.dispose();});}
-  dispose(){this.disposed=true;cancelAnimationFrame(this.frame);this.observer?.disconnect();this.events.abort();this.disposers.forEach(d=>d());for(const e of this.extensions.values()){try{e.scene?.dispose?.();e.hooks?.dispose?.();}catch{}}this.look?.dispose();this.orbit?.dispose();this.photo?.dispose();this.memories?.dispose();this.environment?.dispose();this.mixers.forEach(m=>m.stopAllAction());this.disposeObject(this.scene);this.renderer?.dispose();this.labels.forEach(l=>l.element.remove());this.renderer?.domElement.remove();}
+  dispose(){this.disposed=true;cancelAnimationFrame(this.frame);this.observer?.disconnect();this.events.abort();this.disposers.forEach(d=>d());for(const e of this.extensions.values()){try{e.scene?.dispose?.();e.hooks?.dispose?.();}catch{}}this.look?.dispose();this.orbit?.dispose();this.photo?.dispose();this.memories?.dispose();this.environment?.dispose();this.mixers.forEach(m=>m.stopAllAction());this.disposeObject(this.scene);this.ink?.dispose();this.renderer?.dispose();this.labels.forEach(l=>l.element.remove());this.renderer?.domElement.remove();}
 }

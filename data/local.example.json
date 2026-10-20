@@ -1,0 +1,12 @@
+{
+  "root": "..",
+  "python": "runtime/python/python.exe",
+  "pythonByModule": {},
+  "sources": {
+    "recommendation": "runtime/models/recommendation",
+    "emotion-recognition": "runtime/models/emotion-recognition",
+    "poetry": "runtime/models/poetry",
+    "cat-recognition": "runtime/models/cat-recognition",
+    "xianglm": "runtime/models/xianglm"
+  }
+}
