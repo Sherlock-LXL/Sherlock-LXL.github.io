@@ -7,6 +7,20 @@ export function pointSegmentDistance(x,z,ax,az,bx,bz) {
   return Math.hypot(x-(ax+t*dx),z-(az+t*dz));
 }
 export function onGround(x,z,regions){return Math.hypot(x,z)<9 || harborContains(x,z,.25) || regions.some(r=>Math.hypot(x-r.position[0],z-r.position[1])<r.radius-0.8 || pointSegmentDistance(x,z,0,0,...r.position)<2.5);}
+/** Support across the joined island/bridge topology, independent of an inhabitant's home. */
+export function supportedFootprint(x,z,regions,radius=.35,offsets=[{x:0,z:0}]){
+  for(const p of offsets){
+    if(!onGround(x+p.x,z+p.z,regions))return false;
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/4;
+      if(!onGround(x+p.x+Math.cos(a)*radius,z+p.z+Math.sin(a)*radius,regions))return false;
+    }
+  }
+  return true;
+}
+export function bodyFootprint(yaw,length){
+  return [-length,0,length].map(d=>({x:Math.sin(yaw)*d,z:Math.cos(yaw)*d}));
+}
 export function overlaps(x,z,o,padding=.35){if(o.segment){const [ax,az,bx,bz]=o.segment;if(x<Math.min(ax,bx)-padding-o.radius||x>Math.max(ax,bx)+padding+o.radius||z<Math.min(az,bz)-padding-o.radius||z>Math.max(az,bz)+padding+o.radius)return false;return pointSegmentDistance(x,z,ax,az,bx,bz)<o.radius+padding;}return o.halfX!==undefined
     ? Math.abs(x-o.x)<o.halfX+padding && Math.abs(z-o.z)<o.halfZ+padding
     : Math.hypot(x-o.x,z-o.z)<o.radius+padding;}

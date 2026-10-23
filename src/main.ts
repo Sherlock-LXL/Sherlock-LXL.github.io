@@ -1,4 +1,5 @@
 import {actionIcon} from './core/action-icons';
+import {brandMark,mountBrandIcon} from './core/brand';
 import {navIcon} from './core/nav-icons';
 import {diagonalArrow} from './core/inline-arrow';
 import './style.css';
@@ -11,7 +12,7 @@ import {nearbyActions,type InteractionKey} from './core/nearby-actions';
 import {mountAlbumGallery} from './core/album-gallery';
 import { version } from '../package.json';
 import { catalog, invoke } from './core/api';
-import { EventBus } from './core/events';
+import { EventBus,type LivingPrompt } from './core/events';
 import { VisitorStore } from './core/storage';
 import { discoveries,type Exhibit } from './core/types';
 import { World } from './world/world';
@@ -32,7 +33,8 @@ const app=document.querySelector<HTMLDivElement>('#app')!;
 const touchExperience=document.documentElement.classList.contains('touch-experience');
 const escape=(value:unknown)=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const icon=(name:string)=>({world:'◈',mountain:'△',science:'◌',museum:'▥',studio:'♫',guide:'✦',arrow:diagonalArrow,sound:'♪',map:'⌖',close:'×',star:'☆'}[name]??'◈');
-app.innerHTML='<div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">想</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p>正在读取项目与世界档案…</p><progress aria-label="读取世界档案"></progress></div>';
+mountBrandIcon();
+app.innerHTML=`<div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">${brandMark}</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p>正在读取项目与世界档案…</p><progress aria-label="读取世界档案"></progress></div>`;
 async function boot(){
   const data=await catalog();const bus=new EventBus(),store=new VisitorStore(),audio=new AudioSystem(bus,data.audio,(text,playing)=>{
     const caption=document.querySelector<HTMLElement>('#music-caption');if(caption){caption.textContent='♫ '+text;caption.dataset.playing=String(playing);}
@@ -41,9 +43,10 @@ async function boot(){
   app.classList.add('world-booting');
   app.innerHTML=`
     <aside class="sidebar">
-      <a class="brand" href="#" aria-label="返回世界总览"><span class="brand-symbol xiang-logo" aria-hidden="true">想</span><span>XiangMeta<small>A PERSONAL UNIVERSE</small></span></a>
+      <a class="brand" href="#" aria-label="返回世界总览"><span class="brand-symbol xiang-logo" aria-hidden="true">${brandMark}</span><span>XiangMeta<small>A PERSONAL UNIVERSE</small></span></a>
       <div class="side-caption">EXPLORATION <span>探索无界</span></div>
       <button class="nav-overview active" id="overview" aria-label="世界总览" title="世界总览">${navIcon('world')} <span>世界总览</span><span class="nav-end">⌘</span></button>
+      <button class="secondary-nav" id="seasonal-games" aria-label="四季游乐" title="四季游乐">${navIcon('games')} <span>四季游乐</span><span class="nav-end" aria-hidden="true">${diagonalArrow}</span></button>
       <div class="nav-section-label">探索大陆</div>
       <nav id="regions">${data.regions.map((r,i)=>`<button class="region-nav" data-region="${r.id}" aria-label="${escape(r.title)}" title="${escape(r.title)}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}">${navIcon(['mountain','science','museum','studio'][i])}<span>${escape(r.title)}<small>${escape(r.english)}</small></span><span class="nav-end">${diagonalArrow}</span></button>`).join('')}</nav>
       <div class="side-divider"></div>
@@ -53,7 +56,7 @@ async function boot(){
     </aside>
     ${touchExperience?'<button class="mobile-nav-dismiss" id="mobile-nav-dismiss" aria-label="关闭探索菜单"></button>':''}
     <main class="main-world first-person">
-      <header class="topbar"><div class="topbar-location">${touchExperience?'<button class="icon-button mobile-menu-button" id="mobile-menu" aria-label="打开探索菜单" aria-expanded="false">☰</button>':''}<span class="breadcrumb">我的数字宇宙</span><span class="slash">/</span><span id="current-region">世界总览</span></div><div class="top-actions"><span class="local-badge"><span class="status-dot"></span> 本地世界</span><button class="icon-button" id="sound" aria-label="开启声音" title="开启声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-3v13M9 9l11-3"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg><span class="muted-slash" aria-hidden="true"></span></button><button class="journal-button" id="journal" aria-label="旅行印记" title="旅行印记">✧ <span id="stamp-count"></span></button><button class="icon-button" id="help" aria-label="操作指南">?</button></div></header>
+      <header class="topbar"><div class="topbar-location">${touchExperience?`<button class="icon-button mobile-menu-button" id="mobile-menu" aria-label="打开探索菜单" aria-expanded="false">${actionIcon('menu')}</button>`:''}<span class="breadcrumb">我的数字宇宙</span><span class="slash">/</span><span id="current-region">世界总览</span></div><div class="top-actions"><span class="local-badge"><span class="status-dot"></span> 本地世界</span><button class="icon-button" id="sound" aria-label="开启声音" title="开启声音"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l11-3v13M9 9l11-3"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg><span class="muted-slash" aria-hidden="true"></span></button><button class="journal-button" id="journal" aria-label="旅行印记" title="旅行印记">✧ <span id="stamp-count"></span></button><button class="icon-button" id="help" aria-label="操作指南">${actionIcon('help')}</button></div></header>
       <section id="world" aria-label="可探索的 3D 世界"></section>
       <div class="world-heading"><div class="eyebrow"><span class="line"></span> 山海册页 · ALBUM OF MOUNTAINS AND SEAS</div><h1>一卷山海，无限可能<span>。</span></h1><p>让好奇心带路，让每一次创造成为画卷中新的岛屿。</p></div>
       <div class="world-meta"><span class="status-dot"></span> ${data.regions.length} REGIONS <span class="meta-divider">/</span> ${String(data.modules.length).padStart(2,'0')} EXHIBITS <span class="meta-divider">/</span> ALWAYS GROWING</div>
@@ -61,15 +64,15 @@ async function boot(){
       <div class="interaction-prompt" id="interaction-prompt" hidden></div>
       <button class="interaction-prompt discovery-prompt" id="discovery-prompt" hidden><span class="interaction-key">G</span><span><b id="discovery-name"></b><small id="discovery-action"></small></span><span class="prompt-art">${actionIcon('sparkle')}</span></button>
       <div class="view-badge"><span class="status-dot"></span><span id="view-name">第一人称探索</span><button id="capture-look">点击进入环顾</button></div>
-      <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">⌖</button></div>
+      <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">${actionIcon('locate')}</button></div>
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>${diagonalArrow}</span></button>
-      ${touchExperience?'<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃"><span>↑</span><small>跳跃</small></button></div>':''}
+      ${touchExperience?`<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃">${actionIcon('jump')}<small>跳跃</small></button></div>`:''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
-      <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-100 -100 200 200" role="img" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="99"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+6}">${escape(r.english)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
+      <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-78 -78 156 156" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="77"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+9}">${escape(r.title)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
     <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div></dialog>
-    <div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">想</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p id="load-label" role="status">正在构建群岛…</p><progress id="world-progress" max="100" value="0" aria-label="构建世界"></progress><small id="load-percent">0%</small><a href="${sitePath('projects/')}">浏览项目 →</a></div>`;
+    <div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">${brandMark}</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p id="load-label" role="status">正在构建群岛…</p><progress id="world-progress" max="100" value="0" aria-label="构建世界"></progress><small id="load-percent">0%</small><a href="${sitePath('projects/')}">浏览项目 →</a></div>`;
   const $=<T extends HTMLElement=HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
   const dialog=$<HTMLDialogElement>('#inspector');let world:World|undefined;let current:Exhibit|undefined;let abort:AbortController|undefined;
   $('.local-badge').innerHTML=`<a href="${sitePath('projects/')}">Projects ${diagonalArrow}</a>`;
@@ -89,6 +92,7 @@ async function boot(){
     $('.sidebar').addEventListener('click',event=>{const target=(event.target as Element).closest<HTMLElement>('[data-mobile-tool],.region-nav,.nav-overview,.secondary-nav,.portfolio-home');if(!target)return;const id=target.dataset.mobileTool;if(id)document.getElementById(id)?.click();closeMenu();});
   }
   $('.main-world').insertAdjacentHTML('beforeend','<button class="interaction-prompt memory-prompt" id="memory-prompt" hidden><span class="interaction-key">G</span><span><b id="memory-near-name"></b><small>收集碎片 · 点亮星图</small></span><span class="prompt-art" id="memory-prompt-icon"></span></button><div id="trail-guide" hidden><span id="trail-text"></span><button id="trail-stop" aria-label="结束路线">×</button></div><div id="photo-toolbar" hidden><div><b>XIANGMETA / PHOTO MODE</b><small>WASD 移动 · Q / E 升降 · 拖动环顾 · P / Esc 返回</small></div><label>视角 <input id="photo-fov" type="range" min="30" max="90" value="60" aria-label="摄影视野"/></label><label>光线 <select id="photo-hour" aria-label="摄影时刻"><option value="">当前时刻</option><option value="6.2">晨曦</option><option value="10">晴昼</option><option value="17.8">暮色</option><option value="22">月夜</option></select></label><button id="photo-save">导出照片</button><button id="postcard-save">制作明信片</button><button id="photo-exit">返回世界</button><span id="photo-status" role="status"></span></div>');
+  if(touchExperience)$('#photo-toolbar small').textContent='拖动画面环顾 · 调整视角与光线';
   let stream:MediaStream|undefined;let imageData='';let toastTimer:ReturnType<typeof setTimeout>;
   function toast(text:string){$('.toast').textContent=text;$('.toast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('.toast').hidden=true,4500);}
   bus.on('whisper',text=>toast(text));
@@ -98,7 +102,7 @@ async function boot(){
   function cleanup(){cleanupResearch();cleanupResearch=()=>{};abort?.abort();abort=undefined;stopCamera();imageData='';}
   function closePanel(capture:boolean|Event=true){cleanup();current=undefined;dialog.close();world?.setPaused(false);document.querySelector<HTMLCanvasElement>('#world canvas')?.focus({preventScroll:true});if(capture!==false)world?.captureMouse();}
   function showPanel(html:string){cleanup();dialog.classList.remove('product-mode','memory-mode','immersive-mode','memory-detail');dialog.dataset.kind='';world?.setPaused(true);$('#panel-content').innerHTML=html;if(!dialog.open)dialog.showModal();dialog.scrollTop=0;$('#close-panel').onclick=closePanel;}
-  function showHarbor(){showPanel(panelHeader('向海出发','海风港口')+`<p class="panel-description">船已泊岸，新的大陆正在生长。<br>在这里，预览下一次旅程的方向。</p><div class="harbor-ticket"><span>出发港</span><b>中央枢纽 · 海风港口</b><span class="harbor-status">航线筹备中</span></div><div class="harbor-routes">${harborRoutes.map((r,i)=>`<article class="harbor-route"><div class="route-number">0${i+1}</div><div><h3>${escape(r.title)}</h3><small>${escape(r.theme)}</small><p>${escape(r.description)}</p></div><button disabled aria-label="${escape(r.title)}尚未开放">尚未开放</button></article>`).join('')}</div><p class="harbor-note">航线暂时封锁，尚不可乘船抵达。目的地开放后，会在这里迎接第一批旅人，敬请期待。</p><button class="primary-button" id="harbor-visit">去栈桥走走 ${diagonalArrow}</button>`);dialog.dataset.kind='harbor';$('#harbor-visit').onclick=()=>{closePanel(false);world?.visitHarbor();world?.captureMouse();};}
+  function showHarbor(){showPanel(panelHeader('向海出发','海风港口')+`<p class="panel-description">在栈桥看看海，也看看未来的航线。</p><div class="harbor-ticket"><span>出发港</span><b>中央枢纽 · 海风港口</b><span class="harbor-status">航线筹备中</span></div><div class="harbor-routes">${harborRoutes.map((r,i)=>`<article class="harbor-route"><div class="route-number">0${i+1}</div><div><h3>${escape(r.title)}</h3><small>${escape(r.theme)}</small><p>${escape(r.description)}</p></div><button disabled aria-label="${escape(r.title)}尚未开放">尚未开放</button></article>`).join('')}</div><p class="harbor-note">这些目的地尚未开放，暂时无法乘船抵达。</p><button class="primary-button" id="harbor-visit">去栈桥走走 ${diagonalArrow}</button>`);dialog.dataset.kind='harbor';$('#harbor-visit').onclick=()=>{closePanel(false);world?.visitHarbor();world?.captureMouse();};}
   bus.on('harbor',showHarbor);
   $('#collections').insertAdjacentHTML('beforebegin','<button id="harbor-open" aria-label="海风港口" title="海风港口" class="secondary-nav">'+navIcon('harbor')+' <span>海风港口</span><b>航线</b></button>');$('#harbor-open').onclick=showHarbor;
   function panelHeader(eyebrow:string,title:string){return `<div class="panel-top"><span class="eyebrow">${escape(eyebrow)}</span><button class="icon-button" id="close-panel" aria-label="关闭面板"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div><h2 id="panel-title">${escape(title)}</h2>`;}
@@ -112,7 +116,7 @@ async function boot(){
   dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closePanel();}});
   function collection(favorites=false){
     const items=data.modules.filter(m=>!favorites||store.favorites.has(m.id));
-    showPanel(panelHeader('THE COLLECTION',favorites?'我的收藏':'每一次创造，都有坐标')+`<p class="panel-description">${favorites?'你想再次抵达的地方。收藏保存在这台设备上。':'每个起点都有自己的故事。这个索引会随着模块的加入自动生长。'}</p><div class="collection-list">${items.map(m=>`<button class="collection-item" data-exhibit="${m.id}"><span class="collection-symbol">${icon('world')}</span><span><b>${escape(m.title)}</b><small>${escape(m.subtitle)}</small></span><span>${diagonalArrow}</span></button>`).join('')||'<p class="empty">还没有收藏。打开一个展品，点击收藏即可。</p>'}</div>`);
+    showPanel(panelHeader('THE COLLECTION',favorites?'我的收藏':'展品索引')+`<p class="panel-description">${favorites?'收藏保存在这台设备上。':`${data.modules.length} 件作品，分布在 ${data.regions.length} 座岛上。`}</p><div class="collection-list">${items.map(m=>`<button class="collection-item" data-exhibit="${m.id}"><span class="collection-symbol">${icon('world')}</span><span><b>${escape(m.title)}</b><small>${escape(m.subtitle)}</small></span><span>${diagonalArrow}</span></button>`).join('')||'<p class="empty">还没有收藏。打开一个展品，点击收藏即可。</p>'}</div>`);
     wireExhibits();
   }
   function wireExhibits(){dialog.querySelectorAll<HTMLButtonElement>('[data-exhibit]').forEach(b=>b.onclick=()=>openExhibit(data.modules.find(m=>m.id===b.dataset.exhibit)!));}
@@ -144,7 +148,7 @@ async function boot(){
         ${m.link?`<a class="primary-button external-link" href="${escape(m.link)}" target="_blank" rel="noopener noreferrer">观看 MV <span>${diagonalArrow}</span></a>`:''}
       </section>
       <section id="story" hidden><div class="timeline">${m.story.map(s=>`<article><h3>${escape(s.title)}</h3><p>${escape(s.body)}</p></article>`).join('')}</div></section>
-      <footer class="panel-footer"><button class="quiet-button" id="visit">${actionIcon('visit')}<span>抵达展台</span></button><button class="quiet-button" id="favorite" aria-pressed="${store.favorites.has(m.id)}">${actionIcon('favorite',store.favorites.has(m.id))}<span>${store.favorites.has(m.id)?'已收藏':'收藏'}</span></button><button class="quiet-button back-world" id="back-world">${actionIcon('back')}<span>返回 · Esc</span></button></footer>`);
+      <footer class="panel-footer"><button class="quiet-button" id="visit">${actionIcon('visit')}<span>抵达展台</span></button><button class="quiet-button" id="favorite" aria-pressed="${store.favorites.has(m.id)}">${actionIcon('favorite',store.favorites.has(m.id))}<span>${store.favorites.has(m.id)?'已收藏':'收藏'}</span></button><button class="quiet-button back-world" id="back-world">${actionIcon('back')}<span>${touchExperience?'返回世界':'返回 · Esc'}</span></button></footer>`);
     dialog.classList.toggle('product-mode',product);dialog.dataset.kind=m.visual;dialog.style.setProperty('--product-accent',pigmentAccent(region.color));mountAlbumGallery($('#experience'),m,albumId);
     if(m.world?.connections.length){$('#experience').insertAdjacentHTML('beforeend',`<div class="connection-list"><small>另一条线索 / THREADS</small>${m.world.connections.map(link=>`<button class="connection-card" data-connection="${link.target}"><b>${escape(link.title)} ${diagonalArrow}</b><span>${escape(link.body)}</span></button>`).join('')}</div>`);dialog.querySelectorAll<HTMLButtonElement>('[data-connection]').forEach(b=>b.onclick=()=>{world?.visit(data.modules.find(m=>m.id===b.dataset.connection)!);closePanel();});}
     if(m.world?.capabilities.includes('gallery'))dialog.querySelectorAll<HTMLElement>('.media-card').forEach((card,i)=>{if(m.media[i].kind!=='image')return;const imageIndex=m.media.slice(0,i).filter(item=>item.kind==='image').length;const b=document.createElement('button');b.className='quiet-button';b.innerHTML=`沉浸观看 ${diagonalArrow}`;b.dataset.immerse=String(imageIndex);b.onclick=()=>immerse(m,imageIndex);card.append(b);});
@@ -207,7 +211,7 @@ async function boot(){
     dialog.querySelectorAll<HTMLButtonElement>('[data-memory]').forEach(b=>b.onclick=()=>openMemory(fragments.find(f=>f.id===b.dataset.memory)!));$('#atlas-visit').onclick=()=>{world?.visitConstellation();closePanel();};$('#atlas-growth').onclick=showGrowth;
   }
   function showGrowth(){
-    showPanel(panelHeader('THE GROWTH PATH','从山脚，走向语言的山顶')+`<p class="panel-description">沿金色山径依次探索礼物、表情、双盲诗、猫咪与 XiangLM。两座 CNN 台地之间有蓝色视觉捷径。<br>这是一条概念成长路线，不是精确的履历时间线。</p><div class="growth-list">${growth.map(f=>`<article><small>${escape(f.growth!.label)}</small><h3>${escape(f.title)}</h3><p>${escape(f.regionTitle)} · ${store.memories.has(f.id)?'记忆已收藏':'等待你的探索'}</p><button class="quiet-button" data-track-memory="${f.id}">沿步道寻找 →</button><button class="quiet-button" data-visit-memory="${f.id}">抵达附近 ${diagonalArrow}</button></article>`).join('')}</div>`);
+    showPanel(panelHeader('THE GROWTH PATH','成长路径')+`<p class="panel-description">沿金色山径，从推荐与视觉项目走到 XiangLM。蓝色步道连接两座 CNN 台地。</p><div class="growth-list">${growth.map(f=>`<article><small>${escape(f.growth!.label)}</small><h3>${escape(f.title)}</h3><p>${escape(f.regionTitle)} · ${store.memories.has(f.id)?'记忆已收藏':'尚未探索'}</p><button class="quiet-button" data-track-memory="${f.id}">沿步道寻找 →</button><button class="quiet-button" data-visit-memory="${f.id}">抵达附近 ${diagonalArrow}</button></article>`).join('')}</div>`);
     dialog.querySelectorAll<HTMLButtonElement>('[data-track-memory]').forEach(b=>b.onclick=()=>{tracking=fragments.find(f=>f.id===b.dataset.trackMemory);world?.trackMemory(tracking!.id);$('#trail-guide').hidden=false;$('#trail-text').textContent=`寻找 · ${tracking!.title} · 靠近按 G`;closePanel();});
     dialog.querySelectorAll<HTMLButtonElement>('[data-visit-memory]').forEach(b=>b.onclick=()=>{world?.visitMemory(b.dataset.visitMemory!);closePanel();});
   }
@@ -221,11 +225,11 @@ async function boot(){
   bus.on('photo',active=>{document.body.classList.toggle('photo-mode',active);$('#photo-toolbar').hidden=!active;$<HTMLInputElement>('#photo-fov').value='60';$<HTMLSelectElement>('#photo-hour').value='';$('#photo-status').textContent='';});
   $<HTMLInputElement>('#photo-fov').oninput=e=>world?.photoFov(Number((e.target as HTMLInputElement).value));$<HTMLSelectElement>('#photo-hour').onchange=e=>{const value=(e.target as HTMLSelectElement).value;if(value)world?.setTime(Number(value));};
   const capturePhoto=async(postcard:boolean)=>{try{await world?.photograph(postcard);$('#photo-status').textContent=postcard?'明信片已导出':'照片已导出';}catch{$('#photo-status').textContent='导出失败，请重试';}};$('#photo-save').onclick=()=>void capturePhoto(false);$('#postcard-save').onclick=()=>void capturePhoto(true);
-  window.addEventListener('keydown',e=>{if(dialog.open)return;if(world?.isPhoto&&(e.code==='Escape'||e.code==='KeyP'&&!e.repeat)){e.preventDefault();exitPhoto();return;}if(e.target instanceof Element&&e.target.closest('textarea,input,select'))return;if(e.code==='KeyP'&&!e.repeat){e.preventDefault();enterPhoto();}});
+  window.addEventListener('keydown',e=>{if(dialog.open||world?.isPlayingGames)return;if(world?.isPhoto&&(e.code==='Escape'||e.code==='KeyP'&&!e.repeat)){e.preventDefault();exitPhoto();return;}if(e.target instanceof Element&&e.target.closest('textarea,input,select'))return;if(e.code==='KeyP'&&!e.repeat){e.preventDefault();enterPhoto();}});
 
   function showGuide(){
     const chat=data.modules.find(m=>m.id===data.agents[0]?.chatModule);
-    showPanel(panelHeader('YOUR WORLD COMPANION','跟随好奇心出发')+`<div class="guide-intro"><span class="guide-orb">✦</span><p>我是世界向导。告诉我你想了解什么，我会从展览资料中帮你找到入口。</p></div><span class="guide-mode">资料导览 · 不使用生成模型</span><form id="guide-form"><label for="guide-query">想探索的主题</label><input id="guide-query" placeholder="例如：语言模型、猫咪、音乐…" maxlength="100" required/><button class="primary-button">寻找下一站 <span>${diagonalArrow}</span></button></form><div id="guide-results"></div>${chat?`<button class="collection-item" data-exhibit="${chat.id}"><span>✦</span><span><b>${escape(chat.title)} · 真实对话</b><small>打开配置的语言模型，体验独立单轮问答</small></span><span>${diagonalArrow}</span></button>`:''}`);
+    showPanel(panelHeader('YOUR WORLD COMPANION','世界向导')+`<div class="guide-intro"><span class="guide-orb">✦</span><p>输入感兴趣的主题，找到相关作品。</p></div><span class="guide-mode">按展览资料查找</span><form id="guide-form"><label for="guide-query">想探索的主题</label><input id="guide-query" placeholder="例如：语言模型、猫咪、音乐…" maxlength="100" required/><button class="primary-button">寻找下一站 <span>${diagonalArrow}</span></button></form><div id="guide-results"></div>${chat?`<button class="collection-item" data-exhibit="${chat.id}"><span>✦</span><span><b>${escape(chat.title)}</b><small>语言模型项目</small></span><span>${diagonalArrow}</span></button>`:''}`);
     const route=(q:string)=>{const answer=guide(q,data);$('#guide-results').innerHTML=`<p class="panel-description">${escape(answer.text)}</p>${answer.exhibits.map(m=>`<button class="collection-item" data-exhibit="${m.id}"><span><b>${escape(m.title)}</b><small>${escape(m.subtitle)}</small></span><span>${diagonalArrow}</span></button>`).join('')}`;wireExhibits();};
     $<HTMLFormElement>('#guide-form').onsubmit=e=>{e.preventDefault();route($<HTMLInputElement>('#guide-query').value);};wireExhibits();
   }
@@ -266,10 +270,13 @@ async function boot(){
   $('#discovery-prompt').onclick=()=>world?.interactDiscovery();
   $('#sky-settings').onclick=()=>{
     const time=world?.timeOfDay??9;
-    showPanel(panelHeader('ISLAND TIME','让光，慢慢经过')+`<p class="panel-description">日出时月亮沉入海面，日落时月亮从另一侧升起。<br>白天是柔和的奶油色，夜晚是月光与温暖的灯带。</p><div class="time-presets"><button data-hour="6.2">☀<b>晨曦</b><small>06:12</small></button><button data-hour="10">◉<b>晴昼</b><small>10:00</small></button><button data-hour="17.8">◒<b>暮色</b><small>17:48</small></button><button data-hour="22">☾<b>月夜</b><small>22:00</small></button></div><label class="time-slider">时刻 <output id="time-value"></output><input aria-label="世界时刻" id="time-range" type="range" min="0" max="24" step=".05" value="${time}"/></label><label class="quality-option"><input type="checkbox" id="cycle-time" ${world?.timeCycling?'checked':''}/> 自然流转 · 16 分钟一昼夜</label><label class="weather-choice">天气<select id="weather-select" aria-label="世界天气"><option value="auto">自动 · 随机流转</option>${weatherKinds.map((kind:string)=>`<option value="${kind}">${weatherNames[kind as keyof typeof weatherNames]}</option>`).join('')}</select></label><p class="source-note">天气用约 12 秒渐变，自动模式每隔约 2–4 分钟流转。摄影模式暂停天气与云的移动。<br>选择时刻会平滑过渡。关闭自然流转，可以把世界留在喜欢的光线中。</p>`);
-    const weather=$<HTMLSelectElement>('#weather-select');weather.value=world?.weather.automatic?'auto':world?.weather.kind??'sunny';weather.onchange=()=>world?.setWeather(weather.value);
+    showPanel(panelHeader('ISLAND TIME','海岛时光')+`<p class="panel-description">选一个时刻，换一种天气。</p><div class="time-presets"><button data-hour="6.2">☀<b>晨曦</b><small>06:12</small></button><button data-hour="10">◉<b>晴昼</b><small>10:00</small></button><button data-hour="17.8">◒<b>暮色</b><small>17:48</small></button><button data-hour="22">☾<b>月夜</b><small>22:00</small></button></div><label class="time-slider">时刻 <output id="time-value"></output><input aria-label="世界时刻" id="time-range" type="range" min="0" max="24" step=".05" value="${time}"/></label><label class="quality-option"><input type="checkbox" id="cycle-time" ${world?.timeCycling?'checked':''}/> 自然流转 · 16 分钟一昼夜</label><label class="weather-choice">天气<select id="weather-select" aria-label="世界天气"><option value="auto">自动流转</option>${weatherKinds.map((kind:string)=>`<option value="${kind}">${weatherNames[kind as keyof typeof weatherNames]}</option>`).join('')}</select></label><p class="source-note">关闭自然流转可固定时刻。极光会切换到月夜，霞光会切换到傍晚。</p><details class="help-details"><summary>天气与摄影</summary><p class="source-note">天气逐渐过渡，自动模式每 2–4 分钟更换一次。摄影模式会暂停天气与云的移动。</p></details>`);
+    const weather=$<HTMLSelectElement>('#weather-select');weather.value=world?.weather.automatic?'auto':world?.weather.kind??'sunny';weather.onchange=()=>{
+      world?.setWeather(weather.value);const hour=weather.value==='aurora'?22:weather.value==='sunset'?17.4:null;
+      if(hour!==null){world?.setTime(hour);input.value=String(hour);label(hour);}
+    };
     const input=$<HTMLInputElement>('#time-range'),output=$<HTMLOutputElement>('#time-value');
-    const label=(h:number)=>output.value=`${String(Math.floor(h)%24).padStart(2,'0')}:${String(Math.floor(h%1*60)).padStart(2,'0')}`;label(time);
+    const label=(h:number)=>{const minutes=Math.round(h*60);output.value=`${String(Math.floor(minutes/60)%24).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`;};label(time);
     input.oninput=()=>{const h=Number(input.value);label(h);world?.setTime(h);};
     dialog.querySelectorAll<HTMLButtonElement>('[data-hour]').forEach(b=>b.onclick=()=>{const h=Number(b.dataset.hour);input.value=String(h);label(h);world?.setTime(h);});
     $<HTMLInputElement>('#cycle-time').onchange=e=>world?.cycleTime((e.target as HTMLInputElement).checked);
@@ -281,12 +288,14 @@ async function boot(){
   $('#overview').onclick=overview;$('#camera-reset').onclick=()=>world?.resumeWalk();$('#capture-look').onclick=()=>world?.captureMouse();$('.brand').onclick=e=>{e.preventDefault();overview();};
   document.querySelectorAll<HTMLButtonElement>('.region-nav').forEach(b=>b.onclick=()=>b.dataset.region&&world?.focusRegion(b.dataset.region));
   $('#collections').onclick=()=>collection();$('#favorites').onclick=()=>collection(true);$('#guide').onclick=showGuide;document.addEventListener('open-guide',showGuide);
+  $('#seasonal-games').onclick=()=>{document.body.classList.remove('mobile-nav-open');document.querySelector('#mobile-menu')?.setAttribute('aria-expanded','false');if(dialog.open)closePanel(false);world?.openGames();};
   store.muted=true;
   const soundLabel=()=>{const text=store.muted?'开启音乐与音效':'暂停音乐与音效';$('#sound').classList.toggle('enabled',!store.muted);$('#sound').setAttribute('aria-label',text);$('#sound').setAttribute('aria-pressed',String(!store.muted));$('#sound').title=text;};
   $('#sound').onclick=async()=>{store.muted=!store.muted;soundLabel();try{await audio.setMuted(store.muted);store.save();toast(store.muted?'音乐与音效已暂停':'BGM、四季音乐与风铃已开启');}catch{store.muted=true;soundLabel();toast('音乐暂时不可用，请点击 ♪ 重试');}};
   soundLabel();
-  const helpControls=touchExperience?'<p>拖动左下摇杆：控制行走方向与速度</p><p>在世界画面上拖动：环顾四周；右下「跳跃」越过台阶</p><p>移动与环顾支持双指同时操作，两个触点互不干扰</p><p>靠近展台后，直接点击浮窗中的 GitHub、简介、Demo 或展览按钮</p><p>左上菜单：切换区域、打开世界总览、项目索引、记忆与摄影工具</p>':'<p><kbd>W A S D</kbd> 或方向键：行走；Shift 加速；Space 跳跃</p><p>点击画布或「进入环顾」：鼠标环顾；也可以按住拖动</p><p><kbd>F</kbd>：打开项目 GitHub；没有仓库链接时打开展览；作品前查看作品，港口查看航线</p><p><kbd>E</kbd>：查看项目简介、技术栈、结果与资料</p><p><kbd>R</kbd>：打开 Demo / 音乐 / MV，仅有链接的项目显示</p><p><kbd>G</kbd>：收集记忆或体验趣味装置</p><p><kbd>P</kbd>：摄影模式；WASD 平移，Q / E 升降，导出明信片</p><p>左侧区域导航：传送；「世界总览」：拖动旋转与滚轮缩放</p><p><kbd>Esc</kbd>：释放鼠标或关闭面板；关闭后可继续探索</p>';
-  $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','以自己的视角，走进世界')+`<div class="help-grid">${helpControls}</div><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低渲染质量，适配低性能设备</label><p class="source-note">科研模拟按论文方程计算，默认值是演示参数。个人音乐和 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
+  const helpControls=touchExperience?'<p>左下摇杆移动，拖动画面环顾，右下按钮跳跃。</p><p>可以同时用两根手指移动和环顾。</p><p>靠近展台、动物或小装置，点击浮窗操作。</p><p>左上菜单可切换岛屿、查找作品和打开摄影工具。</p>':'<p><kbd>W A S D</kbd> / 方向键行走 · <kbd>Shift</kbd> 加速 · <kbd>Space</kbd> 跳跃</p><p>点击画面进入环顾，也可以按住拖动。</p><p><kbd>F</kbd> 打开 GitHub / 展览 · <kbd>E</kbd> 项目简介</p><p><kbd>R</kbd> Demo / 音乐 / MV · <kbd>G</kbd> 记忆与小装置</p><p><kbd>Esc</kbd> 释放鼠标或关闭面板</p>';
+  const helpExtras=touchExperience?'<p>摄影：拖动画面环顾，调整视角与光线，导出照片或明信片。</p><p>动物与小物：靠近后可抚摸、骑乘或拿起；绿圈表示可以放下物品。</p><p>游戏：从「四季游乐」或摊位进入，用屏幕按钮驾驶、暂停和复位。</p>':'<p><kbd>P</kbd> 摄影 · WASD 平移 · <kbd>Q</kbd> / <kbd>E</kbd> 升降</p><p><kbd>Q</kbd> 拿起 / 放下小物或抚摸动物；绿圈表示可以放下。</p><p><kbd>T</kbd> 骑上梅花鹿、北极熊或下来；骑乘可以跨桥。</p><p><kbd>V</kbd> 进入附近摊位，也可从「四季游乐」进入。</p><p>驾驶时 <kbd>P</kbd> / <kbd>Esc</kbd> 暂停，<kbd>R</kbd> 复位。</p><p>侧栏切换岛屿；世界总览可拖动旋转、滚轮缩放。</p><p>作品前按 F 查看作品，港口按 F 查看航线。</p>';
+  $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','操作指南')+`<div class="help-grid">${helpControls}</div><details class="help-details"><summary>摄影、骑乘与游戏</summary><div class="help-grid">${helpExtras}</div></details><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低画质，提升流畅度</label><p class="source-note">科研模拟使用演示参数。音乐与 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
   const openExternal=(url:string)=>{if(document.pointerLockElement)document.exitPointerLock();window.open(url,'_blank','noopener,noreferrer');};
   bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});
   bus.on('demo',m=>{const {demo}=projectLinks(m);if(demo)openExternal(demo);});
@@ -295,8 +304,23 @@ async function boot(){
   bus.on('view',mode=>{$('.main-world').classList.toggle('first-person',mode==='first-person');$('#view-name').textContent=mode==='first-person'?'第一人称探索':'世界地图';$('#capture-look').hidden=mode==='map';$('#look-hint').textContent=mode==='map'?'拖动旋转 · 滚轮缩放':'点击 / 拖动环顾 · Esc 释放鼠标';if(mode==='first-person'){const english=$('.coordinates small').textContent;$('#current-region').textContent=data.regions.find(r=>r.english===english)?.title??'中央枢纽';}});
   bus.on('look',locked=>{$('.main-world').classList.toggle('mouse-locked',locked);$('#capture-look').textContent=locked?'Esc 释放鼠标':'点击进入环顾';});
   bus.on('region',id=>{const r=data.regions.find(r=>r.id===id);$('#current-region').textContent=r?.title??'中央枢纽';$('.coordinates small').textContent=r?.english??'XIANGMETA NEXUS';document.querySelectorAll<HTMLButtonElement>('.region-nav').forEach(b=>b.classList.toggle('active',b.dataset.region===id));$('#overview').classList.toggle('active',id==='nexus');});
-  let nearbyModule:Exhibit|null=null,nearbyArtwork:ArtworkInteraction|null=null,nearbyHarbor=false;
+  let nearbyModule:Exhibit|null=null,nearbyArtwork:ArtworkInteraction|null=null,nearbyHarbor=false,nearbyLiving:LivingPrompt|null=null;
   const renderNearby=()=>{
+    if(nearbyLiving){
+      const p=nearbyLiving,prompt=$('#interaction-prompt'),button=$<HTMLButtonElement>('#nearby');
+      // Keep the actual buttons alive while an animal changes its behaviour. Replacing
+      // them between pointerdown and pointerup used to swallow touch interactions.
+      if(!prompt.querySelector('[data-living-key]')){
+        prompt.innerHTML=`<div class="nearby-copy"><b></b><small></small></div><div class="nearby-actions">${['Q','T'].map(key=>`<button data-living-key="${key}">${touchExperience?'':`<kbd>${key}</kbd> `}<span></span></button>`).join('')}</div>`;
+        prompt.querySelectorAll<HTMLButtonElement>('[data-living-key]').forEach(b=>b.onclick=()=>world?.interactLiving(b.dataset.livingKey as 'Q'|'T'));
+      }
+      prompt.hidden=false;prompt.querySelector('b')!.textContent=p.title;prompt.querySelector('small')!.textContent=p.detail;
+      for(const key of ['Q','T'] as const){
+        const b=prompt.querySelector<HTMLButtonElement>(`[data-living-key="${key}"]`)!,label=key==='Q'?p.q:p.t;
+        b.hidden=!label;b.disabled=key==='Q'&&p.disabled;b.querySelector('span')!.textContent=label??'';
+      }
+      button.disabled=(!p.q&&!p.t)||(p.disabled&&!p.t);button.innerHTML=`${p.q||p.t?`<kbd>${p.q?'Q':'T'}</kbd> `:''}${escape(p.title)}`;button.onclick=()=>world?.interactLiving(p.q?'Q':'T');return;
+    }
     const m=nearbyArtwork?.module??nearbyModule,actions=nearbyActions(nearbyModule,nearbyArtwork,nearbyHarbor),title=nearbyHarbor?'海风港口':nearbyArtwork?.label??m?.portfolio?.name??m?.title;
     const prompt=$('#interaction-prompt'),button=$<HTMLButtonElement>('#nearby'),primary=actions[0];button.disabled=!primary;button.innerHTML=`<kbd>${primary?.key??'F'}</kbd> ${title?escape(title):'靠近展台交互'}`;button.title=primary?`${primary.key} · ${primary.label}`:'靠近展台交互';
     prompt.hidden=!title;
@@ -304,10 +328,11 @@ async function boot(){
     prompt.querySelectorAll<HTMLButtonElement>('button[data-near-key]').forEach(b=>b.onclick=()=>world?.interactExhibit(b.dataset.nearKey as InteractionKey));button.onclick=()=>primary&&world?.interactExhibit(primary.key);
   };
   bus.on('harborNearby',v=>{nearbyHarbor=v;renderNearby();});
+  bus.on('livingNearby',v=>{nearbyLiving=v;renderNearby();});bus.on('livingMessage',toast);
   bus.on('nearby',m=>{nearbyModule=m;renderNearby();});bus.on('artworkNearby',a=>{nearbyArtwork=a;renderNearby();});
   bus.on('artwork',a=>{if(a.action.kind==='album')openExhibit(a.module,true,a.action.id);else immerse(a.module,a.action.index);});
 
-  const requested=new URLSearchParams(location.search).get('project'),destination=data.modules.find(m=>m.id===requested);if(destination&&world){world.visit(destination);toast('已抵达项目展台 · E 查看简介');}
+  const requested=new URLSearchParams(location.search).get('project'),destination=data.modules.find(m=>m.id===requested);if(destination&&world){world.visit(destination);toast(touchExperience?'已抵达展台 · 点击浮窗查看作品':'已抵达项目展台 · E 查看简介');}
   progress();
   window.addEventListener('pagehide',event=>{if(event.persisted){world?.setPaused(true);return;}cleanup();world?.dispose();audio.dispose();});
   window.addEventListener('pageshow',event=>{if(event.persisted)world?.setPaused(false);});

@@ -10,12 +10,12 @@ const shared=<M extends T.Material>(key:string,make:()=>M)=>{let m=cache.get(key
 
 export const kit={
   stone:()=>shared('stone',()=>surfaceMaterial(pigment.stone,.92,.02,'stone')),
-  marble:()=>shared('marble',()=>surfaceMaterial('#e7e1d2',.86,.02,'stone')),
+  marble:()=>shared('marble',()=>surfaceMaterial('#edf0e5',.86,.02,'stone')),
   stoneDark:()=>shared('stone-dark',()=>surfaceMaterial(pigment.stoneDeep,.95,.02,'stone')),
-  plaster:()=>shared('plaster',()=>surfaceMaterial('#ece4d3',.95,0,'plaster')),
-  lacquer:()=>shared('lacquer',()=>surfaceMaterial('#9b3a2c',.58,.02,'wood')),
+  plaster:()=>shared('plaster',()=>surfaceMaterial('#f6f2e6',.95,0,'plaster')),
+  lacquer:()=>shared('lacquer',()=>surfaceMaterial(pigment.cinnabar,.58,.02,'wood')),
   timber:()=>shared('timber',()=>surfaceMaterial(pigment.timber,.85,.02,'wood')),
-  timberLight:()=>shared('timber-light',()=>surfaceMaterial('#a37a55',.82,.02,'wood')),
+  timberLight:()=>shared('timber-light',()=>surfaceMaterial('#c6a67d',.82,.02,'wood')),
   bronze:()=>shared('bronze',()=>surfaceMaterial('#9a7442',.5,.34,'metal')),
   patina:()=>shared('patina',()=>surfaceMaterial('#6f9583',.66,.2,'metal')),
   gold:()=>shared('gold',()=>surfaceMaterial('#caa04f',.42,.45,'metal')),
@@ -26,18 +26,18 @@ export const kit={
   paper:()=>shared('paper',()=>surfaceMaterial(pigment.paper,.95,0,'plaster')),
   /** Warm paper-lantern light; brightens at night with every other glow. */
   lamp:(color='#f3c77a')=>shared('lamp-'+color,()=>{const m=new T.MeshStandardMaterial({color:'#fff1d6',emissive:color,emissiveIntensity:.2,roughness:.7});m.userData.nightGlow=true;return m;}),
-  tile:()=>shared('roof-tile',()=>roofMaterial('#5b646b')),
-  tileGreen:()=>shared('roof-tile-green',()=>roofMaterial('#4c7a68')),
-  tileGold:()=>shared('roof-tile-gold',()=>roofMaterial('#b98b3c')),
-  tileBlue:()=>shared('roof-tile-blue',()=>roofMaterial('#3d6584')),
+  tile:()=>shared('roof-tile',()=>roofMaterial(pigment.tile)),
+  tileGreen:()=>shared('roof-tile-green',()=>roofMaterial('#6ba491')),
+  tileGold:()=>shared('roof-tile-gold',()=>roofMaterial('#d0ad69')),
+  tileBlue:()=>shared('roof-tile-blue',()=>roofMaterial('#5c90a7')),
   tileSnow:()=>shared('roof-tile-snow',()=>roofMaterial('#e3e8ea')),
   rock:()=>shared('scholar-rock',()=>surfaceMaterial('#9da49f',.93,.02,'stone')),
   soil:()=>shared('soil',()=>surfaceMaterial('#6d5a43',1,0,'grass')),
   brick:()=>shared('brick',()=>surfaceMaterial('#b8ae9b',.95,.02,'paving')),
-  plasterWarm:()=>shared('plaster-warm',()=>surfaceMaterial('#e9dfca',.95,0,'plaster')),
+  plasterWarm:()=>shared('plaster-warm',()=>surfaceMaterial('#f1e5cc',.95,0,'plaster')),
   straw:()=>shared('straw',()=>surfaceMaterial('#c9a86a',.95,0,'wood')),
-  awning:()=>shared('awning',()=>surfaceMaterial('#33302b',.9,0,'wood')),
-  eaves:()=>shared('eaves',()=>surfaceMaterial('#3f4a4c',.85,.02,'wood')),
+  awning:()=>shared('awning',()=>surfaceMaterial('#496b6c',.9,0,'wood')),
+  eaves:()=>shared('eaves',()=>surfaceMaterial('#536e73',.85,.02,'wood')),
   beam:()=>shared('painted-beam',()=>beamMaterial()),
   lattice:()=>shared('lattice',()=>latticeMaterial()),
 };
@@ -69,7 +69,7 @@ function beamMaterial(){
 /** Paper behind a square lattice: lit from within after dusk. */
 function latticeMaterial(){
   const map=canvasTexture(128,128,c=>{
-    c.fillStyle='#efe2c2';c.fillRect(0,0,128,128);c.strokeStyle='#6a4630';c.lineWidth=5;c.strokeRect(2,2,124,124);c.lineWidth=3;
+    c.fillStyle='#f5edd8';c.fillRect(0,0,128,128);c.strokeStyle='#8a7156';c.lineWidth=5;c.strokeRect(2,2,124,124);c.lineWidth=3;
     for(const p of [32,64,96]){c.beginPath();c.moveTo(p,0);c.lineTo(p,128);c.moveTo(0,p);c.lineTo(128,p);c.stroke();}
     c.lineWidth=2;c.beginPath();c.moveTo(16,16);c.lineTo(48,16);c.lineTo(48,48);c.moveTo(80,80);c.lineTo(112,80);c.lineTo(112,112);c.stroke();
   });
@@ -268,7 +268,7 @@ function limb(points:T.Vector3[],r0:number,r1:number,segments=10,radial=6){
 }
 export type TreeForm='pine'|'snowpine'|'blossom'|'maple'|'broadleaf'|'willow';
 const foliage={
-  pine:['#355f4c','#4d7d5e'],snowpine:['#33584a','#f1f2ec'],blossom:['#eab0bd','#f4d2d6'],maple:['#b9452d','#d2713a','#dca23c'],broadleaf:['#5d8d63','#7da775'],willow:['#7fa86a','#9cbd78']
+  pine:['#568b76','#76a58a'],snowpine:['#527e70','#f1f2ec'],blossom:['#efbbcd','#f6d8df'],maple:['#d78d71','#e7ad79','#edc675'],broadleaf:['#7ca786','#a1c5a1'],willow:['#99bc86','#bcce9d']
 };
 const leafMaterials=new Map<string,T.Material>();
 const leaf=(color:string)=>{let m=leafMaterials.get(color);if(!m){m=surfaceMaterial(color,.92,0,'foliage');leafMaterials.set(color,m);}return m;};

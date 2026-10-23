@@ -1,6 +1,6 @@
 /* 山海册页 · Album of Mountains and Seas — the interface is mounted like an album leaf:
  * silk paper, ink rules, mineral accents and a cinnabar seal. Loaded last; it only restyles. */
-:root{--paper:#f6f0e3;--silk:#efe6d2;--mount:#e6dac0;--ink:#2b2824;--ink-soft:#5d5447;--ink-faint:#8b8170;--seal:#a34a35;--seal-deep:#7f3324;--malachite:#3d7560;--azurite:#355f7a;--ochre:#93652c;--rule:rgba(58,48,38,.22);--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif;--muted:#7a705f;--border:rgba(58,48,38,.16);color:var(--ink);background:var(--silk)}
+:root{--paper:#fafbf5;--silk:#edf3ed;--mount:#dce9df;--ink:#293f43;--ink-soft:#506763;--ink-faint:#617873;--seal:#b36150;--seal-deep:#924c40;--malachite:#377d6d;--azurite:#3d758c;--ochre:#886835;--rule:rgba(48,89,85,.2);--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif;--muted:#617873;--border:rgba(48,89,85,.16);color:var(--ink);background:var(--silk)}
 body{background:var(--silk)}
 ::selection{background:#e7c9a8;color:var(--ink)}
 .main-world{background:linear-gradient(180deg,#efe7d5,#e4dcc7)}
@@ -177,3 +177,61 @@ input[type=range]{accent-color:var(--seal)}
   html.touch-experience .toast,html.touch-experience #trail-guide{top:188px;bottom:auto;left:14px;right:14px;transform:none;max-width:none}
   html.touch-experience .icon-button{border-radius:50%}
 }
+
+/* Sea-light edition: ivory, celadon, soft coral; retain the painted paper and serif titles. */
+.sidebar{background-color:#f1f6ef;box-shadow:inset -1px 0 0 var(--rule),inset -5px 0 0 #e5eee5}
+.topbar{background-color:rgba(250,252,246,.92)}
+.first-person .world-heading{background:linear-gradient(90deg,rgba(248,251,242,.93),rgba(248,251,242,0));border-left-color:#ce8871}
+.controls-pill,.view-badge,.guide-card,.music-caption,#photo-toolbar{background-color:rgba(248,252,244,.94);border-color:var(--rule);box-shadow:0 6px 22px rgba(41,77,76,.1);border-radius:8px}
+.interaction-prompt{background-color:rgba(250,253,245,.97);border-color:var(--rule);border-radius:10px;box-shadow:0 10px 30px rgba(41,77,76,.13)}
+.toast,#trail-guide{background-color:#f6faef;border-color:var(--rule);border-radius:8px;box-shadow:0 6px 20px rgba(41,77,76,.12)}
+.icon-button,.journal-button,.sky-clock{background:rgba(251,253,247,.88);border-color:var(--rule);border-radius:8px}
+.icon-button:hover,.journal-button:hover,.sky-clock:hover,.quiet-button:hover{background:#e7f1e7}
+.controls-pill kbd,kbd,#interaction-prompt .nearby-actions a,#interaction-prompt .nearby-actions button{background:#fcfdf7;border-color:var(--rule)}
+.overview-small{display:grid;place-items:center;padding:0;line-height:1;background:#f7fcf2;border-color:var(--rule)}
+.icon-button>.action-icon,.overview-small>.action-icon{color:inherit;width:18px;height:18px;flex:none}
+.brand-symbol,.guide-orb{background:#ca816b;box-shadow:inset 0 0 0 2px #f5eedc,inset 0 0 0 3px #ca816b}
+.mini-atlas{background:radial-gradient(circle at 50% 45%,#f5fbf0,#dcefe4);border-color:rgba(73,119,111,.4);box-shadow:0 8px 24px rgba(41,77,76,.13),inset 0 0 0 5px #f2f8ed,inset 0 0 0 6px var(--rule)}
+.mini-atlas .atlas-sea{fill:#e3f1e7;stroke:var(--rule)}
+.mini-atlas text{font-size:7px;letter-spacing:.25px;stroke:#f4faee;stroke-width:2}
+.mini-atlas .atlas-region circle{stroke:rgba(48,89,85,.55)}
+.mini-atlas .atlas-region:focus-visible{outline:none}
+.mini-atlas .atlas-region:focus-visible circle{stroke:var(--azurite);stroke-width:2}
+.exhibit-label,.first-person .exhibit-label,.region-label,.guide-label,.harbor-label{background:rgba(249,252,244,.95);border-color:var(--rule);border-radius:6px;box-shadow:0 2px 8px rgba(41,77,76,.1)}
+.future-label{background:rgba(237,246,236,.93)!important;border-color:var(--rule)!important}
+dialog,dialog.product-mode{--panel-surface:#f9fcf4;border-color:var(--rule);border-radius:12px;box-shadow:0 24px 70px rgba(36,69,68,.23),inset 0 0 0 5px #e9f0e3}
+dialog::backdrop,.product-mode::backdrop{background:rgba(32,64,64,.22)}
+.fact-grid,.memory-index button,.stamp-card,.connection-card,.album-detail,.album-cover.active{background:#edf4e9}
+.album-cover.active{border-color:var(--malachite);box-shadow:inset 0 0 0 1px var(--malachite)}
+.primary-button,.product-mode .primary-button{background:#356f68;color:#fbfdf5;border-radius:7px}
+.quiet-button,.stamp-card,.harbor-route,.media-card,.connection-card,.time-presets button{border-radius:7px}
+textarea,input:not([type=range]):not([type=checkbox]):not([type=file]),select{background:#fefff9}
+.time-presets button.active,.time-presets button[aria-pressed=true]{background:#e2f0e4;border-color:var(--malachite)}
+
+/* Scene labels stay in the scene layer; controls, notices and the modal retain their own order. */
+#world{isolation:isolate;z-index:0}
+.world-heading,.world-meta,.compass{z-index:2}
+.world-bottom,.guide-card,.music-caption{z-index:4}
+.interaction-prompt{z-index:7}
+.topbar{z-index:8}
+.world-label[hidden]{display:none}
+@media(max-width:900px) and (pointer:coarse){
+  html.touch-experience .sidebar{background-color:#f1f6ef}
+  html.touch-experience .mobile-tools button{background:#f9fcf3}
+  html.touch-experience .touch-joystick{background:radial-gradient(circle,rgba(239,248,235,.48) 0 30%,rgba(239,248,235,.85) 31% 100%);border-color:var(--rule)}
+  html.touch-experience .touch-joystick-knob{background:#65958b;border-color:#f6fcf1}
+  html.touch-experience .touch-jump{display:flex;flex-direction:column;justify-content:center;gap:2px;background:rgba(247,252,240,.94);border-color:var(--rule)}
+  html.touch-experience .touch-jump>.action-icon{width:24px;height:24px;flex:none;color:inherit}
+  html.touch-experience .overview-small{background:#f7fcf2}
+  html.touch-experience .toast{top:188px}
+  html.touch-experience #trail-guide{top:244px}
+}
+@media(max-height:600px) and (pointer:coarse){
+  html.touch-experience .mini-atlas{width:88px;height:88px}
+  html.touch-experience .interaction-prompt,html.touch-experience .interaction-prompt#interaction-prompt{bottom:24px;width:min(350px,calc(100% - 310px));max-height:calc(100dvh - 100px);overflow:auto}
+  html.touch-experience .toast{top:72px;left:160px;right:116px}
+  html.touch-experience #trail-guide{top:128px;left:160px;right:116px}
+}
+.brand-symbol.xiang-logo{width:44px;height:44px;background:transparent;box-shadow:none;border:0;transform:none;overflow:visible}
+.web-loading .loading-symbol.xiang-logo{background:transparent;box-shadow:none;transform:none}
+#interaction-prompt .nearby-actions button:disabled{opacity:.5;cursor:default}

@@ -1,16 +1,16 @@
 import * as T from 'three';
 import {FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
 
-/** Album palette: mineral pigments on silk. Shared by the renderer, materials and painted canvases. */
+/** Fresh mineral washes on ivory paper. Shared by rendering, architecture and painted canvases. */
 export const pigment={
-  silk:'#efe6d2',paper:'#f6f0e2',ink:'#2b2824',inkSoft:'#5b554c',
-  azurite:'#3f6f8f',azuriteDeep:'#284d66',malachite:'#4f9a80',malachiteLight:'#8cc2a4',
-  ochre:'#b07a45',ochreLight:'#d8b483',gamboge:'#dcb04c',cinnabar:'#b8432f',cinnabarDeep:'#8e2f22',
-  leadWhite:'#f3eee2',celadon:'#a9c8b4',bronze:'#8a6a3e',bronzeLight:'#c3a067',stone:'#d9d1bf',stoneDeep:'#9b9484',timber:'#6f4a33',tile:'#59626a'
+  silk:'#edf3ed',paper:'#faf8ef',ink:'#293e42',inkSoft:'#536b69',
+  azurite:'#609eaf',azuriteDeep:'#396a82',malachite:'#65ad96',malachiteLight:'#acd7b6',
+  ochre:'#bd986d',ochreLight:'#e2c79b',gamboge:'#e6bd6b',cinnabar:'#d07a67',cinnabarDeep:'#9f5449',
+  leadWhite:'#faf7ed',celadon:'#c0ddcb',bronze:'#ad9163',bronzeLight:'#d9b77e',stone:'#e3e5d8',stoneDeep:'#9faeaa',timber:'#8b7056',tile:'#698e93'
 } as const;
 
 /** Each island's data colour is a pastel; in the painting it is laid as the matching mineral pigment. */
-const accents:Record<string,string>={'#ebbdcf':'#b5564e','#cbdde9':'#3f6f8f','#e3c385':'#b0823c','#acd9c5':'#4f8f78'};
+const accents:Record<string,string>={'#ebbdcf':'#c97986','#cbdde9':'#5d99b1','#e3c385':'#c69950','#acd9c5':'#529d86'};
 export function pigmentAccent(color:T.ColorRepresentation){
   const c=new T.Color(color),known=accents['#'+c.getHexString()];if(known)return known;
   const hsl={h:0,s:0,l:0};c.getHSL(hsl);return '#'+new T.Color().setHSL(hsl.h,Math.min(.5,hsl.s*.7+.1),.42).getHexString();
@@ -77,14 +77,14 @@ void main(){
     color=mat3(.59719,.07600,.02840,.35458,.90834,.13383,.04823,.01566,.83777)*color;
     vec3 a=color*(color+.0245786)-.000090537,b=color*(.983729*color+.4329510)+.238081;color=a/b;
     color=clamp(mat3(1.60475,-.10208,-.00327,-.53108,1.10813,-.07276,-.07367,-.00605,1.07602)*color,0.,1.);
-    float grey=dot(color,vec3(.299,.587,.114));color=max(mix(vec3(grey),color,.92),0.);
+    float grey=dot(color,vec3(.299,.587,.114));color=max(mix(vec3(grey),color,1.04),0.);
     color=shadowInk+color*(1.-shadowInk);
     float fiber=noise(gl_FragCoord.xy*vec2(.011,.4))*.6+noise(gl_FragCoord.xy*vec2(.05,.85))*.4;
-    color*=mix(vec3(1.),paperTint,.35+.4*fiber);
+    color*=mix(vec3(1.),paperTint,.2+.25*fiber);
     color+=(hash(gl_FragCoord.xy)-.5)*.01;
   }
   color=mix(color,inkColor*(.5+.5*color),ink*.86);
-  vec2 v=(vUv-.5)*vec2(aspect,1.);color*=mix(vec3(.9,.86,.79),vec3(1.),smoothstep(1.1,.45,length(v)));
+  vec2 v=(vUv-.5)*vec2(aspect,1.);color*=mix(vec3(.95,.97,.96),vec3(1.),1.-smoothstep(.45,1.1,length(v)));
   gl_FragColor=vec4(clamp(color,0.,1.),1.);
   #include <colorspace_fragment>
 }`;
@@ -100,7 +100,7 @@ export class InkPipeline{
     this.material=new T.ShaderMaterial({vertexShader,fragmentShader,depthTest:false,depthWrite:false,toneMapped:false,uniforms:{
       tColor:{value:this.target.texture},tDepth:{value:this.target.depthTexture},texel:{value:new T.Vector2(1,1)},near:{value:.1},far:{value:900},aspect:{value:1},
       pixelAngle:{value:.002},lineWidth:{value:1},exposure:{value:1},strength:{value:1},inkRange:{value:this.range},
-      inkColor:{value:new T.Color(pigment.ink)},paperTint:{value:new T.Color('#fff6e6')},shadowInk:{value:new T.Color('#0f0e0c')}
+      inkColor:{value:new T.Color(pigment.ink)},paperTint:{value:new T.Color('#fcfff9')},shadowInk:{value:new T.Color('#101e23')}
     }});
     this.quad=new FullScreenQuad(this.material);
   }

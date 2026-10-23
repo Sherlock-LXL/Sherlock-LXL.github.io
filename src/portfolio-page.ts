@@ -1,8 +1,10 @@
 import './portfolio.css';
+import {brandMark,mountBrandIcon} from './core/brand';
 import {diagonalArrow} from './core/inline-arrow';
 import {navIcon} from './core/nav-icons';
 import {readContent,sitePath,escapeHTML as esc,externalAttrs,type Portfolio,type Project} from './core/portfolio';
 const host=document.querySelector<HTMLDivElement>('#portfolio')!;
+mountBrandIcon();
 const isHome=document.body.dataset.page==='home';
 const labels={AI:'AI / 人工智能',Research:'Research / 科研',Engineering:'Engineering / 工程',Creative:'Music & Creative / 创作'};
 const link=(href:string,text:string,cls='text-link')=>`<a class="${cls}" href="${esc(href)}" ${externalAttrs}>${text} ${diagonalArrow}</a>`;
@@ -63,7 +65,7 @@ function atlas(){
     <span class="atlas-coordinate">31° N / A PERSONAL UNIVERSE</span>
     <a class="isle isle-ai" href="${sitePath('projects/')}?category=AI"><span class="isle-symbol">${navIcon('mountain')}</span><b>AI Mountain</b><small>语言 · 视觉 · 生成</small><i>01</i></a>
     <a class="isle isle-research" href="${sitePath('projects/')}?category=Research"><span class="isle-symbol">${navIcon('science')}</span><b>Science Valley</b><small>气泡 · 声音 · 光</small><i>02</i></a>
-    <a class="atlas-core" href="${worldURL()}" aria-label="进入 XiangMeta"><span class="xiang-logo-glyph">想</span><b>XIANGMETA</b></a>
+    <a class="atlas-core" href="${worldURL()}" aria-label="进入 XiangMeta"><span class="xiang-logo-glyph">${brandMark}</span><b>XIANGMETA</b></a>
     <a class="isle isle-creative" href="${sitePath('projects/')}?category=Creative"><span class="isle-symbol">${navIcon('museum')}</span><b>Personal Museum</b><small>旋律 · 光影 · 记忆</small><i>03</i></a>
     <span class="atlas-caption">EVERY CREATION HAS A COORDINATE.</span>
   </div>`;
@@ -73,7 +75,7 @@ async function boot(){
   const touchExperience=matchMedia('(pointer: coarse) and (max-width: 900px)').matches;
   const worldHint=touchExperience?'摇杆移动 · 拖动画面环顾 · 点击跳跃与展台操作':'WASD 行走 · 鼠标环顾 · F 打开 GitHub / 展览 · E 查看简介';
   const categories=[...new Set(projects.map(p=>p.category))];
-  const navigation=`<a class="wordmark" href="${sitePath()}"><span class="xiang-logo" aria-hidden="true">想</span> XiangMeta<span class="wordmark-dot">/</span><small>${esc(profile.handle)}</small></a><nav aria-label="主导航"><a href="${sitePath()}#about">About</a><a href="${sitePath('projects/')}" ${!isHome?'aria-current="page"':''}>Projects</a>${link(profile.github,'GitHub')}<a class="nav-enter" href="${worldURL()}">Enter world ${diagonalArrow}</a></nav>`;
+  const navigation=`<a class="wordmark" href="${sitePath()}"><span class="xiang-logo" aria-hidden="true">${brandMark}</span> XiangMeta<span class="wordmark-dot">/</span><small>${esc(profile.handle)}</small></a><nav aria-label="主导航"><a href="${sitePath()}#about">About</a><a href="${sitePath('projects/')}" ${!isHome?'aria-current="page"':''}>Projects</a>${link(profile.github,'GitHub')}<a class="nav-enter" href="${worldURL()}">Enter world ${diagonalArrow}</a></nav>`;
   const heading=isHome?`<section class="hero"><div class="hero-copy"><p class="eyebrow"><span class="live-dot"></span> 山海册页 · THE PERSONAL ATLAS</p><h1>李湘伦<span class="hero-handle">Sherlock-LXL</span></h1><p class="disciplines">${esc(profile.disciplines)}</p><p class="hero-description">让好奇心带路，<br>让每一次创造成为新的大陆。</p><div class="hero-actions"><a class="button primary" href="${worldURL()}">Enter XiangMeta <span>${diagonalArrow}</span></a><a class="button" href="${sitePath('projects/')}">View Projects <span>→</span></a></div><p class="device-note">${touchExperience?'已适配触控移动、环顾与跳跃':'自由探索 3D 世界 · 桌面浏览器体验更佳'}</p></div>${atlas()}</section>
     <div class="index-strip"><span>ONE WORLD. MANY WAYS TO CREATE.</span><div><b>${String(projects.length).padStart(2,'0')}</b> PROJECTS <i>/</i> <b>04</b> REGIONS <i>/</i> ALWAYS GROWING</div></div>
     <section class="about-section" id="about"><div><p class="eyebrow">01 / ABOUT</p><h2>在不同领域之间，<br>寻找同一种好奇。</h2></div><div><p>${esc(profile.intro)}</p><p>XiangMeta 是我的个人交互作品集。你可以沿着山径找到语言模型，在实验室里观察气泡，也可以走进展廊，听见音乐、看见旅途。</p><a class="text-link" href="${sitePath('projects/')}">直接浏览所有项目 →</a></div></section>`:

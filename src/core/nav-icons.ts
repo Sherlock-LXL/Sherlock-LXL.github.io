@@ -1,6 +1,7 @@
 /** One optical grid for the atlas: filled enamel shapes and fine rounded outlines. */
 const drawings:Record<string,string>={
  world:'<circle cx="18" cy="18" r="12" fill="currentColor" fill-opacity=".15"/><ellipse cx="18" cy="18" rx="6" ry="12"/><path d="M6 18h24M9 10q9 5 18 0M9 26q9-5 18 0"/><path d="m28 4 1.2 3.8L33 9l-3.8 1.2L28 14l-1.2-3.8L23 9l3.8-1.2Z" fill="currentColor"/>',
+ games:'<path d="M11 10h14q5 0 6 5l2 11q.7 5-3 5-2 0-4-4l-2-3H12l-2 3q-2 4-4 4-3.7 0-3-5l2-11q1-5 6-5Z" fill="currentColor" fill-opacity=".2"/><path d="M18 10V7q0-3 4-3M9 17h8M13 13v8"/><circle cx="24" cy="15" r="1.8" fill="currentColor"/><circle cx="28" cy="19" r="1.8" fill="currentColor"/>',
  mountain:'<path d="M3 29 13 8l7 13 4-8 9 16Z" fill="currentColor" fill-opacity=".2"/><path d="m9 17 4 3 4-3M20 21l4 3 3-4M7 29h22"/><circle cx="26" cy="6" r="2" fill="currentColor"/>',
  science:'<path d="M13 4h10M15 4v9L6 27q-2 5 4 5h16q6 0 4-5l-9-14V4"/><path d="M11 22q7-4 14 0l5 7q0 3-5 3H11q-5 0-5-3Z" fill="currentColor" fill-opacity=".25"/><circle cx="15" cy="25" r="2"/><circle cx="23" cy="18" r="1.4"/><circle cx="28" cy="9" r="2.5"/>',
  museum:'<path d="M4 14 18 5l14 9Z" fill="currentColor" fill-opacity=".25"/><path d="M7 14v15M29 14v15M4 31h28M12 27v-8q0-3 3-3t3 3v8m3 0v-8q0-3 3-3t3 3v8"/><circle cx="18" cy="10" r="1" fill="currentColor"/>',
@@ -11,5 +12,5 @@ const drawings:Record<string,string>={
  collections:'<rect x="4" y="5" width="12" height="11" rx="2" fill="currentColor" fill-opacity=".2"/><rect x="21" y="5" width="11" height="17" rx="2"/><rect x="4" y="21" width="12" height="11" rx="2"/><rect x="21" y="27" width="11" height="5" rx="2" fill="currentColor" fill-opacity=".3"/><path d="m7 13 3-4 3 4M24 18l2-4 3 4"/>',
  favorites:'<path d="M6 9v23l12-6 12 6V9"/><path d="m18 3 3.3 6.7 7.4 1.1-5.4 5.2 1.3 7.4-6.6-3.5-6.6 3.5 1.3-7.4-5.4-5.2 7.4-1.1Z" fill="currentColor" fill-opacity=".25"/>'
 };
-const colors:Record<string,string>={world:'#3d7560',mountain:'#a34a35',science:'#355f7a',museum:'#93652c',studio:'#3d7560',growth:'#355f7a',horizons:'#6d5683',harbor:'#355f7a',collections:'#93652c',favorites:'#a34a35'};
+const colors:Record<string,string>={world:'#3d7560',games:'#93652c',mountain:'#a34a35',science:'#355f7a',museum:'#93652c',studio:'#3d7560',growth:'#355f7a',horizons:'#6d5683',harbor:'#355f7a',collections:'#93652c',favorites:'#a34a35'};
 export function navIcon(name:string){return `<span class="nav-art" style="color:${colors[name]??colors.world}" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${drawings[name]??drawings.world}</svg></span>`;}

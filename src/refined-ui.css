@@ -40,3 +40,7 @@ textarea,input:not([type=range]):not([type=checkbox]):not([type=file]),select{bo
 .memory-star{color:#93652c}.memory-star.found{color:#6b6153}
 .memory-star>.action-icon{filter:drop-shadow(0 0 8px #ffe3a87a)}
 .memory-star.found>.action-icon{filter:drop-shadow(0 0 2px #8fbab52a)}
+.help-details{margin:20px 0;border-block:1px solid var(--border);font-size:13px;color:#4a4237}
+.help-details summary{cursor:pointer;padding:14px 0;line-height:1.7}
+.help-details .help-grid{margin:0 0 16px}
+.help-details .source-note{margin:0 0 16px;font-size:12px}

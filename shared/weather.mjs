@@ -1,6 +1,12 @@
-export const weatherKinds=['sunny','cloudy','overcast','rain','snow'];
-export const weatherNames={sunny:'晴天',cloudy:'多云',overcast:'阴天',rain:'雨天',snow:'雪天'};
-const presets={sunny:{cover:.15,shade:0,rain:0,snow:0,wind:.45},cloudy:{cover:.55,shade:.22,rain:0,snow:0,wind:.65},overcast:{cover:.9,shade:.65,rain:0,snow:0,wind:.55},rain:{cover:1,shade:.85,rain:1,snow:0,wind:1},snow:{cover:.8,shade:.45,rain:0,snow:1,wind:.35}};
+export const weatherKinds=['sunny','cloudy','overcast','rain','snow','tornado','hail','aurora','sunset'];
+export const weatherNames={sunny:'晴天',cloudy:'多云',overcast:'阴天',rain:'雨天',snow:'雪天',tornado:'远海龙卷',hail:'冰雹',aurora:'极光',sunset:'霞光'};
+const base={cover:.15,shade:0,rain:0,snow:0,wind:.45,tornado:0,hail:0,aurora:0,sunset:0};
+const presets={
+  sunny:{...base},cloudy:{...base,cover:.55,shade:.22,wind:.65},overcast:{...base,cover:.9,shade:.65,wind:.55},
+  rain:{...base,cover:1,shade:.85,rain:1,wind:1},snow:{...base,cover:.8,shade:.45,snow:1,wind:.35},
+  tornado:{...base,cover:.68,shade:.3,wind:1,tornado:1},hail:{...base,cover:.86,shade:.48,wind:.8,hail:1},
+  aurora:{...base,cover:.08,wind:.25,aurora:1},sunset:{...base,cover:.28,wind:.3,sunset:1},
+};
 const smooth=t=>t*t*t*(t*(t*6-15)+10);
 /** Continuous, interruption-safe weather. One journey holds each sky for 2–4 minutes. */
 export class WeatherCycle{

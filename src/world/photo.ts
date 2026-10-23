@@ -30,19 +30,20 @@ export class PhotoCamera {
 /** `draw` renders the painted frame into `source`; the export reads it within the same task. */
 export async function exportPostcard(source:HTMLCanvasElement,draw:()=>void,place:string,hour:number,postcard:boolean){
   draw();
-  const w=Math.min(source.width,2048),h=Math.round(w*source.height/source.width),border=postcard?28:0,footer=postcard?112:0;
+  const w=Math.min(source.width,2048),h=Math.round(w*source.height/source.width),compact=w<960,border=postcard?28:0,footer=postcard?(compact?132:112):0;
   const output=document.createElement('canvas');output.width=w+border*2;output.height=h+border*2+footer;
   const ctx=output.getContext('2d')!;ctx.fillStyle='#efe6d2';ctx.fillRect(0,0,output.width,output.height);ctx.drawImage(source,border,border,w,h);
   if(postcard){
     const serif='"Songti SC","STSong","Noto Serif SC","Source Han Serif SC","SimSun",serif',baseline=h+border;
     ctx.strokeStyle='#2b282455';ctx.lineWidth=1;ctx.strokeRect(border-6.5,border-6.5,w+13,h+13);
     // A cinnabar seal carries the owner's character, as on every leaf of an album.
-    const seal=54,sx=border+8,sy=baseline+30;ctx.fillStyle='#b8432f';ctx.fillRect(sx,sy,seal,seal);ctx.strokeStyle='#f6efe2';ctx.lineWidth=2;ctx.strokeRect(sx+4,sy+4,seal-8,seal-8);
-    ctx.fillStyle='#f6efe2';ctx.font=`600 34px ${serif}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('湘',sx+seal/2,sy+seal/2+1);
-    ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#2b2824';ctx.font=`600 26px ${serif}`;ctx.fillText('XiangMeta · 山海册页',sx+seal+18,baseline+56);
-    ctx.fillStyle='#6b6255';ctx.font='13px "Segoe UI", "PingFang SC", sans-serif';ctx.fillText('A PERSONAL ALBUM OF MOUNTAINS AND SEAS',sx+seal+18,baseline+80);
-    ctx.textAlign='right';ctx.fillStyle='#2b2824';ctx.font=`20px ${serif}`;ctx.fillText(place,output.width-border-10,baseline+56,w*.46);
-    ctx.fillStyle='#6b6255';ctx.font='13px "Segoe UI", sans-serif';ctx.fillText(`${String(Math.floor(hour)).padStart(2,'0')}:${String(Math.floor(hour%1*60)).padStart(2,'0')} · ISLAND TIME`,output.width-border-10,baseline+80);
+    const seal=compact?44:54,sx=border+8,sy=baseline+30;ctx.fillStyle='#b8432f';ctx.fillRect(sx,sy,seal,seal);ctx.strokeStyle='#f6efe2';ctx.lineWidth=2;ctx.strokeRect(sx+4,sy+4,seal-8,seal-8);
+    ctx.fillStyle='#f6efe2';ctx.font=`600 ${compact?28:34}px ${serif}`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('湘',sx+seal/2,sy+seal/2+1);
+    const titleX=sx+seal+(compact?14:18),titleWidth=output.width-border-10-titleX;
+    ctx.textAlign='left';ctx.textBaseline='alphabetic';ctx.fillStyle='#2b2824';ctx.font=`600 ${compact?19:26}px ${serif}`;ctx.fillText('XiangMeta · 山海册页',titleX,baseline+(compact?47:56),titleWidth);
+    ctx.fillStyle='#6b6255';ctx.font=`${compact?10:13}px "Segoe UI", "PingFang SC", sans-serif`;ctx.fillText('A PERSONAL ALBUM OF MOUNTAINS AND SEAS',titleX,baseline+(compact?69:80),titleWidth);
+    ctx.textAlign=compact?'left':'right';ctx.fillStyle='#2b2824';ctx.font=`${compact?15:20}px ${serif}`;ctx.fillText(place,compact?sx:output.width-border-10,baseline+(compact?108:56),w*(compact?.64:.46));
+    ctx.textAlign='right';ctx.fillStyle='#6b6255';ctx.font=`${compact?10:13}px "Segoe UI", sans-serif`;ctx.fillText(`${String(Math.floor(hour)).padStart(2,'0')}:${String(Math.floor(hour%1*60)).padStart(2,'0')} · ISLAND TIME`,output.width-border-10,baseline+(compact?132:80));
   }
   const blob=await new Promise<Blob>((resolve,reject)=>output.toBlob(b=>b?resolve(b):reject(new Error('图片导出失败')),'image/png'));
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`XiangMeta-${postcard?'Postcard':'Photo'}-${Date.now()}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createWalker,advanceWalker,GRAVITY,JUMP_SPEED } from '../shared/locomotion.mjs';
+import {supportedFootprint,bodyFootprint} from '../shared/navigation.mjs';
 const regions=[{position:[0,0],radius:17}];
 const input=(x=0,z=0,jump=false)=>({x,z,jump});
 function simulate(state,obstacles,seconds,velocity=input(),dt=1/60){
@@ -35,4 +36,40 @@ test('short collision substeps give matching motion at 10 and 120 frames per sec
   const slow=createWalker(),fast=createWalker();
   simulate(slow,[],1,input(5.2,0,true),.1);simulate(fast,[],1,input(5.2,0,true),1/120);
   assert.ok(Math.abs(slow.x-fast.x)<1e-6);assert.equal(slow.y,fast.y);assert.equal(slow.grounded,fast.grounded);
+});
+test('uneven paving and small steps are crossed both ways without jumping or losing ground',()=>{
+  const steps=[{x:1,z:0,halfX:.3,halfZ:2,radius:0,height:.38},{x:2.4,z:0,halfX:.3,halfZ:2,radius:0,height:.45}];
+  const p=createWalker();
+  for(const direction of [1,-1])for(let i=0;i<96;i++){
+    advanceWalker(p,input(direction*5),1/120,regions,steps);
+    assert.equal(p.grounded,true);assert.equal(p.vy,0);
+  }
+  assert.ok(Math.abs(p.x)<.01);
+  const mount=createWalker(),curb={x:1,z:0,halfX:.3,halfZ:2,radius:0,height:.52};
+  for(let i=0;i<100;i++)advanceWalker(mount,input(5),1/120,regions,[curb],{stepHeight:.55,radius:.48});
+  assert.ok(mount.x>4);assert.equal(mount.grounded,true);
+});
+test('a mount can leave its island, cross bridges and the hub, and enter a different island',()=>{
+  const world=[{position:[30,0],radius:12},{position:[0,30],radius:12}],p=createWalker(23,0,world);
+  for(const [x,z] of [[8,0],[5,5],[0,8],[0,23]]){
+    for(let i=0;i<2000&&Math.hypot(x-p.x,z-p.z)>.06;i++){
+      const d=Math.hypot(x-p.x,z-p.z),yaw=Math.atan2(x-p.x,z-p.z),footprint=bodyFootprint(yaw,.53);
+      advanceWalker(p,input((x-p.x)/d*7.5,(z-p.z)/d*7.5),1/120,world,[],{
+        radius:.48,footprint,stepHeight:.55,canEnter:(x,z)=>supportedFootprint(x,z,world,.48,footprint),
+      });
+    }
+    assert.ok(Math.hypot(x-p.x,z-p.z)<.07,`reached ${x},${z}`);assert.equal(p.grounded,true);
+  }
+  assert.equal(supportedFootprint(15,4,world,.48),false,'the sea remains outside the travel area');
+});
+test('step contact resolves immediately while the eye rises smoothly and jump physics remain independent',()=>{
+  const p=createWalker(),curb={x:1,z:0,halfX:.4,halfZ:2,radius:0,height:.42};
+  let last=p.y,largest=0;
+  for(let i=0;i<90;i++){
+    advanceWalker(p,input(1),1/120,regions,[curb]);
+    const visible=p.y+p.stepOffset;largest=Math.max(largest,visible-last);last=visible;
+    assert.equal(p.grounded,true);
+  }
+  assert.equal(p.y,.42);assert.ok(largest<.065);assert.ok(Math.abs(p.stepOffset)<.002);
+  advanceWalker(p,input(0,0,true),1/120,regions,[curb]);assert.ok(p.vy>0);assert.equal(p.grounded,false);
 });

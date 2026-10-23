@@ -20,8 +20,16 @@ export function batchStatic(root:T.Object3D){
   for(const {material,meshes,shadow} of buckets.values()){
     if(meshes.length<2)continue;
     const baked=meshes.map(m=>{
-      const geometry=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone();
-      geometry.applyMatrix4(new T.Matrix4().multiplyMatrices(inverse,m.matrixWorld));return geometry;
+      const geometry=m.geometry.index?m.geometry.toNonIndexed():m.geometry.clone(),transform=new T.Matrix4().multiplyMatrices(inverse,m.matrixWorld);
+      geometry.applyMatrix4(transform);
+      // Rendering flips front faces for mirrored objects. Preserve that winding after baking
+      // their negative scale into a batch, or reflected bases and walls become inside-out.
+      if(transform.determinant()<0)for(const attribute of Object.values(geometry.attributes)){
+        for(let i=0;i<attribute.count;i+=3)for(let k=0;k<attribute.itemSize;k++){
+          const value=attribute.getComponent(i+1,k);attribute.setComponent(i+1,k,attribute.getComponent(i+2,k));attribute.setComponent(i+2,k,value);
+        }
+      }
+      return geometry;
     });
     const geometry=mergeGeometries(baked,false);baked.forEach(g=>g.dispose());if(!geometry)continue;
     geometry.computeBoundingSphere();const batch=new T.Mesh(geometry,material);batch.name='static-batch';batch.castShadow=shadow;batch.receiveShadow=meshes[0].receiveShadow;root.add(batch);

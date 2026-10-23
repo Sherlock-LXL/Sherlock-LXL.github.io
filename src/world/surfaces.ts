@@ -6,7 +6,7 @@ export function surfaceMap(kind:Finish){
   const existing=maps.get(kind);if(existing)return existing;
   const canvas=document.createElement('canvas');canvas.width=canvas.height=512;const c=canvas.getContext('2d')!;
   let seed=71423;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-  c.fillStyle={plaster:'#f3efe6',stone:'#ebe6da',wood:'#efe5d4',metal:'#f0efe9',grass:'#dfe3c6',paving:'#efe8da',foliage:'#eef0e2',cliff:'#efe6d0',sand:'#f7eedb',snow:'#fafcff'}[kind];c.fillRect(0,0,512,512);
+  c.fillStyle={plaster:'#faf9f2',stone:'#f1f3eb',wood:'#f6eedf',metal:'#f3f6f2',grass:'#e9efdb',paving:'#f3f0e5',foliage:'#f1f6e9',cliff:'#f2eedf',sand:'#fbf2dd',snow:'#fafcff'}[kind];c.fillRect(0,0,512,512);
   // Texture strokes (cun): short dry-brush hatching that gives rock its painted grain.
   if(kind==='cliff'||kind==='stone')for(let i=0;i<(kind==='cliff'?260:120);i++){
     const x=random()*512,y=random()*512,len=10+random()*(kind==='cliff'?34:18),angle=(kind==='cliff'?-.25:.1)+(random()-.5)*.5;

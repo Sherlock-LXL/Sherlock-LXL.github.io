@@ -1,6 +1,8 @@
 import * as T from 'three';
 import {WeatherCycle} from '../../shared/weather.mjs';
 import {precipitationSamples} from '../../shared/precipitation.mjs';
+import {WeatherWonders} from './weather-wonders';
+import type {Region} from '../core/types';
 
 /** Shared draws for drifting puffs, overcast canopy, rain and snow. */
 export class Weather {
@@ -10,9 +12,11 @@ export class Weather {
   private cloudMaterial=new T.MeshStandardMaterial({color:'#fbf6ea',roughness:1,emissive:'#e9e2d0',emissiveIntensity:.3,flatShading:false});
   private pose=new T.Object3D();private time=0;private interval=0;private bases:Float32Array;private precipitationCount=7200;
   private flow={value:0};private parted=new Float32Array(48);private bank=new T.Vector3();private toward=new T.Vector3();
+  private wonders:WeatherWonders;
   get motionTime(){return this.time;}
   /** `islands` are bounding spheres of the core islands; banks part rather than paint over them. */
-  constructor(scene:T.Scene,private islands:{x:number;y:number;z:number;radius:number}[]=[]){
+  constructor(scene:T.Scene,private islands:{x:number;y:number;z:number;radius:number}[]=[],regions:Region[]=[]){
+    this.wonders=new WeatherWonders(scene,regions);
     // Auspicious-cloud lobes: a flattened, flat-bottomed puff whose underside tucks into a straight brush line.
     const puff=new T.SphereGeometry(1,28,14),vertices=puff.attributes.position;
     for(let i=0;i<vertices.count;i++){const x=vertices.getX(i),y=vertices.getY(i),z=vertices.getZ(i),s=1+.03*Math.sin(x*5+z*3);vertices.setXYZ(i,x*s,y<0?y*.18:y*s,z*s);}puff.computeVertexNormals();
@@ -57,6 +61,7 @@ export class Weather {
   }
   update(dt:number,freeze:boolean,camera:T.Vector3,day:number,reduced=false){
     const state=this.cycle.update(dt,freeze);if(!freeze)this.time+=dt*(.6+state.wind*.4)*(reduced?.45:1);
+    this.wonders.update(this.time,state,day);
     this.flow.value=this.time;this.cloudMaterial.emissiveIntensity=.08+day*.26;
     this.cloudMaterial.color.set('#6f7f99').lerp(new T.Color('#fbf5e8'),day).lerp(new T.Color('#4a5868').lerp(new T.Color('#8d9aa1'),day),state.shade*.9).lerp(new T.Color('#97a7be').lerp(new T.Color('#e6ebef'),day),state.snow*.65);
     // The canopy shader has zero alpha below .24 coverage; skip the full-screen pass then.

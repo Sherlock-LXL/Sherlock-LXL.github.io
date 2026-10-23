@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {bridgeLightSpan} from '../../shared/bridge-joints.mjs';
+import {bridgeLayout} from '../../shared/bridge-layout.mjs';
 import {kit,place,balustrade} from './vernacular';
 import {nightLight} from './hub';
 import type {Region} from '../core/types';
@@ -7,7 +8,7 @@ import type {Region} from '../core/types';
 const DECK_TOP=-.04,DECK=.36,HALF=2.8,WATER=-5.65;
 /** A flat stone causeway carried on arches. The walking plane (y=0) and corridor width are unchanged. */
 export function buildBridge(region:Region){
-  const [x,z]=region.position,distance=Math.hypot(x,z),start=8.4,end=distance-region.radius+.6,length=end-start,mid=(start+end)/2;
+  const [x,z]=region.position,{distance,length,mid,radius,centres,spring,crown}=bridgeLayout(region);
   const root=new T.Group();root.name=`bridge-${region.id}`;root.position.set(x/distance*mid,0,z/distance*mid);root.rotation.y=Math.atan2(x,z);
   const stone=kit.stone(),marble=kit.marble(),dark=kit.stoneDark();
   // Deck: paved slab with a moulded fascia.
@@ -15,12 +16,10 @@ export function buildBridge(region:Region){
   for(const s of [-1,1]){place(root,new T.BoxGeometry(.16,.2,length),marble,s*(HALF+.02),DECK_TOP-.1,0);place(root,new T.BoxGeometry(.1,.12,length),dark,s*(HALF-.02),DECK_TOP-DECK-.06,0);}
   const seams=kit.stoneDark();for(let p=-length/2+.9;p<length/2-.6;p+=1.8)place(root,new T.BoxGeometry(HALF*2-.4,.008,.035),seams,0,DECK_TOP+.002,p).castShadow=false;
   // Spandrel walls with arch openings; abutments sink into each island's cliff.
-  const abutment=1.5,pier=1.05,span=length-abutment*2,count=Math.max(1,Math.round(span/5.4)),arch=(span-pier*(count-1))/count,radius=arch/2;
-  const crown=DECK_TOP-DECK-.5,spring=crown-radius,bottom=WATER-1.4;
+  const pier=1.05,count=centres.length,bottom=WATER-1.4;
   const wall=new T.Shape();wall.moveTo(-length/2,bottom);wall.lineTo(length/2,bottom);wall.lineTo(length/2,DECK_TOP-DECK);wall.lineTo(-length/2,DECK_TOP-DECK);wall.closePath();
-  const centres:number[]=[];
   for(let i=0;i<count;i++){
-    const c=-span/2+radius+i*(arch+pier);centres.push(c);
+    const c=centres[i];
     const hole=new T.Path();hole.moveTo(c-radius,bottom+.4);hole.lineTo(c-radius,spring);hole.absarc(c,spring,radius,Math.PI,0,true);hole.lineTo(c+radius,bottom+.4);hole.closePath();wall.holes.push(hole);
   }
   const wallGeometry=new T.ExtrudeGeometry(wall,{depth:.5,bevelEnabled:false,curveSegments:24});wallGeometry.rotateY(Math.PI/2);

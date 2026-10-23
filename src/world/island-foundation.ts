@@ -7,7 +7,7 @@ const smooth=(a:number,b:number,x:number)=>{const t=Math.max(0,Math.min(1,(x-a)/
 export const shoreRadius=(radius:number)=>radius*1.085+.35;
 /** [height, radial scale, angular relief in metres]. Alternating faces and shelves read as strata. */
 const profile:[number,number,number][]=[[-.2,1,.02],[-.5,1.003,.1],[-.9,.998,.18],[-1.12,1.03,.32],[-1.65,1.022,.34],[-2.15,1.014,.4],[-2.38,1.05,.5],[-2.95,1.042,.52],[-3.5,1.035,.56],[-3.72,1.068,.6],[-4.3,1.062,.62],[-4.95,1.07,.55],[-5.45,1.082,.45],[-5.9,1.1,.5],[-6.6,1.12,.55]];
-const tones={moss:new T.Color('#7c9f72'),mossDeep:new T.Color('#55806a'),azurite:new T.Color('#5d8590'),ochre:new T.Color('#c19a64'),umber:new T.Color('#8d6f4d'),wet:new T.Color('#4a5b5c'),sand:new T.Color('#d8c49a')};
+const tones={moss:new T.Color('#9abb8b'),mossDeep:new T.Color('#76a48e'),azurite:new T.Color('#81aab2'),ochre:new T.Color('#cbb997'),umber:new T.Color('#a5967c'),wet:new T.Color('#668988'),sand:new T.Color('#e3d2ab')};
 
 /** Sculpt only below the walking plane; the established terrain and collision stay exact.
  * `openings` are local angles (atan2(z,x)) with half-widths where bridges and piers need a sheer face. */

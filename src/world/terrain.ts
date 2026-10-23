@@ -25,7 +25,7 @@ export function groundTexture(radius:number,color:string,exhibits:Exhibit[],anis
   // Layered pigment washes: soft-edged pools of three related tones.
   for(let i=0;i<170;i++){
     const a=random()*Math.PI*2,d=Math.sqrt(random())*radius,x=Math.cos(a)*d,z=Math.sin(a)*d,r=1.2+random()*4.5,wash=ctx.createRadialGradient(x,z,0,x,z,r);
-    const tone=new T.Color(g.washes[i%3]);wash.addColorStop(0,`rgba(${tone.r*255|0},${tone.g*255|0},${tone.b*255|0},${.16+random()*.16})`);wash.addColorStop(1,`rgba(${tone.r*255|0},${tone.g*255|0},${tone.b*255|0},0)`);
+    const tone=new T.Color(g.washes[i%3]).getRGB({r:0,g:0,b:0},T.SRGBColorSpace);wash.addColorStop(0,`rgba(${tone.r*255|0},${tone.g*255|0},${tone.b*255|0},${.16+random()*.16})`);wash.addColorStop(1,`rgba(${tone.r*255|0},${tone.g*255|0},${tone.b*255|0},0)`);
     ctx.fillStyle=wash;ctx.beginPath();ctx.ellipse(x,z,r*1.4,r,random()*3,0,Math.PI*2);ctx.fill();
   }
   if(season==='summer'){const beach=ctx.createRadialGradient(0,0,radius-5.5,0,0,radius);beach.addColorStop(0,'rgba(219,201,152,0)');beach.addColorStop(.55,'rgba(219,201,152,.92)');beach.addColorStop(1,'#d9c393');ctx.fillStyle=beach;ctx.fillRect(-radius,-radius,radius*2,radius*2);}
@@ -40,7 +40,7 @@ export function groundTexture(radius:number,color:string,exhibits:Exhibit[],anis
     ctx.globalAlpha=1;
   }
   // A darker band at the rim seats every island on its cliff.
-  const rim=new T.Color(g.rim),rimWash=ctx.createRadialGradient(0,0,radius-2.2,0,0,radius);rimWash.addColorStop(0,`rgba(${rim.r*255|0},${rim.g*255|0},${rim.b*255|0},0)`);rimWash.addColorStop(1,`rgba(${rim.r*255|0},${rim.g*255|0},${rim.b*255|0},.75)`);ctx.fillStyle=rimWash;ctx.fillRect(-radius,-radius,radius*2,radius*2);
+  const rim=new T.Color(g.rim).getRGB({r:0,g:0,b:0},T.SRGBColorSpace),rimWash=ctx.createRadialGradient(0,0,radius-2.2,0,0,radius);rimWash.addColorStop(0,`rgba(${rim.r*255|0},${rim.g*255|0},${rim.b*255|0},0)`);rimWash.addColorStop(1,`rgba(${rim.r*255|0},${rim.g*255|0},${rim.b*255|0},.75)`);ctx.fillStyle=rimWash;ctx.fillRect(-radius,-radius,radius*2,radius*2);
   // Paths: a dark kerb first, then stone, then joints inked only where stone exists.
   const paths=document.createElement('canvas');paths.width=paths.height=2048;
   const p=paths.getContext('2d')!;p.translate(1024,1024);p.scale(scale,scale);p.lineCap=p.lineJoin='round';

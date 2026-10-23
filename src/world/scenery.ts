@@ -85,9 +85,11 @@ function flowerBed(g:T.Group,color:string){
 function restCorner(g:T.Group,x:number,flowers:FlowerPoint[]){
   for(const leg of [-.8,.8])place(g,new T.BoxGeometry(.5,.47,.58),kit.stone(),x+leg,.235,9);
   place(g,new T.BoxGeometry(2.4,.1,.62),kit.timberLight(),x,.52,9);
-  for(let i=0;i<10;i++){const spindle=place(g,new T.BoxGeometry(.035,.42,.035),kit.timber(),x-1.08+i*.24,.78,9.33);spindle.rotation.x=-.25;}
-  place(g,new T.BoxGeometry(2.4,.07,.08),kit.timber(),x,.99,9.42);
-  for(const side of [-1,1])place(g,new T.BoxGeometry(.08,.46,.08),kit.timber(),x+side*1.16,.78,9.36).rotation.x=-.25;
+  // Back posts, spindles and cap share a seat-edge pivot and lean together.
+  const back=new T.Group();back.name='bench-back';back.position.set(x,.54,9.27);back.rotation.x=.25;g.add(back);
+  for(let i=0;i<10;i++)place(back,new T.BoxGeometry(.035,.44,.035),kit.timber(),-1.08+i*.24,.22,0);
+  place(back,new T.BoxGeometry(2.4,.08,.09),kit.timber(),0,.44,0);
+  for(const side of [-1,1])place(back,new T.BoxGeometry(.08,.54,.08),kit.timber(),side*1.16,.20,0);
   const planter=place(g,new T.BoxGeometry(1.6,.5,1.2),kit.stone(),x,.25,11);planter.castShadow=false;
   place(g,new T.BoxGeometry(1.72,.09,1.32),kit.marble(),x,.52,11);place(g,new T.BoxGeometry(1.45,.04,1.05),kit.soil(),x,.57,11);
   for(let n=0;n<18;n++)flowers.push({x:x+Math.sin(n*2.4)*(.15+Math.sqrt(n)*.12),y:.60,z:11+Math.cos(n*2.4)*.4});
@@ -99,7 +101,11 @@ function restCorner(g:T.Group,x:number,flowers:FlowerPoint[]){
 export function dressRegion(region:Region,exhibits:Exhibit[],obstacles:Obstacle[]){
   const g=new T.Group();const [rx,rz]=region.position;g.position.set(rx,0,rz);
   const gardenFlowers:FlowerPoint[]=[];
-  const block=(x:number,z:number,radius:number,height=Infinity)=>obstacles.push({x:rx+x,z:rz+z,radius,height});
+  // Ground-only props used to have infinitely tall blockers. Match their sculpted bounds
+  // so flight can pass above trees, lanterns and entrance arches.
+  const block=(x:number,z:number,radius:number,height?:number)=>obstacles.push({
+    x:rx+x,z:rz+z,radius,height:height??new T.Box3().setFromObject(g.children.at(-1)!).max.y,
+  });
   const onPath=(x:number,z:number,margin=0)=>onRegionRoute(x,z,region,exhibits,margin);
   const nearDiscovery=(x:number,z:number)=>!!region.discovery&&Math.hypot(x-region.discovery.position[0],z-region.discovery.position[1])<3.1;
   if(region.season!=='winter'&&!onPath(-5,11,1.5)){flowerBed(g,region.color);block(-5,11,1.25,.85);}
@@ -114,7 +120,7 @@ export function dressRegion(region:Region,exhibits:Exhibit[],obstacles:Obstacle[
     const distance=Math.hypot(rx,rz),gx=-rx/distance*(region.radius-2),gz=-rz/distance*(region.radius-2),rotation=Math.atan2(-rx,-rz);
     const arch=paifang(g,6.2,4.2,{x:gx,z:gz,rotation,tiles:region.season==='winter'?kit.tileSnow():kit.tile()});
     const entrance=sign(arch.group,region.title,region.scenery==='laboratory'?'观察 · 建模 · 探索':'',region.color,3,.62);entrance.position.set(0,arch.plaqueY,0);
-    for(const x of [-3.1,3.1])for(const z of [0,-.58,.58]){const p=new T.Vector3(x,0,z).applyAxisAngle(new T.Vector3(0,1,0),rotation).add(new T.Vector3(gx,0,gz));block(p.x,p.z,z?.26:.3,z?1:Infinity);}
+    for(const x of [-3.1,3.1])for(const z of [0,-.58,.58]){const p=new T.Vector3(x,0,z).applyAxisAngle(new T.Vector3(0,1,0),rotation).add(new T.Vector3(gx,0,gz));block(p.x,p.z,z?.26:.3,z?1:undefined);}
   }
   const fence=region.season==='winter'?'stone':region.season==='summer'?'bamboo':'timber';
   // Perimeter planting, lanterns and fence runs leave the radial bridges open.

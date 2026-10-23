@@ -11,7 +11,7 @@ import type {Region,Exhibit} from '../core/types';
 export function mountainSurface(region:Region){
   const positions:number[]=[],colors:number[]=[],uvs:number[]=[],indices:number[]=[],rings=180,sectors=256;
   // Blue-green landscape: ochre foothills, malachite slopes, azurite ridges.
-  const low=new T.Color('#86a46a'),mid=new T.Color(region.season?seasonalColors[region.season].ground:'#7fa56f'),high=new T.Color('#4f8a86'),crest=new T.Color('#3f6f8f');
+  const low=new T.Color('#a8c78d'),mid=new T.Color(region.season?seasonalColors[region.season].ground:'#98bc89'),high=new T.Color('#77afa1'),crest=new T.Color('#609eaf');
   for(let ring=0;ring<=rings;ring++)for(let j=0;j<=sectors;j++){
     const a=j/sectors*Math.PI*2,r=ring/rings*region.radius,x=Math.cos(a)*r,z=Math.sin(a)*r,y=regionHeight(x,z,region);
     positions.push(x,y,z);uvs.push(x/2.5,z/2.5);
@@ -34,7 +34,7 @@ export function mountainSurface(region:Region){
   ctx.fillStyle='#ff0000';for(const p of landings(region)){ctx.beginPath();ctx.arc(p.x,p.z,p.radius,0,Math.PI*2);ctx.fill();}
   const roadMask=new T.CanvasTexture(canvas);roadMask.anisotropy=4;
   grass.addEventListener('dispose',()=>roadMask.dispose());
-  const color=geometry.attributes.color,normal=geometry.attributes.normal,ochre=new T.Color('#b48c58');for(let i=0;i<color.count;i++){const t=T.MathUtils.clamp((1-normal.getY(i)-.1)*3,0,1),c=new T.Color().fromBufferAttribute(color,i).lerp(ochre,t*.85);color.setXYZ(i,c.r,c.g,c.b);}
+  const color=geometry.attributes.color,normal=geometry.attributes.normal,ochre=new T.Color('#c1b497');for(let i=0;i<color.count;i++){const t=T.MathUtils.clamp((1-normal.getY(i)-.1)*3,0,1),c=new T.Color().fromBufferAttribute(color,i).lerp(ochre,t*.72);color.setXYZ(i,c.r,c.g,c.b);}
   grass.onBeforeCompile=shader=>{
     shader.fragmentShader='#undef USE_ENVMAP\n'+shader.fragmentShader;
     shader.uniforms.rockTexture={value:rock};
@@ -49,7 +49,7 @@ export function mountainSurface(region:Region){
         +texture2D(rockTexture,terrainPosition.xy/2.15).rgb*weights.z
         +texture2D(rockTexture,terrainPosition.xz/2.15).rgb*weights.y;
       float macro=.5+.5*sin(terrainPosition.x*.23+sin(terrainPosition.z*.17)*1.6);
-      rockColor*=mix(vec3(.86,.8,.68),vec3(1.04,.96,.84),macro);
+      rockColor*=mix(vec3(.88,.92,.87),vec3(1.04,1.02,.93),macro);
       diffuseColor.rgb*=mix(texture2D(map,vMapUv).rgb,rockColor,smoothstep(0.10,0.34,1.0-abs(normalize(terrainNormal).y)));
       float cliff=smoothstep(0.12,0.4,1.0-abs(normalize(terrainNormal).y));
       // Hemp-fibre texture strokes: long parallel ink lines that follow the strata of every cliff.

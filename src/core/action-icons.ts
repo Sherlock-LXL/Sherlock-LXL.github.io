@@ -1,4 +1,8 @@
 const paths={
+  menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+  help:'<path d="M8.5 8a3.5 3.5 0 1 1 5.3 3c-1.3.8-1.8 1.2-1.8 3"/><circle cx="12" cy="18.5" r=".8" fill="currentColor" stroke="none"/>',
+  locate:'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.6"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>',
+  jump:'<path d="M12 19V5m-5 5 5-5 5 5"/>',
   arrow:'<path d="M6 18 18 6M6 6h12v12"/>',
   visit:'<path d="M12 21s6-5.8 6-12a6 6 0 0 0-12 0c0 6.2 6 12 6 12Z"/><circle cx="12" cy="9" r="2.1"/><path d="M4 19H2m18 0h2"/>',
   favorite:'<path d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1 6.2-5.6-3-5.6 3 1-6.2L2.9 9.6l6.3-.9Z"/>',

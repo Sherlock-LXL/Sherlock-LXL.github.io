@@ -1,8 +1,10 @@
 .web-loading{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;background:radial-gradient(ellipse at 50% 42%,#f8f2e5,#ece2cd 70%,#e2d6bc);color:#2b2824;font:14px/1.8 "Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC",Georgia,serif;padding:35px}
 .web-loading::before{content:'';position:absolute;inset:18px;border:1px solid rgba(58,48,38,.28);box-shadow:inset 0 0 0 6px rgba(246,240,227,.6),inset 0 0 0 7px rgba(58,48,38,.14);pointer-events:none}
 .web-loading::after{content:'';position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(180deg,transparent,rgba(79,138,128,.08)),radial-gradient(ellipse 60% 40% at 30% 100%,rgba(63,111,143,.16),transparent 70%),radial-gradient(ellipse 50% 32% at 75% 100%,rgba(79,154,128,.14),transparent 70%);pointer-events:none}
-.web-loading .loading-symbol{display:grid;place-items:center;width:74px;height:74px;font-size:44px;color:#f7efdf;background:#a34a35;border-radius:5px;box-shadow:inset 0 0 0 3px #f2e3cc,inset 0 0 0 4px #a34a35;transform:rotate(-3deg)}
-.xiang-logo{position:relative;isolation:isolate;overflow:hidden;transform:rotate(-2deg)}.xiang-logo::before{content:'';position:absolute;inset:4px;border:1px solid rgba(247,239,223,.48);pointer-events:none}.xiang-logo::after{content:'';position:absolute;right:5px;bottom:5px;width:10px;height:4px;border-block:1px solid rgba(53,95,122,.72);opacity:.78;pointer-events:none}
+.web-loading .loading-symbol{display:grid;place-items:center;width:88px;height:88px;background:transparent;box-shadow:none;transform:none}
+.xiang-logo{display:inline-grid;place-items:center;flex-shrink:0}
+.brand-mark{display:block;width:100%;height:100%;overflow:visible}
+.xiang-logo::before,.xiang-logo::after{content:none}
 .web-loading h1{font-size:32px;font-weight:600;letter-spacing:6px;margin:6px 0 0}
 .web-loading p{max-width:480px;color:#5d5447;margin:0;letter-spacing:1px}
 .web-loading progress{appearance:none;-webkit-appearance:none;width:min(320px,70vw);height:3px;border:0;background:rgba(58,48,38,.14);accent-color:#a34a35}

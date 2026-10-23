@@ -121,3 +121,8 @@ summary::-webkit-details-marker{display:none}summary span,.card-detail span{font
   .site-footer{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+.wordmark .xiang-logo{display:inline-grid;place-items:center;width:38px;height:38px;padding:0;background:transparent;box-shadow:none;border:0;transform:none}
+.brand-mark{display:block;width:100%;height:100%;overflow:visible}
+.atlas-core .xiang-logo-glyph{display:block;width:58px;height:58px}
+.atlas-core .xiang-logo-glyph::after,.wordmark .xiang-logo::before,.wordmark .xiang-logo::after{content:none}
+.atlas-core{background:#f0f6e9;color:#456f70}
