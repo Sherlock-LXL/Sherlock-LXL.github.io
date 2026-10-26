@@ -55,7 +55,9 @@ export function gameVehicle(kind:string,rider=true){
     box(body,.92,.23,.67,kit.timberLight(),0,.46,.76);
     for(const x of [-.32,.32]){box(body,.44,.16,.52,kit.ink(),x,.45,-.55);box(body,.44,.42,.12,kit.paper(),x,.61,-.83);}
     const shield=box(body,1.0,.42,.07,kit.celadon(),0,.72,.33);shield.rotation.x=-.32;
-    box(body,.28,.58,.25,kit.ink(),0,.15,-1.55);
+    // The motor's upper housing stays above the wake; only its lower shaft enters water.
+    box(body,.28,.42,.25,kit.ink(),0,.34,-1.55);
+    box(body,.13,.35,.12,kit.bronze(),0,.03,-1.55);
     rod(body,[-.52,.50,1.15],[.52,.50,1.15],.025,kit.bronze());
     const wheel=mesh(body,new T.TorusGeometry(.13,.025,6,16),kit.bronze(),-.28,.70,.04);wheel.rotation.x=-.5;
   }else{
@@ -91,6 +93,7 @@ export function gameVehicle(kind:string,rider=true){
   }
   return {root,animate:(speed:number,bank:number,pitch:number,dt:number,steer=0)=>{
     body.rotation.set(-pitch,0,kind==='spring'?0:bank,'YXZ');
+    if(kind==='summer')body.position.y=.04+1.65*Math.sin(Math.max(0,pitch))+.76*Math.abs(Math.sin(bank));
     if(bikeFrame)bikeFrame.rotation.z=T.MathUtils.clamp(bank,-.20,.20);
     if(front)front.rotation.y=steer*.35;
     if(pilot&&kind==='spring')pilot.rotation.z=bank*.15;

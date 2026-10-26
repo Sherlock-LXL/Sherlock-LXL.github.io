@@ -66,7 +66,7 @@ async function boot(){
       <div class="view-badge"><span class="status-dot"></span><span id="view-name">第一人称探索</span><button id="capture-look">点击进入环顾</button></div>
       <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">${actionIcon('locate')}</button></div>
       <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>${diagonalArrow}</span></button>
-      ${touchExperience?`<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动摇杆移动"><div class="touch-joystick-knob"></div><small>移动</small></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃">${actionIcon('jump')}<small>跳跃</small></button></div>`:''}
+      ${touchExperience?`<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动移动，拉到外圈奔跑"><div class="touch-joystick-ring"><small>移动 · 外圈奔跑</small></div><div class="touch-joystick-knob"></div></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃">${actionIcon('jump')}<small>跳跃</small></button></div>`:''}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
       <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-78 -78 156 156" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="77"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+9}">${escape(r.title)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
       <div class="toast" role="status" aria-live="polite" hidden></div>
@@ -243,12 +243,16 @@ async function boot(){
       const joystick=$('#touch-joystick'),knob=$('.touch-joystick-knob');let joystickPointer:number|null=null;
       const moveJoystick=(event:PointerEvent)=>{
         if(event.pointerId!==joystickPointer)return;event.preventDefault();event.stopPropagation();
-        const box=joystick.getBoundingClientRect(),limit=38,dx=event.clientX-(box.left+box.width/2),dy=event.clientY-(box.top+box.height/2),length=Math.hypot(dx,dy),scale=length>limit?limit/length:1,x=dx*scale,y=dy*scale;
-        knob.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;world?.setTouchMove(x/limit,-y/limit);
+        const box=joystick.getBoundingClientRect(),limit=59,dx=event.clientX-(box.left+box.width/2),dy=event.clientY-(box.top+box.height/2),length=Math.hypot(dx,dy),scale=length>limit?limit/length:1,x=dx*scale,y=dy*scale;
+        const sprint=length>(joystick.classList.contains('sprinting')?46:51),strength=Math.min(1,length/38),normal=length||1;
+        knob.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;joystick.classList.toggle('sprinting',sprint);
+        world?.setTouchMove(dx/normal*strength,-dy/normal*strength,sprint);
       };
-      const releaseJoystick=(event:PointerEvent)=>{if(event.pointerId!==joystickPointer)return;event.preventDefault();event.stopPropagation();joystickPointer=null;knob.style.transform='translate(0,0)';world?.setTouchMove(0,0);};
+      const resetJoystick=()=>{joystickPointer=null;knob.style.transform='translate(0,0)';joystick.classList.remove('sprinting');world?.setTouchMove(0,0);};
+      const releaseJoystick=(event:PointerEvent)=>{if(event.pointerId!==joystickPointer)return;event.preventDefault();event.stopPropagation();resetJoystick();};
       joystick.addEventListener('pointerdown',event=>{if(joystickPointer!==null)return;joystickPointer=event.pointerId;try{joystick.setPointerCapture(event.pointerId);}catch{}moveJoystick(event);});
       joystick.addEventListener('pointermove',moveJoystick);joystick.addEventListener('pointerup',releaseJoystick);joystick.addEventListener('pointercancel',releaseJoystick);joystick.addEventListener('lostpointercapture',releaseJoystick);
+      window.addEventListener('blur',resetJoystick);document.addEventListener('visibilitychange',()=>{if(document.hidden)resetJoystick();});
       $('#touch-jump').addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();world?.requestJump();});
     }
   }catch(error){

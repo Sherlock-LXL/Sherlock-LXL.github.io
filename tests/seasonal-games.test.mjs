@@ -2,9 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {makeCourse,createRace,advanceRace,raceGrade,resetRaceVehicle,createVehicle,advanceVehicle,seaClear,readBest,saveBest,formatTime} from '../shared/seasonal-games.mjs';
-import {Arcade,mergeLine,blockInterval,mergeDuration,arcadeScoreKey} from '../shared/arcade.mjs';
+import {Arcade,mergeLine,blockInterval,mergeDuration,arcadeScoreKey,pairsHealth} from '../shared/arcade.mjs';
 import {seaPath,waterClear,waterContact} from '../shared/game-routes.mjs';
-import {guidanceWindow,gateVisibility} from '../shared/race-guidance.mjs';
+import {guidanceWindow,gateVisibility,fadeGate} from '../shared/race-guidance.mjs';
+import {flightFloor} from '../shared/flight-contact.mjs';
+import {distantIslands} from '../shared/distant-islands.mjs';
+import {supportedFootprint} from '../shared/navigation.mjs';
 import {FallingMerge,orbRadii} from '../shared/falling-merge.mjs';
 import {bikeBody,bikeContact,bikeMotion,bikeObstruction} from '../shared/bike-contact.mjs';
 import {seededRandom} from '../shared/living-catalog.mjs';
@@ -85,7 +88,7 @@ test('snake wraps at every edge, rejects reversal and still collides with itself
   const pairs=new Arcade('pairs',seededRandom(9));let a=0,b=pairs.cards.findIndex(v=>v!==pairs.cards[0]);pairs.flip(a);pairs.flip(b);pairs.flip(3);assert.equal(pairs.open.length,2);
   for(let i=0;i<9;i++)pairs.update(.1);assert.equal(pairs.open.length,0);
   for(let value=0;value<8;value++){pairs.cards.forEach((v,i)=>{if(v===value)pairs.flip(i);});}
-  assert.equal(pairs.won,true);assert.equal(pairs.matched.length,16);assert.ok(pairs.score>=800);
+  assert.equal(pairs.over,false);assert.equal(pairs.boards,1);assert.equal(pairs.matched.length,16);assert.equal(pairs.score,1000);
 });
 test('endless breakout speeds up, replenishes descending rows and ends only on missed balls or red-line contact',()=>{
   const g=new Arcade('bricks');g.serving=false;g.ball={x:.5,y:.85,vx:0,vy:.6};g.update(.05);assert.ok(g.ball.vy<0);
@@ -106,15 +109,19 @@ test('2048 continues after the milestone, tracks tile motion and drains fast buf
   assert.equal(g.tiles.length,2);assert.equal(g.merges.length,1);assert.ok(g.newTile);g.action('down');g.action('right');
   for(let i=0;i<6;i++)g.update(.1);assert.equal(g.mergeAge,mergeDuration);assert.equal(g.mergeQueue.length,0);assert.ok(g.moves>=2);
 });
-test('every valid pair-card reveal costs points, extra attempts lower the final record, and old scores stay separate',()=>{
+test('pairs lose health only on mismatches, retain earned points and continue on freshly shuffled boards',()=>{
   const finish=extra=>{
     const g=new Arcade('pairs',seededRandom(9));const different=g.cards.findIndex(v=>v!==g.cards[0]);
     for(let i=0;i<extra;i++){g.flip(0);g.flip(different);for(let j=0;j<9;j++)g.update(.1);}
     for(let n=0;n<8;n++)g.cards.forEach((v,i)=>{if(v===n)g.flip(i);});return g;
   };
-  const a=finish(0),b=finish(4);assert.equal(a.score-b.score,40);
-  const g=new Arcade('pairs');g.flip(0);assert.equal(g.score,195);g.flip(0);assert.equal(g.score,195);
-  assert.equal(arcadeScoreKey('pairs'),'arcade.pairs.v2');assert.notEqual(arcadeScoreKey('bricks'),'arcade.bricks');
+  const a=finish(0),b=finish(4);assert.equal(a.score,b.score);assert.equal(a.health-b.health,4);
+  const cards=a.cards.slice();for(let i=0;i<7;i++)a.update(.1);
+  assert.equal(a.matched.length,0);assert.notDeepEqual(a.cards,cards);assert.equal(a.score,1000);assert.equal(a.health,pairsHealth);
+  for(let n=0;n<8;n++)a.cards.forEach((v,i)=>{if(v===n)a.flip(i);});assert.equal(a.boards,2);assert.equal(a.score,2000);
+  const g=new Arcade('pairs');g.flip(0);g.flip(0);assert.equal(g.score,0);assert.equal(g.health,pairsHealth);
+  const wrong=g.cards.findIndex(v=>v!==g.cards[0]);g.health=1;g.flip(wrong);assert.equal(g.health,0);assert.equal(g.over,true);
+  assert.equal(arcadeScoreKey('pairs'),'arcade.pairs.v3');assert.equal(arcadeScoreKey('bricks'),'arcade.bricks.v4');
 });
 test('large sea course has safe bridge crossings and rejects stone piers',()=>{
   const path=seaPath();assert.ok(path.length>1000);assert.ok(waterClear(-10.7,-13.4,regions,Math.atan2(7.04,-5.64)));
@@ -222,7 +229,7 @@ test('guidance shows imminent gates and selects the current branch at a coincide
   ];
   const race={next:1,course:{path,gateIndices}},window=guidanceWindow(race,{x:1,y:0,z:0});
   assert.ok(window.some(p=>p.z===1));assert.ok(!window.some(p=>p.z===-1));
-  assert.deepEqual(Array.from({length:6},(_,i)=>gateVisibility(5,i,6)),[.48,.10,0,0,0,1]);
+  assert.deepEqual(Array.from({length:6},(_,i)=>gateVisibility(5,i,6)),[.60,.28,0,0,0,1]);
 });
 test('boats slide along shore contact and reverse promptly without growing a trapped collision box',()=>{
   for(const yaw of [-Math.PI/2,-Math.PI/2+.3]){
@@ -235,12 +242,15 @@ test('boats slide along shore contact and reverse promptly without growing a tra
     assert.ok(waterContact(s.x,s.z,regions,s.yaw).depth<.001);
   }
 });
-test('breakout replenishes exactly once on the last brick of a row and resets its automatic progress',()=>{
+test('clearing a brick row preserves every remaining position and existing descent progress',()=>{
   const g=new Arcade('bricks'),rows=g.rows;g.rowTravel=.032;
+  const before=g.bricks.filter(b=>b.row!==0).map(b=>({...b})),speed=g.ballSpeed,descent=g.rowSpeed;
   for(let i=0;i<7;i++)g.hitBrick(g.bricks.findIndex(b=>b.row===0));
   assert.equal(g.rows,rows);g.hitBrick(g.bricks.findIndex(b=>b.row===0));
-  assert.equal(g.rows,rows+1);assert.equal(g.rowTravel,0);assert.equal(g.bricks.filter(b=>b.row===rows).length,7);
-  assert.ok(g.bricks.filter(b=>b.row!==rows).every(b=>b.y>=.148));
+  assert.equal(g.rows,rows);assert.equal(g.rowTravel,.032);assert.deepEqual(g.bricks,before);
+  assert.equal(g.clearedRows,1);assert.equal(g.ballSpeed,speed);assert.equal(g.rowSpeed,descent);
+  g.addBrickRow();assert.equal(g.rows,rows+1);assert.equal(g.bricks.filter(b=>b.row===rows).length,7);
+  assert.deepEqual(g.bricks.filter(b=>b.row!==rows),before);assert.equal(g.addBrickRow(),false);
 });
 test('falling balls merge in chains, respect drop cooldown and settle without tunneling',()=>{
   const g=new FallingMerge(()=>0);assert.equal(g.drop(),true);assert.equal(g.drop(),false);
@@ -273,4 +283,74 @@ test('the largest falling circles remain stable and a pile above the limit ends 
   for(let i=0;i<3;i++){const b=g.make(orbRadii.length-1,.5,.94-r-i*r*2);b.age=2;g.balls.push(b);}
   assert.equal(g.over,false);for(let i=0;i<400&&!g.over;i++)g.update(1/120);
   assert.equal(g.over,true);assert.ok(g.balls.every(b=>Number.isFinite(b.y)));
+});
+test('free flight stays on the ground without teleporting and can lift away at every frame rate',()=>{
+  for(const dt of [1/120,1/30,.1]){
+    const world=[{position:[70,30],radius:100}],s=createVehicle('autumn',{x:70,y:.2,z:30,yaw:0});
+    for(let i=0;i<1/dt;i++)advanceVehicle(s,{throttle:1},dt,world,[]);
+    assert.equal(s.y,.12);const start={...s};
+    for(let i=0;i<1/dt;i++)advanceVehicle(s,{throttle:-1},dt,world,[]);
+    assert.ok(s.y>start.y+3);assert.ok(Math.hypot(s.x-start.x,s.z-start.z)<20);
+    const wall={x:s.x,z:s.z+3,radius:0,halfX:5,halfZ:.1,base:0,height:9};
+    for(let i=0;i<.5/dt;i++)advanceVehicle(s,{throttle:1},dt,world,[wall]);
+    assert.ok(s.z+.55<=wall.z-.1+.0001);const y=s.y;
+    for(let i=0;i<2/dt;i++)advanceVehicle(s,{throttle:-1},dt,world,[wall]);
+    assert.ok(s.y>y+4,'contact never disables lift');
+  }
+});
+test('distant islands are solid for sea and air travel without enlarging the walkable map',()=>{
+  for(const island of distantIslands){
+    assert.equal(flightFloor(island.x,island.z,regions),-3.79);
+    assert.equal(waterClear(island.x,island.z,regions),false);
+    const s=createVehicle('autumn',{x:island.x,y:-3.78,z:island.z+island.rz*.7,yaw:Math.PI});
+    for(let i=0;i<40;i++)advanceVehicle(s,{throttle:1},1/120,regions,[]);
+    assert.ok(s.y>=-3.67);const y=s.y;
+    for(let i=0;i<60;i++)advanceVehicle(s,{throttle:-1},1/120,regions,[]);
+    assert.ok(s.y>y+1);
+  }
+});
+test('race rings fit on supported land and the guidance slides with continuous arc phase',()=>{
+  const c=makeCourse('spring',regions);
+  assert.ok(c.gates.every(g=>supportedFootprint(g.x,g.z,regions,1.85)));
+  const race=createRace(makeCourse('autumn',regions)),i=race.course.gateIndices[1]-3,p=race.course.path[i],q=race.course.path[i+1];
+  const a=guidanceWindow(race,p),b=guidanceWindow(race,{x:p.x+(q.x-p.x)*.01,y:p.y+(q.y-p.y)*.01,z:p.z+(q.z-p.z)*.01});
+  assert.ok(a.length>40);assert.ok(Math.abs(a[0].arc-b[0].arc)<.02);assert.notEqual(a[0].arc,b[0].arc);
+  assert.ok(fadeGate(1,0,1/60)>0&&fadeGate(1,0,1/60)<1);let opacity=1;
+  for(let i=0;i<12;i++)opacity=fadeGate(opacity,0,1/60);assert.ok(opacity<.01);
+});
+test('breakout ball pace is independent of clears; descent accelerates smoothly with bounded limits',()=>{
+  const a=new Arcade('bricks'),b=new Arcade('bricks');a.hits=500;a.clearedRows=100;
+  for(const t of [0,30,120,600,12000]){a.activeTime=b.activeTime=t;assert.equal(a.ballSpeed,b.ballSpeed);assert.ok(a.ballSpeed<=1.32);}
+  b.activeTime=12000;assert.equal(b.descentTarget,.0048);
+  a.serving=false;a.ball={x:.5,y:.7,vx:.6,vy:0};const before=a.rowSpeed;a.update(.1);
+  assert.ok(a.rowSpeed>before&&a.rowSpeed-before<.00015);
+  assert.ok(a.descentTarget<.0102);assert.ok(a.ballSpeed<=1.32);
+});
+test('a fresh small ball visibly pushes the largest floor ball, consistently at 10–120 Hz',()=>{
+  const positions=[];
+  for(const dt of [1/120,1/30,.1]){
+    const g=new FallingMerge(()=>0),big=g.make(8,.5,.94-orbRadii[8]);big.age=2;big.wait=0;g.balls.push(big);g.aim=.38;g.drop();
+    for(let i=0;i<1.4/dt;i++)g.update(dt);
+    assert.ok(big.x>.56,'off-centre impact moves the large ball at least 29 canvas pixels');
+    assert.ok(big.y+big.r<=.940001);assert.ok(g.balls.every(b=>Number.isFinite(b.vx)&&Number.isFinite(b.vy)));
+    positions.push(big.x);
+  }
+  assert.ok(Math.max(...positions)-Math.min(...positions)<.001);
+});
+test('optimal memory play averages about five complete pair boards before health runs out',()=>{
+  let completed=0;
+  for(let trial=0;trial<1500;trial++){
+    const g=new Arcade('pairs',seededRandom(7000+trial)),seen=new Map();
+    while(!g.over){
+      if(g.boardDelay){for(let i=0;i<7;i++)g.update(.1);seen.clear();}
+      let pair=null;
+      for(const [i,v] of seen)for(const [j,w] of seen)if(i!==j&&v===w)pair=[i,j];
+      const a=pair?.[0]??g.cards.findIndex((_,i)=>!g.matched.includes(i)&&!seen.has(i)),v=g.cards[a];
+      const b=pair?.[1]??[...seen].find(([,w])=>w===v)?.[0]??g.cards.findIndex((_,i)=>i!==a&&!g.matched.includes(i)&&!seen.has(i));
+      g.flip(a);g.flip(b);
+      if(v===g.cards[b]){seen.delete(a);seen.delete(b);}else{seen.set(a,v);seen.set(b,g.cards[b]);for(let i=0;i<9;i++)g.update(.1);}
+    }
+    completed+=g.boards;
+  }
+  const mean=completed/1500;assert.ok(mean>4.8&&mean<5.4,`mean completed boards: ${mean}`);
 });

@@ -5,11 +5,11 @@ import {gameCatalog,makeCourse,createRace,advanceRace,raceGrade,readBest,saveBes
 import {arcadeCatalog,arcadeScoreKey} from '../../shared/arcade.mjs';
 import {LivingNavigation} from '../../shared/living-navigation.mjs';
 import {seededRandom} from '../../shared/living-catalog.mjs';
-import {groundHeight} from '../../shared/terrain-height.mjs';
-import {onGround,overlaps} from '../../shared/navigation.mjs';
+import {overlaps} from '../../shared/navigation.mjs';
+import {flightFloor} from '../../shared/flight-contact.mjs';
 import {gameStall,gameVehicle,releaseGameObject} from './game-models';
 import {batchStatic} from './optimizer';
-import {gateVisibility,guidanceWindow} from '../../shared/race-guidance.mjs';
+import {gateVisibility,guidanceWindow,fadeGate} from '../../shared/race-guidance.mjs';
 import {RouteGuide} from './route-guide';
 import type {ArcadeRoom} from './arcade-room';
 import '../games.css';
@@ -244,7 +244,6 @@ export class SeasonalGames{
     if(canMove){
       if(race.countdown<=0)advanceVehicle(s,input,dt,this.data.regions,[...this.navigation.nearby(s.x,s.z,7),...(s.kind==='spring'?this.hooks.dynamic():[])],this.time);
       const passed=advanceRace(race,previous,s,race.countdown>0?Math.min(.1,raceDelta):raceDelta);if(passed)this.hooks.sound();
-      if(s.kind==='autumn'&&s.hit&&!race.finished){this.reset();this.updateHud();return;}
       if(race.finished)this.finish();
     }
     const visualY=s.y+s.stepOffset;
@@ -252,7 +251,7 @@ export class SeasonalGames{
     this.updateTrail(canMove&&race.countdown<=0?dt:0,reduced);
     const distance=s.kind==='autumn'?10:s.kind==='summer'?8:5,height=s.kind==='autumn'?4:s.kind==='summer'?3.7:2.8;
     const target=new T.Vector3(s.x-Math.sin(s.yaw)*distance,visualY+height,s.z-Math.cos(s.yaw)*distance);
-    if(onGround(target.x,target.z,this.data.regions))target.y=Math.max(target.y,groundHeight(target.x,target.z,this.data.regions)+1.1);
+    target.y=Math.max(target.y,flightFloor(target.x,target.z,this.data.regions)+1.1);
     // Pull the chase camera in front of walls instead of looking through an exhibit.
     for(let i=1;i<=10;i++){
       const t=i/10,x=s.x+(target.x-s.x)*t,z=s.z+(target.z-s.z)*t,y=s.y+1.3+(target.y-s.y-1.3)*t;
@@ -261,7 +260,11 @@ export class SeasonalGames{
     if(!this.cameraReady){camera.position.copy(target);this.cameraReady=true;}else camera.position.lerp(target,1-Math.exp(-dt*8));
     camera.lookAt(s.x+Math.sin(s.yaw)*2,visualY+1.1,s.z+Math.cos(s.yaw)*2);
     this.routeGuide.update(race,s,canMove&&race.countdown===0?dt:0,reduced);
-    this.gateMeshes.forEach((m,i)=>{const opacity=gateVisibility(race.next,i,race.course.gates.length,race.finished);m.visible=opacity>0;(m.material as T.MeshBasicMaterial).opacity=opacity;(m.material as T.MeshBasicMaterial).color.set(i===race.next?'#ffcc66':'#91aaa0');});
+    this.gateMeshes.forEach((m,i)=>{
+      const material=m.material as T.MeshBasicMaterial,target=gateVisibility(race.next,i,race.course.gates.length,race.finished);
+      material.opacity=reduced?target:fadeGate(material.opacity,target,dt);m.visible=material.opacity>.002;
+      material.color.lerp(new T.Color(i===race.next?'#ffcc66':'#91aaa0'),reduced?1:1-Math.exp(-dt*24));
+    });
     for(const o of this.routeRoot.children)if(o.name==='thermal'){
       o.visible=Math.hypot(o.position.x-s.x,o.position.z-s.z)<22;
       if(!reduced&&canMove&&o instanceof T.Points){
@@ -290,7 +293,7 @@ export class SeasonalGames{
     countdown.hidden=!text;countdown.querySelector('[data-count]')!.textContent=text;countdown.querySelector<HTMLElement>('[data-count-label]')!.hidden=race.countdown<=0;
     this.hud.querySelector('[data-target]')!.textContent=race.leisure?s.kind==='autumn'?'寻找金色上升气流':s.kind==='summer'?'随海风远行':'随心骑行':`信标 ${race.next+1} / ${race.course.gates.length} · ${Math.round(distance)} m`;
     const arrow=this.hud.querySelector<HTMLElement>('[data-direction]')!;arrow.hidden=race.leisure;arrow.textContent='↑';arrow.style.transform=`rotate(${-angleDiff(s.yaw,Math.atan2(g.x-s.x,g.z-s.z))}rad)`;
-    this.hud.querySelector('[data-notice]')!.textContent=s.hit?s.kind==='autumn'?'转向避开障碍':'倒车或转向离开':race.leisure?this.touchExperience?'右上角暂停':'Esc 暂停':race.penalty?`罚时 +${race.penalty} 秒`:'按顺序通过';
+    this.hud.querySelector('[data-notice]')!.textContent=s.hit?s.kind==='autumn'?'抬升或转向离开':'倒车或转向离开':race.leisure?this.touchExperience?'右上角暂停':'Esc 暂停':race.penalty?`罚时 +${race.penalty} 秒`:'按顺序通过';
     const canvas=this.hud.querySelector<HTMLCanvasElement>('canvas')!,ctx=canvas.getContext('2d')!,points=race.course.path;
     ctx.clearRect(0,0,170,140);
     if(race.leisure){ctx.fillStyle='#746956';ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('自由漫游',85,64);ctx.fillText('暂停后可返回摊位',85,86);return;}

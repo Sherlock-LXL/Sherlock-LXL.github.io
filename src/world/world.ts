@@ -56,7 +56,7 @@ export class World {
   private harborScene!:ReturnType<typeof buildHarbor>;private nearHarbor=false;
   private artworkRay=new T.Raycaster();private aim=new T.Vector2();
   private labels:{element:HTMLButtonElement;position:T.Vector3;id:string}[]=[];
-  private keys=new Set<string>();private touchSide=0;private touchForward=0;private paused=false;private near:Exhibit|null=null;private region='';
+  private keys=new Set<string>();private touchSide=0;private touchForward=0;private touchSprint=false;private paused=false;private near:Exhibit|null=null;private region='';
   private guide=new T.Group();private selected!:T.Mesh;private environment!:Environment;
   private clock=new T.Clock();private time=0;private frame=0;private disposed=false;
   private observer!:ResizeObserver;private events=new AbortController();private disposers:(()=>void)[]=[];
@@ -98,6 +98,7 @@ export class World {
     this.photo=new PhotoCamera(canvas);
     host.dataset.view=this.mode;host.dataset.eyeHeight=String(EYE_HEIGHT);
     this.environment=new Environment(this.scene,data.regions);
+    this.obstacles.push(...this.environment.colliders);
     const lightRoom=new RoomEnvironment(),pmrem=new T.PMREMGenerator(this.renderer),reflection=pmrem.fromScene(lightRoom,.04);
     this.scene.environment=reflection.texture;this.scene.environmentIntensity=.24;lightRoom.dispose();pmrem.dispose();this.disposers.push(()=>reflection.dispose());
     for(const place of horizons)this.label('◇ '+place.title,new T.Vector3(...place.target),()=>bus.emit('horizon',place.id),'future-label',place.id);
@@ -264,7 +265,7 @@ export class World {
   photoFov(value:number){this.photo.fov(value);}
   async photograph(postcard:boolean){if(!this.photo.active)return;const p=this.photo.camera.position,r=this.data.regions.find(r=>Math.hypot(p.x-r.position[0],p.z-r.position[1])<r.radius);await exportPostcard(this.renderer.domElement,()=>this.draw(),r?.title??horizons.find(h=>Math.hypot(p.x-h.target[0],p.z-h.target[2])<50)?.title??(Math.hypot(p.x,p.z)<10?'记忆星图 · 中央枢纽':'群岛之间'),this.environment.hour,postcard);}
   quality(low:boolean){this.lowQuality=low;this.renderer.setPixelRatio(low?1:Math.min(devicePixelRatio,renderSettings.pixelRatio));this.renderer.shadowMap.enabled=!low;this.renderer.shadowMap.needsUpdate=true;this.ink.quality=low;this.resize();}
-  setTouchMove(side:number,forward:number){if(this.mode==='first-person'&&!this.paused&&!this.games.busy){this.touchSide=Math.max(-1,Math.min(1,side));this.touchForward=Math.max(-1,Math.min(1,forward));}else this.touchSide=this.touchForward=0;}
+  setTouchMove(side:number,forward:number,sprint=false){if(this.mode==='first-person'&&!this.paused&&!this.games.busy){this.touchSide=Math.max(-1,Math.min(1,side));this.touchForward=Math.max(-1,Math.min(1,forward));this.touchSprint=sprint;}else{this.touchSide=this.touchForward=0;this.touchSprint=false;}}
   requestJump(){if(this.mode==='first-person'&&!this.paused&&!this.games.busy)this.jumpRequested=true;}
   get isLowQuality(){return this.lowQuality;}
   get timeOfDay(){return this.environment.hour;}
@@ -327,7 +328,8 @@ export class World {
     const forward=Number(this.keys.has('KeyW')||this.keys.has('ArrowUp'))-Number(this.keys.has('KeyS')||this.keys.has('ArrowDown'))+this.touchForward;
     const side=Number(this.keys.has('KeyD')||this.keys.has('ArrowRight'))-Number(this.keys.has('KeyA')||this.keys.has('ArrowLeft'))+this.touchSide;
     const strength=Math.min(1,Math.hypot(forward,side));
-    const yaw=this.look.yaw,velocity=new T.Vector3(-Math.sin(yaw)*forward+Math.cos(yaw)*side,0,-Math.cos(yaw)*forward-Math.sin(yaw)*side).normalize().multiplyScalar((this.keys.has('ShiftLeft')||this.keys.has('ShiftRight')?8.5:5.2)*strength);
+    const sprint=this.touchSprint&&Math.hypot(this.touchSide,this.touchForward)>0||this.keys.has('ShiftLeft')||this.keys.has('ShiftRight');
+    const yaw=this.look.yaw,velocity=new T.Vector3(-Math.sin(yaw)*forward+Math.cos(yaw)*side,0,-Math.cos(yaw)*forward-Math.sin(yaw)*side).normalize().multiplyScalar((sprint?8.5:5.2)*strength);
     const ride=this.living.ride;
     if(ride){velocity.multiplyScalar(1.45);this.living.steerRide(velocity,dt);}
     advanceWalker(this.player,{x:velocity.x,z:velocity.z,jump:this.jumpRequested},dt,this.data.regions,[...this.obstacles,...this.living.colliders],
@@ -341,7 +343,7 @@ export class World {
     this.games.update(dt,this.player,this.camera,this.mode==='first-person'&&!this.paused,this.paused,this.reduced.matches);
     const moving=Math.hypot(this.player.x-previousX,this.player.z-previousZ)>.001;
     this.traveler?.update(motion,this.player.x,this.player.z,this.player.y,this.look.yaw,moving,this.player.grounded,this.reduced.matches,this.region||'nexus');
-    this.whispers?.update(motion,this.region||'nexus',moving,this.mode!=='first-person'||this.paused||!!this.near||!!this.nearArtwork||this.nearHarbor,this.environment.hour,this.resonance?.snapshot.complete);
+    this.whispers?.update(motion,this.region||'nexus',moving,this.mode!=='first-person'||this.paused||this.games.busy||!!this.near||!!this.nearArtwork||this.nearHarbor,this.environment.hour,this.resonance?.snapshot.complete);
     this.resonance?.update(motion,this.reduced.matches);
     this.guide.position.y=hubLayout.guideY+Math.sin(this.time*1.2)*.1;this.guide.rotation.y+=motion*.35;this.hubMotion(this.reduced.matches?0:motion);
     this.harborScene.update(motion);

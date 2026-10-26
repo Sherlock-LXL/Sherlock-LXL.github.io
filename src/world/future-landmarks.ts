@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {material,mesh,softBox} from './architecture';
-import {sign} from './scenery';
+import {sign,type Obstacle} from './scenery';
+import {distantIslands,distantGround} from '../../shared/distant-islands.mjs';
 import {kit,roof,roundRoof,hallFrame,podium,column,beam,lantern,paintedTree} from './vernacular';
 const box=(g:T.Object3D,w:number,h:number,d:number,x:number,y:number,z:number,m:T.Material=kit.stone())=>mesh(g,softBox(w,h,d),m,x,y,z);
 function link(g:T.Object3D,a:number[],b:number[],radius:number,m:T.Material){const start=new T.Vector3(...a as [number,number,number]),end=new T.Vector3(...b as [number,number,number]),v=end.clone().sub(start);const o=mesh(g,new T.CylinderGeometry(radius,radius,v.length(),10),m);o.position.copy(start).add(end).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),v.normalize());return o;}
@@ -26,7 +27,11 @@ function island(name:string,x:number,z:number,rx:number,rz:number,season:'pine'|
  const cliff=mesh(root,new T.CylinderGeometry(1,1.12,3.4,64),material('#b5b498',.95,0,'cliff'),0,-1.4);cliff.scale.set(rx+.4,1,rz+.4);
  const land=mesh(root,new T.CylinderGeometry(1,1.02,.68,80),material('#90b99a',.95,0,'grass'),0,-.03);land.scale.set(rx,1,rz);
  for(let i=0;i<22;i++){const a=i*Math.PI*2/22+Math.sin(i)*.1;const rock=mesh(root,new T.DodecahedronGeometry(1,0),material(i%3?'#8d6f4d':'#5e6f66',.95,0,'stone'),Math.cos(a)*(rx+1.2),-2.9+(i%3)*.2,Math.sin(a)*(rz+1.2));rock.scale.set(1+(i%3)*.35,.7+(i%2)*.3,.9);rock.rotation.set(i,i*.7,0);}
- for(const side of [-1,1])for(let i=0;i<3;i++)paintedTree(root,side*(rx-3-i*.25),-rz+3+i*3,.95+i*.12,i%2?season:'pine',GROUND);
+ // Plant on the rear arc, leaving room for both the canopy and the hall's eaves.
+ for(const side of [-1,1])for(let i=0;i<3;i++){
+   const a=-Math.PI/2+side*(.48+i*.24);
+   paintedTree(root,Math.cos(a)*(rx-2.6),Math.sin(a)*(rz-2.6),.85+i*.08,i%2?season:'pine',GROUND);
+ }
  const dockZ=rz+1.4;box(root,4,.28,3.8,0,-.52,dockZ,kit.timberLight());
  for(const x of [-1.75,1.75])for(const z of [dockZ-1.4,dockZ+1.4])mesh(root,new T.CylinderGeometry(.1,.17,3.1,10),kit.timber(),x,-1.16,z);
  for(let i=0;i<4;i++){const h=GROUND+.04-i*.18;box(root,3.4,h+.66,.48,0,(h-.66)/2,rz-.65+i*.43,kit.stone());}
@@ -51,8 +56,10 @@ export function exchangeIsland(){
  const chart=new T.Group();chart.position.set(0,GROUND,4.6);root.add(chart);podium(chart,9.2,1.4,.5);
  for(let i=0;i<7;i++){const x=(i-3)*1.25,low=.85+(i%3)*.32,h=.9+(i*3%5)*.45;box(chart,.62,h,.62,x,low+h/2,0,i%3?kit.malachite():kit.lacquer());link(chart,[x,.5,0],[x,low+h+.4,0],.04,kit.bronze());}
  const ticker=sign(root,'量化研究 · 数据中庭','','#e3c385',7,.75);ticker.position.set(0,GROUND+2.7,1.62);
+ for(const x of [-2.6,2.6])link(root,[x,GROUND+3.7,1.15],[x,GROUND+3.075,1.62],.024,kit.bronze());
  const rotunda=new T.Group();rotunda.position.set(-11,GROUND,5.3);root.add(rotunda);podium(rotunda,4.8,4.8,.3);
  for(let i=0;i<8;i++){const a=i*Math.PI/4;column(rotunda,Math.cos(a)*1.9,Math.sin(a)*1.9,2.6,.11,kit.lacquer(),.3);}
+ mesh(rotunda,new T.CylinderGeometry(2,2,.24,8),kit.beam(),0,3.0);
  roundRoof(rotunda,{radius:2.6,height:1.5,y:3.1,material:kit.tileGreen()});
  approach(root,4.6,13,'量化投资交易所岛','#e3c385');return root;
 }
@@ -101,7 +108,24 @@ export function researchInstitute(){
  for(const side of [-1,1])hall(root,6.2,6,side*13,-2,{height:3,eaves:1,tiles:kit.tileBlue()});
  const entry=sign(root,'AI 研究院','模型 · 科学 · 下一段探索','#cbdde9',7.2,.9);entry.position.set(0,GROUND+5.2,5.3);
  for(const x of [-3.9,3.9])column(root,x,5.3,5.2,.18,kit.lacquer(),GROUND);
+ beam(root,8,0,GROUND+4.73,5.3,0,.16,.2);
  // Two bronze sundials flank the approach.
- for(const x of [-6,6]){mesh(root,new T.CylinderGeometry(1.2,1.35,.8,8),kit.stone(),x,GROUND+.4,8);const dial=mesh(root,new T.CylinderGeometry(1,1,.1,32),kit.bronze(),x,GROUND+1.25,8);dial.rotation.x=.7;link(root,[x,GROUND+1,8],[x,GROUND+1.9,8.6],.04,kit.gold());}
+ for(const x of [-6,6]){mesh(root,new T.CylinderGeometry(1.2,1.35,.8,8),kit.stone(),x,GROUND+.4,8);const dial=mesh(root,new T.CylinderGeometry(1,1,.1,32),kit.bronze(),x,GROUND+1.25,8);dial.rotation.x=.7;link(root,[x,GROUND+.8,8],[x,GROUND+1.25,8],.09,kit.bronze());link(root,[x,GROUND+1,8],[x,GROUND+1.9,8.6],.04,kit.gold());}
  approach(root,4.6,15,'AI 研究院','#cbdde9');return root;
+}
+
+/** Capture real vertical bounds before the scenery is merged into static batches. */
+export function distantColliders(root:T.Group):Obstacle[]{
+ const spec=distantIslands.find(s=>s.name===root.name)!;
+ const colliders:Obstacle[]=[{x:spec.x,z:spec.z,radius:0,halfX:spec.rx,halfZ:spec.rz,ellipse:true,surface:true,base:-7.2,height:distantGround}];
+ root.updateMatrixWorld(true);
+ root.traverse(o=>{
+   if(!(o instanceof T.Mesh))return;
+   // The first two meshes are the elliptical cliff/land, already represented above.
+   if(o===root.children[0]||o===root.children[1])return;
+   const bounds=new T.Box3().setFromObject(o),size=bounds.getSize(new T.Vector3()),centre=bounds.getCenter(new T.Vector3());
+   if(size.x<.012||size.y<.012||size.z<.012)return;
+   colliders.push({x:centre.x,z:centre.z,radius:0,halfX:size.x/2,halfZ:size.z/2,base:bounds.min.y,height:bounds.max.y});
+ });
+ return colliders;
 }

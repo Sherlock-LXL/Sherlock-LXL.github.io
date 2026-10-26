@@ -18,10 +18,12 @@ try{
   await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade.moves>1&&window.__xiangmetaInspect().games.arcade.mergeAge===.12);
   assert.equal((await read()).over,false);await page.screenshot({path:out+'/2048.png'});console.log('2048 rapid inputs settle with valid tiles');
   await click('[data-back]');await click('[data-game="pairs"]');await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade?.id==='pairs');
-  const before=(await read()).score;await click('[data-card="0"]');assert.equal((await read()).score,before-5);
-  await click('[data-card="0"]');assert.equal((await read()).score,before-5);
+  const before=(await read()).score;await click('[data-card="0"]');assert.equal((await read()).score,before);
+  await click('[data-card="0"]');assert.equal((await read()).score,before);
   await click('[data-back]');await click('[data-game="bricks"]');await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade?.id==='bricks');
-  const canvas=await page.locator('.arcade-stage canvas').boundingBox();await page.mouse.move(canvas.x+canvas.width*.5,canvas.y+canvas.height*.9);await page.mouse.down();
+  const canvas=await page.locator('.arcade-stage canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.5,canvas.y+canvas.height*.9);
+  await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade.mouseActive);
+  assert.equal(await page.locator('.arcade-stage canvas').evaluate(c=>getComputedStyle(c).cursor),'none');
   const speed=(await read()).ballSpeed,deadline=performance.now()+35000;
   while(performance.now()<deadline){
     const s=await read();assert.equal(s.over,false);
@@ -29,7 +31,8 @@ try{
     await page.mouse.move(canvas.x+Math.max(.1,Math.min(.9,s.ball.x))*canvas.width,canvas.y+canvas.height*.9);
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
   }
-  await page.mouse.up();assert.ok((await read()).rows>4);await click('.seasonal-dialog [data-pause]');await page.screenshot({path:out+'/endless-wave.png'});
+  assert.ok((await read()).rows>4);await page.keyboard.press('p');assert.equal((await read()).paused,true);
+  await page.waitForFunction(()=>!document.pointerLockElement);await page.screenshot({path:out+'/endless-wave.png'});
   await click('[data-back]');await click('[data-game="falling"]');await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade?.id==='falling');
   const bowl=await page.locator('.arcade-stage canvas').boundingBox();
   const dropTime=(await read()).time;

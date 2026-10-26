@@ -107,9 +107,23 @@ try{
     if(await page.locator(`[data-card="${ids[0]}"]`).isDisabled())continue;
     await click(`[data-card="${ids[0]}"]`);await click(`[data-card="${ids[1]}"]`);await frames(.03);
   }
-  await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade.over);
-  assert.equal((await state()).arcade.won,true);assert.ok((await page.locator('.arcade-result').textContent()).includes('完成'));
-  await page.screenshot({path:out+'/pairs-finish.png'});console.log('paused input, restart, pairs full win');
+  await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade.boards===1);
+  assert.equal((await state()).arcade.over,false);assert.equal((await state()).arcade.score,1000);
+  await page.waitForFunction(()=>window.__xiangmetaInspect().games.arcade.boardDelay===0);
+  assert.equal(await page.locator('[data-card]:disabled').count(),0,'a complete board gives a fresh set of questions');
+  await page.screenshot({path:out+'/pairs-next-board.png'});
+  let wrong;
+  for(let i=0;i<16&&!wrong;i+=2){
+    const health=(await state()).arcade.health;await click(`[data-card="${i}"]`);await click(`[data-card="${i+1}"]`);
+    if((await state()).arcade.health<health)wrong=[i,i+1];
+    await frames(.9);
+  }
+  assert.ok(wrong);
+  const earned=(await state()).arcade.score;
+  while(!(await state()).arcade.over){await click(`[data-card="${wrong[0]}"]`);await click(`[data-card="${wrong[1]}"]`);await frames(.9);}
+  assert.equal((await state()).arcade.health,0);assert.equal((await state()).arcade.score,earned);
+  assert.ok((await page.locator('.arcade-result').textContent()).includes('本局结束'));
+  await page.screenshot({path:out+'/pairs-finish.png'});console.log('paused input, restart, pairs renewed board and health ending');
   await click('[data-back]');await click('[data-close]');await page.reload();
   await page.waitForFunction(()=>window.__xiangmetaInspect&&!document.querySelector('#world-loading'),null,{timeout:90000});
   await click('#seasonal-games');assert.ok((await page.locator('.seasonal-card').nth(1).textContent()).includes('最佳'));

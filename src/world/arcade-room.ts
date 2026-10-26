@@ -1,4 +1,4 @@
-import {Arcade,arcadeCatalog,arcadeScoreKey,mergeDuration} from '../../shared/arcade.mjs';
+import {Arcade,arcadeCatalog,arcadeScoreKey,mergeDuration,pairsHealth} from '../../shared/arcade.mjs';
 import {readBest,saveBest} from '../../shared/seasonal-games.mjs';
 import {orbRadii,orbNames} from '../../shared/falling-merge.mjs';
 
@@ -9,6 +9,7 @@ export class ArcadeRoom{
   private game:Arcade;private canvas:HTMLCanvasElement;private ctx:CanvasRenderingContext2D;private status:HTMLElement;private result:HTMLElement;
   private paused=false;private recorded=false;private events=new AbortController();private held=new Set<string>();private repeat=0;private last=0;private frame=0;
   private pointers=new Map<number,string>();private dragPointer:number|null=null;
+  private mouseActive=false;private mouseLocked=false;
   private score=-1;private best:number|null;private drag:{x:number;y:number}|null=null;
   constructor(private host:HTMLElement,private id:string,private storage:Storage,back:()=>void){
     const spec=arcadeCatalog.find(g=>g.id===id)!;this.game=new Arcade(id);this.best=readBest(storage,arcadeScoreKey(id));
@@ -29,8 +30,33 @@ export class ArcadeRoom{
     });
     const cards=host.querySelector<HTMLElement>('.arcade-cards')!;cards.hidden=id!=='pairs';
     if(id==='pairs'){cards.innerHTML=Array.from({length:16},(_,i)=>`<button data-card="${i}" aria-label="翻开第 ${i+1} 张卡片">${i+1}</button>`).join('');cards.addEventListener('click',e=>{const b=(e.target as HTMLElement).closest<HTMLButtonElement>('[data-card]');if(b&&!this.paused)this.game.flip(Number(b.dataset.card));},opts);}
-    this.canvas.addEventListener('pointerdown',e=>{if(this.paused||e.button!==0||this.dragPointer!==null)return;this.canvas.focus();this.canvas.setPointerCapture(e.pointerId);const p=this.point(e);this.drag=p;this.dragPointer=e.pointerId;if(id==='bricks'){this.game.paddle=Math.max(.1,Math.min(.9,p.x));this.press('space');}if(this.game.falling)this.game.falling.aim=p.x;if(id==='pairs')this.game.flip(Math.floor(p.y*4)*4+Math.floor(p.x*4));},opts);
-    this.canvas.addEventListener('pointermove',e=>{if(this.paused)return;const x=this.point(e).x;if(e.pointerId===this.dragPointer&&this.drag&&id==='bricks')this.game.paddle=Math.max(.1,Math.min(.9,x));if(this.game.falling&&(this.dragPointer===null||e.pointerId===this.dragPointer))this.game.falling.aim=x;},opts);
+    this.canvas.addEventListener('pointerdown',e=>{
+      if(this.paused||this.game.over||e.button!==0||this.dragPointer!==null)return;
+      this.canvas.focus();const p=this.point(e);
+      if(id==='bricks'&&e.pointerType==='mouse'){
+        if(!this.mouseActive)this.game.paddle=Math.max(.1,Math.min(.9,p.x));
+        this.mouseActive=true;this.canvas.style.cursor='none';this.press('space');
+        if(document.pointerLockElement!==this.canvas)try{this.canvas.requestPointerLock()?.catch(()=>{});}catch{}
+        return;
+      }
+      this.canvas.setPointerCapture(e.pointerId);this.drag=p;this.dragPointer=e.pointerId;
+      if(id==='bricks'){this.game.paddle=Math.max(.1,Math.min(.9,p.x));this.press('space');}
+      if(this.game.falling)this.game.falling.aim=p.x;
+      if(id==='pairs')this.game.flip(Math.floor(p.y*4)*4+Math.floor(p.x*4));
+    },opts);
+    this.canvas.addEventListener('pointermove',e=>{
+      if(this.paused)return;const x=this.point(e).x;
+      if(id==='bricks'&&(this.mouseActive||e.pointerId===this.dragPointer&&this.drag)){
+        const paddle=document.pointerLockElement===this.canvas?this.game.paddle+e.movementX/this.canvas.getBoundingClientRect().width:x;
+        this.game.paddle=Math.max(.1,Math.min(.9,paddle));
+      }
+      if(this.game.falling&&(this.dragPointer===null||e.pointerId===this.dragPointer))this.game.falling.aim=x;
+    },opts);
+    document.addEventListener('pointerlockchange',()=>{
+      const locked=document.pointerLockElement===this.canvas;
+      if(this.mouseLocked&&!locked&&this.mouseActive)this.pause(true);
+      this.mouseLocked=locked;
+    },opts);
     this.canvas.addEventListener('pointerup',e=>{if(e.pointerId!==this.dragPointer)return;if(this.drag&&id==='merge'){const p=this.point(e),dx=p.x-this.drag.x,dy=p.y-this.drag.y;if(Math.hypot(dx,dy)>.06)this.press(Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up');}if(id==='falling')this.press('space');this.drag=null;this.dragPointer=null;},opts);
     const cancelDrag=(e:PointerEvent)=>{if(e.pointerId===this.dragPointer){this.drag=null;this.dragPointer=null;}};
     this.canvas.addEventListener('pointercancel',cancelDrag,opts);this.canvas.addEventListener('lostpointercapture',cancelDrag,opts);
@@ -46,8 +72,9 @@ export class ArcadeRoom{
   }
   private point(e:PointerEvent){const b=this.canvas.getBoundingClientRect();return {x:Math.min(.999,Math.max(0,(e.clientX-b.left)/b.width)),y:Math.min(.999,Math.max(0,(e.clientY-b.top)/b.height))};}
   private press(key:string){if(!this.paused)this.game.action(key);}
-  private pause(value:boolean){this.paused=value;this.held.clear();this.pointers.clear();this.game.axis=0;this.drag=null;this.dragPointer=null;this.host.querySelector('[data-pause]')!.textContent=value?'继续':'暂停';}
-  private store(){if(this.recorded||this.id==='pairs'&&!this.game.over)return;const r=saveBest(this.storage,arcadeScoreKey(this.id),this.game.score);this.best=r.best;this.recorded=this.game.over;return r;}
+  private releaseMouse(){this.mouseActive=false;this.mouseLocked=false;this.canvas.style.cursor='';if(document.pointerLockElement===this.canvas)document.exitPointerLock();}
+  private pause(value:boolean){this.paused=value;this.releaseMouse();this.held.clear();this.pointers.clear();this.game.axis=0;this.drag=null;this.dragPointer=null;this.host.querySelector('[data-pause]')!.textContent=value?'继续':'暂停';}
+  private store(){if(this.recorded)return;const r=saveBest(this.storage,arcadeScoreKey(this.id),this.game.score);this.best=r.best;this.recorded=this.game.over;return r;}
   private animate=(time:number)=>{
     this.frame=requestAnimationFrame(this.animate);const dt=this.last?Math.min(.1,(time-this.last)/1000):0;this.last=time;
     if(!this.paused){
@@ -56,9 +83,9 @@ export class ArcadeRoom{
       if(this.repeat<=0){this.repeat=.09;if(this.id==='blocks')for(const key of held)if(['left','right','down'].includes(key))this.press(key);}
       this.game.axis=Number(held.has('right'))-Number(held.has('left'));this.game.update(dt);
     }
-    if(this.game.over&&!this.recorded&&this.game.mergeAge>=mergeDuration){const r=this.store();this.result.hidden=false;this.result.innerHTML=`<b>${this.game.won&&this.id!=='merge'?'完成':'本局结束'}</b><span>${this.game.score} 分${r?.record?' · 新纪录':''}</span><small>${r?.saved?'已保存':'未能保存'}</small>`;}
+    if(this.game.over&&!this.recorded&&this.game.mergeAge>=mergeDuration){this.releaseMouse();const r=this.store();this.result.hidden=false;this.result.innerHTML=`<b>${this.game.won&&this.id!=='merge'?'完成':'本局结束'}</b><span>${this.game.score} 分${r?.record?' · 新纪录':''}</span><small>${r?.saved?'已保存':'未能保存'}</small>`;}
     if(this.game.score!==this.score||['pairs','bricks','blocks','falling'].includes(this.id)){
-      this.score=this.game.score;this.status.innerHTML=`<small>得分</small><strong>${this.score}</strong><span>最佳 ${this.best??'—'}</span><small>${this.id==='blocks'?`已消除 ${this.game.lines} 行`:this.id==='bricks'?`${this.game.lives} 次机会 · 球速 ${(this.game.ballSpeed/.6).toFixed(1)}×`:this.id==='pairs'?`翻牌 ${this.game.flips} 次 · 每次 −5 分`:this.game.falling?`最大 ${orbNames[this.game.falling.highest]}<br>接下来 ${orbNames[this.game.falling.next[0]]} → ${orbNames[this.game.falling.next[1]]}`:this.id==='merge'&&this.game.won?'已达 2048':''}</small>`;
+      this.score=this.game.score;this.status.innerHTML=`<small>得分</small><strong>${this.score}</strong><span>最佳 ${this.best??'—'}</span><small>${this.id==='blocks'?`已消除 ${this.game.lines} 行`:this.id==='bricks'?`${this.game.lives} 次机会 · 球速 ${(this.game.ballSpeed/.6).toFixed(1)}×`:this.id==='pairs'?`第 ${this.game.boards+(this.game.boardDelay?0:1)} 面 · 已完成 ${this.game.boards} 面`:this.game.falling?`最大 ${orbNames[this.game.falling.highest]}<br>接下来 ${orbNames[this.game.falling.next[0]]} → ${orbNames[this.game.falling.next[1]]}`:this.id==='merge'&&this.game.won?'已达 2048':''}</small>${this.id==='pairs'?`<div class="pairs-health" role="meter" aria-label="剩余血量" aria-valuemin="0" aria-valuemax="${pairsHealth}" aria-valuenow="${this.game.health}"><i style="width:${this.game.health/pairsHealth*100}%"></i></div><small>血量 ${this.game.health} / ${pairsHealth}</small>`:''}`;
     }
     this.draw();
   };
@@ -108,7 +135,7 @@ export class ArcadeRoom{
       c.strokeStyle='#9b886e66';c.setLineDash([3,6]);c.beginPath();c.moveTo(aim*w,(.085+radius)*w);c.lineTo(aim*w,.91*w);c.stroke();c.setLineDash([]);
       if(!reduced)for(const e of game.effects){c.strokeStyle=`rgba(181,135,65,${(1-e.age/.3)*(e.kind==='hit'?.65:1)})`;c.lineWidth=e.kind==='hit'?2:3;c.beginPath();c.arc(e.x*w,e.y*w,e.r*w*(1+e.age*3),0,Math.PI*2);c.stroke();}
     }else{
-      for(const b of g.bricks){c.fillStyle=colors[b.tone];c.beginPath();c.roundRect(b.x*480,b.y*480,.11*480,.036*480,3);c.fill();}
+      for(const b of g.bricks){c.globalAlpha=Math.min(1,b.age/.3);c.fillStyle=colors[b.tone];c.beginPath();c.roundRect(b.x*480,b.y*480,.11*480,.036*480,3);c.fill();}c.globalAlpha=1;
       c.strokeStyle='#b87865';c.setLineDash([5,5]);c.beginPath();c.moveTo(12,.8*480);c.lineTo(468,.8*480);c.stroke();c.setLineDash([]);
       c.fillStyle='#467c76';c.beginPath();c.roundRect((g.paddle-.1)*480,.88*480,.2*480,12,6);c.fill();
       c.fillStyle='#ba785a';c.beginPath();c.arc(g.ball.x*480,g.ball.y*480,7,0,Math.PI*2);c.fill();
@@ -116,6 +143,6 @@ export class ArcadeRoom{
     }
     if(this.paused){c.fillStyle='#f3eddfdf';c.fillRect(0,0,w,w);c.fillStyle='#514c42';c.textAlign='center';c.font='28px serif';c.fillText('已暂停',240,240);}
   }
-  get snapshot(){return {id:this.id,score:this.game.score,over:this.game.over,paused:this.paused,won:this.game.won,lines:this.game.lines,moves:this.game.moves,time:this.game.time,piece:{x:this.game.px,y:this.game.py},paddle:this.game.paddle,flips:this.game.flips,rows:this.game.rows,rowProgress:this.game.rowTravel,ballSpeed:this.game.ballSpeed,ball:{...this.game.ball},snake:this.game.snake.map(p=>({...p})),mergeAge:this.game.mergeAge,board:this.game.board,falling:this.game.falling?{drops:this.game.falling.drops,highest:this.game.falling.highest,next:[...this.game.falling.next],balls:this.game.falling.balls.map(b=>({...b})),cooldown:this.game.falling.cooldown,overflow:this.game.falling.overflow}:null};}
-  dispose(){this.store();cancelAnimationFrame(this.frame);this.events.abort();}
+  get snapshot(){return {id:this.id,score:this.game.score,over:this.game.over,paused:this.paused,won:this.game.won,health:this.game.health,boards:this.game.boards,boardDelay:this.game.boardDelay,mouseActive:this.mouseActive,lines:this.game.lines,moves:this.game.moves,time:this.game.time,piece:{x:this.game.px,y:this.game.py},paddle:this.game.paddle,flips:this.game.flips,rows:this.game.rows,rowProgress:this.game.rowTravel,rowSpeed:this.game.rowSpeed,ballSpeed:this.game.ballSpeed,ball:{...this.game.ball},snake:this.game.snake.map(p=>({...p})),mergeAge:this.game.mergeAge,board:this.game.board,falling:this.game.falling?{drops:this.game.falling.drops,highest:this.game.falling.highest,next:[...this.game.falling.next],balls:this.game.falling.balls.map(b=>({...b})),cooldown:this.game.falling.cooldown,overflow:this.game.falling.overflow}:null};}
+  dispose(){this.releaseMouse();this.store();cancelAnimationFrame(this.frame);this.events.abort();}
 }

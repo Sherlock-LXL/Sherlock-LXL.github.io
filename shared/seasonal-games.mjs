@@ -1,8 +1,8 @@
 import {advanceWalker,createWalker} from './locomotion.mjs';
-import {groundHeight} from './terrain-height.mjs';
-import {supportedFootprint,onGround,overlaps} from './navigation.mjs';
+import {supportedFootprint} from './navigation.mjs';
 import {landPath,seaPath,skyPath,waterClear,waterContact,moveBoat} from './game-routes.mjs';
 import {bikeBody,bikeFootprint,bikeObstruction,bikeMotion} from './bike-contact.mjs';
+import {moveGlider} from './flight-contact.mjs';
 
 export const gameCatalog=[
   {id:'spring',name:'四季环岛骑行',vehicle:'山地摩托',tag:'春 · 陆地',color:'#ba685e',description:'沿山路与桥梁，环游四岛。',controls:'W / S 油门、倒车 · A / D 转向 · Shift 漂移 · 空格刹车 · E 加速'},
@@ -29,13 +29,13 @@ export function makeCourse(id,regions,obstacles=[]){
   const gates=[{...path[0],nx:0,nz:1,radius:1}],indices=[0];let distance=0,length=0;
   for(let i=1;i<path.length;i++){
     const d=Math.hypot(path[i].x-path[i-1].x,path[i].z-path[i-1].z,path[i].y-path[i-1].y);distance+=d;length+=d;
-    if(distance>=(id==='spring'?7:20)&&i<path.length-3){gates.push({...path[i],nx:0,nz:1,radius:1});indices.push(i);distance=0;}
+    if(distance>=(id==='spring'?7:20)&&i<path.length-3&&(id!=='spring'||supportedFootprint(path[i].x,path[i].z,regions,1.85))){gates.push({...path[i],nx:0,nz:1,radius:1});indices.push(i);distance=0;}
   }
   if(Math.hypot(gates.at(-1).x-gates[0].x,gates.at(-1).z-gates[0].z)<(id==='spring'?5:15))gates.pop();
   const radius=id==='spring'?1.65:id==='summer'?5.2:6;
   gates.forEach((g,i)=>{const at=indices[i],a=path[(at-3+path.length-1)%(path.length-1)],b=path[(at+3)%(path.length-1)],d=Math.hypot(b.x-a.x,b.z-a.z)||1;Object.assign(g,{nx:(b.x-a.x)/d,nz:(b.z-a.z)/d,radius});});
   const reference=length*2/(id==='spring'?4.4:id==='summer'?9.5:10.8);
-  return {id,version:id==='autumn'?3:2,path,gates,gateIndices:indices.slice(0,gates.length),laps:2,length,medals:[reference,reference*1.35],spawn:{...gates[0],yaw:Math.atan2(gates[0].nx,gates[0].nz)}};
+  return {id,version:id==='summer'?2:3,path,gates,gateIndices:indices.slice(0,gates.length),laps:2,length,medals:[reference,reference*1.35],spawn:{...gates[0],yaw:Math.atan2(gates[0].nx,gates[0].nz)}};
 }
 /** @param {ReturnType<typeof makeCourse>} course */
 export function createRace(course,leisure=false){return {course,leisure,next:1,lap:1,elapsed:0,penalty:0,countdown:3,finished:false,passed:0};}
@@ -85,9 +85,7 @@ export function advanceVehicle(s,input,dt,regions,obstacles,time=0){
       const lift=thermals.reduce((v,t)=>Math.max(v,Math.max(0,1-Math.hypot(s.x-t.x,s.z-t.z)/t.radius)*6),0);
       const vertical=-.45-throttle*(s.speed>8?5.3:2.5)+lift-(s.speed<8?(8-s.speed)*.6:0);
       s.vy+=(vertical-s.vy)*(1-Math.exp(-h*8));
-      s.x+=Math.sin(s.yaw)*s.speed*h;s.z+=Math.cos(s.yaw)*s.speed*h;s.y=clamp(s.y+s.vy*h,-3,64);
-      const floor=onGround(s.x,s.z,regions)?groundHeight(s.x,s.z,regions):-5.65;
-      if(s.y<floor+2.4||Math.hypot(s.x,s.z)>148||obstacles.some(o=>overlaps(s.x,s.z,o,3.2)&&s.y<(o.height??floor+8)+3.2))s.hit=true;
+      moveGlider(s,Math.sin(s.yaw)*s.speed*h,Math.cos(s.yaw)*s.speed*h,s.vy*h,regions,obstacles);
     }else{
       if(!input.boost&&s.boost>=.25)s.boostReady=true;
       const bike=s.kind==='spring',boost=!!input.boost&&s.boostReady&&s.boost>0&&throttle>0&&!brake;
@@ -118,7 +116,7 @@ export function advanceVehicle(s,input,dt,regions,obstacles,time=0){
         const slope=(s.y-oldY)/(Math.abs(s.speed)*h+.001);s.pitch+=(clamp(Math.atan(slope),-.4,.4)-s.pitch)*(1-Math.exp(-h*7));
       }else{
         if(moveBoat(s,s.vx*h,s.vz*h,regions))s.hit=true;
-        s.y=seaHeight(s.x,s.z,time);s.pitch=(Math.sin(time*3+s.x*.1)*.035)+Math.abs(s.speed)*.009;
+        s.y=seaHeight(s.x,s.z,time);s.pitch=Math.sin(time*3+s.x*.1)*.022+Math.min(.075,Math.abs(s.speed)*.0035);
       }
       if(bike&&Math.hypot(s.x-x,s.z-z)<Math.abs(s.speed)*h*.15)s.speed*=Math.exp(-h*5);
       s.bank+=(-turn*Math.abs(s.speed)*(bike?.026+s.drift*.016:.016)-s.bank)*(1-Math.exp(-h*9));

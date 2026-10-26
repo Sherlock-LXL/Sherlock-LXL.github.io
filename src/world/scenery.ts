@@ -7,7 +7,7 @@ import {flowerDrifts,type FlowerPoint} from './garden-details';
 import {seasonalColors,palm} from './season-style';
 import {kit,place,beam,roof,lantern,paifang,drumStone,drumStool,fenceSection,scholarRock,paintedTree} from './vernacular';
 import {pigmentAccent} from './ink';
-export type Obstacle={x:number;z:number;radius:number;halfX?:number;halfZ?:number;height?:number;segment?:[number,number,number,number]};
+export type Obstacle={x:number;z:number;radius:number;halfX?:number;halfZ?:number;height?:number;base?:number;ellipse?:boolean;surface?:boolean;segment?:[number,number,number,number]};
 const cube=(g:T.Object3D,m:T.Material,w:number,h:number,d:number,x=0,y=0,z=0)=>mesh(g,softBox(w,h,d),m,x,y,z);
 const serif='"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun","Times New Roman",serif';
 const sans='"PingFang SC","Microsoft YaHei UI","Microsoft YaHei","Segoe UI",sans-serif';

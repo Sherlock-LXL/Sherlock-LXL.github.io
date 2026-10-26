@@ -3,12 +3,14 @@ import {FallingMerge} from './falling-merge.mjs';
 export const arcadeCatalog=[
   {id:'blocks',name:'雪花方块',symbol:'▦',hint:'← → 移动 · ↑ 旋转 · ↓ 加速 · 空格落下',detail:'填满一行就能消除。'},
   {id:'snake',name:'春芽贪吃蛇',symbol:'⌁',hint:'方向键转向',detail:'吃春芽，别咬到自己。'},
-  {id:'bricks',name:'无尽潮汐',symbol:'▤',hint:'拖动或 ← → 移动 · 空格发球',detail:'守住不断下移的砖块。'},
+  {id:'bricks',name:'无尽潮汐',symbol:'▤',hint:'点击后移动鼠标 · 触屏拖动 · 空格发球',detail:'守住不断下移的砖块。'},
   {id:'merge',name:'秋色 2048',symbol:'◇',hint:'方向键或滑动',detail:'合并相同数字。'},
-  {id:'pairs',name:'四季翻翻乐',symbol:'✿',hint:'翻开两张，寻找配对',detail:'翻牌越少，得分越高。'},
+  {id:'pairs',name:'四季翻翻乐',symbol:'✿',hint:'翻错扣一格血 · 配完进入下一面',detail:'记住卡片，挑战更高分。'},
   {id:'falling',name:'四季叠叠球',symbol:'◉',hint:'拖动选位置，松手投球',detail:'相同的小球会合成。'},
 ];
-export const arcadeScoreKey=id=>`arcade.${id}${id==='bricks'?'.v3':['blocks','snake','pairs'].includes(id)?'.v2':''}`;
+export const arcadeScoreKey=id=>`arcade.${id}${id==='bricks'?'.v4':id==='pairs'?'.v3':['blocks','snake'].includes(id)?'.v2':''}`;
+// Optimal-memory Monte Carlo: 25 mistakes permit about five completed 8-pair boards.
+export const pairsHealth=25;
 export const blockInterval=(time,lines,pieces)=>.15+.37*Math.exp(-Math.max(time/45,lines/3,pieces/8)*.16);
 export const mergeDuration=.12;
 const shapes=[[[1,1,1,1]],[[2,2],[2,2]],[[0,3,0],[3,3,3]],[[0,4,4],[4,4,0]],[[5,5,0],[0,5,5]],[[6,0,0],[6,6,6]],[[0,0,7],[7,7,7]]];
@@ -31,9 +33,9 @@ export class Arcade{
     this.snake=[{x:7,y:8},{x:6,y:8},{x:5,y:8}];this.dir={x:1,y:0};this.queued={x:1,y:0};this.food={x:11,y:8};
     /** @type {{x:number;y:number}[]} */ this.turns=[];
     this.paddle=.5;this.ball={x:.5,y:.83,vx:.3,vy:-.52};this.serving=true;this.lives=3;this.axis=0;
-    /** @type {{x:number;y:number;tone:number;row:number}[]} */ this.bricks=[];
-    this.activeTime=0;this.hits=0;this.rowTravel=0;this.rows=4;
-    for(let row=0;row<4;row++)for(let col=0;col<8;col++)this.bricks.push({x:col*.116+.037,y:.1+row*.048,tone:row%6+1,row});
+    /** @type {{x:number;y:number;tone:number;row:number;age:number}[]} */ this.bricks=[];
+    this.activeTime=0;this.hits=0;this.rowTravel=0;this.rows=4;this.clearedRows=0;this.rowSpeed=.0048;
+    for(let row=0;row<4;row++)for(let col=0;col<8;col++)this.bricks.push({x:col*.116+.037,y:.1+row*.048,tone:row%6+1,row,age:1});
     /** @type {{fromX:number;fromY:number;x:number;y:number;value:number}[]} */ this.tiles=[];
     /** @type {{x:number;y:number}[]} */ this.merges=[];
     /** @type {{x:number;y:number}|null} */ this.newTile=null;
@@ -42,8 +44,7 @@ export class Arcade{
     /** @type {number[]} */ this.cards=shuffle([...Array(8).keys(),...Array(8).keys()],random);
     /** @type {number[]} */ this.open=[];
     /** @type {number[]} */ this.matched=[];
-    this.reveal=0;this.moves=0;this.flips=0;
-    if(kind==='pairs')this.score=200;
+    this.reveal=0;this.moves=0;this.flips=0;this.health=pairsHealth;this.boards=0;this.boardDelay=0;
     if(kind==='blocks'){this.board=Array.from({length:20},()=>Array(10).fill(0));this.next=this.drawPiece();this.spawn();}
     if(kind==='merge'){this.board=Array.from({length:4},()=>Array(4).fill(0));this.addTile();this.addTile();}
   }
@@ -61,18 +62,18 @@ export class Arcade{
     const empty=[];this.board.forEach((r,y)=>r.forEach((v,x)=>{if(!v)empty.push({x,y});}));
     if(empty.length){const p=empty[Math.floor(this.random()*empty.length)];this.board[p.y][p.x]=this.random()<.9?2:4;this.newTile=p;}
   }
-  get ballSpeed(){return Math.min(1.5,.60+.65*(1-Math.exp(-this.activeTime/130))+Math.min(.25,this.hits*.003));}
-  get rowInterval(){return 8+8*Math.exp(-this.activeTime/150);}
+  get ballSpeed(){return .60+.72*(1-Math.exp(-this.activeTime/220));}
+  get descentTarget(){return .0048+.0054*(1-Math.exp(-this.clearedRows/24));}
+  get rowInterval(){return .048/this.rowSpeed;}
   addBrickRow(){
-    const shift=this.bricks.length?Math.max(0,.148-Math.min(...this.bricks.map(b=>b.y))):0;
-    if(shift)this.bricks.forEach(b=>b.y+=shift);
+    if(this.bricks.some(b=>b.y<.148-.000001))return false;
     const gap=Math.floor(this.random()*8);
-    for(let col=0;col<8;col++)if(col!==gap)this.bricks.push({x:col*.116+.037,y:.1,tone:this.rows%6+1,row:this.rows});
-    this.rows++;this.rowTravel=0;
+    for(let col=0;col<8;col++)if(col!==gap)this.bricks.push({x:col*.116+.037,y:.1,tone:this.rows%6+1,row:this.rows,age:0});
+    this.rows++;return true;
   }
   hitBrick(index){
     const [brick]=this.bricks.splice(index,1);this.hits++;this.score+=25;
-    if(!this.bricks.some(b=>b.row===brick.row))this.addBrickRow();
+    if(!this.bricks.some(b=>b.row===brick.row))this.clearedRows++;
   }
   action(key){
     if(this.over)return;
@@ -115,13 +116,13 @@ export class Arcade{
     }
   }
   flip(i){
-    if(this.kind!=='pairs'||this.over||this.reveal||i<0||i>=16||this.open.includes(i)||this.matched.includes(i))return;
-    this.flips++;this.score=Math.max(0,200+this.matched.length/2*100-this.flips*5);
+    if(this.kind!=='pairs'||this.over||this.reveal||this.boardDelay||i<0||i>=16||this.open.includes(i)||this.matched.includes(i))return;
+    this.flips++;
     this.open.push(i);
     if(this.open.length===2){
       this.moves++;
-      if(this.cards[this.open[0]]===this.cards[this.open[1]]){this.matched.push(...this.open);this.open=[];this.score=Math.max(0,200+this.matched.length/2*100-this.flips*5);if(this.matched.length===16){this.score=Math.max(0,1400-this.flips*5);this.won=this.over=true;}}
-      else this.reveal=.8;
+      if(this.cards[this.open[0]]===this.cards[this.open[1]]){this.matched.push(...this.open);this.open=[];this.score+=100;if(this.matched.length===16){this.score+=200;this.boards++;this.boardDelay=.65;}}
+      else{this.health--;this.reveal=.8;if(!this.health)this.over=true;}
     }
   }
   update(dt){
@@ -138,12 +139,14 @@ export class Arcade{
       else{this.score+=10;const empty=[];for(let y=0;y<16;y++)for(let x=0;x<16;x++)if(!this.snake.some(p=>p.x===x&&p.y===y))empty.push({x,y});if(!empty.length)this.won=this.over=true;else this.food=empty[Math.floor(this.random()*empty.length)];}
     }
     if(this.kind==='pairs'&&this.reveal){this.reveal=Math.max(0,this.reveal-dt);if(!this.reveal)this.open=[];}
+    if(this.kind==='pairs'&&this.boardDelay){this.boardDelay=Math.max(0,this.boardDelay-dt);if(!this.boardDelay){this.cards=shuffle([...Array(8).keys(),...Array(8).keys()],this.random);this.matched=[];this.open=[];}}
     if(this.kind==='bricks'){
       this.paddle=clamp(this.paddle+this.axis*dt*.9,.1,.9);
       if(this.serving){this.ball.x=this.paddle;this.ball.y=.84;return;}
       this.activeTime+=dt;
-      const descend=.048/this.rowInterval*dt;this.rowTravel+=descend;this.bricks.forEach(b=>b.y+=descend);
-      if(this.rowTravel>=.048||!this.bricks.length)this.addBrickRow();
+      this.rowSpeed+=(this.descentTarget-this.rowSpeed)*(1-Math.exp(-dt/4));
+      const descend=this.rowSpeed*dt;this.rowTravel+=descend;this.bricks.forEach(b=>{b.y+=descend;b.age+=dt;});
+      this.addBrickRow();
       if(this.bricks.some(b=>b.y+.036>=.80)){this.over=true;return;}
       const n=Math.ceil(dt*240),h=dt/n,b=this.ball;
       const speed=this.ballSpeed,length=Math.hypot(b.vx,b.vy)||1;b.vx*=speed/length;b.vy*=speed/length;

@@ -21,7 +21,7 @@ export function supportedFootprint(x,z,regions,radius=.35,offsets=[{x:0,z:0}]){
 export function bodyFootprint(yaw,length){
   return [-length,0,length].map(d=>({x:Math.sin(yaw)*d,z:Math.cos(yaw)*d}));
 }
-export function overlaps(x,z,o,padding=.35){if(o.segment){const [ax,az,bx,bz]=o.segment;if(x<Math.min(ax,bx)-padding-o.radius||x>Math.max(ax,bx)+padding+o.radius||z<Math.min(az,bz)-padding-o.radius||z>Math.max(az,bz)+padding+o.radius)return false;return pointSegmentDistance(x,z,ax,az,bx,bz)<o.radius+padding;}return o.halfX!==undefined
+export function overlaps(x,z,o,padding=.35){if(o.ellipse)return ((x-o.x)/(o.halfX+padding))**2+((z-o.z)/(o.halfZ+padding))**2<1;if(o.segment){const [ax,az,bx,bz]=o.segment;if(x<Math.min(ax,bx)-padding-o.radius||x>Math.max(ax,bx)+padding+o.radius||z<Math.min(az,bz)-padding-o.radius||z>Math.max(az,bz)+padding+o.radius)return false;return pointSegmentDistance(x,z,ax,az,bx,bz)<o.radius+padding;}return o.halfX!==undefined
     ? Math.abs(x-o.x)<o.halfX+padding && Math.abs(z-o.z)<o.halfZ+padding
     : Math.hypot(x-o.x,z-o.z)<o.radius+padding;}
 export function walkable(x,z,regions,obstacles=[],feetY=groundHeight(x,z,regions)) {

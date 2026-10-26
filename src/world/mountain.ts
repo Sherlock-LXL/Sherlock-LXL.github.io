@@ -108,7 +108,8 @@ export function mountainScenery(region:Region,exhibits:Exhibit[],obstacles:Obsta
     if(Math.max(...samples)-Math.min(...samples)>.55||Math.hypot(x,z)>region.radius-3)continue;
     const grove=new T.Group();grove.position.set(x,y,z);root.add(grove);paintedTree(grove,0,0,.72+(i%3)*.16,i%4===0?'blossom':'pine');
     obstacles.push({x:x+region.position[0],z:z+region.position[1],radius:.22,height:y+3.8});
-    const rock=mesh(grove,new T.IcosahedronGeometry(.45,1),material('#a99a7c',.95,0,'stone'),.65,.23,.5);rock.scale.set(1,.6,.8);
+    const rockY=regionHeight(x+.65,z+.5,region)-y+.12;
+    const rock=mesh(grove,new T.IcosahedronGeometry(.45,1),material('#a99a7c',.95,0,'stone'),.65,rockY,.5);rock.scale.set(1,.6,.8);
   }
   const outcrops=new T.InstancedMesh(new T.DodecahedronGeometry(1,0),material('#a89473',1,0,'stone'),36),pose=new T.Object3D();let outcropCount=0;
   for(let i=0;i<180&&outcropCount<36;i++){
@@ -116,7 +117,7 @@ export function mountainScenery(region:Region,exhibits:Exhibit[],obstacles:Obsta
     if(Math.hypot(x,z)>region.radius-3||exhibits.some(m=>Math.hypot(x-m.position[0],z-m.position[1])<5.8)||routes.some(route=>closestRoute(x,z,route).distance<route.width/2+1.4))continue;
     const y=regionHeight(x,z,region),rim=Array.from({length:8},(_,n)=>regionHeight(x+Math.cos(n*Math.PI/4)*.75,z+Math.sin(n*Math.PI/4)*.75,region));
     const spread=Math.max(...rim,y)-Math.min(...rim,y);if(spread<.18||spread>1.7)continue;
-    const scale=.32+(i%5)*.11;pose.position.set(x,y+scale*.18,z);pose.rotation.set(i*.37,a,i*.19);pose.scale.set(scale*(1.2+(i%3)*.18),scale*.62,scale);pose.updateMatrix();
+    const scale=.32+(i%5)*.11;pose.position.set(x,Math.min(...rim,y)+scale*.10,z);pose.rotation.set(i*.37,a,i*.19);pose.scale.set(scale*(1.2+(i%3)*.18),scale*.62,scale);pose.updateMatrix();
     outcrops.setMatrixAt(outcropCount++,pose.matrix);obstacles.push({x:x+region.position[0],z:z+region.position[1],radius:scale*.65,height:y+scale*.8});
   }
   outcrops.count=outcropCount;outcrops.castShadow=true;outcrops.receiveShadow=true;root.add(outcrops);

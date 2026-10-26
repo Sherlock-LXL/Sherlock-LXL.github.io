@@ -5,12 +5,13 @@ import {LivingNavigation} from './living-navigation.mjs';
 import {overlaps,onGround,walkable} from './navigation.mjs';
 import {bridgeLayout} from './bridge-layout.mjs';
 import {harbor} from './harbor.mjs';
+import {distantIslands} from './distant-islands.mjs';
 
 /** Compact capsule around the hull, with contact normals for sliding along the shore. */
 export function waterContact(x,z,regions,yaw=0){
   let contact={depth:0,nx:0,nz:0};
   const touch=(depth,nx,nz)=>{if(depth>contact.depth)contact={depth,nx,nz};};
-  const boundary=Math.hypot(x,z);touch(boundary-148,-x/(boundary||1),-z/(boundary||1));
+  const boundary=Math.hypot(x,z);touch(boundary-220,-x/(boundary||1),-z/(boundary||1));
   const bodies=[{position:[0,0],radius:9},...regions];
   const hullRadius=.60;
   for(const along of [-1.05,0,1.05]){
@@ -22,6 +23,11 @@ export function waterContact(x,z,regions,yaw=0){
       const mouth=r.radius===9||angle<4/r.radius;
       const shore=mouth?r.radius+.70:r.radius*1.085+1.05;
       touch(shore+hullRadius-d,dx/(d||1),dz/(d||1));
+    }
+    for(const island of distantIslands){
+      const dx=px-island.x,dz=pz-island.z,rx=island.rx+2.3+hullRadius,rz=island.rz+2.3+hullRadius;
+      const d=Math.hypot(dx/rx,dz/rz);
+      if(d<1){const gx=dx/(rx*rx),gz=dz/(rz*rz),normal=Math.hypot(gx,gz)||1;touch((1-d)*Math.min(rx,rz),gx/normal||1,gz/normal);}
     }
     const rect=(cx,cz,hx,hz)=>{
       const dx=px-cx,dz=pz-cz,ax=hx+hullRadius-Math.abs(dx),az=hz+hullRadius-Math.abs(dz);
@@ -111,7 +117,8 @@ export function landPath(regions,obstacles=[]){
   join(world({x:-10.8,z:12.7}));join(world({x:-8,z:14}));join(world({x:-5,z:13.5}));
   join(world(main[Math.max(first,top-9)]));
   route.push(...main.slice(first,Math.max(first,top-9)).reverse().map(world));
-  for(const p of [[-24,-16.5],[-18,-21],[-6,-7.5],[-5,-6],[6,-4.8],[12.5,-10.4],[24,-13],[29,-12],[28,-8],[24,-8],[20,-10],[12.5,-10.4],[6,-4.8],[6,5],[12,12],[15,14],[24,15],[27,15],[29,18],[27,20],[24,19],[21,16],[15,14],[12,12],[6,5],[-5,6],[-12,12],[-14,12],[-18,13],[-24,13],[-29,15],[-30,19],[-27,21],[-24,19],[-19,15],[-14,12],[-12,12],[-5,6],[-6,-5],[-6,-7.5],[-18,-21],[-24,-16.5],[-24,-18.5]])join({x:p[0],z:p[1]});
+  // Bring the mountain-to-bridge bend inward so a gate never asks for a rim-side turn.
+  for(const p of [[-24,-19.2],[-20,-23],[-6,-7.5],[-5,-6],[6,-4.8],[12.5,-10.4],[24,-13],[29,-12],[28,-8],[24,-8],[20,-10],[12.5,-10.4],[6,-4.8],[6,5],[12,12],[15,14],[24,15],[27,15],[29,18],[27,20],[24,19],[21,16],[15,14],[12,12],[6,5],[-5,6],[-12,12],[-14,12],[-18,13],[-24,13],[-29,15],[-30,19],[-27,21],[-24,19],[-19,15],[-14,12],[-12,12],[-5,6],[-6,-5],[-6,-7.5],[-20,-23],[-24,-19.2],[-24,-18.5]])join({x:p[0],z:p[1]});
   join(route[0]);
   // Remove sub-grid zigzags only where a swept segment is supported and clear.
   const clear=(a,b)=>{

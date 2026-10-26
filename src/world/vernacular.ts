@@ -245,7 +245,7 @@ export function roundRoof(parent:T.Object3D,{radius,height,y=0,x=0,z=0,material=
 /** Ink bamboo: jointed culms leaning out of one clump, sprays of narrow leaves near the top. */
 const bambooSpray=(()=>{const parts:T.BufferGeometry[]=[];for(let i=0;i<6;i++){const a=(i-2.5)*.38,g=new T.SphereGeometry(1,6,3).scale(.05,.012,.3).translate(0,0,.28).rotateX(.5+Math.abs(a)*.4).rotateY(a);parts.push(g);}return mergeGeometries(parts)!;})();
 export function bamboo(parent:T.Object3D,x:number,z:number,{height=4.4,culms=7,radius=.38,y=0,seed=1}={}){
-  let s=Math.floor(Math.abs(x*91.7+z*37.3+seed*13))%2147483647||11;const random=()=>((s=Math.imul(s,48271)%2147483647)/2147483647);
+  let s=Math.floor(Math.abs(x*91.7+z*37.3+seed*13))>>>0;const random=()=>((s=Math.imul(s,1664525)+1013904223>>>0)/4294967296);
   const g=new T.Group();g.position.set(x,y,z);parent.add(g);
   const cane=leaf('#5f8a5a'),node=leaf('#3f6446'),blade=leaf('#3e6a4a');
   for(let i=0;i<culms;i++){
@@ -274,7 +274,7 @@ const leafMaterials=new Map<string,T.Material>();
 const leaf=(color:string)=>{let m=leafMaterials.get(color);if(!m){m=surfaceMaterial(color,.92,0,'foliage');leafMaterials.set(color,m);}return m;};
 /** Brush-painted trees: crooked limbs carrying flat cloud-tiers of foliage. */
 export function paintedTree(parent:T.Object3D,x:number,z:number,scale=1,form:TreeForm='pine',y=0){
-  let seed=Math.floor(Math.abs(x*73.1+z*31.7+scale*997))%2147483647||7;const random=()=>((seed=Math.imul(seed,48271)%2147483647)/2147483647);
+  let seed=Math.floor(Math.abs(x*73.1+z*31.7+scale*997))>>>0;const random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
   const g=new T.Group();g.position.set(x,y,z);g.scale.setScalar(scale);g.rotation.y=random()*Math.PI*2;parent.add(g);
   const bark=form==='blossom'?kit.ink():kit.timber(),colors=foliage[form];
   const lean=(random()-.5)*.5,height=form==='pine'||form==='snowpine'?3.1:form==='willow'?2.3:2.6;

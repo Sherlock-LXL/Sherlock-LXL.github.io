@@ -93,6 +93,8 @@
 .arcade-pad [data-key="space"]{grid-column:1/-1;font-size:12px}
 .arcade-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:15px}
 .arcade-cards button{min-height:34px;padding:4px;font-size:12px}
+.pairs-health{height:10px;width:100%;min-width:130px;border-radius:5px;background:#d5dacf;overflow:hidden}
+.pairs-health i{display:block;height:100%;background:linear-gradient(90deg,#aa6856,#c49275);transition:width .18s ease;border-radius:inherit}
 .arcade-result{position:absolute;inset:25% 8%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;border:1px solid #c9b797;border-radius:12px;background:#f6eeddeF;box-shadow:0 8px 30px #55442825}
 .arcade-result b{font:26px "Songti SC",serif}.arcade-result span{font-size:16px}.arcade-result small{font-size:11px;color:#86755a}
 @media (pointer:coarse){.game-touch-drive{display:flex}.game-drive-help{display:none}.game-route-map{bottom:100px;right:14px;transform:scale(.8);transform-origin:bottom right}.game-near-prompt{bottom:160px}}

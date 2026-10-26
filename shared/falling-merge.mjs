@@ -20,21 +20,22 @@ export class FallingMerge{
     if(this.balls.some(b=>Math.hypot(b.x-x,b.y-.085)<b.r+r))return false;
     this.balls.push(this.make(level,x,.085,0,.45));this.next.shift();this.next.push(this.draw());this.cooldown=.24;this.drops++;return true;
   }
-  walls(b){
+  walls(b,h=0){
     const low=.07+b.r,high=.93-b.r,floor=.94-b.r;
-    if(b.x<low){b.x=low;if(b.vx<0)b.vx*=-.22;}
-    if(b.x>high){b.x=high;if(b.vx>0)b.vx*=-.22;}
+    if(b.x<low){b.x=low;if(b.vx<0)b.vx*=-.4;}
+    if(b.x>high){b.x=high;if(b.vx>0)b.vx*=-.4;}
     if(b.y>floor){
       b.y=floor;
       if(b.vy>.5){b.pulse=Math.min(.16,b.vy*.07);this.effects.push({x:b.x,y:b.y,r:b.r,age:0,kind:'hit'});}
-      if(b.vy>0)b.vy=b.vy<.18?0:-b.vy*.24;
-      b.vx*=.90;
+      if(b.vy>0)b.vy=b.vy<.18?0:-b.vy*.30;
+      // Friction is applied once per time step, never for each solver correction.
+      b.vx*=Math.exp(-h*2.2);
     }
   }
   step(h){
     for(const b of this.balls){
-      b.age+=h;b.wait=Math.max(0,b.wait-h);b.pulse*=Math.exp(-h*18);b.vy=Math.min(2.6,b.vy+3.4*h);b.vx*=Math.exp(-h*.65);
-      b.x+=b.vx*h;b.y+=b.vy*h;this.walls(b);
+      b.age+=h;b.wait=Math.max(0,b.wait-h);b.pulse*=Math.exp(-h*18);b.vy=Math.min(2.6,b.vy+3.4*h);b.vx*=Math.exp(-h*.28);
+      b.x+=b.vx*h;b.y+=b.vy*h;this.walls(b,h);
     }
     for(let pass=0;pass<5;pass++){
       const sorted=this.balls.slice().sort((a,b)=>a.x-a.r-(b.x-b.r)),gone=new Set(),born=[];
@@ -51,15 +52,16 @@ export class FallingMerge{
             this.effects.push({x:child.x,y:child.y,r:child.r,age:0,kind:'merge'});break;
           }
           const nx=d?dx/d:1,ny=d?dy/d:0,overlap=r-d;
-          const ma=a.r*a.r,mb=b.r*b.r,wa=mb/(ma+mb),wb=1-wa;
+          // Radius-based game mass lets a new small ball move the larger circles.
+          const ma=a.r,mb=b.r,wa=mb/(ma+mb),wb=1-wa;
           a.x-=nx*overlap*wa;a.y-=ny*overlap*wa;b.x+=nx*overlap*wb;b.y+=ny*overlap*wb;
           const approach=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
           if(approach<0){
-            const impulse=approach*1.20;a.vx+=nx*impulse*wa;a.vy+=ny*impulse*wa;b.vx-=nx*impulse*wb;b.vy-=ny*impulse*wb;
+            const impulse=approach*1.52;a.vx+=nx*impulse*wa;a.vy+=ny*impulse*wa;b.vx-=nx*impulse*wb;b.vy-=ny*impulse*wb;
             if(approach<-.45){a.pulse=Math.max(a.pulse,Math.min(.14,-approach*.04));b.pulse=Math.max(b.pulse,Math.min(.14,-approach*.04));}
             // Light contact friction damps stacks without freezing falling circles.
             const tangent=(b.vx-a.vx)*-ny+(b.vy-a.vy)*nx;
-            a.vx+=-ny*tangent*.12*wa;a.vy+=nx*tangent*.12*wa;b.vx-=-ny*tangent*.12*wb;b.vy-=nx*tangent*.12*wb;
+            a.vx+=-ny*tangent*.05*wa;a.vy+=nx*tangent*.05*wa;b.vx-=-ny*tangent*.05*wb;b.vy-=nx*tangent*.05*wb;
           }
           this.walls(a);this.walls(b);
         }

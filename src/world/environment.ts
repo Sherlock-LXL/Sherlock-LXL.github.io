@@ -3,7 +3,8 @@ import {renderSettings} from './render-settings';
 import { daylight } from '../../shared/atmosphere.mjs';
 import {harbor} from '../../shared/harbor.mjs';
 import { Weather } from './weather';
-import {exchangeIsland,robotDistrict,researchInstitute} from './future-landmarks';
+import {exchangeIsland,robotDistrict,researchInstitute,distantColliders} from './future-landmarks';
+import type {Obstacle} from './scenery';
 import {batchStatic} from './optimizer';
 import type { Region } from '../core/types';
 
@@ -36,6 +37,7 @@ export class Environment {
   private washes={day:wash(palette.day),dusk:wash(palette.dusk),night:wash(palette.night),storm:wash(palette.storm),snow:wash(palette.snow)};
   private current:Wash=wash(palette.day);
   private releaseFar:()=>void;
+  readonly colliders:Obstacle[]=[];
   readonly weather:Weather;private observer=new T.Vector3();
   get weatherState(){return {...this.weather.cycle.snapshot,motionTime:this.weather.motionTime};}
   /** Linear horizon colour; the renderer's mist and every distant wash meet it. */
@@ -130,6 +132,7 @@ export class Environment {
     // Future islands: sparse silhouettes beyond the playable shadow volume, sharing draws.
     const far=new T.Group();far.name='distant-islands';scene.add(far);
     far.add(exchangeIsland(),robotDistrict(),researchInstitute());
+    for(const root of far.children)this.colliders.push(...distantColliders(root as T.Group));
     far.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=false;o.receiveShadow=false;}});
     this.releaseFar=batchStatic(far);
     this.update(0);

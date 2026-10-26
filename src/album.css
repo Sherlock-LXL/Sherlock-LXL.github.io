@@ -5,7 +5,7 @@ body{background:var(--silk)}
 ::selection{background:#e7c9a8;color:var(--ink)}
 .main-world{background:linear-gradient(180deg,#efe7d5,#e4dcc7)}
 /* Paper fibre: two faint crossing hatches shared by every mounted surface. */
-.sidebar,.topbar,dialog,.interaction-prompt,.guide-card,.controls-pill,.toast,#photo-toolbar,.web-loading,.view-badge,#trail-guide,.music-caption{background-image:repeating-linear-gradient(90deg,rgba(120,96,58,.025) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(120,96,58,.02) 0 1px,transparent 1px 11px)}
+.sidebar,.topbar,dialog,.interaction-prompt,.guide-card,.controls-pill,.toast,#photo-toolbar,.view-badge,#trail-guide,.music-caption{background-image:repeating-linear-gradient(90deg,rgba(120,96,58,.025) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(120,96,58,.02) 0 1px,transparent 1px 11px)}
 /* Album spine: the sidebar is the mounted cover, its edge a double ink rule. */
 .sidebar{background-color:#f3ebdb;border-right:0;box-shadow:inset -1px 0 0 var(--rule),inset -5px 0 0 #ebe1cc,inset -6px 0 0 rgba(58,48,38,.12)}
 .brand{color:var(--ink);font-family:var(--serif);letter-spacing:.5px}
@@ -218,7 +218,8 @@ textarea,input:not([type=range]):not([type=checkbox]):not([type=file]),select{ba
 @media(max-width:900px) and (pointer:coarse){
   html.touch-experience .sidebar{background-color:#f1f6ef}
   html.touch-experience .mobile-tools button{background:#f9fcf3}
-  html.touch-experience .touch-joystick{background:radial-gradient(circle,rgba(239,248,235,.48) 0 30%,rgba(239,248,235,.85) 31% 100%);border-color:var(--rule)}
+  html.touch-experience .touch-joystick{background:radial-gradient(circle closest-side,rgba(239,248,235,.48) 0 24%,rgba(239,248,235,.85) 25% 81%,rgba(239,248,235,.24) 82% 100%);border-color:var(--rule)}
+  html.touch-experience .touch-joystick.sprinting{border-color:var(--malachite)}
   html.touch-experience .touch-joystick-knob{background:#65958b;border-color:#f6fcf1}
   html.touch-experience .touch-jump{display:flex;flex-direction:column;justify-content:center;gap:2px;background:rgba(247,252,240,.94);border-color:var(--rule)}
   html.touch-experience .touch-jump>.action-icon{width:24px;height:24px;flex:none;color:inherit}
@@ -228,7 +229,7 @@ textarea,input:not([type=range]):not([type=checkbox]):not([type=file]),select{ba
 }
 @media(max-height:600px) and (pointer:coarse){
   html.touch-experience .mini-atlas{width:88px;height:88px}
-  html.touch-experience .interaction-prompt,html.touch-experience .interaction-prompt#interaction-prompt{bottom:24px;width:min(350px,calc(100% - 310px));max-height:calc(100dvh - 100px);overflow:auto}
+  html.touch-experience .interaction-prompt,html.touch-experience .interaction-prompt#interaction-prompt{bottom:24px;width:min(350px,calc(100% - 366px));max-height:calc(100dvh - 100px);overflow:auto}
   html.touch-experience .toast{top:72px;left:160px;right:116px}
   html.touch-experience #trail-guide{top:128px;left:160px;right:116px}
 }
