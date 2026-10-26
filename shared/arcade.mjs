@@ -8,9 +8,8 @@ export const arcadeCatalog=[
   {id:'pairs',name:'四季翻翻乐',symbol:'✿',hint:'翻错扣一格血 · 配完进入下一面',detail:'记住卡片，挑战更高分。'},
   {id:'falling',name:'四季叠叠球',symbol:'◉',hint:'拖动选位置，松手投球',detail:'相同的小球会合成。'},
 ];
-export const arcadeScoreKey=id=>`arcade.${id}${id==='bricks'?'.v4':id==='pairs'?'.v3':['blocks','snake'].includes(id)?'.v2':''}`;
-// Optimal-memory Monte Carlo: 25 mistakes permit about five completed 8-pair boards.
-export const pairsHealth=25;
+export const arcadeScoreKey=id=>`arcade.${id}${['bricks','pairs'].includes(id)?'.v4':['blocks','snake'].includes(id)?'.v2':''}`;
+export const pairsHealth=40;
 export const blockInterval=(time,lines,pieces)=>.15+.37*Math.exp(-Math.max(time/45,lines/3,pieces/8)*.16);
 export const mergeDuration=.12;
 const shapes=[[[1,1,1,1]],[[2,2],[2,2]],[[0,3,0],[3,3,3]],[[0,4,4],[4,4,0]],[[5,5,0],[0,5,5]],[[6,0,0],[6,6,6]],[[0,0,7],[7,7,7]]];

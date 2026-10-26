@@ -3,6 +3,15 @@ import assert from 'node:assert/strict';
 import {createServer} from 'vite';
 import * as T from 'three';
 import {loadCatalog} from '../backend/catalog.mjs';
+import {distantIslands,distantGround,distantContains} from '../shared/distant-islands.mjs';
+
+async function withCanvasModels(check){
+  const original=globalThis.document,gradient={addColorStop(){}};
+  const context=new Proxy({measureText:text=>({width:text.length*32}),createLinearGradient:()=>gradient},{get:(target,key)=>target[key]??(()=>{})});
+  globalThis.document={createElement:()=>({width:512,height:512,getContext:()=>context})};
+  const vite=await createServer({server:{middlewareMode:true,hmr:false},appType:'custom'});
+  try{await check(vite);}finally{await vite.close();if(original===undefined)delete globalThis.document;else globalThis.document=original;}
+}
 
 test('mirrored static meshes keep outward faces and vertex data when batched',async()=>{
   const vite=await createServer({server:{middlewareMode:true},appType:'custom'});
@@ -21,6 +30,62 @@ test('mirrored static meshes keep outward faces and vertex data when batched',as
     }
     release();batch.geometry.dispose();geometry.dispose();material.dispose();
   }finally{await vite.close();}
+});
+
+test('round pavilion tiles and lantern caps stop a ray cast from above',async()=>{
+  await withCanvasModels(async vite=>{
+    const {roundRoof,lantern}=await vite.ssrLoadModule('/src/world/vernacular.ts'),root=new T.Group();
+    roundRoof(root,{radius:3,height:1.5});root.updateMatrixWorld(true);
+    const tiles=root.getObjectByName('round-roof-tiles'),normal=tiles.geometry.attributes.normal;
+    for(let i=0;i<normal.count;i++)assert.ok(normal.getY(i)>0,'roof skin has an upward normal');
+    const ray=new T.Raycaster(new T.Vector3(1,4,0),new T.Vector3(0,-1,0));
+    assert.ok(ray.intersectObject(tiles).length>0,'front faces remain visible from the sky');
+    const lamp=lantern(new T.Group(),0,0);lamp.updateMatrixWorld(true);
+    ray.set(new T.Vector3(.2,3,0),new T.Vector3(0,-1,0));
+    assert.ok(ray.intersectObject(lamp.getObjectByName('lantern-cap')).length>0,'stone cap faces outward');
+  });
+});
+
+test('distant planting clears the halls; piers reach the seabed and tilted sundials clear their plinths',async()=>{
+  await withCanvasModels(async vite=>{
+    const {exchangeIsland,robotDistrict,researchInstitute,distantColliders}=await vite.ssrLoadModule('/src/world/future-landmarks.ts');
+    for(const root of [exchangeIsland(),robotDistrict(),researchInstitute()]){
+      root.updateMatrixWorld(true);
+      const spec=distantIslands.find(s=>s.name===root.name),halls=root.getObjectsByProperty('name','horizon-hall').map(h=>new T.Box3().setFromObject(h));
+      for(let i=0;i<halls.length;i++)for(let j=i+1;j<halls.length;j++)assert.ok(!halls[i].intersectsBox(halls[j]),'neighbouring halls leave space between their eaves');
+      const structures=[...halls,...['horizon-institute','horizon-colonnade','horizon-automaton'].flatMap(name=>root.getObjectsByProperty('name',name).map(o=>new T.Box3().setFromObject(o)))];
+      for(const lamp of root.getObjectsByProperty('name','horizon-lantern')){
+        const bounds=new T.Box3().setFromObject(lamp);
+        assert.ok(Math.abs(bounds.min.y-distantGround)<.00001,'stone lantern foot meets the land');
+        assert.ok(structures.every(b=>!b.intersectsBox(bounds)),'lanterns remain outside raised platforms and buildings');
+      }
+      const trees=root.getObjectsByProperty('name','horizon-tree');
+      assert.equal(trees.length,6);
+      for(const tree of trees){
+        const bounds=new T.Box3().setFromObject(tree);
+        assert.ok(bounds.min.y<=distantGround&&bounds.min.y>distantGround-.08,'roots meet the land');
+        assert.ok(halls.every(h=>!h.intersectsBox(bounds)),'crowns leave clearance around real roof bounds');
+        tree.traverse(o=>{
+          if(!o.isMesh)return;
+          const p=o.geometry.attributes.position,v=new T.Vector3();
+          for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i).applyMatrix4(o.matrixWorld);assert.ok(distantContains(v.x,v.z,spec),'entire tree remains inside the island');}
+        });
+      }
+      const deck=new T.Box3().setFromObject(root.getObjectByName('horizon-dock-deck'));
+      assert.ok(deck.min.y>-5.65,'timber deck remains clear of the water');
+      for(const pile of root.getObjectsByProperty('name','horizon-dock-pile')){
+        const bounds=new T.Box3().setFromObject(pile);
+        assert.ok(bounds.min.y<-7.2&&bounds.max.y>deck.max.y,'pile supports the deck from below the seabed');
+      }
+      for(const sundial of root.getObjectsByProperty('name','horizon-sundial')){
+        const plinth=new T.Box3().setFromObject(sundial.children[0]),face=new T.Box3().setFromObject(sundial.getObjectByName('horizon-dial-face'));
+        assert.ok(face.min.y>plinth.max.y+.02,'tilted bronze rim does not sink into the stone');
+      }
+      const colliders=distantColliders(root);
+      assert.equal(colliders.filter(o=>o.surface).length,1);
+      assert.ok(colliders.every(o=>Number.isFinite(o.base)&&Number.isFinite(o.height)&&o.base<o.height));
+    }
+  });
 });
 
 test('real flocks fade before recycling; fish relocate and leave no traffic conflicts over five minutes',async()=>{

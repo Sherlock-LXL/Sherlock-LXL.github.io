@@ -121,7 +121,7 @@ test('pairs lose health only on mismatches, retain earned points and continue on
   for(let n=0;n<8;n++)a.cards.forEach((v,i)=>{if(v===n)a.flip(i);});assert.equal(a.boards,2);assert.equal(a.score,2000);
   const g=new Arcade('pairs');g.flip(0);g.flip(0);assert.equal(g.score,0);assert.equal(g.health,pairsHealth);
   const wrong=g.cards.findIndex(v=>v!==g.cards[0]);g.health=1;g.flip(wrong);assert.equal(g.health,0);assert.equal(g.over,true);
-  assert.equal(arcadeScoreKey('pairs'),'arcade.pairs.v3');assert.equal(arcadeScoreKey('bricks'),'arcade.bricks.v4');
+  assert.equal(arcadeScoreKey('pairs'),'arcade.pairs.v4');assert.equal(arcadeScoreKey('bricks'),'arcade.bricks.v4');
 });
 test('large sea course has safe bridge crossings and rejects stone piers',()=>{
   const path=seaPath();assert.ok(path.length>1000);assert.ok(waterClear(-10.7,-13.4,regions,Math.atan2(7.04,-5.64)));
@@ -337,7 +337,7 @@ test('a fresh small ball visibly pushes the largest floor ball, consistently at 
   }
   assert.ok(Math.max(...positions)-Math.min(...positions)<.001);
 });
-test('optimal memory play averages about five complete pair boards before health runs out',()=>{
+test('optimal memory play averages eight to nine complete pair boards before health runs out',()=>{
   let completed=0;
   for(let trial=0;trial<1500;trial++){
     const g=new Arcade('pairs',seededRandom(7000+trial)),seen=new Map();
@@ -352,5 +352,5 @@ test('optimal memory play averages about five complete pair boards before health
     }
     completed+=g.boards;
   }
-  const mean=completed/1500;assert.ok(mean>4.8&&mean<5.4,`mean completed boards: ${mean}`);
+  const mean=completed/1500;assert.ok(mean>8.2&&mean<8.9,`mean completed boards: ${mean}`);
 });

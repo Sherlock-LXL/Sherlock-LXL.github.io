@@ -169,8 +169,8 @@ export function lantern(parent:T.Object3D,x:number,z:number,scale=1,y=0,light=ki
   place(g,new T.CylinderGeometry(.28,.22,.12,6),s,0,1.07);
   place(g,new T.CylinderGeometry(.2,.2,.36,6),light,0,1.31).castShadow=false;
   for(let i=0;i<6;i++){const a=i/6*Math.PI*2+Math.PI/6;place(g,new T.BoxGeometry(.05,.38,.05),s,Math.sin(a)*.2,1.31,Math.cos(a)*.2);}
-  const cap=new T.LatheGeometry([[0,.32],[.12,.3],[.3,.14],[.4,.02],[.42,0],[0,0]].map(([r,h])=>new T.Vector2(r,h)),6);
-  place(g,cap,s,0,1.5);place(g,new T.SphereGeometry(.07,8,6),s,0,1.86);
+  const cap=new T.LatheGeometry([[0,0],[.42,0],[.4,.02],[.3,.14],[.12,.3],[0,.32]].map(([r,h])=>new T.Vector2(r,h)),6);
+  place(g,cap,s,0,1.5).name='lantern-cap';place(g,new T.SphereGeometry(.07,8,6),s,0,1.86);
   return g;
 }
 
@@ -234,7 +234,8 @@ export function roundRoof(parent:T.Object3D,{radius,height,y=0,x=0,z=0,material=
   const g=new T.Group();g.position.set(x,y,z);parent.add(g);
   const n=10,profile:T.Vector2[]=[];
   for(let i=0;i<=n;i++){const t=i/n;profile.push(new T.Vector2(radius*(1-t),height*Math.pow(t,1.7)*(1-.08*(1-t))+.12*(1-t)*(1-t)));}
-  place(g,new T.LatheGeometry(profile.slice().reverse(),Math.max(16,ridges*4)),material);
+  // Follow the eave toward the apex so both winding and normals face the sky.
+  place(g,new T.LatheGeometry(profile,Math.max(16,ridges*4)),material).name='round-roof-tiles';
   place(g,new T.CylinderGeometry(radius,radius*.98,.16,Math.max(16,ridges*4),1,true),kit.eaves(),0,.04);
   place(g,new T.CircleGeometry(radius,Math.max(16,ridges*4)).rotateX(Math.PI/2),kit.eaves(),0,-.04);
   for(let i=0;i<ridges;i++){const a=i/ridges*Math.PI*2,pts=profile.map(p=>new T.Vector3(Math.cos(a)*p.x,p.y+.05,Math.sin(a)*p.x));place(g,new T.TubeGeometry(new T.CatmullRomCurve3(pts),10,.045,5,false),kit.stoneDark());}
