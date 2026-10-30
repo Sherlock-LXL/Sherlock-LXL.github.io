@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [webContentPlugin()],
   server: { host: '127.0.0.1', port: 5173, strictPort: true },
   build: { chunkSizeWarningLimit: 650, rollupOptions: {
-    input: {home:'index.html',projects:'projects/index.html',world:'world/index.html'},
+    input: {home:'index.html',projects:'projects/index.html',world:'world/index.html',jiahui:'jiahui/index.html'},
     output: {manualChunks:{three:['three']}}
   }}
 });

@@ -86,7 +86,7 @@ async function boot(){
     <div class="project-grid">${(isHome?projects.filter(p=>p.featured):projects).map((p,i)=>card(p,i,isHome)).join('')}</div><p id="empty-projects" hidden>没有找到匹配的项目，请换一个关键词。</p></section>
     ${isHome?`<section class="world-invitation">${scroll}<div><p class="eyebrow">03 / GO EXPLORING</p><h2>走进作品所在的世界。</h2><p>${worldHint}</p></div><a class="button primary" href="${worldURL()}">Enter XiangMeta ${diagonalArrow}</a></section>`:''}
     <section class="contact-section" id="contact"><div><p class="eyebrow">KEEP IN TOUCH</p><h2>下一次连接，从这里开始。</h2></div><div>${link(profile.github,'GitHub / Sherlock-LXL')}${link(profile.music,'网易云音乐 / 个人主页')}</div></section></main>
-    <footer class="site-footer"><span>© ${new Date().getFullYear()} ${esc(profile.name)} · XiangMeta</span><span>BUILT WITH CURIOSITY.</span><a href="${sitePath()}">回到起点 ↑</a></footer>`;
+    <footer class="site-footer"><span>© ${new Date().getFullYear()} ${esc(profile.name)} · XiangMeta</span><span>BUILT WITH CURIOSITY.</span><a href="${sitePath('jiahui/')}" ${externalAttrs}>Jiahui Teaching Studio ${diagonalArrow}</a><a href="${sitePath()}">回到起点 ↑</a></footer>`;
   if(!isHome){
     const params=new URLSearchParams(location.search);
     let category=categories.includes(params.get('category') as Project['category'])?params.get('category')!:'All';
