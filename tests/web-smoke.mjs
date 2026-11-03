@@ -52,7 +52,7 @@ try{
   assert.equal(await page.getByRole('link',{name:'Jiahui Teaching Studio'}).getAttribute('href'),`${base}jiahui/`);
   for(const javaScriptEnabled of [true,false]){
     const entryContext=await browser.newContext({javaScriptEnabled});
-    const destination='https://jiahui-teaching-studio.18616246261.workers.dev/';
+    const destination='https://teaching-studio.de5.net/jiahui/';
     await entryContext.route(destination,route=>route.fulfill({contentType:'text/html',body:'<title>Teaching Studio destination</title>'}));
     try{
       const entryPage=await entryContext.newPage();
