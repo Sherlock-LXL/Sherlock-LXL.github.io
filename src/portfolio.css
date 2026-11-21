@@ -1,9 +1,9 @@
 @import './web-loading.css';
 /* 山海册页 · the portfolio pages are mounted like the world: silk paper, ink rules, mineral accents and one cinnabar seal. */
-:root{font-family:Inter,"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;color:#2b2824;background:#f3ecdc;font-synthesis:none;line-height:1.6;font-weight:400;--ink:#2b2824;--muted:#5d5447;--faint:#8b8170;--line:rgba(58,48,38,.18);--rule:rgba(58,48,38,.3);--paper:#f8f3e8;--silk:#efe6d2;--seal:#a34a35;--seal-deep:#7f3324;--malachite:#3d7560;--azurite:#355f7a;--ochre:#93652c;--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif}
+:root{font-family:Inter,"Avenir Next","PingFang SC","Microsoft YaHei",sans-serif;color:#2b2824;background:#edf3ed;font-synthesis:none;line-height:1.6;font-weight:400;--ink:#2b2824;--muted:#5d5447;--faint:#8b8170;--line:rgba(58,48,38,.18);--rule:rgba(58,48,38,.3);--paper:#f8f3e8;--silk:#edf3ed;--seal:#a34a35;--seal-deep:#7f3324;--malachite:#3d7560;--azurite:#355f7a;--ochre:#93652c;--serif:"Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC","SimSun",Georgia,serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}
 /* Paper fibre: the same faint crossing hatch the world's panels use. */
-body{margin:0;background-color:#f3ecdc;background-image:repeating-linear-gradient(90deg,rgba(120,96,58,.022) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(120,96,58,.018) 0 1px,transparent 1px 11px)}
+body{margin:0;background-color:var(--silk);background-image:repeating-linear-gradient(90deg,rgba(120,96,58,.022) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgba(120,96,58,.018) 0 1px,transparent 1px 11px)}
 a{color:inherit;text-decoration:none}button,input{font:inherit}button,a,input{ -webkit-tap-highlight-color:transparent}a,button{touch-action:manipulation}button{cursor:pointer}a:hover{color:var(--seal)}
 button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--seal);outline-offset:5px}[hidden]{display:none!important}::selection{background:#e7c9a8;color:var(--ink)}
 p{color:var(--muted)}h1,h2,h3,h4,p{margin-top:0}h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:.01em}h2{font-size:clamp(25px,3vw,35px);line-height:1.45}
