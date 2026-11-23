@@ -11,12 +11,14 @@
     "dev:legacy": "node scripts/dev.mjs",
     "typecheck": "tsc --noEmit",
     "build": "tsc --noEmit && vite build",
+    "build:ai-lab": "tsc --noEmit && node scripts/build-ai-lab.mjs",
+    "test:ai-lab": "node --test tests/ai-lab.test.mjs && node tests/ai-lab-browser.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "export:pages": "node scripts/export-pages.mjs",
     "start": "node backend/server.mjs",
     "desktop": "electron .",
     "dist:win": "npm run build && electron-builder --win portable --x64",
-    "test": "node --test tests/web-portfolio.test.mjs tests/jump.test.mjs tests/terrain.test.mjs tests/research-physics.test.mjs tests/garden-route.test.mjs tests/discovery-focus.test.mjs tests/music.test.mjs tests/ambient-response.test.mjs tests/ambient-life.test.mjs tests/ambient-models.test.mjs tests/living-world.test.mjs tests/seasonal-games.test.mjs",
+    "test": "node --test tests/web-portfolio.test.mjs tests/jump.test.mjs tests/terrain.test.mjs tests/research-physics.test.mjs tests/garden-route.test.mjs tests/discovery-focus.test.mjs tests/music.test.mjs tests/ambient-response.test.mjs tests/ambient-life.test.mjs tests/ambient-models.test.mjs tests/living-world.test.mjs tests/seasonal-games.test.mjs tests/ai-lab.test.mjs",
     "test:games": "node tests/seasonal-browser.mjs",
     "test:game-experience": "node tests/seasonal-experience.mjs",
     "test:arcade": "node tests/arcade-polish.mjs",
@@ -28,16 +30,17 @@
     "module:new": "node scripts/new-module.mjs"
   },
   "dependencies": {
+    "onnxruntime-web": "1.23.2",
     "three": "^0.180.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
     "@types/three": "^0.180.0",
-    "typescript": "^5.9.2",
-    "vite": "^7.1.5",
     "electron": "^38.0.0",
     "electron-builder": "^26.0.12",
-    "playwright": "^1.55.0"
+    "playwright": "^1.55.0",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.5"
   },
   "build": {
     "appId": "world.xiangmeta.desktop",

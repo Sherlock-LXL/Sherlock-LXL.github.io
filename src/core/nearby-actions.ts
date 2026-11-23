@@ -1,5 +1,6 @@
 import {projectLinks} from './portfolio';
 import type {ArtworkInteraction,Exhibit} from './types';
+import {aiProjectForModule} from '../../shared/ai-lab.mjs';
 
 export type InteractionKey='F'|'E'|'R';
 export interface NearbyAction {key:InteractionKey;label:string;href?:string}
@@ -12,6 +13,7 @@ export function nearbyActions(module:Exhibit|null,artwork:ArtworkInteraction|nul
   const {github,demo}=projectLinks(m);
   const primary:NearbyAction=artwork
     ?{key:'F',label:artwork.action.kind==='album'?'查看专辑':'查看摄影'}
+    :aiProjectForModule(m.id)?{key:'F',label:'体验 AI'}
     :{key:'F',label:github?'GitHub':'打开展览',...(github?{href:github}:{})};
   return [
     primary,

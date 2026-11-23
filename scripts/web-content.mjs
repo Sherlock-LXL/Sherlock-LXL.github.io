@@ -1,8 +1,9 @@
 import {readdir, readFile, stat} from 'node:fs/promises';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 import {moduleSchema, regionSchema} from '../shared/schema.mjs';
 
-/** Build only from public manifests. Never read data/local.json or model folders. */
+/** Build only explicitly public content and versioned, hash-checked AI exports. */
 export async function webContent(root) {
   const json = async file => JSON.parse(await readFile(path.join(root,file),'utf8'));
   const world = await json('data/world.json');
@@ -64,14 +65,32 @@ export async function webContent(root) {
     else if(value&&typeof value==='object') { for(const item of Object.values(value)) await collect(item); }
   }
   await collect(catalog);await collect(portfolio);
-  return {catalog,portfolio,assets};
+  const aiLab=await json('data/ai-lab-models.json');
+  for(const project of aiLab.projects)for(const resource of project.resources){
+    if(!/^\/assets\/ai-lab\/[a-z0-9-]+\/[a-z0-9.-]+\.(json|onnx|bin)$/.test(resource.path)||resource.path.includes('..')||!/^[a-f0-9]{64}$/.test(resource.sha256))
+      throw new Error(`Unsupported AI export: ${resource.path}`);
+    const file=path.join(root,'public',resource.path.slice(1)),info=await stat(file);
+    if(info.size!==resource.bytes||info.size>=100*1024*1024)throw new Error(`AI export size mismatch: ${resource.path}`);
+    assets.set(resource.path,{file,size:info.size,sha256:resource.sha256});
+  }
+  const runtime=await json('node_modules/onnxruntime-web/package.json');
+  if(runtime.version!==aiLab.runtimeVersion)throw new Error('ONNX Web runtime version mismatch');
+  for(const name of ['ort-wasm-simd-threaded.mjs','ort-wasm-simd-threaded.wasm']){
+    const file=path.join(root,'node_modules/onnxruntime-web/dist',name),info=await stat(file);
+    assets.set(`/assets/ai-runtime/${name}`,{file,size:info.size});
+  }
+  return {catalog,portfolio,aiLab,assets};
 }
 
 export function webContentPlugin() {
   let root,content,base;
-  const files=()=>new Map([
+  const labOnly=Boolean(process.env.AI_LAB_ONLY);
+  const files=()=>new Map(labOnly?[
+    ['/content/ai-lab.json',JSON.stringify(content.aiLab)]
+  ]:[
     ['/content/world.json',JSON.stringify(content.catalog)],
-    ['/content/projects.json',JSON.stringify(content.portfolio)]
+    ['/content/projects.json',JSON.stringify(content.portfolio)],
+    ['/content/ai-lab.json',JSON.stringify(content.aiLab)]
   ]);
   return {
     name:'xiangmeta-public-content',
@@ -79,7 +98,7 @@ export function webContentPlugin() {
     configureServer(server){
       server.watcher.add([path.join(root,'modules'),path.join(root,'data')]);
       server.watcher.on('change',async file=>{
-        if(!/\/(manifest|region|world|profile|audio|image-previews)\.json$/.test(file))return;
+        if(!/\/(manifest|region|world|profile|audio|image-previews|ai-lab-models)\.json$/.test(file))return;
         try{content=await webContent(root);server.ws.send({type:'full-reload'});}
         catch(error){server.config.logger.error(error.message);}
       });
@@ -88,17 +107,28 @@ export function webContentPlugin() {
         if(base!=='/'&&url.startsWith(base))url='/'+url.slice(base.length);
         const text=files().get(url),asset=content.assets.get(url);
         if(text!==undefined){res.setHeader('Content-Type','application/json');res.end(text);return;}
-        if(asset){try{res.setHeader('Content-Type',url.endsWith('.mp3')?'audio/mpeg':url.endsWith('.webp')?'image/webp':url.endsWith('.png')?'image/png':url.endsWith('.glb')?'model/gltf-binary':'image/jpeg');res.end(await readFile(asset.file));}catch{res.statusCode=404;res.end();}return;}
+        if(asset){try{res.setHeader('Content-Type',url.endsWith('.mp3')?'audio/mpeg':url.endsWith('.webp')?'image/webp':url.endsWith('.png')?'image/png':url.endsWith('.glb')?'model/gltf-binary':url.endsWith('.wasm')?'application/wasm':url.endsWith('.mjs')?'text/javascript':url.endsWith('.json')?'application/json':/\.(onnx|bin)$/.test(url)?'application/octet-stream':'image/jpeg');res.end(await readFile(asset.file));}catch{res.statusCode=404;res.end();}return;}
         next();
       });
     },
     async generateBundle(){
       content=await webContent(root);
       for(const [fileName,source] of files())this.emitFile({type:'asset',fileName:fileName.slice(1),source});
-      for(const [url,{file}] of content.assets)this.emitFile({type:'asset',fileName:url.slice(1),source:await readFile(file)});
+      for(const [url,{file,sha256}] of content.assets){
+        if(labOnly&&!url.startsWith('/assets/ai-'))continue;
+        const source=await readFile(file);
+        if(sha256&&createHash('sha256').update(source).digest('hex')!==sha256)throw new Error(`AI export hash mismatch: ${url}`);
+        this.emitFile({type:'asset',fileName:url.slice(1),source});
+      }
       this.emitFile({type:'asset',fileName:'.nojekyll',source:''});
       const notices=[];
       for(const name of ['three','zod'])notices.push(`${name}\n\n${await readFile(path.join(root,'node_modules',name,'LICENSE'),'utf8')}`);
+      notices.push(`onnxruntime-web ${content.aiLab.runtimeVersion}\n\n${await readFile(path.join(root,'scripts/ai-lab-originals/onnxruntime/LICENSE'),'utf8')}`);
+      for(const name of ['gift-chooser','expression-recognition-cnn','blind-verse-rnn']){
+        const license=await readFile(path.join(root,'scripts/ai-lab-originals',name,'LICENSE'),'utf8');
+        notices.push(`Original model: ${name}\n\n${license}`);
+      }
+      notices.push(await readFile(path.join(root,'scripts/ai-lab-originals/gift-chooser/MODEL_AND_DATA_NOTICE.md'),'utf8'));
       this.emitFile({type:'asset',fileName:'THIRD_PARTY_NOTICES.txt',source:notices.join('\n\n----------------\n\n')});
     }
   };

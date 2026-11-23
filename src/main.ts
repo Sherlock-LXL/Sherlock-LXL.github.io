@@ -28,6 +28,9 @@ import {weatherKinds,weatherNames} from '../shared/weather.mjs';
 import {artwork} from './world/artwork';
 import {resonantRegions} from '../shared/ambient-response.mjs';
 import {worldFeatures} from './world/features';
+import {aiProjectForModule} from '../shared/ai-lab.mjs';
+import {aiLabFrame} from './core/ai-lab-frame';
+import './ai-lab/modal.css';
 
 const app=document.querySelector<HTMLDivElement>('#app')!;
 const touchExperience=document.documentElement.classList.contains('touch-experience');
@@ -71,10 +74,11 @@ async function boot(){
       <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-78 -78 156 156" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="77"/>${data.regions.map(r=>`<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1]+r.radius+9}">${escape(r.title)}</text></g>`).join('')}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
       <div class="toast" role="status" aria-live="polite" hidden></div>
     </main>
-    <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div></dialog>
+    <dialog id="inspector" aria-labelledby="panel-title"><div id="panel-content"></div><div id="ai-lab-host" hidden></div></dialog>
     <div class="web-loading" id="world-loading"><span class="loading-symbol xiang-logo" aria-hidden="true">${brandMark}</span><h1>XiangMeta</h1><span class="loading-subtitle">山海册页 · 一卷正在展开的个人世界</span><p id="load-label" role="status">正在构建群岛…</p><progress id="world-progress" max="100" value="0" aria-label="构建世界"></progress><small id="load-percent">0%</small><a href="${sitePath('projects/')}">浏览项目 →</a></div>`;
   const $=<T extends HTMLElement=HTMLElement>(selector:string)=>document.querySelector<T>(selector)!;
   const dialog=$<HTMLDialogElement>('#inspector');let world:World|undefined;let current:Exhibit|undefined;let abort:AbortController|undefined;
+  const aiFrame=aiLabFrame($('#ai-lab-host'),()=>closePanel());
   $('.local-badge').innerHTML=`<a href="${sitePath('projects/')}">Projects ${diagonalArrow}</a>`;
   $('.side-caption').insertAdjacentHTML('beforebegin',`<a class="portfolio-home" href="${sitePath()}">← 李湘伦 / Portfolio</a>`);
   $('.main-world').insertAdjacentHTML('beforeend',`<div id="music-caption" class="music-caption">♫ 点击右上角 ♪ · 开启 BGM 与四季音乐</div>`);
@@ -99,9 +103,9 @@ async function boot(){
   function progress(){const count=data.modules.filter(m=>store.visited.has(m.id)).length;$('#progress-count').textContent=`${String(count).padStart(2,'0')} / ${String(data.modules.length).padStart(2,'0')}`;$('#progress-fill').style.width=`${count/data.modules.length*100}%`;$('#favorite-count').textContent=String(data.modules.filter(m=>store.favorites.has(m.id)).length);}
   function stopCamera(){stream?.getTracks().forEach(t=>t.stop());stream=undefined;}
   let cleanupResearch=()=>{};
-  function cleanup(){cleanupResearch();cleanupResearch=()=>{};abort?.abort();abort=undefined;stopCamera();imageData='';}
+  function cleanup(){aiFrame.suspend();cleanupResearch();cleanupResearch=()=>{};abort?.abort();abort=undefined;stopCamera();imageData='';}
   function closePanel(capture:boolean|Event=true){cleanup();current=undefined;dialog.close();world?.setPaused(false);document.querySelector<HTMLCanvasElement>('#world canvas')?.focus({preventScroll:true});if(capture!==false)world?.captureMouse();}
-  function showPanel(html:string){cleanup();dialog.classList.remove('product-mode','memory-mode','immersive-mode','memory-detail');dialog.dataset.kind='';world?.setPaused(true);$('#panel-content').innerHTML=html;if(!dialog.open)dialog.showModal();dialog.scrollTop=0;$('#close-panel').onclick=closePanel;}
+  function showPanel(html:string){cleanup();dialog.classList.remove('product-mode','memory-mode','immersive-mode','memory-detail','ai-lab-mode');dialog.dataset.kind='';world?.setPaused(true);$('#panel-content').innerHTML=html;if(!dialog.open)dialog.showModal();dialog.scrollTop=0;$('#close-panel').onclick=closePanel;}
   function showHarbor(){showPanel(panelHeader('向海出发','海风港口')+`<p class="panel-description">在栈桥看看海，也看看未来的航线。</p><div class="harbor-ticket"><span>出发港</span><b>中央枢纽 · 海风港口</b><span class="harbor-status">航线筹备中</span></div><div class="harbor-routes">${harborRoutes.map((r,i)=>`<article class="harbor-route"><div class="route-number">0${i+1}</div><div><h3>${escape(r.title)}</h3><small>${escape(r.theme)}</small><p>${escape(r.description)}</p></div><button disabled aria-label="${escape(r.title)}尚未开放">尚未开放</button></article>`).join('')}</div><p class="harbor-note">这些目的地尚未开放，暂时无法乘船抵达。</p><button class="primary-button" id="harbor-visit">去栈桥走走 ${diagonalArrow}</button>`);dialog.dataset.kind='harbor';$('#harbor-visit').onclick=()=>{closePanel(false);world?.visitHarbor();world?.captureMouse();};}
   bus.on('harbor',showHarbor);
   $('#collections').insertAdjacentHTML('beforebegin','<button id="harbor-open" aria-label="海风港口" title="海风港口" class="secondary-nav">'+navIcon('harbor')+' <span>海风港口</span><b>航线</b></button>');$('#harbor-open').onclick=showHarbor;
@@ -121,6 +125,7 @@ async function boot(){
   }
   function wireExhibits(){dialog.querySelectorAll<HTMLButtonElement>('[data-exhibit]').forEach(b=>b.onclick=()=>openExhibit(data.modules.find(m=>m.id===b.dataset.exhibit)!));}
   function openExhibit(m:Exhibit,product=false,albumId?:string){
+    if(product&&aiProjectForModule(m.id)){openAiLab(m);return;}
     current=m;store.visited.add(m.id);store.save();progress();world?.focusExhibit(m);bus.emit('sound','interaction');
     const region=data.regions.find(r=>r.id===m.region)!;
     const links=projectLinks(m);
@@ -137,7 +142,7 @@ async function boot(){
       <div class="panel-subtitle">${escape(m.subtitle)}</div><div class="tag-row">${m.tags.map(t=>`<span>${escape(t)}</span>`).join('')}</div>
       <p class="panel-description">${escape(m.portfolio?.summary??m.description)}</p>
       <div class="portfolio-actions">${links.github?`<a class="primary-button" href="${escape(links.github)}" ${externalAttrs}>GitHub ${diagonalArrow}</a>`:''}${links.demo?`<a class="quiet-button" href="${escape(links.demo)}" ${externalAttrs}>${m.albums?'网易云音乐':m.id==='weiming'?'观看 MV':'Demo'} ${diagonalArrow}</a>`:''}<a class="quiet-button" href="${sitePath('projects/')}#${m.id}">项目档案 →</a></div>
-      <button class="primary-button open-product" id="use-product">${m.simulation?'打开交互模拟':'进入展览'} <span>${diagonalArrow}</span></button>
+      <button class="primary-button open-product" id="use-product">${aiProjectForModule(m.id)?'亲自体验 AI':m.simulation?'打开交互模拟':'进入展览'} <span>${diagonalArrow}</span></button>
       <div class="fact-grid">${m.facts.map(f=>`<div><b>${escape(f.value)}</b><span>${escape(f.label)}</span></div>`).join('')}</div>
       <div class="panel-tabs"><button class="active" data-tab="experience">${m.interface?'交互体验':'展品'} <span>${diagonalArrow}</span></button><button data-tab="story">成长档案 <span>${diagonalArrow}</span></button></div>
       <section id="experience">
@@ -301,7 +306,13 @@ async function boot(){
   const helpExtras=touchExperience?'<p>摄影：拖动画面环顾，调整视角与光线，导出照片或明信片。</p><p>动物与小物：靠近后可抚摸、骑乘或拿起；绿圈表示可以放下物品。</p><p>游戏：从「四季游乐」或摊位进入，用屏幕按钮驾驶、暂停和复位。</p>':'<p><kbd>P</kbd> 摄影 · WASD 平移 · <kbd>Q</kbd> / <kbd>E</kbd> 升降</p><p><kbd>Q</kbd> 拿起 / 放下小物或抚摸动物；绿圈表示可以放下。</p><p><kbd>T</kbd> 骑上梅花鹿、北极熊或下来；骑乘可以跨桥。</p><p><kbd>V</kbd> 进入附近摊位，也可从「四季游乐」进入。</p><p>驾驶时 <kbd>P</kbd> / <kbd>Esc</kbd> 暂停，<kbd>R</kbd> 复位。</p><p>侧栏切换岛屿；世界总览可拖动旋转、滚轮缩放。</p><p>作品前按 F 查看作品，港口按 F 查看航线。</p>';
   $('#help').onclick=()=>{showPanel(panelHeader('FIELD NOTES','操作指南')+`<div class="help-grid">${helpControls}</div><details class="help-details"><summary>摄影、骑乘与游戏</summary><div class="help-grid">${helpExtras}</div></details><label class="quality-option"><input type="checkbox" id="low-quality"/> 降低画质，提升流畅度</label><p class="source-note">科研模拟使用演示参数。音乐与 MV 在外部平台打开。</p>`);$<HTMLInputElement>('#low-quality').checked=world?.isLowQuality??false;$<HTMLInputElement>('#low-quality').onchange=e=>world?.quality((e.target as HTMLInputElement).checked);};
   const openExternal=(url:string)=>{if(document.pointerLockElement)document.exitPointerLock();window.open(url,'_blank','noopener,noreferrer');};
-  bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});
+  function openAiLab(m:Exhibit){
+    const project=aiProjectForModule(m.id);if(!project)return;
+    store.visited.add(m.id);store.save();progress();current=m;bus.emit('sound','interaction');
+    showPanel(panelHeader('XIANGMETA / AI LAB',m.title));
+    dialog.classList.add('ai-lab-mode');dialog.dataset.kind='ai-lab';aiFrame.open(project.id);
+  }
+  bus.on('select',m=>openExhibit(m));bus.on('interact',m=>{if(aiProjectForModule(m.id)){openAiLab(m);return;}const {github}=projectLinks(m);if(github)openExternal(github);else openExhibit(m,true);});
   bus.on('demo',m=>{const {demo}=projectLinks(m);if(demo)openExternal(demo);});
   bus.on('move',p=>{$('#coordinate').textContent=`X ${p.x.toFixed(1)} · Z ${p.z.toFixed(1)}`;const marker=document.getElementById('atlas-player');if(marker)marker.setAttribute('transform',`translate(${p.x.toFixed(2)},${p.z.toFixed(2)})`);});
   document.querySelectorAll<SVGGElement>('[data-mini-region]').forEach(g=>{g.addEventListener('click',()=>world?.focusRegion(g.dataset.miniRegion!));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();world?.focusRegion(g.dataset.miniRegion!);}});});

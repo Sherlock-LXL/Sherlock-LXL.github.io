@@ -41,6 +41,11 @@ jobs:
           npm run test:smoke
         env:
           BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+      - name: Original AI model browser inference
+        run: npm run test:ai-lab
+        env:
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+          AI_LAB_ONLY_TEST: '1'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

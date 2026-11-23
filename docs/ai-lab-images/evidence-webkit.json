@@ -1,0 +1,39 @@
+{
+  "engine": "WebKit",
+  "version": "26.6",
+  "checks": [
+    {
+      "name": "gift",
+      "result": {
+        "raw": 0.7909820509122167,
+        "score": 7.909820509122167
+      }
+    },
+    {
+      "name": "cnn",
+      "tensorError": 0,
+      "probabilityError": 2.384185791015625e-7
+    },
+    {
+      "name": "rnn-seeded-continuation",
+      "result": {
+        "lines": [
+          "山月已经落在地面"
+        ],
+        "tokenIds": [
+          [
+            1251,
+            3408,
+            3848,
+            818,
+            821,
+            4857,
+            2
+          ]
+        ],
+        "seed": 20261123
+      }
+    }
+  ],
+  "errors": []
+}

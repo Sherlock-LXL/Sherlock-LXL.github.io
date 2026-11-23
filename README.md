@@ -9,6 +9,10 @@ collisions, teleportation, seasons, photography and exploration systems.
 `Landing → Enter XiangMeta` opens the world. `View Projects` opens the fast,
 responsive project archive, with no 3D engine download.
 
+`AI Lab` opens three original AI projects in one static browser application.
+The Gift Chooser, Expression CNN and Blind Verse stations also open this same
+application inside the world. See [AI Lab delivery and validation](docs/ai-lab-delivery.md).
+
 <!-- Browser validation generates the screenshots referenced below. -->
 ![XiangMeta Web portfolio](docs/images/landing.png)
 ![The original XiangMeta world, running in the browser](docs/images/world.png)
@@ -16,7 +20,8 @@ responsive project archive, with no 3D engine download.
 ## Local development
 
 Node.js **22.14+** and npm are required for development. Visitors only need a
-browser; there is no Python, Electron, model download or installation step.
+browser; there is no Python server, Electron or installation step. AI Lab
+downloads only the selected project's original model, then runs locally.
 
 ```sh
 npm ci --ignore-scripts
@@ -50,19 +55,31 @@ Use HTTP(S), including for a local preview. Opening `index.html` through
 | Shift | Run |
 | Space | Jump |
 | Click canvas / drag | Look around; drag works when pointer lock is unavailable |
-| F | Open nearby project's GitHub, or its exhibition when no repository is linked; inspect artwork or harbor routes |
+| F | Experience the nearby AI project in a window; other exhibits open GitHub/exhibitions, artwork or harbor routes |
 | E | Project description, technologies, results and exhibition |
 | R | Demo / music / MV, shown only when a destination exists |
 | G | Discoveries and memory fragments |
+| Q | Pick up / place seasonal objects, or pet the animal you face |
+| T | Ride a deer / polar bear, or dismount on clear ground |
 | P | Photo mode; WASD moves, Q / E changes altitude |
 | Esc | Close panel / release pointer |
 | Sidebar region | Teleport |
 | World overview | Orbit map |
 | ♪ sound button | Start / pause background music, seasonal cues and chimes |
 
-On touch devices the 3D entrance recommends the ordinary Portfolio. An
-explicit “still load 3D” option remains available; touch walking is not a V1
-feature. The Help panel offers reduced rendering quality.
+Touch devices have a movement joystick, drag-to-look, jump and contextual
+interaction buttons. The Help panel offers reduced rendering quality.
+
+The original four islands contain 16 portable objects and ten animals.
+Animals alternate between resting, wandering, grazing and curious looks;
+petting produces hearts. Mounts move 1.45× faster and jump higher within their
+home island. Object placement requires clear, level ground and keeps entrances
+open. Object arrangements last for the current visit.
+
+Island Time includes distant tornadoes, hail, aurora and sunset skies. Choosing
+aurora or sunset also selects a suitable hour. Photo mode freezes their motion.
+Run `node tests/living-browser.mjs` for the object, pet, mount and weather checks;
+`TEST_WEBKIT=1` includes WebKit.
 
 ## Content and architecture
 
@@ -70,6 +87,7 @@ feature. The Help panel offers reduced rendering quality.
 index.html                   Landing
 projects/index.html          Filterable Portfolio
 world/index.html             Deferred 3D entrance
+ai-lab/index.html            Three original models, standalone or embedded
 data/profile.json            Name, introduction, GitHub and music profile
 data/world.json              Original islands and world layout
 data/audio.json              Seven BGM tracks, four seasonal cues, playback gain
@@ -120,7 +138,9 @@ project details, and R appears only when a Demo/music/MV destination exists.
 ## Web scope and performance
 
 - Five AI project archives link to their source repositories. Local Python
-  inference remains in the historical source, not the public website.
+  inference remains in the historical source for other projects. Gift Chooser,
+  Expression CNN and Blind Verse now run their original models in AI Lab,
+  using JavaScript or ONNX Runtime Web WASM in a Worker.
 - Both bubble research simulations still run in a browser Worker. Parameters
   illustrate the equations; they are not fitted experimental predictions.
 - Albums use the author's supplied NetEase links; the MV links to Bilibili.
@@ -154,11 +174,31 @@ sizes and validation limits.
 
 Target user site: **`https://Sherlock-LXL.github.io/`**.
 
+The existing site uses a separate checkout at `.runtime/pages-source/`.
+To update it from this source repository, first ensure that checkout is clean:
+
+```sh
+node scripts/sync-pages.mjs
+cd .runtime/pages-source
+npm ci --ignore-scripts
+npm run build
+npm test
+npm run test:smoke
+AI_LAB_ONLY_TEST=1 npm run test:ai-lab
+```
+
+Review the diff before committing and publishing. The script preserves the
+existing Pages workflow and unrelated pages; it does not commit or push.
+Confirm GitHub Actions and live model inference after an authorized push.
+
+The steps below describe a **new**, empty publication checkout:
+
 1. Create the public repository `Sherlock-LXL.github.io`.
 2. Use `npm run export:pages` to prepare a clean source folder at
    `.runtime/pages-source/`. It includes the compressed BGM/seasonal MP3s,
-   excludes original audio/video archives, local model configuration,
-   historical binaries and existing Git history.
+  excludes original audio/video archives, private model configuration,
+  historical binaries and existing Git history. AI Lab includes explicitly
+  versioned, hash-verified model exports and their original notices.
 3. Push that source folder to the new repository's `main` branch.
 4. Set **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 5. The included workflow builds, runs regression/browser checks, uploads
@@ -185,15 +225,16 @@ The local source export does not push or publish anything. Existing `origin`
 is left unchanged. An authenticated GitHub account with repository permissions
 is required to create/push the new repository.
 
-The workflow obtains the correct `BASE_PATH` from `configure-pages`, so it
-also supports a project site such as `/xiangmeta/`. To test locally:
+The workflow obtains the correct `BASE_PATH` from `configure-pages`. The live
+site uses the root domain; the old `/xiangmeta/` deployment remains disabled.
+To test a generic nested path locally:
 
 ```sh
-BASE_PATH=/xiangmeta/ npm run build
-BASE_PATH=/xiangmeta/ npm run test:ui
+BASE_PATH=/nested/ npm run build
+BASE_PATH=/nested/ npm run test:ui
 ```
 
-PowerShell: set `$env:BASE_PATH="/xiangmeta/"` before those commands.
+PowerShell: set `$env:BASE_PATH="/nested/"` before those commands.
 
 ## Credits
 

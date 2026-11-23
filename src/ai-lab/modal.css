@@ -1,0 +1,10 @@
+#inspector.ai-lab-mode{width:min(1040px,calc(100vw - 48px));height:min(820px,calc(100dvh - 48px));max-width:1040px;max-height:calc(100dvh - 48px);padding:0;overflow:hidden;background:#e4efe7;display:flex;flex-direction:column;border:1px solid #bdcebe;border-radius:17px}
+#inspector.ai-lab-mode:not([open]){display:none}
+#inspector.ai-lab-mode #panel-content{flex:none;padding:12px 22px;border-bottom:1px solid #c7d6cb;background:#e4efe7}
+#inspector.ai-lab-mode .panel-top{margin:0;min-height:36px}
+#inspector.ai-lab-mode #panel-title{font-size:0;height:0;margin:0}
+#inspector.ai-lab-mode #ai-lab-host{flex:1;min-height:0}
+#ai-lab-host[hidden]{display:none!important}
+#ai-lab-host iframe{display:block;width:100%;height:100%;border:0;background:#e4efe7}
+#inspector.ai-lab-mode::backdrop{background:rgba(27,49,39,.5);backdrop-filter:blur(5px)}
+@media(max-width:600px){#inspector.ai-lab-mode{width:calc(100vw - 16px);height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);border-radius:12px}#inspector.ai-lab-mode #panel-content{padding:8px 14px}#inspector.ai-lab-mode #close-panel{min-width:44px;min-height:44px}}

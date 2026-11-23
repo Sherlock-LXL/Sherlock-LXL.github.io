@@ -1,0 +1,246 @@
+{
+  "browser": "153.0.8010.12",
+  "origin": "http://127.0.0.1:63192",
+  "base": "/",
+  "checks": [
+    {
+      "name": "standalone-gift",
+      "input": {
+        "scores": [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        "category": 2,
+        "raw": 0.7909820509122168,
+        "score": 7.909820509122168
+      },
+      "output": {
+        "raw": 0.7909820509122167,
+        "score": 7.909820509122167
+      },
+      "seconds": 0.00009999990463256836,
+      "lazyLoading": true
+    },
+    {
+      "name": "standalone-cnn-lossless",
+      "tensorError": 0,
+      "probabilityError": 2.384185791015625e-7,
+      "probabilities": [
+        0.007923807017505169,
+        0.00012098829756723717,
+        0.07660242170095444,
+        0.030387738719582558,
+        0.2225959748029709,
+        0.6479622721672058,
+        0.01440677884966135
+      ],
+      "seconds": 0.02140000009536743
+    },
+    {
+      "name": "standalone-cnn-jpeg",
+      "tensorError": 0,
+      "probabilityError": 2.384185791015625e-7,
+      "probabilities": [
+        0.007923807017505169,
+        0.00012098829756723717,
+        0.07660242170095444,
+        0.030387738719582558,
+        0.2225959748029709,
+        0.6479622721672058,
+        0.01440677884966135
+      ],
+      "seconds": 0.008599999904632569
+    },
+    {
+      "name": "camera-capture-local-inference",
+      "result": [
+        0.00519248703494668,
+        0.00002805428630381357,
+        0.03976673260331154,
+        0.5083629488945007,
+        0.374469131231308,
+        0.05316819250583649,
+        0.019012441858649254
+      ]
+    },
+    {
+      "name": "rnn-five-step-parity",
+      "stateError": 0.0000057220458984375,
+      "seconds": 0.026900000095367433
+    },
+    {
+      "name": "rnn-original-decoding",
+      "input": {
+        "seed": 20261123,
+        "mode": 0,
+        "prefix": ""
+      },
+      "output": {
+        "lines": [
+          "我们都会记住",
+          "我们的时候"
+        ],
+        "tokenIds": [
+          [
+            1583,
+            131,
+            4576,
+            149,
+            4142,
+            170,
+            2
+          ],
+          [
+            1583,
+            131,
+            2961,
+            1931,
+            237,
+            2
+          ]
+        ],
+        "seed": 20261123
+      },
+      "seconds": 0.06440000009536744
+    },
+    {
+      "name": "rnn-original-decoding",
+      "input": {
+        "seed": 20261123,
+        "mode": 1,
+        "prefix": "山月"
+      },
+      "output": {
+        "lines": [
+          "山月已经落在地面"
+        ],
+        "tokenIds": [
+          [
+            1251,
+            3408,
+            3848,
+            818,
+            821,
+            4857,
+            2
+          ]
+        ],
+        "seed": 20261123
+      },
+      "seconds": 0.03840000009536743
+    },
+    {
+      "name": "rnn-original-decoding",
+      "input": {
+        "seed": 20261123,
+        "mode": 2,
+        "prefix": ""
+      },
+      "output": {
+        "lines": [
+          "你看见天空也许是不愿你的眼光",
+          "我们还要继续下沉"
+        ],
+        "tokenIds": [
+          [
+            181,
+            3006,
+            4106,
+            926,
+            3204,
+            63,
+            4148,
+            1949,
+            12,
+            1546,
+            181,
+            2961,
+            3020,
+            292,
+            2
+          ],
+          [
+            1583,
+            131,
+            4470,
+            4104,
+            3426,
+            3430,
+            11,
+            2359,
+            2
+          ]
+        ],
+        "seed": 20261123
+      },
+      "seconds": 0.10590000009536743
+    },
+    {
+      "name": "offline-load-failure-and-retry",
+      "passed": true
+    },
+    {
+      "name": "mobile-all-three-local-inference",
+      "passed": true,
+      "viewport": "390×844"
+    },
+    {
+      "name": "camera-permission-denied",
+      "passed": true
+    },
+    {
+      "name": "corrupt-model-rejected-and-retry",
+      "passed": true
+    },
+    {
+      "name": "world-gift-chooser",
+      "parentNavigation": false,
+      "popup": false,
+      "statePreserved": true,
+      "escape": true
+    },
+    {
+      "name": "world-expression-recognition-cnn",
+      "parentNavigation": false,
+      "popup": false,
+      "statePreserved": true,
+      "escape": true
+    },
+    {
+      "name": "world-blind-verse-rnn",
+      "parentNavigation": false,
+      "popup": false,
+      "statePreserved": true,
+      "escape": true
+    },
+    {
+      "name": "repeat-open-reuses-session-without-model-download",
+      "passed": true
+    },
+    {
+      "name": "world-keyboard-control-restored",
+      "passed": true
+    },
+    {
+      "name": "world-mouse-look-restored",
+      "passed": true
+    },
+    {
+      "name": "close-before-iframe-load-stops-initialization",
+      "passed": true
+    },
+    {
+      "name": "world-mobile-embed",
+      "passed": true,
+      "viewport": "390×844"
+    }
+  ],
+  "errors": [],
+  "failures": [],
+  "warnings": []
+}

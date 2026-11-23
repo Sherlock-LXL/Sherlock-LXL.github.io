@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "runtimeVersion": "1.23.2",
+  "projects": [
+    {
+      "id": "gift-chooser",
+      "moduleId": "recommendation",
+      "version": "original-f64-v1",
+      "precision": "float64",
+      "parameters": 129,
+      "source": {
+        "repository": "https://github.com/Sherlock-LXL/gift-chooser",
+        "commit": "029c186b55120073bc7d34e62bfcca8a34ade63f",
+        "files": [
+          {
+            "name": "src/model.py",
+            "bytes": 5562,
+            "sha256": "89b52f1cc321a1781c198c85f79c209fdf8767f9eaf30323163c25ef2dfd0620"
+          },
+          {
+            "name": "models/final_model.npz",
+            "bytes": 1998,
+            "sha256": "b156aca374a911bd9b1594103a633d4da86bdf9f535c700f8e903df129f52380"
+          }
+        ]
+      },
+      "resources": [
+        {
+          "path": "/assets/ai-lab/gift-v1/model.json",
+          "bytes": 4233,
+          "sha256": "306e87f4d38aee26e62e871ee1d38ce37d4eeac95843d6b7b3a45cfdf4490809"
+        }
+      ]
+    },
+    {
+      "id": "expression-recognition-cnn",
+      "moduleId": "emotion-recognition",
+      "version": "residual-ensemble-v3-f32",
+      "precision": "float32",
+      "parameters": 1360341,
+      "inputShape": [
+        1,
+        1,
+        48,
+        48
+      ],
+      "labels": [
+        "angry",
+        "disgust",
+        "fear",
+        "happy",
+        "neutral",
+        "sad",
+        "surprise"
+      ],
+      "source": {
+        "repository": "https://github.com/Sherlock-LXL/expression-recognition-cnn",
+        "commit": "cfd71e55f49b0df9af7ab283e648a74ff9173910",
+        "files": [
+          {
+            "name": "src/model.py",
+            "bytes": 1956,
+            "sha256": "65fa86e9a7789d95c1106aeadf19853714a7f1d3beb3f1abefaac5f14d7dff2c"
+          },
+          {
+            "name": "src/config.py",
+            "bytes": 175,
+            "sha256": "73c389e7f09db997e8d40f4e4c3e4d4e2b2f26942b543a057c53b152dda69401"
+          },
+          {
+            "name": "checkpoints/best_model_res_1.pth",
+            "bytes": 1846197,
+            "sha256": "9703be9df90b28457e13aed9455d1593cb6eba4d579e18bec5b3caf5024596ec"
+          },
+          {
+            "name": "checkpoints/best_model_res_2.pth",
+            "bytes": 1846197,
+            "sha256": "71f302e80d83256ff995044735a4e4a788431c727428aca1ffa45f5bda86bf64"
+          },
+          {
+            "name": "checkpoints/best_model_res_3.pth",
+            "bytes": 1846197,
+            "sha256": "1add8f94a45e6985e2a7089e9411b776e9b33144957f5fe7713fc8ceb56a1279"
+          }
+        ]
+      },
+      "resources": [
+        {
+          "path": "/assets/ai-lab/expression-v3/ensemble.onnx",
+          "bytes": 5457394,
+          "sha256": "f6b54dba76e0af290f403a628a78b578bf6c80ff466ed59b8c684b69bff758fd"
+        }
+      ]
+    },
+    {
+      "id": "blind-verse-rnn",
+      "moduleId": "poetry",
+      "version": "finetuned-v1-f32",
+      "precision": "float32",
+      "parameters": 34743336,
+      "vocabularySize": 5160,
+      "hiddenSize": 1536,
+      "externalData": [
+        "weights-00.bin",
+        "weights-01.bin",
+        "weights-02.bin",
+        "weights-03.bin",
+        "weights-04.bin",
+        "weights-05.bin"
+      ],
+      "source": {
+        "repository": "https://github.com/Sherlock-LXL/blind-verse-rnn",
+        "commit": "4abc105b799ccdc92efe769ccf555122d2396f7c",
+        "files": [
+          {
+            "name": "src/model.py",
+            "bytes": 956,
+            "sha256": "f2823ede10f9c6ab4de2f05de12369c244a320244519a3d170fdb9e536fcc1b3"
+          },
+          {
+            "name": "data/processed/vocab_benchmark.json",
+            "bytes": 76300,
+            "sha256": "7a7e3a11df1be662bcdf31e1fc07b5656feb587638fda15d2a0112fa1f09f798"
+          },
+          {
+            "name": "best_finetuned_model.pth",
+            "bytes": 138976287,
+            "sha256": "76ba8ffc97af8302d8cec64ffc5b04e2f7934414097935150eca95b399a5d754"
+          }
+        ],
+        "checkpointURL": "https://github.com/Sherlock-LXL/blind-verse-rnn/releases/download/v1.0.0/best_finetuned_model.pth"
+      },
+      "resources": [
+        {
+          "path": "/assets/ai-lab/verse-v1/step.onnx",
+          "bytes": 1935,
+          "sha256": "c3ad08ca5a43da7234980dd381afbec7b6d3938e6172cc070f6ed6403d3bf0ea"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/vocab.json",
+          "bytes": 76300,
+          "sha256": "7a7e3a11df1be662bcdf31e1fc07b5656feb587638fda15d2a0112fa1f09f798"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-00.bin",
+          "bytes": 31703040,
+          "sha256": "0167a9f1983e6cf9a2583d47a372f1c3173c0bb495eeb332e0fe1a889cb7bc64"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-01.bin",
+          "bytes": 20640,
+          "sha256": "db7f089c16c8b6ba03617c3bab94d517ceb36ab73b521075acaa710f85d37c0b"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-02.bin",
+          "bytes": 37748736,
+          "sha256": "da8e91ec3e48daf0750bf4cbbc61752270c07a9138477f526aae1aa6e7866091"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-03.bin",
+          "bytes": 37748736,
+          "sha256": "9f65408c07d38fab89b7d892b504a92a3cd23cfca498ba05e9205351fd34f7eb"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-04.bin",
+          "bytes": 49152,
+          "sha256": "67fae27b3466eaec82eb9ed4f9d31d9122db57d4caa290ebb36aaef186729670"
+        },
+        {
+          "path": "/assets/ai-lab/verse-v1/weights-05.bin",
+          "bytes": 31703040,
+          "sha256": "55c44507197cab9a88f748b010716f586c84618b036a048463c062c35903aad4"
+        }
+      ]
+    }
+  ]
+}
