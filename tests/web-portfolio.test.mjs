@@ -47,10 +47,8 @@ test('production contains direct-loadable pages and only the allowed compressed 
   },Promise.resolve([]));
   const files=await walk('dist');
   assert.ok(files.includes('dist/world/index.html'));assert.ok(files.includes('dist/projects/index.html'));
-  assert.ok(files.includes('dist/jiahui/index.html'));
+  assert.ok(!files.includes('dist/jiahui/index.html'));
   assert.ok(files.includes('dist/teaching-studio/index.html'));
-  const oldEntry=await readFile('dist/jiahui/index.html','utf8');
-  assert.ok(oldEntry.includes('../teaching-studio/'));
   const entry=await readFile('dist/teaching-studio/index.html','utf8');
   assert.match(entry,/http-equiv=["']?refresh/);
   assert.ok(entry.includes("location.replace('https://teaching-studio.de5.net/')"));
