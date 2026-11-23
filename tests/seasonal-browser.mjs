@@ -111,7 +111,7 @@ try {
   for (const stall of initial.games.stalls) {
     await page.evaluate((s) => window.__xiangmetaWalk(s.approach.x, s.approach.z, s.x, s.z), stall);
     await page.waitForFunction((id) => window.__xiangmetaInspect().games.near === id, stall.id);
-    await click(".game-near-prompt");
+    await click('[data-context-key="V"]');
     await page.locator(`[data-stall-page="${stall.id}"]`).waitFor({ state: "visible" });
     assert.equal(
       await page.locator(".seasonal-cards").count(),

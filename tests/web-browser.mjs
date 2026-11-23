@@ -33,7 +33,8 @@ const server = createServer(async (req, res) => {
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 const origin = `http://127.0.0.1:${server.address().port}`,
   url = (route) => origin + base + route;
-await mkdir("artifacts/web", { recursive: true });
+const out = process.env.WEB_ARTIFACTS || "/private/tmp/xiangmeta-web";
+await mkdir(out, { recursive: true });
 const engines = process.env.TEST_WEBKIT === "1" ? { chromium, webkit } : { chromium };
 const graphics =
   process.platform === "darwin"
@@ -75,7 +76,14 @@ try {
       await page.locator(".hero").waitFor();
       assert.equal(await page.locator(".project-card").count(), 3);
       assert.ok(!requests.some((u) => /three-|main-.*\.js|\.webp|\/api\//.test(u)));
-      await page.screenshot({ path: `artifacts/web/${name}-landing.png`, fullPage: true });
+      assert.equal(await page.locator(".subsite-card").count(), 4);
+      assert.deepEqual(
+        await page
+          .locator(".subsite-card .card-detail")
+          .evaluateAll((links) => links.map((a) => a.getAttribute("href"))),
+        ["teaching-studio", "gift-lab", "ai-lab", "sketch2link"].map((id) => base + id + "/"),
+      );
+      await page.screenshot({ path: `${out}/${name}-landing.png`, fullPage: true });
       await page.getByRole("link", { name: "View Projects", exact: false }).click();
       await page.locator(".project-card").last().waitFor();
       assert.equal(await page.locator(".project-card").count(), 10);
@@ -118,9 +126,9 @@ try {
           const s = getComputedStyle(el);
           return { color: s.color, background: s.backgroundColor, size: parseFloat(s.fontSize) };
         });
-      assert.equal(keyStyle.color, "rgb(23, 51, 39)");
-      assert.ok(keyStyle.size >= 16);
-      await page.screenshot({ path: `artifacts/web/${name}-mountain.png` });
+      assert.equal(keyStyle.color, "rgb(23, 60, 53)");
+      assert.ok(keyStyle.size >= 12);
+      await page.screenshot({ path: `${out}/${name}-mountain.png` });
       const initial = await page.evaluate(() => window.__xiangmetaInspect().player);
       await page.keyboard.down("KeyS");
       await page.waitForFunction(
@@ -132,26 +140,7 @@ try {
         initial,
         { timeout: 10000 },
       );
-      const hudBounds = await page.evaluate(
-        () =>
-          new Promise((resolve) => {
-            const bounds = [];
-            const sample = () => {
-              const r = document.querySelector(".controls-pill").getBoundingClientRect();
-              bounds.push({ x: r.x, width: r.width });
-              if (bounds.length < 35) requestAnimationFrame(sample);
-              else resolve(bounds);
-            };
-            sample();
-          }),
-      );
-      assert.ok(
-        hudBounds.every(
-          (r) =>
-            Math.abs(r.x - hudBounds[0].x) < 0.1 && Math.abs(r.width - hudBounds[0].width) < 0.1,
-        ),
-        "walking HUD must not move with coordinates or nearby names",
-      );
+      assert.equal(await page.locator(".controls-pill,.guide-card,#nearby").count(), 0);
       await page.keyboard.up("KeyS");
       await page.keyboard.press("Space");
       await page.waitForFunction(() => !window.__xiangmetaInspect().player.grounded, null, {
@@ -172,6 +161,7 @@ try {
       await page.keyboard.press("Escape");
       // 点击普通控件前释放自动恢复的鼠标锁定。
       await page.keyboard.press("Escape");
+      await page.locator('#interaction-prompt [data-near-key="F"]').waitFor();
       const popup = context.waitForEvent("page");
       await page.keyboard.press("KeyF");
       const external = await popup;
@@ -194,7 +184,7 @@ try {
       await activate(page.locator("#memory-open"));
       await page.locator(".memory-index [data-memory]").first().click();
       await page.locator("#memory-visit").click();
-      await page.locator("#memory-prompt").waitFor({ timeout: 10000 });
+      await page.locator('[data-context-key="G"]').waitFor({ timeout: 10000 });
       await page.keyboard.press("KeyG");
       await page.locator("#inspector[open] .memory-source").waitFor();
       assert.ok((await page.locator(".memory-source").innerText()).includes("已收藏"));
@@ -211,7 +201,7 @@ try {
         {},
         { timeout: 15000 },
       );
-      await page.screenshot({ path: `artifacts/web/${name}-world.png` });
+      await page.screenshot({ path: `${out}/${name}-world.png` });
       await page.goto(url("world/?project=personal-music&inspect"));
       await page.locator("#interaction-prompt").waitFor({ timeout: 90000 });
       const musicPopup = context.waitForEvent("page");
@@ -290,7 +280,7 @@ try {
       assert.equal(reentry.track, "season-winter-v1");
       assert.equal(reentry.heard.length, 4);
       assert.ok(reentry.time >= paused.time);
-      await page.screenshot({ path: `artifacts/web/${name}-music.png` });
+      await page.screenshot({ path: `${out}/${name}-music.png` });
       await activate(page.locator("#sound"));
       checkpoint(
         "Opt-in MP3 playback, all four seasons, pause/resume and no replay on re-entry passed",
@@ -364,7 +354,7 @@ try {
           actions.map((a) => `[${a.key}] ${a.label}`).join("   ·   "),
           `${m.id}: physical sign and HUD agree`,
         );
-        assert.equal(await page.locator("#nearby kbd").innerText(), "F");
+        assert.equal(await page.locator("#interaction-prompt kbd").first().innerText(), "F");
         if (!m.portfolio.github) {
           await page.keyboard.press("KeyF");
           await page.locator("#inspector[open].product-mode").waitFor();
@@ -377,14 +367,14 @@ try {
           await page.keyboard.press("Escape");
           await page.keyboard.press("Escape");
           if (m.id === "bubble-lab") {
-            for (const selector of ["#nearby", '#interaction-prompt [data-near-key="F"]']) {
+            for (const selector of ['#interaction-prompt [data-near-key="F"]']) {
               await activate(page.locator(selector));
               await page.locator("#inspector[open].product-mode").waitFor();
               assert.equal(await page.locator("#panel-title").textContent(), m.title);
               await page.keyboard.press("Escape");
               await page.keyboard.press("Escape");
             }
-            await page.screenshot({ path: `artifacts/web/${name}-interaction-hints.png` });
+            await page.screenshot({ path: `${out}/${name}-interaction-hints.png` });
           }
         }
       }
@@ -470,27 +460,23 @@ try {
         clientX: joystickCenter.x,
         clientY: joystickCenter.y - 38,
       });
-      await mp
-        .locator("#touch-jump")
-        .dispatchEvent("pointerdown", {
-          pointerId: 22,
-          pointerType: "touch",
-          button: 0,
-          buttons: 1,
-        });
+      await mp.locator("#touch-jump").dispatchEvent("pointerdown", {
+        pointerId: 22,
+        pointerType: "touch",
+        button: 0,
+        buttons: 1,
+      });
       await mp.waitForFunction(() => !window.__xiangmetaInspect().player.grounded);
       await mp.waitForFunction(() => window.__xiangmetaInspect().player.grounded);
       const mobileYaw = await mp.evaluate(() => window.__xiangmetaInspect().yaw);
-      await mp
-        .locator("#world canvas")
-        .dispatchEvent("pointerdown", {
-          pointerId: 23,
-          pointerType: "touch",
-          button: 0,
-          buttons: 1,
-          clientX: 300,
-          clientY: 350,
-        });
+      await mp.locator("#world canvas").dispatchEvent("pointerdown", {
+        pointerId: 23,
+        pointerType: "touch",
+        button: 0,
+        buttons: 1,
+        clientX: 300,
+        clientY: 350,
+      });
       await mp.evaluate(() =>
         window.dispatchEvent(
           new PointerEvent("pointermove", {
@@ -593,7 +579,7 @@ try {
         await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
         true,
       );
-      await mp.screenshot({ path: `artifacts/web/${name}-mobile.png`, fullPage: true });
+      await mp.screenshot({ path: `${out}/${name}-mobile.png`, fullPage: true });
       assert.deepEqual(mobileErrors, []);
       await mobile.close();
       const noWebGL = await browser.newContext();
@@ -654,7 +640,7 @@ try {
       await browser.close();
     }
   }
-  await writeFile("artifacts/web/results.json", JSON.stringify({ base, results }, null, 2));
+  await writeFile(`${out}/results.json`, JSON.stringify({ base, results }, null, 2));
   console.log(JSON.stringify(results, null, 2));
 } finally {
   server.close();

@@ -44,7 +44,8 @@ import { exhibitColliders } from "./colliders";
 import { createWalker, advanceWalker } from "../../shared/locomotion.mjs";
 import { LookControls } from "./look-controls";
 import { walkable } from "../../shared/navigation.mjs";
-import { EYE_HEIGHT, nearestStation, lookAngles } from "../../shared/interaction.mjs";
+import { EYE_HEIGHT, lookAngles } from "../../shared/interaction.mjs";
+import { interactionScore } from "../../shared/interaction-focus.mjs";
 import { nearbyActions, actionHint, type InteractionKey } from "../core/nearby-actions";
 import type { Catalog, Exhibit, ArtworkInteraction } from "../core/types";
 import type { EventBus } from "../core/events";
@@ -67,11 +68,13 @@ export class World {
   private obstacles: Obstacle[] = [];
   private stations: Station[] = [];
   private artworks: ArtworkInteraction[] = [];
+  private artworkTargets = new Map<string, { center: T.Vector3; size: number }>();
   private nearArtwork: ArtworkInteraction | null = null;
   private harborScene!: ReturnType<typeof buildHarbor>;
   private nearHarbor = false;
+  private nearGuide = false;
   private artworkRay = new T.Raycaster();
-  private aim = new T.Vector2();
+  private gaze = new T.Vector3();
   private labels: { element: HTMLButtonElement; position: T.Vector3; id: string }[] = [];
   private keys = new Set<string>();
   private touchSide = 0;
@@ -307,6 +310,15 @@ export class World {
           approach: { x: a.x + r.position[0], z: a.z + r.position[1] },
           action: work.action,
         });
+        group.updateMatrixWorld(true);
+        group.traverse((object) => {
+          if (object.userData.artworkId !== work.id) return;
+          const box = new T.Box3().setFromObject(object);
+          this.artworkTargets.set(`${m.id}--${work.id}`, {
+            center: box.getCenter(new T.Vector3()),
+            size: box.getSize(new T.Vector3()).length() / 2,
+          });
+        });
       }
       const front = exhibitPoint(m, 0, 4.35),
         approach = exhibitPoint(m, 0, 6.55),
@@ -456,6 +468,7 @@ export class World {
       arrive: (x, z, tx, tz) => this.teleport(x, z, tx, tz),
       dynamic: () => this.living?.colliders ?? [],
       sound: () => this.bus.emit("sound", "ui"),
+      nearby: (target) => this.bus.emit("gameNearby", target),
     });
     this.disposers.push(() => this.games.dispose());
     this.living = new LivingWorld(this.scene, data, this.obstacles, reserved, bus);
@@ -791,12 +804,9 @@ export class World {
     this.orbit.enabled = !value && this.mode === "map";
   }
   interactExhibit(key: InteractionKey = "F") {
-    if (
-      this.paused ||
-      this.games.busy ||
-      this.mode !== "first-person" ||
-      !nearbyActions(this.near, this.nearArtwork, this.nearHarbor).some((a) => a.key === key)
-    )
+    if (this.paused || this.games.busy || this.mode !== "first-person") return;
+    this.updateNearby();
+    if (!nearbyActions(this.near, this.nearArtwork, this.nearHarbor).some((a) => a.key === key))
       return;
     const m = this.nearArtwork?.module ?? this.near;
     if (key === "E") {
@@ -811,9 +821,9 @@ export class World {
     else if (this.nearArtwork) this.bus.emit("artwork", this.nearArtwork);
     else if (this.near) this.bus.emit("interact", this.near);
   }
-  openGames() {
+  openGames(id?: string) {
     if (this.photo.active) this.photoMode(false);
-    this.games.open();
+    this.games.open(id);
   }
   interactDiscovery() {
     if (
@@ -823,6 +833,10 @@ export class World {
       this.mode === "first-person" &&
       !this.living.focused
     ) {
+      if (this.nearGuide) {
+        document.dispatchEvent(new CustomEvent("open-guide"));
+        return;
+      }
       if (this.memories.interact()) return;
       this.wonders.interact();
     }
@@ -1073,53 +1087,81 @@ export class World {
     this.bus.emit("move", { x: this.player.x, z: this.player.z });
   }
   private updateNearby() {
-    if (this.games.busy) {
-      this.selected.visible = false;
-      return;
+    const available = this.mode === "first-person" && !this.paused && !this.games.busy;
+    this.camera.getWorldDirection(this.gaze);
+    const guide =
+      available &&
+      Number.isFinite(
+        interactionScore(this.camera.position, this.gaze, this.guide.position, 4, 0.8),
+      );
+    if (guide !== this.nearGuide) {
+      this.nearGuide = guide;
+      this.bus.emit("guideNearby", guide);
     }
     const dock =
-      this.mode === "first-person" &&
-      !this.paused &&
-      Math.hypot(this.player.x - harbor.terminal.x, this.player.z - harbor.terminal.z) < 2.8 &&
+      available &&
+      Number.isFinite(
+        interactionScore(
+          this.camera.position,
+          this.gaze,
+          { ...harbor.terminal, y: harbor.level + 1.1 },
+          2.8,
+          0.65,
+        ),
+      ) &&
       Math.abs(this.player.y - harbor.level) < 0.4;
     if (dock !== this.nearHarbor) {
       this.nearHarbor = dock;
       this.bus.emit("harborNearby", dock);
     }
-    const candidate =
-      this.mode === "first-person"
-        ? nearestStation(this.player.x, this.player.z, this.stations)
-        : null;
+    let candidate: Station | null = null,
+      stationScore = -Infinity;
+    if (available)
+      for (const station of this.stations) {
+        const y = groundHeight(station.x, station.z, this.data.regions);
+        if (Math.abs(this.player.y - y) > 0.8) continue;
+        const score = interactionScore(
+          this.camera.position,
+          this.gaze,
+          { ...station, y: y + 1.1 },
+          2.9,
+          0.65,
+        );
+        if (score > stationScore) {
+          stationScore = score;
+          candidate = station;
+        }
+      }
     const next = this.data.modules.find((m) => m.id === candidate?.id) ?? null;
     let art: ArtworkInteraction | null = null;
     const close = this.artworks.filter(
       (a) => Math.hypot(this.player.x - a.x, this.player.z - a.z) < 2.6,
     );
-    if (this.mode === "first-person" && !this.paused && close.length) {
+    if (available && close.length) {
       this.camera.updateMatrixWorld();
-      this.artworkRay.setFromCamera(this.aim, this.camera);
-      this.artworkRay.far = 2.8;
-      // 墙与家具参与检测，准星下首个不透明表面优先。
       const roots = [...new Set(close.map((a) => this.objects.get(a.module.id)!))];
-      const hit = this.artworkRay.intersectObjects(roots, true).find((h) => h.object.visible);
-      if (hit) {
-        let object: T.Object3D | null = hit.object;
+      let best = -Infinity;
+      for (const work of close) {
+        const target = this.artworkTargets.get(work.id);
+        if (!target) continue;
+        const score = interactionScore(
+          this.camera.position,
+          this.gaze,
+          target.center,
+          2.6,
+          target.size,
+        );
+        if (score <= best) continue;
+        // 看向画框范围即可；仍阻止隔墙选中作品。
+        const rayDirection = target.center.clone().sub(this.camera.position);
+        this.artworkRay.set(this.camera.position, rayDirection.clone().normalize());
+        this.artworkRay.far = rayDirection.length() + 0.1;
+        const hit = this.artworkRay.intersectObjects(roots, true).find((h) => h.object.visible);
+        let object: T.Object3D | null = hit?.object ?? null;
         while (object && !object.userData.artworkId) object = object.parent;
-        if (object) {
-          const moduleRoot = roots.find((root) => {
-            let p: T.Object3D | null = object;
-            while (p) {
-              if (p === root) return true;
-              p = p.parent;
-            }
-            return false;
-          });
-          art =
-            close.find(
-              (a) =>
-                this.objects.get(a.module.id) === moduleRoot &&
-                a.id === `${a.module.id}--${object!.userData.artworkId}`,
-            ) ?? null;
+        if (object?.userData.artworkId === work.id.slice(work.module.id.length + 2)) {
+          art = work;
+          best = score;
         }
       }
     }
@@ -1271,7 +1313,13 @@ export class World {
         pulse.scale.setScalar(0.7 + value * 0.35 + Math.sin(this.time * (1 + value * 4)) * 0.15);
       }
     }
-    const heading = { x: -Math.sin(this.look.yaw), z: -Math.cos(this.look.yaw) },
+    this.camera.getWorldDirection(this.gaze);
+    const heading = {
+        x: this.gaze.x,
+        y: this.gaze.y,
+        z: this.gaze.z,
+        eyeY: this.camera.position.y,
+      },
       available =
         this.mode === "first-person" && !this.paused && !this.games.busy && !this.games.focused;
     this.living.update(
@@ -1291,7 +1339,14 @@ export class World {
       motion,
       this.player.x,
       this.player.z,
-      available && !this.living.focused && wonderScore > memoryScore,
+      available &&
+        !this.living.focused &&
+        !this.near &&
+        !this.nearArtwork &&
+        !this.nearHarbor &&
+        !this.nearGuide &&
+        !this.games.nearby &&
+        wonderScore > memoryScore,
       this.paused,
       heading,
     );
@@ -1299,7 +1354,14 @@ export class World {
       motion,
       this.player.x,
       this.player.z,
-      available && !this.living.focused && memoryScore >= wonderScore,
+      available &&
+        !this.living.focused &&
+        !this.near &&
+        !this.nearArtwork &&
+        !this.nearHarbor &&
+        !this.nearGuide &&
+        !this.games.nearby &&
+        memoryScore >= wonderScore,
       this.reduced.matches,
       heading,
     );
@@ -1328,17 +1390,8 @@ export class World {
       )) {
         this.projected.copy(l.position).project(camera);
         const v = this.projected;
-        const distance = l.position.distanceTo(camera.position);
         const visible =
-          v.z < 1 &&
-          v.z > -1 &&
-          Math.abs(v.x) < 1 &&
-          Math.abs(v.y) < 1 &&
-          (this.mode === "map" ||
-            (distance < 17 &&
-              !l.element.classList.contains("region-label") &&
-              !l.element.classList.contains("exhibit-label") &&
-              !l.element.classList.contains("harbor-label")));
+          v.z < 1 && v.z > -1 && Math.abs(v.x) < 1 && Math.abs(v.y) < 1 && this.mode === "map";
         l.element.hidden = !visible;
         if (visible) {
           const x = (v.x * 0.5 + 0.5) * this.width,

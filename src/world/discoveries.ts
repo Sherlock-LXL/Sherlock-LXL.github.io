@@ -360,11 +360,19 @@ export class Discoveries {
       this.items.push(item);
     }
   }
-  candidate(x: number, z: number, heading?: { x: number; z: number }) {
+  candidate(x: number, z: number, heading?: { x: number; y?: number; z: number; eyeY?: number }) {
     let target: Installation | null = null,
       score = -Infinity;
     for (const item of this.items) {
-      const value = discoveryScore(x, z, item.info.x, item.info.z, 2.8, heading);
+      const value = discoveryScore(
+        x,
+        z,
+        item.info.x,
+        item.info.z,
+        2.8,
+        heading,
+        (item.info.y ?? 0) + 1.1,
+      );
       if (value > score) {
         score = value;
         target = item;
@@ -397,7 +405,7 @@ export class Discoveries {
     z: number,
     available: boolean,
     paused: boolean,
-    heading?: { x: number; z: number },
+    heading?: { x: number; y?: number; z: number; eyeY?: number },
   ) {
     const next = available ? this.candidate(x, z, heading).target : null;
     if (next !== this.nearby) {

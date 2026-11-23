@@ -45,6 +45,43 @@ function card(p: Project, index: number, compact = false) {
     }
   </article>`;
 }
+const subsites = [
+  {
+    id: "teaching-studio",
+    name: "Teaching Studio",
+    category: "Teaching / 教学",
+    description:
+      "每一堂好课，从一点用心开始。把备课的想法与日常整理放进一间私人工作台，让教学准备有一个安静、专注的起点。",
+    tags: ["教师工作台", "备课", "账号访问"],
+  },
+  {
+    id: "gift-lab",
+    name: "Gift Lab",
+    category: "Life & AI / 生活实验",
+    description:
+      "一份合适的礼物，始于对一个人的了解。从幸福感雷达、礼物评分到两两选择，把难以说清的偏好变成可以观察的线索。",
+    tags: ["偏好探索", "礼物选择", "幸福感雷达"],
+  },
+  {
+    id: "ai-lab",
+    name: "AI Lab",
+    category: "AI / 人工智能",
+    description:
+      "让模型走出项目档案。挑一份礼物、识别一张表情，或续写一段文字，在浏览器里亲自试试三个作品的算法与模型。",
+    tags: ["礼物推荐", "CNN", "RNN", "浏览器推理"],
+  },
+  {
+    id: "sketch2link",
+    name: "Sketch2Link",
+    category: "Engineering / 工程",
+    description:
+      "画下一条轨迹，看看机构如何把它走出来。从手绘闭合曲线出发，探索四杆与五杆机构，让纸上的想法成为可运动的连杆。",
+    tags: ["手绘轨迹", "连杆机构", "运动学"],
+  },
+];
+function subsiteSection() {
+  return `<section class="subsites-section" id="subsites"><div class="section-heading"><div><p class="eyebrow">02 / SITES TO EXPLORE</p><h2>一些可以亲手体验的小天地。</h2></div><span>工具、实验与日常灵感</span></div><div class="subsite-grid">${subsites.map((s, i) => `<article class="subsite-card"><div class="card-top"><span>${esc(s.category)}</span><span>${String(i + 1).padStart(2, "0")}</span></div><h3><a href="${sitePath(s.id + "/")}">${esc(s.name)}</a></h3><p>${esc(s.description)}</p><div class="technologies">${s.tags.map((t) => `<span>${esc(t)}</span>`).join("")}</div><a class="card-detail" href="${sitePath(s.id + "/")}">进入子站 <span>${diagonalArrow}</span></a></article>`).join("")}</div></section>`;
+}
 /** 水面波纹向地平线收紧，呼应绘画海面。 */
 const waves = (top: number, rows: number, width: number) =>
   Array.from({ length: rows }, (_, i) => {
@@ -55,11 +92,11 @@ const waves = (top: number, rows: number, width: number) =>
   }).join("");
 /** 首页圆册页呈现青绿山、水面笔纹与中心岛轨道。 */
 const fan = `<svg class="atlas-painting" viewBox="0 0 400 400" aria-hidden="true" focusable="false"><defs>
-  <radialGradient id="fan-silk" cx=".5" cy=".36" r=".72"><stop offset="0" stop-color="#fbf6ea"/><stop offset=".72" stop-color="#efe5cf"/><stop offset="1" stop-color="#e2d3b3"/></radialGradient>
+  <radialGradient id="fan-silk" cx=".5" cy=".36" r=".72"><stop offset="0" stop-color="#f4fbf8"/><stop offset=".72" stop-color="#e4f1e9"/><stop offset="1" stop-color="#d0e5dc"/></radialGradient>
   <linearGradient id="fan-peak-wash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#355f7a"/><stop offset=".4" stop-color="#4f9a80"/><stop offset=".78" stop-color="#a7b98d"/><stop offset="1" stop-color="#cfa96f"/></linearGradient>
   <linearGradient id="fan-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6f93a3" stop-opacity=".5"/><stop offset="1" stop-color="#6f93a3" stop-opacity="0"/></linearGradient>
-  <linearGradient id="fan-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece6d2"/><stop offset="1" stop-color="#cbd9cf"/></linearGradient>
-  <linearGradient id="fan-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f0e2" stop-opacity="0"/><stop offset=".72" stop-color="#f6f0e2" stop-opacity=".94"/><stop offset="1" stop-color="#f6f0e2" stop-opacity="0"/></linearGradient>
+  <linearGradient id="fan-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e7f2ed"/><stop offset="1" stop-color="#cbded8"/></linearGradient>
+  <linearGradient id="fan-mist" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eff8f3" stop-opacity="0"/><stop offset=".72" stop-color="#eff8f3" stop-opacity=".94"/><stop offset="1" stop-color="#eff8f3" stop-opacity="0"/></linearGradient>
   <clipPath id="fan-clip"><circle cx="200" cy="200" r="184"/></clipPath></defs>
   <circle class="fan-mount" cx="200" cy="200" r="192"/>
   <g clip-path="url(#fan-clip)"><rect width="400" height="400" fill="url(#fan-silk)"/>
@@ -106,10 +143,11 @@ async function boot() {
     <section class="about-section" id="about"><div><p class="eyebrow">01 / ABOUT</p><h2>在不同领域之间，<br>寻找同一种好奇。</h2></div><div><p>${esc(profile.intro)}</p><p>XiangMeta 是我的个人交互作品集。你可以沿着山径找到语言模型，在实验室里观察气泡，也可以走进展廊，听见音乐、看见旅途。</p><a class="text-link" href="${sitePath("projects/")}">直接浏览所有项目 →</a></div></section>`
     : `<section class="projects-heading"><p class="eyebrow">THE PROJECT ARCHIVE</p><h1>每一次创造，<br>都有坐标<span>。</span></h1><p>从模型、方程到旋律。这里是 ${esc(profile.name)} 的项目与创作档案。</p><a class="text-link" href="${worldURL()}">换一种方式探索 · 进入 XiangMeta ${diagonalArrow}</a></section>`;
   host.innerHTML = `<a class="skip-link" href="#main">跳转正文</a><header class="site-header">${navigation}</header><main id="main">${heading}
-    <section class="projects-section" id="projects"><div class="section-heading"><div><p class="eyebrow">${isHome ? "02 / SELECTED WORK" : "EXPLORE BY INTEREST"}</p><h2>${isHome ? "几处值得停留的地方。" : "项目 / Projects"}</h2></div>${isHome ? `<a href="${sitePath("projects/")}">全部 ${projects.length} 个项目 ${diagonalArrow}</a>` : '<span id="result-count" role="status"></span>'}</div>
+    ${isHome ? subsiteSection() : ""}
+    <section class="projects-section" id="projects"><div class="section-heading"><div><p class="eyebrow">${isHome ? "03 / SELECTED WORK" : "EXPLORE BY INTEREST"}</p><h2>${isHome ? "几处值得停留的地方。" : "项目 / Projects"}</h2></div>${isHome ? `<a href="${sitePath("projects/")}">全部 ${projects.length} 个项目 ${diagonalArrow}</a>` : '<span id="result-count" role="status"></span>'}</div>
     ${isHome ? "" : `<div class="project-tools"><div class="filters" aria-label="项目分类">${["All", ...categories].map((c) => `<button data-filter="${c}" aria-pressed="${c === "All"}">${c === "All" ? "全部" : esc(labels[c as keyof typeof labels])}</button>`).join("")}</div><label class="search-label"><span>搜索项目</span><input id="project-search" type="search" placeholder="名称、技术或关键词…" autocomplete="off"></label></div>`}
     <div class="project-grid">${(isHome ? projects.filter((p) => p.featured) : projects).map((p, i) => card(p, i, isHome)).join("")}</div><p id="empty-projects" hidden>没有找到匹配的项目，请换一个关键词。</p></section>
-    ${isHome ? `<section class="world-invitation">${scroll}<div><p class="eyebrow">03 / GO EXPLORING</p><h2>走进作品所在的世界。</h2><p>${worldHint}</p></div><a class="button primary" href="${worldURL()}">Enter XiangMeta ${diagonalArrow}</a></section>` : ""}
+    ${isHome ? `<section class="world-invitation">${scroll}<div><p class="eyebrow">04 / GO EXPLORING</p><h2>走进作品所在的世界。</h2><p>${worldHint}</p></div><a class="button primary" href="${worldURL()}">Enter XiangMeta ${diagonalArrow}</a></section>` : ""}
     <section class="contact-section" id="contact"><div><p class="eyebrow">KEEP IN TOUCH</p><h2>下一次连接，从这里开始。</h2></div><div>${link(profile.github, "GitHub / Sherlock-LXL")}${link(profile.music, "网易云音乐 / 个人主页")}</div></section></main>
     <footer class="site-footer"><span>© ${new Date().getFullYear()} ${esc(profile.name)} · XiangMeta</span><span>BUILT WITH CURIOSITY.</span><a href="${sitePath("teaching-studio/")}" ${externalAttrs}>Teaching Studio ${diagonalArrow}</a><a href="${sitePath()}">回到起点 ↑</a></footer>`;
   if (!isHome) {

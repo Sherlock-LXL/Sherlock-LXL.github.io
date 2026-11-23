@@ -75,7 +75,12 @@ try {
     await page.goto(url(""));
     await page.locator(".hero").waitFor();
     assert.equal(requested.filter((u) => /ai-lab\/.*\.(bin|onnx|json)/.test(u)).length, 0);
-    assert.ok(await page.getByRole("link", { name: "AI Lab", exact: true }).isVisible());
+    assert.ok(
+      await page
+        .getByRole("navigation", { name: "主导航" })
+        .getByRole("link", { name: "AI Lab", exact: true })
+        .isVisible(),
+    );
   }
   await page.goto(url("ai-lab/?inspect"));
   const gift = await inferGift(page);

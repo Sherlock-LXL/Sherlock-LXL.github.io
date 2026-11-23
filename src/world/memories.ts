@@ -319,16 +319,24 @@ export class Memories {
   track(id: string | null) {
     this.targetId = id;
   }
-  candidate(x: number, z: number, heading?: { x: number; z: number }) {
+  candidate(x: number, z: number, heading?: { x: number; y?: number; z: number; eyeY?: number }) {
     let target: MemoryFragment | "constellation" | null = null,
       score = -Infinity;
-    const atlas = discoveryScore(x, z, 0, 4.55, 2.25, heading);
+    const atlas = discoveryScore(x, z, 0, 4.55, 2.25, heading, 1.2);
     if (atlas > score) {
       target = "constellation";
       score = atlas;
     }
     for (const entry of this.entries) {
-      const value = discoveryScore(x, z, entry.x, entry.z, 2.05, heading);
+      const value = discoveryScore(
+        x,
+        z,
+        entry.x,
+        entry.z,
+        2.05,
+        heading,
+        this.stars.get(entry.id)!.ground.position.y,
+      );
       if (value > score) {
         target = entry;
         score = value;
@@ -348,7 +356,7 @@ export class Memories {
     z: number,
     available: boolean,
     reduced: boolean,
-    heading?: { x: number; z: number },
+    heading?: { x: number; y?: number; z: number; eyeY?: number },
   ) {
     this.elapsed += dt;
     const next = available ? this.candidate(x, z, heading).target : null;

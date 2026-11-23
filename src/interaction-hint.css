@@ -1,0 +1,90 @@
+/* 在册页主题之后统一近身提示，避免各类提示及屏幕尺寸互相覆盖。 */
+#interaction-prompt.interaction-prompt {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  width: max-content;
+  max-width: min(480px, calc(100% - 32px));
+  min-width: 0;
+  bottom: 88px;
+  padding: 7px 12px;
+  color: #173c35;
+  background: rgba(238, 248, 244, 0.78);
+  border: 1px solid rgba(45, 89, 77, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 3px 16px rgba(23, 60, 53, 0.12);
+  backdrop-filter: blur(8px);
+  white-space: normal;
+  cursor: default;
+}
+#interaction-prompt .nearby-copy b {
+  margin: 0;
+  color: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+#interaction-prompt .nearby-actions {
+  gap: 4px 8px;
+  justify-content: center;
+}
+#interaction-prompt .nearby-actions a,
+#interaction-prompt .nearby-actions button {
+  gap: 5px;
+  padding: 4px 5px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #173c35;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 4px;
+}
+#interaction-prompt .nearby-actions a:hover,
+#interaction-prompt .nearby-actions button:hover {
+  color: #173c35;
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(45, 89, 77, 0.25);
+}
+#interaction-prompt .nearby-actions kbd {
+  min-width: 22px;
+  height: 22px;
+  margin: 0;
+  padding: 0 5px;
+  font:
+    600 12px/1 ui-monospace,
+    monospace;
+  color: #173c35;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(45, 89, 77, 0.3);
+  border-radius: 4px;
+}
+#interaction-prompt[hidden] {
+  display: none;
+}
+@media (max-width: 900px) and (pointer: coarse) {
+  html.touch-experience #interaction-prompt.interaction-prompt {
+    bottom: max(188px, calc(env(safe-area-inset-bottom) + 176px));
+    width: max-content;
+    max-width: min(430px, calc(100% - 28px));
+    padding: 5px 10px;
+    gap: 2px 8px;
+  }
+  html.touch-experience #interaction-prompt .nearby-actions a,
+  html.touch-experience #interaction-prompt .nearby-actions button {
+    min-height: 42px;
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+}
+@media (max-height: 600px) and (pointer: coarse) {
+  html.touch-experience #interaction-prompt.interaction-prompt {
+    bottom: 24px;
+    max-width: min(430px, calc(100% - 366px));
+    max-height: calc(100dvh - 100px);
+  }
+}

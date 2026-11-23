@@ -41,7 +41,11 @@ const origin = `http://127.0.0.1:${server.address().port}`;
 const url = (route) => `${origin}${base}${route}`;
 const browser = await chromium.launch({
   headless: true,
-  args: ["--disable-crash-reporter", "--disable-breakpad"],
+  args: [
+    "--disable-crash-reporter",
+    "--disable-breakpad",
+    ...(process.platform === "darwin" ? ["--use-angle=metal"] : []),
+  ],
 });
 
 try {
@@ -58,7 +62,10 @@ try {
   await page.locator(".hero").waitFor({ timeout: 15000 });
   assert.ok(await page.getByRole("link", { name: "View Projects", exact: false }).isVisible());
   assert.equal(
-    await page.getByRole("link", { name: "Teaching Studio" }).getAttribute("href"),
+    await page
+      .locator(".site-footer")
+      .getByRole("link", { name: "Teaching Studio" })
+      .getAttribute("href"),
     `${base}teaching-studio/`,
   );
   for (const javaScriptEnabled of [true, false]) {
@@ -143,7 +150,7 @@ try {
   });
   const mobilePage = await mobile.newPage();
   await mobilePage.goto(url(""));
-  await mobilePage.getByRole("link", { name: "Teaching Studio" }).waitFor();
+  await mobilePage.locator(".site-footer").getByRole("link", { name: "Teaching Studio" }).waitFor();
   assert.equal(
     await mobilePage.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
     true,
@@ -179,7 +186,7 @@ try {
   });
   await mobilePage.waitForFunction((p) => {
     const v = window.__xiangmetaInspect().player;
-    return Math.hypot(v.x - p.x, v.z - p.z) > 0.4;
+    return Math.hypot(v.x - p.x, v.z - p.z) > 1;
   }, start);
   await joystick.dispatchEvent("pointerup", {
     pointerId: 31,

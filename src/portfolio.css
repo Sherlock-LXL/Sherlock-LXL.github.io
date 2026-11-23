@@ -8,11 +8,11 @@
   line-height: 1.6;
   font-weight: 400;
   --ink: #2b2824;
-  --muted: #5d5447;
-  --faint: #8b8170;
-  --line: rgba(58, 48, 38, 0.18);
-  --rule: rgba(58, 48, 38, 0.3);
-  --paper: #f8f3e8;
+  --muted: #50655e;
+  --faint: #72877f;
+  --line: rgba(45, 89, 77, 0.18);
+  --rule: rgba(45, 89, 77, 0.3);
+  --paper: #f3f9f5;
   --silk: #edf3ed;
   --seal: #a34a35;
   --seal-deep: #7f3324;
@@ -34,8 +34,8 @@ body {
   margin: 0;
   background-color: var(--silk);
   background-image:
-    repeating-linear-gradient(90deg, rgba(120, 96, 58, 0.022) 0 1px, transparent 1px 7px),
-    repeating-linear-gradient(0deg, rgba(120, 96, 58, 0.018) 0 1px, transparent 1px 11px);
+    repeating-linear-gradient(90deg, rgba(45, 89, 77, 0.022) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(0deg, rgba(45, 89, 77, 0.018) 0 1px, transparent 1px 11px);
 }
 a {
   color: inherit;
@@ -71,7 +71,7 @@ summary:focus-visible {
   display: none !important;
 }
 ::selection {
-  background: #e7c9a8;
+  background: #c7e4d8;
   color: var(--ink);
 }
 p {
@@ -163,7 +163,7 @@ main,
   border: 1px solid var(--rule);
   padding: 9px 15px;
   border-radius: 3px;
-  background: rgba(251, 247, 236, 0.7);
+  background: rgba(243, 249, 245, 0.7);
   transition:
     border-color 0.2s,
     background 0.2s,
@@ -171,7 +171,7 @@ main,
 }
 .nav-enter:hover {
   border-color: var(--seal);
-  background: #f3e4cf;
+  background: #e0eee6;
 }
 .site-header .text-link {
   font-size: inherit;
@@ -242,7 +242,7 @@ main,
   padding: 14px 21px;
   border: 1px solid var(--rule);
   border-radius: 3px;
-  background: rgba(251, 247, 236, 0.7);
+  background: rgba(243, 249, 245, 0.7);
   font-size: 12px;
   font-weight: 500;
   transition:
@@ -253,17 +253,17 @@ main,
 }
 .button:hover {
   border-color: var(--seal);
-  background: #f3e4cf;
+  background: #e0eee6;
 }
 .primary {
   background: var(--ink);
-  color: #f6efe0;
+  color: #f3f9f5;
   border-color: var(--ink);
 }
 .primary:hover {
   background: var(--seal);
   border-color: var(--seal);
-  color: #fbf4e6;
+  color: #f3f9f5;
   transform: translateY(-2px);
 }
 .device-note {
@@ -291,7 +291,7 @@ main,
   overflow: visible;
 }
 .fan-mount {
-  fill: #efe4cc;
+  fill: #d8eae0;
   stroke: rgba(58, 48, 38, 0.32);
   stroke-width: 1;
   filter: drop-shadow(0 10px 14px rgba(70, 52, 30, 0.14));
@@ -306,7 +306,7 @@ main,
   opacity: 0.82;
 }
 .fan-cloud {
-  fill: #fbf7ec;
+  fill: #f3f9f5;
   stroke: rgba(58, 48, 38, 0.32);
   stroke-width: 0.8;
   stroke-linejoin: round;
@@ -367,9 +367,9 @@ main,
   gap: 2px;
   background: radial-gradient(circle at 50% 40%, #b5523b, #8e3a29);
   box-shadow:
-    0 0 0 7px #f6efe0,
+    0 0 0 7px #f3f9f5,
     0 0 0 8px rgba(58, 48, 38, 0.32),
-    0 0 0 14px rgba(246, 239, 224, 0.55),
+    0 0 0 14px rgba(231, 245, 237, 0.55),
     0 22px 50px rgba(70, 52, 30, 0.22);
   color: #f7efdf;
   transition:
@@ -405,9 +405,9 @@ main,
   color: #fff8ea;
   transform: translate(-50%, -50%) scale(1.04);
   box-shadow:
-    0 0 0 7px #f6efe0,
+    0 0 0 7px #f3f9f5,
     0 0 0 8px var(--seal),
-    0 0 0 14px rgba(246, 239, 224, 0.6),
+    0 0 0 14px rgba(231, 245, 237, 0.6),
     0 26px 56px rgba(70, 52, 30, 0.26);
 }
 .isle {
@@ -416,13 +416,13 @@ main,
   flex-direction: column;
   width: 174px;
   padding: 16px 20px 17px;
-  background: rgba(250, 246, 236, 0.9);
+  background: rgba(243, 249, 245, 0.9);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(58, 48, 38, 0.3);
   border-radius: 3px;
   box-shadow:
     0 12px 26px rgba(70, 52, 30, 0.1),
-    inset 0 0 0 4px rgba(250, 246, 236, 0.9),
+    inset 0 0 0 4px rgba(243, 249, 245, 0.9),
     inset 0 0 0 5px rgba(163, 74, 53, 0.14);
   transition:
     transform 0.3s,
@@ -434,7 +434,7 @@ main,
   border-color: var(--seal);
   box-shadow:
     0 18px 32px rgba(70, 52, 30, 0.14),
-    inset 0 0 0 4px rgba(250, 246, 236, 0.9),
+    inset 0 0 0 4px rgba(243, 249, 245, 0.9),
     inset 0 0 0 5px rgba(163, 74, 53, 0.28);
 }
 .isle b {
@@ -563,17 +563,22 @@ main,
   font-size: 11px;
   color: var(--muted);
 }
-.projects-section {
+.projects-section,
+.subsites-section {
   padding-bottom: 80px;
 }
-.project-grid {
+.project-grid,
+.subsite-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
   align-items: start;
 }
+.subsite-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 /* 项目卡采用绢页、朱红编号与衬线标题。 */
-.project-card {
+:is(.project-card, .subsite-card) {
   border: 1px solid var(--rule);
   padding: 25px 22px 0;
   border-radius: 3px;
@@ -587,7 +592,7 @@ main,
     box-shadow 0.25s,
     border-color 0.25s;
 }
-.project-card:hover {
+:is(.project-card, .subsite-card):hover {
   border-color: rgba(163, 74, 53, 0.45);
   box-shadow:
     0 16px 34px rgba(70, 52, 30, 0.1),
@@ -607,14 +612,14 @@ main,
   color: var(--seal);
   font-size: 10px;
 }
-.project-card h3 {
+:is(.project-card, .subsite-card) h3 {
   font-size: 21px;
   line-height: 1.4;
   letter-spacing: 0.01em;
   margin-bottom: 18px;
   min-height: 59px;
 }
-.project-card > p {
+:is(.project-card, .subsite-card) > p {
   font-size: 12px;
   line-height: 1.9;
   min-height: 69px;
@@ -753,9 +758,9 @@ details[open] > summary span {
   isolation: isolate;
   border: 1px solid var(--rule);
   border-radius: 3px;
-  background: linear-gradient(180deg, #f8f2e4, #efe5cf);
+  background: linear-gradient(180deg, #f3f9f5, #dfeee6);
   box-shadow:
-    inset 0 0 0 6px #f6efe0,
+    inset 0 0 0 6px #f3f9f5,
     inset 0 0 0 7px rgba(58, 48, 38, 0.14);
   padding: 40px;
   display: flex;
@@ -837,7 +842,7 @@ details[open] > summary span {
 }
 .filters button {
   font-size: 10px;
-  background: rgba(251, 247, 236, 0.7);
+  background: rgba(243, 249, 245, 0.7);
   border: 1px solid var(--rule);
   color: var(--muted);
   padding: 9px 12px;
@@ -853,7 +858,7 @@ details[open] > summary span {
 }
 .filters [aria-pressed="true"],
 .filters [aria-pressed="true"]:hover {
-  color: #f6efe0;
+  color: #f3f9f5;
   background: var(--ink);
   border-color: var(--ink);
 }
@@ -867,7 +872,7 @@ details[open] > summary span {
 .search-label input {
   border: 1px solid var(--rule);
   border-radius: 3px;
-  background: #fbf8f0;
+  background: #f3f9f5;
   padding: 9px 12px;
   width: 230px;
   font-size: 11px;
@@ -881,7 +886,7 @@ details[open] > summary span {
   top: -60px;
   left: 20px;
   background: var(--ink);
-  color: #f6efe0;
+  color: #f3f9f5;
   padding: 10px;
   z-index: 100;
 }
@@ -939,7 +944,8 @@ details[open] > summary span {
   .wordmark-dot {
     display: none;
   }
-  .project-grid {
+  .project-grid,
+  .subsite-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .about-section {
@@ -1026,24 +1032,25 @@ details[open] > summary span {
   .about-section h2 {
     font-size: 28px;
   }
-  .project-grid {
+  .project-grid,
+  .subsite-grid {
     grid-template-columns: 1fr;
   }
-  .project-card h3,
-  .project-card > p,
+  :is(.project-card, .subsite-card) h3,
+  :is(.project-card, .subsite-card) > p,
   .technologies {
     min-height: 0;
   }
-  .project-card > p {
+  :is(.project-card, .subsite-card) > p {
     font-size: 13px;
   }
-  .project-card h3 {
+  :is(.project-card, .subsite-card) h3 {
     font-size: 23px;
   }
   .card-top {
     margin-bottom: 23px;
   }
-  .project-card {
+  :is(.project-card, .subsite-card) {
     padding: 24px 24px 0;
   }
   .section-heading {
@@ -1057,7 +1064,8 @@ details[open] > summary span {
     font-size: 10px;
     margin-top: 33px;
   }
-  .projects-section {
+  .projects-section,
+  .subsites-section {
     padding-bottom: 45px;
   }
   .world-invitation {
@@ -1269,17 +1277,17 @@ details[open] > summary span {
     min-height: 44px;
     font-size: 14px;
   }
-  .project-card {
+  :is(.project-card, .subsite-card) {
     padding: 24px 22px 0;
   }
   .card-top {
     font-size: 11px;
   }
-  .project-card h3 {
+  :is(.project-card, .subsite-card) h3 {
     font-size: 24px;
     line-height: 1.35;
   }
-  .project-card > p {
+  :is(.project-card, .subsite-card) > p {
     font-size: 14px;
     line-height: 1.8;
   }

@@ -15,6 +15,7 @@ import {
 import { groundHeight } from "../../shared/terrain-height.mjs";
 import { overlaps, supportedFootprint, bodyFootprint } from "../../shared/navigation.mjs";
 import { seasonalModel } from "./living-models";
+import { interactionScore } from "../../shared/interaction-focus.mjs";
 import { animalModel } from "./animal-models";
 import { batchStatic } from "./optimizer";
 import type { Catalog } from "../core/types";
@@ -443,17 +444,20 @@ export class LivingWorld {
         disabled: !player.grounded,
       };
     } else if (available) {
-      let score = Infinity;
+      let score = -Infinity;
+      const direction = camera.getWorldDirection(new T.Vector3());
       for (const target of [...this.items, ...this.animals]) {
-        const p = "rig" in target ? target.state : target,
-          dx = p.x - player.x,
-          dz = p.z - player.z,
-          d = Math.hypot(dx, dz);
-        const alignment = (-Math.sin(yaw) * dx - Math.cos(yaw) * dz) / Math.max(0.01, d);
-        if (d > p.radius + 1.4 || Math.abs(p.y - player.y) > 0.45 || alignment < 0.35) continue;
-        const rank = d - p.radius + (1 - alignment) * 2.5;
+        const p = "rig" in target ? target.state : target;
+        if (Math.abs(p.y - player.y) > 0.45) continue;
+        const rank = interactionScore(
+          camera.position,
+          direction,
+          { ...p, y: p.y + p.height / 2 },
+          p.radius + 1.4,
+          Math.max(0.85, p.radius, p.height / 2),
+        );
         if (
-          rank < score &&
+          rank > score &&
           this.nav.sight({ ...player, y: player.y + 0.5 }, { ...p, y: p.y + 0.5 })
         ) {
           this.candidate = target;

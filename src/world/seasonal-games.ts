@@ -23,6 +23,7 @@ import { overlaps } from "../../shared/navigation.mjs";
 import { flightFloor } from "../../shared/flight-contact.mjs";
 import { gameStall, gameVehicle, releaseGameObject } from "./game-models";
 import { batchStatic } from "./optimizer";
+import { interactionScore } from "../../shared/interaction-focus.mjs";
 import { gateVisibility, guidanceWindow, fadeGate } from "../../shared/race-guidance.mjs";
 import { RouteGuide } from "./route-guide";
 import type { ArcadeRoom } from "./arcade-room";
@@ -38,6 +39,7 @@ type Stall = {
   approach: { x: number; z: number };
 };
 type Hooks = {
+  nearby: (target: { id: string; name: string } | null) => void;
   lock: () => void;
   arrive: (x: number, z: number, tx: number, tz: number) => void;
   dynamic: () => Obstacle[];
@@ -61,7 +63,6 @@ export class SeasonalGames {
   private stalls: Stall[] = [];
   private roots: T.Group[] = [];
   private releases: (() => void)[] = [];
-  private prompt = document.createElement("button");
   private dialog = document.createElement("dialog");
   private hud = document.createElement("div");
   private events = new AbortController();
@@ -162,12 +163,6 @@ export class SeasonalGames {
       reserved.push({ ...course.spawn, radius: 1.6 });
     }
     this.navigation = new LivingNavigation(data.regions, obstacles);
-    this.prompt.className = "game-near-prompt";
-    this.prompt.hidden = true;
-    this.prompt.onclick = () => {
-      if (this.near) this.open(this.near.id);
-    };
-    host.append(this.prompt);
     this.dialog.className = "seasonal-dialog";
     this.dialog.setAttribute("aria-label", "四季游乐");
     document.body.append(this.dialog);
@@ -259,7 +254,7 @@ export class SeasonalGames {
   private mark() {
     this.host.closest(".main-world")?.classList.toggle("game-active", this.busy);
     this.host.closest(".main-world")?.classList.toggle("game-driving", this.driving);
-    this.prompt.hidden = this.busy || !this.near;
+    this.hooks.nearby(this.busy ? null : this.near);
   }
   private show(content: string) {
     this.loading++;
@@ -698,15 +693,18 @@ export class SeasonalGames {
     this.blocked = !available;
     this.time += dt;
     if (!this.busy) {
+      const direction = camera.getWorldDirection(new T.Vector3());
       const near = available
         ? this.stalls.find(
-            (s) => Math.hypot(player.x - s.x, player.z - s.z) < 3.5 && Math.abs(player.y - s.y) < 1,
+            (s) =>
+              Number.isFinite(
+                interactionScore(camera.position, direction, { ...s, y: s.y + 1.2 }, 3.5, 1),
+              ) && Math.abs(player.y - s.y) < 1,
           )
         : undefined;
       if (near?.id !== this.near?.id) {
         this.near = near ?? null;
-        this.prompt.textContent = near ? `V · ${near.name} · 游玩` : "";
-        this.prompt.hidden = !near;
+        this.hooks.nearby(this.near);
       }
     }
     if (!this.vehicle || !this.race || !this.rig) return;
@@ -971,6 +969,9 @@ export class SeasonalGames {
     this.roots.forEach((r) => r.removeFromParent());
     this.dialog.remove();
     this.hud.remove();
-    this.prompt.remove();
+    this.hooks.nearby(null);
+  }
+  get nearby() {
+    return this.near;
   }
 }

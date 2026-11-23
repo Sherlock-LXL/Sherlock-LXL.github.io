@@ -7,6 +7,7 @@ import "./refined-ui.css";
 import "./web-world.css";
 import "./mobile.css";
 import "./album.css";
+import "./interaction-hint.css";
 import { sitePath, projectLinks, externalAttrs } from "./core/portfolio";
 import { nearbyActions, type InteractionKey } from "./core/nearby-actions";
 import { mountAlbumGallery } from "./core/album-gallery";
@@ -14,7 +15,7 @@ import { version } from "../package.json";
 import { catalog, invoke } from "./core/api";
 import { EventBus, type LivingPrompt } from "./core/events";
 import { VisitorStore } from "./core/storage";
-import { discoveries, type Exhibit } from "./core/types";
+import { discoveries, type Exhibit, type Discovery } from "./core/types";
 import { World } from "./world/world";
 import { pigmentAccent } from "./world/ink";
 import { AudioSystem } from "./audio/audio";
@@ -80,6 +81,7 @@ async function boot() {
       <div class="side-divider"></div>
       <button class="secondary-nav" id="collections" aria-label="展品索引" title="展品索引">${navIcon("collections")} <span>展品索引</span><b>${String(data.modules.length).padStart(2, "0")}</b></button>
       <button class="secondary-nav" id="favorites" aria-label="我的收藏" title="我的收藏">${navIcon("favorites")} <span>我的收藏</span><b id="favorite-count">${store.favorites.size}</b></button>
+      <button class="secondary-nav" id="guide" aria-label="世界向导" title="世界向导">${navIcon("guide")} <span>世界向导</span><span class="nav-end">✦</span></button>
       <div class="side-bottom"><div class="journey-heading">探索足迹 <span id="progress-count"></span></div><div class="progress-track"><div id="progress-fill"></div></div><p>每一段探索，都是新的连接。</p><div class="build-tag"><span class="status-dot"></span> 持续生长 <span>v${version}</span></div></div>
     </aside>
     ${touchExperience ? '<button class="mobile-nav-dismiss" id="mobile-nav-dismiss" aria-label="关闭探索菜单"></button>' : ""}
@@ -90,10 +92,8 @@ async function boot() {
       <div class="world-meta"><span class="status-dot"></span> ${data.regions.length} REGIONS <span class="meta-divider">/</span> ${String(data.modules.length).padStart(2, "0")} EXHIBITS <span class="meta-divider">/</span> ALWAYS GROWING</div>
       <div class="crosshair" aria-hidden="true"></div>
       <div class="interaction-prompt" id="interaction-prompt" hidden></div>
-      <button class="interaction-prompt discovery-prompt" id="discovery-prompt" hidden><span class="interaction-key">G</span><span><b id="discovery-name"></b><small id="discovery-action"></small></span><span class="prompt-art">${actionIcon("sparkle")}</span></button>
       <div class="view-badge"><span class="status-dot"></span><span id="view-name">第一人称探索</span><button id="capture-look">点击进入环顾</button></div>
-      <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><div class="controls-pill"><span><kbd>W A S D</kbd> 行走 · Shift 加速 · 空格跳跃</span><i></i><span id="look-hint">点击 / 拖动环顾 · Esc 释放鼠标</span><i></i><button id="nearby" disabled><kbd>F</kbd> 靠近展台交互</button></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">${actionIcon("locate")}</button></div>
-      <button class="guide-card" id="guide"><span class="guide-orb">✦</span><span><b>世界向导</b><small>下一站，想去哪里？</small></span><span>${diagonalArrow}</span></button>
+      <div class="world-bottom"><div class="coordinates"><span id="coordinate">正在定位…</span><small>XIANGMETA</small></div><button class="overview-small" id="camera-reset" title="回到第一人称" aria-label="回到第一人称">${actionIcon("locate")}</button></div>
       ${touchExperience ? `<div class="touch-controls" id="touch-controls" aria-label="触控探索"><div class="touch-joystick" id="touch-joystick" aria-label="拖动移动，拉到外圈奔跑"><div class="touch-joystick-ring"><small>移动 · 外圈奔跑</small></div><div class="touch-joystick-knob"></div></div><div class="touch-look-hint">拖动画面环顾</div><button class="touch-jump" id="touch-jump" aria-label="跳跃">${actionIcon("jump")}<small>跳跃</small></button></div>` : ""}
       <div class="compass" aria-hidden="true">N<br><span>✧</span></div>
       <aside class="mini-atlas" id="mini-atlas" aria-label="世界迷你地图"><svg viewBox="-78 -78 156 156" aria-label="迷你地图"><circle class="atlas-sea" cx="0" cy="0" r="77"/>${data.regions.map((r) => `<g class="atlas-region" data-mini-region="${r.id}" style="--accent:${r.color};--pigment:${pigmentAccent(r.color)}" tabindex="0" role="button" aria-label="${escape(r.title)}"><circle cx="${r.position[0]}" cy="${r.position[1]}" r="${r.radius}"/><text x="${r.position[0]}" y="${r.position[1] + r.radius + 9}">${escape(r.title)}</text></g>`).join("")}<circle class="atlas-hub" cx="0" cy="0" r="2.4"/><g id="atlas-player" transform="translate(0,0)"><circle r="2.8"/><circle class="atlas-pulse" r="4.4"/></g></svg></aside>
@@ -107,6 +107,14 @@ async function boot() {
   let world: World | undefined;
   let current: Exhibit | undefined;
   let abort: AbortController | undefined;
+  let nearbyModule: Exhibit | null = null,
+    nearbyArtwork: ArtworkInteraction | null = null,
+    nearbyHarbor = false,
+    nearbyLiving: LivingPrompt | null = null,
+    nearbyMemory: MemoryFragment | "constellation" | null = null,
+    nearbyWonder: Discovery | null = null,
+    nearbyGame: { id: string; name: string } | null = null,
+    nearbyGuide = false;
   const aiFrame = aiLabFrame($("#ai-lab-host"), () => closePanel());
   $(".local-badge").innerHTML = `<a href="${sitePath("projects/")}">Projects ${diagonalArrow}</a>`;
   $(".side-caption").insertAdjacentHTML(
@@ -168,7 +176,7 @@ async function boot() {
   }
   $(".main-world").insertAdjacentHTML(
     "beforeend",
-    '<button class="interaction-prompt memory-prompt" id="memory-prompt" hidden><span class="interaction-key">G</span><span><b id="memory-near-name"></b><small>收集碎片 · 点亮星图</small></span><span class="prompt-art" id="memory-prompt-icon"></span></button><div id="trail-guide" hidden><span id="trail-text"></span><button id="trail-stop" aria-label="结束路线">×</button></div><div id="photo-toolbar" hidden><div><b>XIANGMETA / PHOTO MODE</b><small>WASD 移动 · Q / E 升降 · 拖动环顾 · P / Esc 返回</small></div><label>视角 <input id="photo-fov" type="range" min="30" max="90" value="60" aria-label="摄影视野"/></label><label>光线 <select id="photo-hour" aria-label="摄影时刻"><option value="">当前时刻</option><option value="6.2">晨曦</option><option value="10">晴昼</option><option value="17.8">暮色</option><option value="22">月夜</option></select></label><button id="photo-save">导出照片</button><button id="postcard-save">制作明信片</button><button id="photo-exit">返回世界</button><span id="photo-status" role="status"></span></div>',
+    '<div id="trail-guide" hidden><span id="trail-text"></span><button id="trail-stop" aria-label="结束路线">×</button></div><div id="photo-toolbar" hidden><div><b>XIANGMETA / PHOTO MODE</b><small>WASD 移动 · Q / E 升降 · 拖动环顾 · P / Esc 返回</small></div><label>视角 <input id="photo-fov" type="range" min="30" max="90" value="60" aria-label="摄影视野"/></label><label>光线 <select id="photo-hour" aria-label="摄影时刻"><option value="">当前时刻</option><option value="6.2">晨曦</option><option value="10">晴昼</option><option value="17.8">暮色</option><option value="22">月夜</option></select></label><button id="photo-save">导出照片</button><button id="postcard-save">制作明信片</button><button id="photo-exit">返回世界</button><span id="photo-status" role="status"></span></div>',
   );
   if (touchExperience) $("#photo-toolbar small").textContent = "拖动画面环顾 · 调整视角与光线";
   let stream: MediaStream | undefined;
@@ -616,7 +624,6 @@ async function boot() {
   const fragments = memoryEntries(data) as MemoryFragment[],
     growth = growthEntries(fragments) as MemoryFragment[];
   let tracking: MemoryFragment | undefined;
-  $("#memory-prompt-icon").innerHTML = actionIcon("sparkle");
   function memoryProgress() {
     $("#memory-count").textContent =
       `${fragments.filter((f) => store.memories.has(f.id)).length}/${fragments.length}`;
@@ -733,28 +740,20 @@ async function boot() {
   };
   $("#memory-open").onclick = showConstellation;
   $("#growth-open").onclick = showGrowth;
-  $("#memory-prompt").onclick = () => world?.interactDiscovery();
   $("#trail-stop").onclick = () => {
     tracking = undefined;
     world?.trackMemory(null);
     $("#trail-guide").hidden = true;
   };
   bus.on("memoryNearby", (entry) => {
-    $("#memory-prompt").hidden = !entry;
-    $("#memory-near-name").textContent =
-      entry === "constellation" ? "记忆星图" : (entry?.title ?? "");
-    $("#memory-prompt small").textContent =
-      entry === "constellation"
-        ? "查看星图 · 回顾收藏"
-        : entry && store.memories.has(entry.id)
-          ? "查看记忆 · 已收藏"
-          : "收集碎片 · 留下记忆";
+    nearbyMemory = entry;
+    renderNearby();
   });
   bus.on("memory", (entry) => {
     store.memories.add(entry.id);
     store.save();
     memoryProgress();
-    $("#memory-prompt small").textContent = "查看记忆 · 已收藏";
+    renderNearby();
     openMemory(entry);
     bus.emit("sound", "interaction");
   });
@@ -937,7 +936,6 @@ async function boot() {
         }),
     );
   };
-  $("#discovery-prompt").onclick = () => world?.interactDiscovery();
   $("#sky-settings").onclick = () => {
     const time = world?.timeOfDay ?? 9;
     showPanel(
@@ -980,11 +978,8 @@ async function boot() {
       world?.cycleTime((e.target as HTMLInputElement).checked);
   };
   bus.on("wonderNearby", (d) => {
-    $("#discovery-prompt").hidden = !d;
-    $("#discovery-name").textContent = d?.title ?? "";
-    $("#discovery-action").textContent = d
-      ? `${d.action} · ${store.discoveries.has(d.id) ? "再次体验" : "收集旅行印记"}`
-      : "";
+    nearbyWonder = d;
+    renderNearby();
   });
   bus.on("discover", (d) => {
     const first = !store.discoveries.has(d.id),
@@ -993,7 +988,7 @@ async function boot() {
     store.save();
     const after = resonanceCount();
     stamps();
-    $("#discovery-action").textContent = `${d.action} · 再次体验`;
+    renderNearby();
     const resonance =
       worldFeatures.worldResonance && after > before
         ? after === resonanceTotal
@@ -1117,8 +1112,6 @@ async function boot() {
     $(".main-world").classList.toggle("first-person", mode === "first-person");
     $("#view-name").textContent = mode === "first-person" ? "第一人称探索" : "世界地图";
     $("#capture-look").hidden = mode === "map";
-    $("#look-hint").textContent =
-      mode === "map" ? "拖动旋转 · 滚轮缩放" : "点击 / 拖动环顾 · Esc 释放鼠标";
     if (mode === "first-person") {
       const english = $(".coordinates small").textContent;
       $("#current-region").textContent =
@@ -1138,18 +1131,14 @@ async function boot() {
       .forEach((b) => b.classList.toggle("active", b.dataset.region === id));
     $("#overview").classList.toggle("active", id === "nexus");
   });
-  let nearbyModule: Exhibit | null = null,
-    nearbyArtwork: ArtworkInteraction | null = null,
-    nearbyHarbor = false,
-    nearbyLiving: LivingPrompt | null = null;
-  const renderNearby = () => {
+  function renderNearby() {
     if (nearbyLiving) {
       const p = nearbyLiving,
-        prompt = $("#interaction-prompt"),
-        button = $<HTMLButtonElement>("#nearby");
+        prompt = $("#interaction-prompt");
+      delete prompt.dataset.target;
       // 动物行为变化时保留现有按钮，避免在 pointerdown 与 pointerup 之间替换而吞掉触摸输入。
       if (!prompt.querySelector("[data-living-key]")) {
-        prompt.innerHTML = `<div class="nearby-copy"><b></b><small></small></div><div class="nearby-actions">${["Q", "T"].map((key) => `<button data-living-key="${key}">${touchExperience ? "" : `<kbd>${key}</kbd> `}<span></span></button>`).join("")}</div>`;
+        prompt.innerHTML = `<div class="nearby-copy"><b></b></div><div class="nearby-actions">${["Q", "T"].map((key) => `<button data-living-key="${key}">${touchExperience ? "" : `<kbd>${key}</kbd> `}<span></span></button>`).join("")}</div>`;
         prompt
           .querySelectorAll<HTMLButtonElement>("[data-living-key]")
           .forEach(
@@ -1158,37 +1147,73 @@ async function boot() {
       }
       prompt.hidden = false;
       prompt.querySelector("b")!.textContent = p.title;
-      prompt.querySelector("small")!.textContent = p.detail;
+      prompt.title = p.detail;
       for (const key of ["Q", "T"] as const) {
         const b = prompt.querySelector<HTMLButtonElement>(`[data-living-key="${key}"]`)!,
           label = key === "Q" ? p.q : p.t;
         b.hidden = !label;
-        b.disabled = key === "Q" && p.disabled;
+        b.disabled = p.disabled;
         b.querySelector("span")!.textContent = label ?? "";
       }
-      button.disabled = (!p.q && !p.t) || (p.disabled && !p.t);
-      button.innerHTML = `${p.q || p.t ? `<kbd>${p.q ? "Q" : "T"}</kbd> ` : ""}${escape(p.title)}`;
-      button.onclick = () => world?.interactLiving(p.q ? "Q" : "T");
       return;
     }
     const m = nearbyArtwork?.module ?? nearbyModule,
       actions = nearbyActions(nearbyModule, nearbyArtwork, nearbyHarbor),
       title = nearbyHarbor ? "海风港口" : (nearbyArtwork?.label ?? m?.portfolio?.name ?? m?.title);
-    const prompt = $("#interaction-prompt"),
-      button = $<HTMLButtonElement>("#nearby"),
-      primary = actions[0];
-    button.disabled = !primary;
-    button.innerHTML = `<kbd>${primary?.key ?? "F"}</kbd> ${title ? escape(title) : "靠近展台交互"}`;
-    button.title = primary ? `${primary.key} · ${primary.label}` : "靠近展台交互";
+    const prompt = $("#interaction-prompt");
+    prompt.removeAttribute("title");
+    if (!title && (nearbyGuide || nearbyGame || nearbyMemory || nearbyWonder)) {
+      const entry = nearbyMemory,
+        key = !nearbyGuide && nearbyGame ? "V" : "G",
+        name = nearbyGuide
+          ? "世界向导"
+          : (nearbyGame?.name ??
+            (entry === "constellation" ? "记忆星图" : entry?.title) ??
+            nearbyWonder!.title),
+        label = nearbyGuide
+          ? "寻找下一站"
+          : nearbyGame
+            ? "游玩"
+            : entry === "constellation"
+              ? "查看星图"
+              : entry
+                ? store.memories.has(entry.id)
+                  ? "查看记忆"
+                  : "收集碎片"
+                : nearbyWonder!.action;
+      const kind = nearbyGuide ? "guide" : nearbyGame ? "game" : entry ? "memory" : "wonder";
+      // 同一目标保留按钮节点，避免触摸抬起前因状态更新丢失点击。
+      if (prompt.dataset.target !== `${kind}:${name}`) {
+        prompt.dataset.target = `${kind}:${name}`;
+        prompt.innerHTML = `<div class="nearby-copy"><b>${escape(name)}</b></div><div class="nearby-actions"><button data-context-key="${key}">${touchExperience ? "" : `<kbd>${key}</kbd>`}<span></span></button></div>`;
+        prompt.querySelector<HTMLButtonElement>("button")!.onclick = () =>
+          nearbyGuide
+            ? showGuide()
+            : nearbyGame
+              ? world?.openGames(nearbyGame.id)
+              : world?.interactDiscovery();
+      }
+      prompt.querySelector(".nearby-actions span")!.textContent = label;
+      prompt.hidden = false;
+      return;
+    }
+    delete prompt.dataset.target;
     prompt.hidden = !title;
-    prompt.innerHTML = `<div class="nearby-copy"><b>${escape(title ?? "")}</b><small>${nearbyHarbor ? "查看乘船航线" : nearbyArtwork ? "打开作品档案" : escape(m?.portfolio?.summary ?? m?.subtitle ?? "")}</small></div><div class="nearby-actions">${actions.map((a) => (a.href ? `<a data-near-key="${a.key}" href="${escape(a.href)}" ${externalAttrs}><kbd>${a.key}</kbd> ${escape(a.label)} ${diagonalArrow}</a>` : `<button data-near-key="${a.key}"><kbd>${a.key}</kbd> ${escape(a.label)}</button>`)).join("")}</div>`;
+    prompt.innerHTML = `<div class="nearby-copy"><b>${escape(title ?? "")}</b></div><div class="nearby-actions">${actions.map((a) => (a.href ? `<a data-near-key="${a.key}" href="${escape(a.href)}" ${externalAttrs}>${touchExperience ? "" : `<kbd>${a.key}</kbd>`} ${escape(a.label)}</a>` : `<button data-near-key="${a.key}">${touchExperience ? "" : `<kbd>${a.key}</kbd>`} ${escape(a.label)}</button>`)).join("")}</div>`;
     prompt
       .querySelectorAll<HTMLButtonElement>("button[data-near-key]")
       .forEach(
         (b) => (b.onclick = () => world?.interactExhibit(b.dataset.nearKey as InteractionKey)),
       );
-    button.onclick = () => primary && world?.interactExhibit(primary.key);
-  };
+  }
+  bus.on("gameNearby", (target) => {
+    nearbyGame = target;
+    renderNearby();
+  });
+  bus.on("guideNearby", (near) => {
+    nearbyGuide = near;
+    renderNearby();
+  });
   bus.on("harborNearby", (v) => {
     nearbyHarbor = v;
     renderNearby();
@@ -1215,7 +1240,6 @@ async function boot() {
     destination = data.modules.find((m) => m.id === requested);
   if (destination && world) {
     world.visit(destination);
-    toast(touchExperience ? "已抵达展台 · 点击浮窗查看作品" : "已抵达项目展台 · E 查看简介");
   }
   progress();
   window.addEventListener("pagehide", (event) => {

@@ -7,6 +7,8 @@ export type LivingPrompt = {
   disabled: boolean;
 };
 type Events = {
+  gameNearby: { id: string; name: string } | null;
+  guideNearby: boolean;
   livingNearby: LivingPrompt | null;
   livingMessage: string;
   demo: Exhibit;
