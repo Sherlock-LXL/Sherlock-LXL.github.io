@@ -1,11 +1,19 @@
-"""Copy the original Gift Chooser's declarative UI text without executing it."""
+"""提取原 Gift Chooser 的界面文字，不执行原程序。"""
+
 import ast
 import json
 from pathlib import Path
 import sys
 
 source = Path(sys.argv[1])
-names = {"SCORE_QUESTIONS", "CATEGORIES", "SCORE_BANDS", "FEATURE_FEEDBACK", "CATEGORY_TIPS", "RESULT_TEXT"}
+names = {
+    "SCORE_QUESTIONS",
+    "CATEGORIES",
+    "SCORE_BANDS",
+    "FEATURE_FEEDBACK",
+    "CATEGORY_TIPS",
+    "RESULT_TEXT",
+}
 values = {}
 for statement in ast.parse(source.read_text(encoding="utf-8")).body:
     if isinstance(statement, ast.Assign):

@@ -1,8 +1,10 @@
 import numpy as np
+
 try:
     import msvcrt
 except ImportError:
     msvcrt = None
+
 
 def show_splash() -> None:
     print("=" * 30)
@@ -11,24 +13,22 @@ def show_splash() -> None:
     print("=" * 30)
     print()
 
+
 TEXT = {
     "zh": {
         "language_title": "请选择语言 / Please select a language: ",
         "language_options": "1. 中文\n2. English",
         "language_prompt": "请输入选项 / Enter your choice: ",
         "language_error": "请输入 1 或 2。",
-
         "score_instruction": "请根据以下标准，在 0~10 分范围内评分。",
         "score_prompt": "请输入分数: ",
         "score_range_error": "分数必须在 0~10 之间，请重新输入。",
         "score_type_error": "请输入数字，例如 7、8.5 或 10。",
-
         "category_title": "礼物属于哪类物品？",
         "category_instruction": "请在 1~7 中选择最符合的类别。",
         "category_prompt": "请输入类别编号: ",
         "category_range_error": "选项必须在 1~7 之间，请重新输入。",
         "category_type_error": "请输入整数，例如 1、3 或 7。",
-
         "completed": "信息输入完成。",
         "exit_prompt": "\n预测完成。按 Esc 键退出程序。",
         "exit_fallback": "\n预测完成。按 Enter 键退出程序。",
@@ -38,18 +38,15 @@ TEXT = {
         "language_options": "1. 中文\n2. English",
         "language_prompt": "请输入选项 / Enter your choice: ",
         "language_error": "Please enter 1 or 2.",
-
         "score_instruction": "Rate the gift from 0 to 10 using the guide below.",
         "score_prompt": "Enter a score: ",
         "score_range_error": "The score must be between 0 and 10.",
         "score_type_error": "Please enter a number, such as 7, 8.5, or 10.",
-
         "category_title": "Which category best describes the gift?",
         "category_instruction": "Choose the most suitable category from 1 to 7.",
         "category_prompt": "Enter the category number: ",
         "category_range_error": "The option must be between 1 and 7.",
         "category_type_error": "Please enter an integer, such as 1, 3, or 7.",
-
         "completed": "Input completed.",
         "exit_prompt": "\nPrediction complete. Press Esc to exit.",
         "exit_fallback": "\nPrediction complete. Press Enter to exit.",
@@ -262,8 +259,7 @@ SCORE_BANDS = {
             "minimum": 7.0,
             "title": "值得考虑",
             "comment": (
-                "整体方向是对的，ta大概率会喜欢。"
-                "不过仍有部分不确定因素，稍作调整后会更稳妥。"
+                "整体方向是对的，ta大概率会喜欢。不过仍有部分不确定因素，稍作调整后会更稳妥。"
             ),
         },
         {
@@ -294,8 +290,7 @@ SCORE_BANDS = {
             "minimum": 2.1,
             "title": "风险较高",
             "comment": (
-                "这件礼物存在较明显的不匹配风险。"
-                "除非能够确认关键条件，否则更换方向通常会更加稳妥。"
+                "这件礼物存在较明显的不匹配风险。除非能够确认关键条件，否则更换方向通常会更加稳妥。"
             ),
         },
         {
@@ -386,8 +381,7 @@ FEATURE_FEEDBACK = {
             "name": "兴趣匹配",
             "strength": "ta对这类礼物的兴趣比较明确，这是当前方案最可靠的基础之一。",
             "suggestion": (
-                "兴趣匹配目前偏弱。可以确认ta是否主动提过这件物品、"
-                "对应品牌、作品、材质或具体风格。"
+                "兴趣匹配目前偏弱。可以确认ta是否主动提过这件物品、对应品牌、作品、材质或具体风格。"
             ),
         },
         {
@@ -402,8 +396,7 @@ FEATURE_FEEDBACK = {
             "name": "情感个性化",
             "strength": "这件礼物能够体现你对ta的了解，情感价值是明显优势。",
             "suggestion": (
-                "个性化程度还有提升空间。可以加入手写卡片、共同记忆、"
-                "特殊日期或只有你们理解的细节。"
+                "个性化程度还有提升空间。可以加入手写卡片、共同记忆、特殊日期或只有你们理解的细节。"
             ),
         },
         {
@@ -418,16 +411,14 @@ FEATURE_FEEDBACK = {
             "name": "选择安全度",
             "strength": "型号、尺寸或版本等关键条件比较明确，选错的可能性较低。",
             "suggestion": (
-                "这件礼物存在选错风险。购买前应确认尺寸、色号、型号、"
-                "香型、肤质、兼容性或退换政策。"
+                "这件礼物存在选错风险。购买前应确认尺寸、色号、型号、香型、肤质、兼容性或退换政策。"
             ),
         },
         {
             "name": "收纳友好度",
             "strength": "礼物容易保存，也不太会造成重复或杂物负担。",
             "suggestion": (
-                "收纳负担可能偏高。可以改为更小巧、可消耗、可替换，"
-                "或不会与已有物品重复的选择。"
+                "收纳负担可能偏高。可以改为更小巧、可消耗、可替换，或不会与已有物品重复的选择。"
             ),
         },
         {
@@ -549,8 +540,7 @@ RESULT_TEXT = {
         "suggestions": "改进建议",
         "category_tip": "类别提醒",
         "disclaimer": (
-            "提示: 结果是基于当前输入和已有训练数据的估计，"
-            "不能完全替代你对ta的真实了解。"
+            "提示: 结果是基于当前输入和已有训练数据的估计，不能完全替代你对ta的真实了解。"
         ),
     },
     "en": {
@@ -568,6 +558,7 @@ RESULT_TEXT = {
     },
 }
 
+
 def choose_language() -> str:
     print(TEXT["zh"]["language_title"])
     print(TEXT["zh"]["language_options"])
@@ -579,13 +570,14 @@ def choose_language() -> str:
             return "en"
         print(TEXT["zh"]["language_error"])
 
+
 def ask_score(
     question_data: dict,
     language: str,
 ) -> float:
     text = TEXT[language]
     print()
-    print(f'[{question_data["name"]}]')
+    print(f"[{question_data['name']}]")
     print(question_data["question"])
     print(text["score_instruction"])
     for line in question_data["guide"]:
@@ -599,11 +591,12 @@ def ask_score(
         except ValueError:
             print(text["score_type_error"])
 
+
 def ask_category(language: str) -> int:
     text = TEXT[language]
     categories = CATEGORIES[language]
     print()
-    print(f'[{text["category_title"]}]')
+    print(f"[{text['category_title']}]")
     print(text["category_instruction"])
     for index, category_name in enumerate(categories, start=1):
         print(f"{index}. {category_name}")
@@ -615,6 +608,7 @@ def ask_category(language: str) -> int:
             print(text["category_range_error"])
         except ValueError:
             print(text["category_type_error"])
+
 
 def collect_input() -> tuple[np.ndarray, str]:
     language = choose_language()
@@ -633,6 +627,7 @@ def collect_input() -> tuple[np.ndarray, str]:
     print(text["completed"])
     return input_data, language
 
+
 def get_score_band(
     display_score: float,
     language: str,
@@ -641,6 +636,7 @@ def get_score_band(
         if display_score >= band["minimum"]:
             return band
     return SCORE_BANDS[language][-1]
+
 
 def generate_personalized_feedback(
     input_data: np.ndarray,
@@ -655,21 +651,20 @@ def generate_personalized_feedback(
     elif strongest_score >= 0.50:
         if language == "zh":
             strength_text = (
-                f'{strongest_feedback["name"]}是当前相对较稳定的一项，'
+                f"{strongest_feedback['name']}是当前相对较稳定的一项，"
                 f"但得分只有 {strongest_score * 10:.1f}/10，"
                 "暂时还不足以视为明显优势。"
             )
         else:
             strength_text = (
-                f'{strongest_feedback["name"]} is currently the relatively '
+                f"{strongest_feedback['name']} is currently the relatively "
                 f"strongest factor, but its score is only "
                 f"{strongest_score * 10:.1f}/10, so it is not yet a clear strength."
             )
     else:
         if language == "zh":
             strength_text = (
-                "当前七项指标都偏低，还没有明显优势。"
-                "建议先重新确认礼物方向，再考虑具体款式。"
+                "当前七项指标都偏低，还没有明显优势。建议先重新确认礼物方向，再考虑具体款式。"
             )
         else:
             strength_text = (
@@ -684,16 +679,14 @@ def generate_personalized_feedback(
             feedback = FEATURE_FEEDBACK[language][feature_index]
             score_out_of_ten = feature_score * 10
             suggestions.append(
-                f'{feedback["name"]} ({score_out_of_ten:.1f}/10): '
-                f'{feedback["suggestion"]}'
+                f"{feedback['name']} ({score_out_of_ten:.1f}/10): {feedback['suggestion']}"
             )
         if len(suggestions) == 2:
             break
     if not suggestions:
         if language == "zh":
             suggestions.append(
-                "七项指标都比较稳定。目前不需要大幅修改方案，"
-                "购买前确认商品质量和快递时间即可。"
+                "七项指标都比较稳定。目前不需要大幅修改方案，购买前确认商品质量和快递时间即可。"
             )
         else:
             suggestions.append(
@@ -704,6 +697,7 @@ def generate_personalized_feedback(
     category_index = int(np.argmax(category_values))
     category_tip = CATEGORY_TIPS[language][category_index]
     return strength_text, suggestions, category_tip
+
 
 def show_result(
     display_score: float,
@@ -721,27 +715,24 @@ def show_result(
     )
     print(text["title"])
     print("=" * 68)
-    print(
-        f'{text["score"]}: '
-        f"{display_score:.2f} "
-        f'{text["scale"]}'
-    )
+    print(f"{text['score']}: {display_score:.2f} {text['scale']}")
     print()
-    print(f'{text["judgement"]}: {band["title"]}')
-    print(f'  {band["comment"]}')
+    print(f"{text['judgement']}: {band['title']}")
+    print(f"  {band['comment']}")
     print()
-    print(f'{text["strength"]}:')
+    print(f"{text['strength']}:")
     print(f"  {strength}")
     print()
-    print(f'{text["suggestions"]}:')
+    print(f"{text['suggestions']}:")
     for index, suggestion in enumerate(suggestions, start=1):
         print(f"  {index}. {suggestion}")
     print()
-    print(f'{text["category_tip"]}:')
+    print(f"{text['category_tip']}:")
     print(f"  {category_tip}")
     print()
     print(text["disclaimer"])
     print("=" * 68)
+
 
 def wait_for_exit(language: str) -> None:
     text = TEXT[language]

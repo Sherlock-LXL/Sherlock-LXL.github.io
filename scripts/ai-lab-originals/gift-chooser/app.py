@@ -9,11 +9,8 @@ from src.ui import (
     wait_for_exit,
 )
 
-MODEL_PATH = (
-    Path(__file__).resolve().parent
-    / "models"
-    / "final_model.npz"
-)
+MODEL_PATH = Path(__file__).resolve().parent / "models" / "final_model.npz"
+
 
 def main() -> None:
     show_splash()
@@ -24,15 +21,14 @@ def main() -> None:
         parameters,
     )
     raw_score = float(prediction[0, 0])
-    display_score = float(
-        np.clip(raw_score, 0.0, 1.0) * 10
-    )
+    display_score = float(np.clip(raw_score, 0.0, 1.0) * 10)
     show_result(
         display_score=display_score,
         input_data=input_data,
         language=language,
     )
     wait_for_exit(language)
+
 
 if __name__ == "__main__":
     main()

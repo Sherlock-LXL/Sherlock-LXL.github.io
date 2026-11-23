@@ -1,284 +1,661 @@
-import {chromium,webkit} from 'playwright';
-import {createServer} from 'node:http';
-import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
-import path from 'node:path';
-import assert from 'node:assert/strict';
+import { chromium, webkit } from "playwright";
+import { createServer } from "node:http";
+import { readFile, mkdir, stat, writeFile } from "node:fs/promises";
+import path from "node:path";
+import assert from "node:assert/strict";
 
-// Exercise the production files behind a strict static server (no SPA rewrite).
-const root=path.resolve('dist'),base=process.env.BASE_PATH||'/';
-const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.webp':'image/webp','.png':'image/png','.mp3':'audio/mpeg'};
-const server=createServer(async(req,res)=>{
-  try{
-    const pathname=decodeURIComponent(new URL(req.url,'http://local').pathname);
-    if(!pathname.startsWith(base))throw new Error('outside base');
-    let file=path.resolve(root,pathname.slice(base.length)||'index.html');
-    if(!file.startsWith(root+path.sep)&&file!==root)throw new Error('outside root');
-    if((await stat(file)).isDirectory())file=path.join(file,'index.html');
-    res.setHeader('Content-Type',mime[path.extname(file)]??'application/octet-stream');res.end(await readFile(file));
-  }catch{res.statusCode=404;res.end('Not found');}
+// 以无 SPA 重写的静态服务器测试生产文件。
+const root = path.resolve("dist"),
+  base = process.env.BASE_PATH || "/";
+const mime = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".webp": "image/webp",
+  ".png": "image/png",
+  ".mp3": "audio/mpeg",
+};
+const server = createServer(async (req, res) => {
+  try {
+    const pathname = decodeURIComponent(new URL(req.url, "http://local").pathname);
+    if (!pathname.startsWith(base)) throw new Error("outside base");
+    let file = path.resolve(root, pathname.slice(base.length) || "index.html");
+    if (!file.startsWith(root + path.sep) && file !== root) throw new Error("outside root");
+    if ((await stat(file)).isDirectory()) file = path.join(file, "index.html");
+    res.setHeader("Content-Type", mime[path.extname(file)] ?? "application/octet-stream");
+    res.end(await readFile(file));
+  } catch {
+    res.statusCode = 404;
+    res.end("Not found");
+  }
 });
-await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-const origin=`http://127.0.0.1:${server.address().port}`,url=route=>origin+base+route;
-await mkdir('artifacts/web',{recursive:true});
-const engines=process.env.TEST_WEBKIT==='1'?{chromium,webkit}:{chromium};
-const graphics=process.platform==='darwin'?['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist']:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'];
-const results=[];
-try{
-  for(const [name,engine] of Object.entries(engines)){
-    const checkpoint=label=>console.log(`[${name} ${base}] ${label}`);
-    const browser=await engine.launch({headless:true,args:name==='chromium'?['--disable-crash-reporter','--disable-breakpad',...graphics]:[]});
-    try{
-      const context=await browser.newContext({viewport:{width:1440,height:1000}});
+await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+const origin = `http://127.0.0.1:${server.address().port}`,
+  url = (route) => origin + base + route;
+await mkdir("artifacts/web", { recursive: true });
+const engines = process.env.TEST_WEBKIT === "1" ? { chromium, webkit } : { chromium };
+const graphics =
+  process.platform === "darwin"
+    ? ["--use-angle=metal", "--enable-gpu", "--ignore-gpu-blocklist"]
+    : ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
+const results = [];
+try {
+  for (const [name, engine] of Object.entries(engines)) {
+    const checkpoint = (label) => console.log(`[${name} ${base}] ${label}`);
+    const browser = await engine.launch({
+      headless: true,
+      args:
+        name === "chromium" ? ["--disable-crash-reporter", "--disable-breakpad", ...graphics] : [],
+    });
+    try {
+      const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
       context.setDefaultTimeout(30_000);
-      const page=await context.newPage(),errors=[],requests=[],failures=[];
-      const activate=async locator=>{
-        await page.evaluate(()=>{if(document.pointerLockElement)document.exitPointerLock();});
-        await page.waitForFunction(()=>!document.pointerLockElement);
+      const page = await context.newPage(),
+        errors = [],
+        requests = [],
+        failures = [];
+      const activate = async (locator) => {
+        await page.evaluate(() => {
+          if (document.pointerLockElement) document.exitPointerLock();
+        });
+        await page.waitForFunction(() => !document.pointerLockElement);
         await locator.click();
       };
-      page.on('pageerror',e=>errors.push(e.message));
-      page.on('request',r=>requests.push(r.url()));
-      page.on('response',r=>{if(r.status()>=400)failures.push(`${r.status()} ${r.url()}`);});
-      // Observe external destinations without depending on third-party availability.
-      await context.route('https://**/*',route=>route.fulfill({status:200,body:'External destination verified'}));
-      await page.goto(url(''));
-      await page.locator('.hero').waitFor();
-      assert.equal(await page.locator('.project-card').count(),3);
-      assert.ok(!requests.some(u=>/three-|main-.*\.js|\.webp|\/api\//.test(u)));
-      await page.screenshot({path:`artifacts/web/${name}-landing.png`,fullPage:true});
-      await page.getByRole('link',{name:'View Projects',exact:false}).click();
-      await page.locator('.project-card').last().waitFor();
-      assert.equal(await page.locator('.project-card').count(),10);
-      await page.getByRole('button',{name:'Research / 科研',exact:true}).click();
-      assert.equal(await page.locator('.project-card:visible').count(),2);
-      await page.reload();await page.locator('#result-count').waitFor();
-      assert.equal(await page.locator('.project-card:visible').count(),2);
-      await page.getByRole('button',{name:'全部',exact:true}).click();
-      await page.locator('#project-search').fill('LSTM');
-      assert.equal(await page.locator('.project-card:visible').count(),1);
-      await page.goto(url('projects/#personal-music'));
-      await page.locator('#personal-music details[open]').waitFor();
-      assert.equal(await page.locator('#personal-music .record-grid a').count(),5);
-      assert.equal(await page.locator('audio,video').count(),0);
-      checkpoint('Landing, project filters/refresh and album links passed');
-      await page.goto(url('world/?project=xianglm&inspect'));
-      await page.locator('#world-loading').waitFor({state:'hidden',timeout:90000});
-      await page.locator('#interaction-prompt').waitFor({timeout:90000});
-      assert.ok((await page.locator('#interaction-prompt').innerText()).includes('XiangLM'));
-      assert.equal(await page.locator('#interaction-prompt a:has-text("GitHub")').getAttribute('href'),'https://github.com/Sherlock-LXL/xianglm');
-      const textureState=await page.evaluate(()=>window.__xiangmetaInspect().textures);
-      assert.ok(textureState.length>=20);assert.ok(textureState.every(t=>t.ready&&t.width>0));
-      assert.ok(textureState.every(t=>!t.detail&&t.width<=384),'distant covers display real previews before region detail loads');
-      assert.equal(await page.locator('#world').getAttribute('data-preview-ready'),String(textureState.length));
-      const keyStyle=await page.locator('#interaction-prompt kbd').first().evaluate(el=>{
-        const s=getComputedStyle(el);return {color:s.color,background:s.backgroundColor,size:parseFloat(s.fontSize)};
+      page.on("pageerror", (e) => errors.push(e.message));
+      page.on("request", (r) => requests.push(r.url()));
+      page.on("response", (r) => {
+        if (r.status() >= 400) failures.push(`${r.status()} ${r.url()}`);
       });
-      assert.equal(keyStyle.color,'rgb(23, 51, 39)');assert.ok(keyStyle.size>=16);
-      await page.screenshot({path:`artifacts/web/${name}-mountain.png`});
-      const initial=await page.evaluate(()=>window.__xiangmetaInspect().player);
-      await page.keyboard.down('KeyS');
-      await page.waitForFunction(p=>Math.hypot(window.__xiangmetaInspect().player.x-p.x,window.__xiangmetaInspect().player.z-p.z)>.5,initial,{timeout:10000});
-      const hudBounds=await page.evaluate(()=>new Promise(resolve=>{
-        const bounds=[];const sample=()=>{const r=document.querySelector('.controls-pill').getBoundingClientRect();bounds.push({x:r.x,width:r.width});if(bounds.length<35)requestAnimationFrame(sample);else resolve(bounds);};sample();
-      }));
-      assert.ok(hudBounds.every(r=>Math.abs(r.x-hudBounds[0].x)<.1&&Math.abs(r.width-hudBounds[0].width)<.1),'walking HUD must not move with coordinates or nearby names');
-      await page.keyboard.up('KeyS');
-      await page.keyboard.press('Space');
-      await page.waitForFunction(()=>!window.__xiangmetaInspect().player.grounded,null,{timeout:10000});
-      await page.waitForFunction(()=>window.__xiangmetaInspect().player.grounded,null,{timeout:10000});
-      checkpoint('World boot, 20 distant previews, legible keys, stationary HUD, walking and jumping passed');
-      await page.goto(url('world/?project=xianglm&inspect'));
-      await page.locator('#interaction-prompt').waitFor({timeout:90000});
-      await page.keyboard.press('KeyE');
-      await page.locator('#inspector[open]').waitFor();
-      assert.ok((await page.locator('#panel-content').innerText()).includes('4B tokens'));
-      assert.equal(await page.locator('#module-form').count(),0);
-      await page.keyboard.press('Escape');
-      // Release auto-resumed pointer lock before clicking ordinary UI controls.
-      await page.keyboard.press('Escape');
-      const popup=context.waitForEvent('page');
-      await page.keyboard.press('KeyF');
-      const external=await popup;await external.waitForLoadState();
-      assert.equal(external.url(),'https://github.com/Sherlock-LXL/xianglm');await external.close();
-      await page.keyboard.press('KeyP');
-      await page.locator('body.photo-mode').waitFor();
-      const photoY=await page.evaluate(()=>window.__xiangmetaInspect().photoCamera[1]);
-      await page.keyboard.down('KeyE');
-      await page.waitForFunction(y=>window.__xiangmetaInspect().photoCamera[1]>y+.3,photoY,{timeout:10000});
-      await page.keyboard.up('KeyE');
-      assert.equal(await page.locator('#inspector[open]').count(),0);
-      await page.keyboard.press('KeyP');
-      await page.keyboard.press('Escape');
-      await activate(page.locator('#memory-open'));
-      await page.locator('.memory-index [data-memory]').first().click();
-      await page.locator('#memory-visit').click();
-      await page.locator('#memory-prompt').waitFor({timeout:10000});
-      await page.keyboard.press('KeyG');
-      await page.locator('#inspector[open] .memory-source').waitFor();
-      assert.ok((await page.locator('.memory-source').innerText()).includes('已收藏'));
-      await page.keyboard.press('Escape');
-      await page.keyboard.press('Escape');
-      checkpoint('E About, F GitHub, photo E and G memory passed');
-      await activate(page.locator('#overview'));
-      await page.waitForFunction(()=>document.querySelector('#world')?.dataset.view==='map');
-      await page.waitForFunction(()=>performance.getEntriesByType('resource').some(r=>r.name.endsWith('/weiming/yan-lai-you-sheng.webp')),{},{timeout:15000});
-      await page.screenshot({path:`artifacts/web/${name}-world.png`});
-      await page.goto(url('world/?project=personal-music&inspect'));
-      await page.locator('#interaction-prompt').waitFor({timeout:90000});
-      const musicPopup=context.waitForEvent('page');
-      await page.keyboard.press('KeyR');
-      const musicExternal=await musicPopup;await musicExternal.waitForLoadState();
-      assert.equal(musicExternal.url(),'https://music.163.com/#/artist?id=46962347');
+      // 检查外部链接目标，不依赖第三方服务可用性。
+      await context.route("https://**/*", (route) =>
+        route.fulfill({ status: 200, body: "External destination verified" }),
+      );
+      await page.goto(url(""));
+      await page.locator(".hero").waitFor();
+      assert.equal(await page.locator(".project-card").count(), 3);
+      assert.ok(!requests.some((u) => /three-|main-.*\.js|\.webp|\/api\//.test(u)));
+      await page.screenshot({ path: `artifacts/web/${name}-landing.png`, fullPage: true });
+      await page.getByRole("link", { name: "View Projects", exact: false }).click();
+      await page.locator(".project-card").last().waitFor();
+      assert.equal(await page.locator(".project-card").count(), 10);
+      await page.getByRole("button", { name: "Research / 科研", exact: true }).click();
+      assert.equal(await page.locator(".project-card:visible").count(), 2);
+      await page.reload();
+      await page.locator("#result-count").waitFor();
+      assert.equal(await page.locator(".project-card:visible").count(), 2);
+      await page.getByRole("button", { name: "全部", exact: true }).click();
+      await page.locator("#project-search").fill("LSTM");
+      assert.equal(await page.locator(".project-card:visible").count(), 1);
+      await page.goto(url("projects/#personal-music"));
+      await page.locator("#personal-music details[open]").waitFor();
+      assert.equal(await page.locator("#personal-music .record-grid a").count(), 5);
+      assert.equal(await page.locator("audio,video").count(), 0);
+      checkpoint("Landing, project filters/refresh and album links passed");
+      await page.goto(url("world/?project=xianglm&inspect"));
+      await page.locator("#world-loading").waitFor({ state: "hidden", timeout: 90000 });
+      await page.locator("#interaction-prompt").waitFor({ timeout: 90000 });
+      assert.ok((await page.locator("#interaction-prompt").innerText()).includes("XiangLM"));
+      assert.equal(
+        await page.locator('#interaction-prompt a:has-text("GitHub")').getAttribute("href"),
+        "https://github.com/Sherlock-LXL/xianglm",
+      );
+      const textureState = await page.evaluate(() => window.__xiangmetaInspect().textures);
+      assert.ok(textureState.length >= 20);
+      assert.ok(textureState.every((t) => t.ready && t.width > 0));
+      assert.ok(
+        textureState.every((t) => !t.detail && t.width <= 384),
+        "distant covers display real previews before region detail loads",
+      );
+      assert.equal(
+        await page.locator("#world").getAttribute("data-preview-ready"),
+        String(textureState.length),
+      );
+      const keyStyle = await page
+        .locator("#interaction-prompt kbd")
+        .first()
+        .evaluate((el) => {
+          const s = getComputedStyle(el);
+          return { color: s.color, background: s.backgroundColor, size: parseFloat(s.fontSize) };
+        });
+      assert.equal(keyStyle.color, "rgb(23, 51, 39)");
+      assert.ok(keyStyle.size >= 16);
+      await page.screenshot({ path: `artifacts/web/${name}-mountain.png` });
+      const initial = await page.evaluate(() => window.__xiangmetaInspect().player);
+      await page.keyboard.down("KeyS");
+      await page.waitForFunction(
+        (p) =>
+          Math.hypot(
+            window.__xiangmetaInspect().player.x - p.x,
+            window.__xiangmetaInspect().player.z - p.z,
+          ) > 0.5,
+        initial,
+        { timeout: 10000 },
+      );
+      const hudBounds = await page.evaluate(
+        () =>
+          new Promise((resolve) => {
+            const bounds = [];
+            const sample = () => {
+              const r = document.querySelector(".controls-pill").getBoundingClientRect();
+              bounds.push({ x: r.x, width: r.width });
+              if (bounds.length < 35) requestAnimationFrame(sample);
+              else resolve(bounds);
+            };
+            sample();
+          }),
+      );
+      assert.ok(
+        hudBounds.every(
+          (r) =>
+            Math.abs(r.x - hudBounds[0].x) < 0.1 && Math.abs(r.width - hudBounds[0].width) < 0.1,
+        ),
+        "walking HUD must not move with coordinates or nearby names",
+      );
+      await page.keyboard.up("KeyS");
+      await page.keyboard.press("Space");
+      await page.waitForFunction(() => !window.__xiangmetaInspect().player.grounded, null, {
+        timeout: 10000,
+      });
+      await page.waitForFunction(() => window.__xiangmetaInspect().player.grounded, null, {
+        timeout: 10000,
+      });
+      checkpoint(
+        "World boot, 20 distant previews, legible keys, stationary HUD, walking and jumping passed",
+      );
+      await page.goto(url("world/?project=xianglm&inspect"));
+      await page.locator("#interaction-prompt").waitFor({ timeout: 90000 });
+      await page.keyboard.press("KeyE");
+      await page.locator("#inspector[open]").waitFor();
+      assert.ok((await page.locator("#panel-content").innerText()).includes("4B tokens"));
+      assert.equal(await page.locator("#module-form").count(), 0);
+      await page.keyboard.press("Escape");
+      // 点击普通控件前释放自动恢复的鼠标锁定。
+      await page.keyboard.press("Escape");
+      const popup = context.waitForEvent("page");
+      await page.keyboard.press("KeyF");
+      const external = await popup;
+      await external.waitForLoadState();
+      assert.equal(external.url(), "https://github.com/Sherlock-LXL/xianglm");
+      await external.close();
+      await page.keyboard.press("KeyP");
+      await page.locator("body.photo-mode").waitFor();
+      const photoY = await page.evaluate(() => window.__xiangmetaInspect().photoCamera[1]);
+      await page.keyboard.down("KeyE");
+      await page.waitForFunction(
+        (y) => window.__xiangmetaInspect().photoCamera[1] > y + 0.3,
+        photoY,
+        { timeout: 10000 },
+      );
+      await page.keyboard.up("KeyE");
+      assert.equal(await page.locator("#inspector[open]").count(), 0);
+      await page.keyboard.press("KeyP");
+      await page.keyboard.press("Escape");
+      await activate(page.locator("#memory-open"));
+      await page.locator(".memory-index [data-memory]").first().click();
+      await page.locator("#memory-visit").click();
+      await page.locator("#memory-prompt").waitFor({ timeout: 10000 });
+      await page.keyboard.press("KeyG");
+      await page.locator("#inspector[open] .memory-source").waitFor();
+      assert.ok((await page.locator(".memory-source").innerText()).includes("已收藏"));
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Escape");
+      checkpoint("E About, F GitHub, photo E and G memory passed");
+      await activate(page.locator("#overview"));
+      await page.waitForFunction(() => document.querySelector("#world")?.dataset.view === "map");
+      await page.waitForFunction(
+        () =>
+          performance
+            .getEntriesByType("resource")
+            .some((r) => r.name.endsWith("/weiming/yan-lai-you-sheng.webp")),
+        {},
+        { timeout: 15000 },
+      );
+      await page.screenshot({ path: `artifacts/web/${name}-world.png` });
+      await page.goto(url("world/?project=personal-music&inspect"));
+      await page.locator("#interaction-prompt").waitFor({ timeout: 90000 });
+      const musicPopup = context.waitForEvent("page");
+      await page.keyboard.press("KeyR");
+      const musicExternal = await musicPopup;
+      await musicExternal.waitForLoadState();
+      assert.equal(musicExternal.url(), "https://music.163.com/#/artist?id=46962347");
       await musicExternal.close();
-      await page.keyboard.press('KeyE');
-      await page.locator('.album-gallery').waitFor();
-      assert.equal(await page.locator('audio,video').count(),0);
-      assert.equal(await page.locator('.album-detail a').getAttribute('href'),'https://music.163.com/#/album?id=172971428');
-      assert.equal(await page.locator('.album-cover').count(),5);
-      checkpoint('Map, R music and album gallery passed');
-      assert.ok(!requests.some(u=>/\.mp3|\.mp4|\/api\//.test(u)),'no audio request before opt-in');
-      await page.keyboard.press('Escape');await page.keyboard.press('Escape');
-      await activate(page.locator('#memory-open'));await activate(page.locator('#atlas-visit'));
-      await page.keyboard.press('Escape');
-      await activate(page.locator('#sound'));
-      await page.waitForFunction(()=>window.__xiangmetaAudio().playing&&window.__xiangmetaAudio().context==='running',null,{timeout:15000});
-      assert.match(await page.evaluate(()=>window.__xiangmetaAudio().track),/^backing-0[1-7]$/);
+      await page.keyboard.press("KeyE");
+      await page.locator(".album-gallery").waitFor();
+      assert.equal(await page.locator("audio,video").count(), 0);
+      assert.equal(
+        await page.locator(".album-detail a").getAttribute("href"),
+        "https://music.163.com/#/album?id=172971428",
+      );
+      assert.equal(await page.locator(".album-cover").count(), 5);
+      checkpoint("Map, R music and album gallery passed");
+      assert.ok(
+        !requests.some((u) => /\.mp3|\.mp4|\/api\//.test(u)),
+        "no audio request before opt-in",
+      );
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Escape");
+      await activate(page.locator("#memory-open"));
+      await activate(page.locator("#atlas-visit"));
+      await page.keyboard.press("Escape");
+      await activate(page.locator("#sound"));
+      await page.waitForFunction(
+        () => window.__xiangmetaAudio().playing && window.__xiangmetaAudio().context === "running",
+        null,
+        { timeout: 15000 },
+      );
+      assert.match(await page.evaluate(() => window.__xiangmetaAudio().track), /^backing-0[1-7]$/);
       await activate(page.locator('[data-region="personal-museum"]'));
-      await page.waitForFunction(()=>{const s=window.__xiangmetaAudio();return s.track==='season-autumn-v1'&&s.playing&&s.heard.includes('season-autumn-v1');},null,{timeout:15000});
-      assert.equal(await page.evaluate(()=>window.__xiangmetaAudio().track),'season-autumn-v1');
-      for(const [region,track] of [['ai-mountain','season-spring-v1'],['weiming-studio','season-summer-v1'],['science-valley','season-winter-v1']]){
+      await page.waitForFunction(
+        () => {
+          const s = window.__xiangmetaAudio();
+          return (
+            s.track === "season-autumn-v1" && s.playing && s.heard.includes("season-autumn-v1")
+          );
+        },
+        null,
+        { timeout: 15000 },
+      );
+      assert.equal(await page.evaluate(() => window.__xiangmetaAudio().track), "season-autumn-v1");
+      for (const [region, track] of [
+        ["ai-mountain", "season-spring-v1"],
+        ["weiming-studio", "season-summer-v1"],
+        ["science-valley", "season-winter-v1"],
+      ]) {
         await activate(page.locator(`[data-region="${region}"]`));
-        await page.waitForFunction(id=>{const s=window.__xiangmetaAudio();return s.track===id&&s.playing&&s.heard.includes(id);},track,{timeout:15000});
+        await page.waitForFunction(
+          (id) => {
+            const s = window.__xiangmetaAudio();
+            return s.track === id && s.playing && s.heard.includes(id);
+          },
+          track,
+          { timeout: 15000 },
+        );
       }
-      const beforePause=await page.evaluate(()=>window.__xiangmetaAudio());
-      await activate(page.locator('#sound'));
-      await page.waitForFunction(()=>window.__xiangmetaAudio().muted&&!window.__xiangmetaAudio().playing);
-      const paused=await page.evaluate(()=>window.__xiangmetaAudio());
-      assert.ok(paused.time>=beforePause.time);
-      await activate(page.locator('#sound'));
-      await page.waitForFunction(t=>window.__xiangmetaAudio().playing&&window.__xiangmetaAudio().time>t+.2,paused.time,{timeout:15000});
+      const beforePause = await page.evaluate(() => window.__xiangmetaAudio());
+      await activate(page.locator("#sound"));
+      await page.waitForFunction(
+        () => window.__xiangmetaAudio().muted && !window.__xiangmetaAudio().playing,
+      );
+      const paused = await page.evaluate(() => window.__xiangmetaAudio());
+      assert.ok(paused.time >= beforePause.time);
+      await activate(page.locator("#sound"));
+      await page.waitForFunction(
+        (t) => window.__xiangmetaAudio().playing && window.__xiangmetaAudio().time > t + 0.2,
+        paused.time,
+        { timeout: 15000 },
+      );
       await activate(page.locator('[data-region="ai-mountain"]'));
-      const reentry=await page.evaluate(()=>window.__xiangmetaAudio());
-      assert.equal(reentry.track,'season-winter-v1');assert.equal(reentry.heard.length,4);assert.ok(reentry.time>=paused.time);
-      await page.screenshot({path:`artifacts/web/${name}-music.png`});
-      await activate(page.locator('#sound'));
-      checkpoint('Opt-in MP3 playback, all four seasons, pause/resume and no replay on re-entry passed');
-      for(const [project,parameter] of [['bubble-lab','saturation'],['sonoluminescence','drive']]){
-        await activate(page.locator('#collections'));await activate(page.locator(`[data-exhibit="${project}"]`));
-        await page.waitForFunction(()=>document.querySelector('#research-radius')?.getAttribute('d')?.length>100,null,{timeout:15000});
-        const curve=await page.locator('#research-radius').getAttribute('d');
-        await page.locator(`[data-parameter="${parameter}"]`).focus();await page.keyboard.press('ArrowRight');
-        await page.waitForFunction(previous=>document.querySelector('#research-radius')?.getAttribute('d')!==previous,curve,{timeout:15000});
-        await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+      const reentry = await page.evaluate(() => window.__xiangmetaAudio());
+      assert.equal(reentry.track, "season-winter-v1");
+      assert.equal(reentry.heard.length, 4);
+      assert.ok(reentry.time >= paused.time);
+      await page.screenshot({ path: `artifacts/web/${name}-music.png` });
+      await activate(page.locator("#sound"));
+      checkpoint(
+        "Opt-in MP3 playback, all four seasons, pause/resume and no replay on re-entry passed",
+      );
+      for (const [project, parameter] of [
+        ["bubble-lab", "saturation"],
+        ["sonoluminescence", "drive"],
+      ]) {
+        await activate(page.locator("#collections"));
+        await activate(page.locator(`[data-exhibit="${project}"]`));
+        await page.waitForFunction(
+          () => document.querySelector("#research-radius")?.getAttribute("d")?.length > 100,
+          null,
+          { timeout: 15000 },
+        );
+        const curve = await page.locator("#research-radius").getAttribute("d");
+        await page.locator(`[data-parameter="${parameter}"]`).focus();
+        await page.keyboard.press("ArrowRight");
+        await page.waitForFunction(
+          (previous) => document.querySelector("#research-radius")?.getAttribute("d") !== previous,
+          curve,
+          { timeout: 15000 },
+        );
+        await page.keyboard.press("Escape");
+        await page.keyboard.press("Escape");
       }
-      checkpoint('Both research Workers respond to parameter changes');
-      const catalog=JSON.parse(await readFile(path.join(root,'content/world.json'),'utf8'));
-      for(const m of catalog.modules){
+      checkpoint("Both research Workers respond to parameter changes");
+      const catalog = JSON.parse(await readFile(path.join(root, "content/world.json"), "utf8"));
+      for (const m of catalog.modules) {
         checkpoint(`Checking exhibit ${m.id}`);
-        await activate(page.locator('#collections'));await activate(page.locator(`[data-exhibit="${m.id}"]`));
-        await activate(page.locator('#visit'));await page.keyboard.press('Escape');
-        await page.waitForFunction(title=>document.querySelector('#interaction-prompt:not([hidden]) .nearby-copy b')?.textContent===title,m.portfolio.name,{timeout:15000});
-        const actions=await page.locator('#interaction-prompt [data-near-key]').evaluateAll(elements=>elements.map(el=>({
-          key:el.dataset.nearKey,label:el.textContent.trim().replace(/^[FER]\s+|\s*↗$/g,''),href:el.getAttribute('href')
-        })));
-        const demo=m.portfolio.demo??m.link;
-        assert.deepEqual(actions.map(a=>a.key),demo?['F','E','R']:['F','E'],m.id);
-        const aiStation=['recommendation','emotion-recognition','poetry'].includes(m.id);
-        assert.equal(actions[0].label,aiStation?'体验 AI':m.portfolio.github?'GitHub':'打开展览',m.id);
-        assert.equal(actions[0].href,aiStation?null:m.portfolio.github??null,m.id);
-        if(demo)assert.equal(actions[2].href,demo,m.id);
-        const sign=await page.evaluate(id=>window.__xiangmetaInspect().stations.find(s=>s.id===id).hint,m.id);
-        assert.equal(sign,actions.map(a=>`[${a.key}] ${a.label}`).join('   ·   '),`${m.id}: physical sign and HUD agree`);
-        assert.equal(await page.locator('#nearby kbd').innerText(),'F');
-        if(!m.portfolio.github){
-          await page.keyboard.press('KeyF');await page.locator('#inspector[open].product-mode').waitFor();
-          assert.equal(await page.locator('#panel-title').textContent(),m.title);
-          await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+        await activate(page.locator("#collections"));
+        await activate(page.locator(`[data-exhibit="${m.id}"]`));
+        await activate(page.locator("#visit"));
+        await page.keyboard.press("Escape");
+        await page.waitForFunction(
+          (title) =>
+            document.querySelector("#interaction-prompt:not([hidden]) .nearby-copy b")
+              ?.textContent === title,
+          m.portfolio.name,
+          { timeout: 15000 },
+        );
+        const actions = await page
+          .locator("#interaction-prompt [data-near-key]")
+          .evaluateAll((elements) =>
+            elements.map((el) => ({
+              key: el.dataset.nearKey,
+              label: el.textContent.trim().replace(/^[FER]\s+|\s*↗$/g, ""),
+              href: el.getAttribute("href"),
+            })),
+          );
+        const demo = m.portfolio.demo ?? m.link;
+        assert.deepEqual(
+          actions.map((a) => a.key),
+          demo ? ["F", "E", "R"] : ["F", "E"],
+          m.id,
+        );
+        const aiStation = ["recommendation", "emotion-recognition", "poetry"].includes(m.id);
+        assert.equal(
+          actions[0].label,
+          aiStation ? "体验 AI" : m.portfolio.github ? "GitHub" : "打开展览",
+          m.id,
+        );
+        assert.equal(actions[0].href, aiStation ? null : (m.portfolio.github ?? null), m.id);
+        if (demo) assert.equal(actions[2].href, demo, m.id);
+        const sign = await page.evaluate(
+          (id) => window.__xiangmetaInspect().stations.find((s) => s.id === id).hint,
+          m.id,
+        );
+        assert.equal(
+          sign,
+          actions.map((a) => `[${a.key}] ${a.label}`).join("   ·   "),
+          `${m.id}: physical sign and HUD agree`,
+        );
+        assert.equal(await page.locator("#nearby kbd").innerText(), "F");
+        if (!m.portfolio.github) {
+          await page.keyboard.press("KeyF");
+          await page.locator("#inspector[open].product-mode").waitFor();
+          assert.equal(await page.locator("#panel-title").textContent(), m.title);
+          await page.keyboard.press("Escape");
+          await page.keyboard.press("Escape");
           await activate(page.locator('#interaction-prompt [data-near-key="E"]'));
-          await page.locator('#inspector[open]:not(.product-mode)').waitFor();
-          assert.equal(await page.locator('#panel-title').textContent(),m.title);
-          await page.keyboard.press('Escape');await page.keyboard.press('Escape');
-          if(m.id==='bubble-lab'){
-            for(const selector of ['#nearby','#interaction-prompt [data-near-key="F"]']){
-              await activate(page.locator(selector));await page.locator('#inspector[open].product-mode').waitFor();
-              assert.equal(await page.locator('#panel-title').textContent(),m.title);
-              await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+          await page.locator("#inspector[open]:not(.product-mode)").waitFor();
+          assert.equal(await page.locator("#panel-title").textContent(), m.title);
+          await page.keyboard.press("Escape");
+          await page.keyboard.press("Escape");
+          if (m.id === "bubble-lab") {
+            for (const selector of ["#nearby", '#interaction-prompt [data-near-key="F"]']) {
+              await activate(page.locator(selector));
+              await page.locator("#inspector[open].product-mode").waitFor();
+              assert.equal(await page.locator("#panel-title").textContent(), m.title);
+              await page.keyboard.press("Escape");
+              await page.keyboard.press("Escape");
             }
-            await page.screenshot({path:`artifacts/web/${name}-interaction-hints.png`});
+            await page.screenshot({ path: `artifacts/web/${name}-interaction-hints.png` });
           }
         }
       }
-      await activate(page.locator('#harbor-open'));await activate(page.locator('#harbor-visit'));
-      await page.keyboard.press('Escape');
-      await page.waitForFunction(()=>document.querySelector('#interaction-prompt:not([hidden]) .nearby-copy b')?.textContent==='海风港口',null,{timeout:15000});
-      assert.deepEqual(await page.locator('#interaction-prompt kbd').allTextContents(),['F']);
-      assert.match(await page.locator('#interaction-prompt').innerText(),/查看航线/);
-      await page.keyboard.press('KeyE');await page.keyboard.press('KeyR');
-      assert.equal(await page.locator('#inspector[open]').count(),0);
-      await page.keyboard.press('KeyF');await page.locator('#inspector[open][data-kind="harbor"]').waitFor();
-      await page.keyboard.press('Escape');await page.keyboard.press('Escape');
-      checkpoint('All 10 sign/HUD key lists match; no-repository F, E, HUD clicks and harbor actions passed');
-      const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
-      const mp=await mobile.newPage(),mobileErrors=[];mp.on('pageerror',e=>mobileErrors.push(e.message));
-      await mp.goto(url(''));await mp.locator('.hero').waitFor();
-      assert.equal(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-      assert.equal(await mp.locator('.project-card>p').first().evaluate(e=>getComputedStyle(e).fontSize),'14px');
-      await mp.goto(url('world/?inspect'));await mp.locator('#world canvas').waitFor({timeout:90000});
-      await mp.waitForFunction(()=>typeof window.__xiangmetaInspect==='function',null,{timeout:90000});
-      const joystick=mp.locator('#touch-joystick'),joystickBox=await joystick.boundingBox();
-      assert.ok(joystickBox);const joystickCenter={x:joystickBox.x+joystickBox.width/2,y:joystickBox.y+joystickBox.height/2};
-      const mobileStart=await mp.evaluate(()=>window.__xiangmetaInspect().player);
-      await joystick.dispatchEvent('pointerdown',{pointerId:21,pointerType:'touch',button:0,buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y});
-      await joystick.dispatchEvent('pointermove',{pointerId:21,pointerType:'touch',buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
-      await mp.waitForFunction(p=>{const v=window.__xiangmetaInspect().player;return Math.hypot(v.x-p.x,v.z-p.z)>.5},mobileStart);
-      await joystick.dispatchEvent('pointerup',{pointerId:21,pointerType:'touch',button:0,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
-      await mp.locator('#touch-jump').dispatchEvent('pointerdown',{pointerId:22,pointerType:'touch',button:0,buttons:1});
-      await mp.waitForFunction(()=>!window.__xiangmetaInspect().player.grounded);
-      await mp.waitForFunction(()=>window.__xiangmetaInspect().player.grounded);
-      const mobileYaw=await mp.evaluate(()=>window.__xiangmetaInspect().yaw);
-      await mp.locator('#world canvas').dispatchEvent('pointerdown',{pointerId:23,pointerType:'touch',button:0,buttons:1,clientX:300,clientY:350});
-      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:23,pointerType:'touch',buttons:1,clientX:210,clientY:350})));
-      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:23,pointerType:'touch',clientX:210,clientY:350})));
-      assert.notEqual(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),mobileYaw);
-      const canvas=mp.locator('#world canvas');
-      await joystick.dispatchEvent('pointerdown',{pointerId:24,pointerType:'touch',button:0,buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y});
-      await joystick.dispatchEvent('pointermove',{pointerId:24,pointerType:'touch',buttons:1,clientX:joystickCenter.x,clientY:joystickCenter.y-38});
-      await canvas.dispatchEvent('pointerdown',{pointerId:25,pointerType:'touch',button:0,buttons:1,clientX:300,clientY:350});
-      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:25,pointerType:'touch',buttons:1,clientX:270,clientY:350})));
-      const dragYaw=await mp.evaluate(()=>window.__xiangmetaInspect().yaw);
-      await joystick.dispatchEvent('pointermove',{pointerId:24,pointerType:'touch',buttons:1,clientX:joystickCenter.x+20,clientY:joystickCenter.y-32});
-      assert.equal(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),dragYaw);
-      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointermove',{pointerId:25,pointerType:'touch',buttons:1,clientX:230,clientY:350})));
-      assert.notEqual(await mp.evaluate(()=>window.__xiangmetaInspect().yaw),dragYaw);
-      await joystick.dispatchEvent('pointerup',{pointerId:24,pointerType:'touch',button:0,clientX:joystickCenter.x+20,clientY:joystickCenter.y-32});
-      await mp.evaluate(()=>window.dispatchEvent(new PointerEvent('pointerup',{pointerId:25,pointerType:'touch',clientX:230,clientY:350})));
-      await mp.locator('#mobile-menu').click();
-      await mp.waitForFunction(()=>document.body.classList.contains('mobile-nav-open'));
-      assert.equal(await mp.locator('.mobile-tools button').count(),6);
-      assert.equal(await mp.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
-      await mp.screenshot({path:`artifacts/web/${name}-mobile.png`,fullPage:true});
-      assert.deepEqual(mobileErrors,[]);
+      await activate(page.locator("#harbor-open"));
+      await activate(page.locator("#harbor-visit"));
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        () =>
+          document.querySelector("#interaction-prompt:not([hidden]) .nearby-copy b")
+            ?.textContent === "海风港口",
+        null,
+        { timeout: 15000 },
+      );
+      assert.deepEqual(await page.locator("#interaction-prompt kbd").allTextContents(), ["F"]);
+      assert.match(await page.locator("#interaction-prompt").innerText(), /查看航线/);
+      await page.keyboard.press("KeyE");
+      await page.keyboard.press("KeyR");
+      assert.equal(await page.locator("#inspector[open]").count(), 0);
+      await page.keyboard.press("KeyF");
+      await page.locator('#inspector[open][data-kind="harbor"]').waitFor();
+      await page.keyboard.press("Escape");
+      await page.keyboard.press("Escape");
+      checkpoint(
+        "All 10 sign/HUD key lists match; no-repository F, E, HUD clicks and harbor actions passed",
+      );
+      const mobile = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+        hasTouch: true,
+      });
+      const mp = await mobile.newPage(),
+        mobileErrors = [];
+      mp.on("pageerror", (e) => mobileErrors.push(e.message));
+      await mp.goto(url(""));
+      await mp.locator(".hero").waitFor();
+      assert.equal(
+        await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+        true,
+      );
+      assert.equal(
+        await mp
+          .locator(".project-card>p")
+          .first()
+          .evaluate((e) => getComputedStyle(e).fontSize),
+        "14px",
+      );
+      await mp.goto(url("world/?inspect"));
+      await mp.locator("#world canvas").waitFor({ timeout: 90000 });
+      await mp.waitForFunction(() => typeof window.__xiangmetaInspect === "function", null, {
+        timeout: 90000,
+      });
+      const joystick = mp.locator("#touch-joystick"),
+        joystickBox = await joystick.boundingBox();
+      assert.ok(joystickBox);
+      const joystickCenter = {
+        x: joystickBox.x + joystickBox.width / 2,
+        y: joystickBox.y + joystickBox.height / 2,
+      };
+      const mobileStart = await mp.evaluate(() => window.__xiangmetaInspect().player);
+      await joystick.dispatchEvent("pointerdown", {
+        pointerId: 21,
+        pointerType: "touch",
+        button: 0,
+        buttons: 1,
+        clientX: joystickCenter.x,
+        clientY: joystickCenter.y,
+      });
+      await joystick.dispatchEvent("pointermove", {
+        pointerId: 21,
+        pointerType: "touch",
+        buttons: 1,
+        clientX: joystickCenter.x,
+        clientY: joystickCenter.y - 38,
+      });
+      await mp.waitForFunction((p) => {
+        const v = window.__xiangmetaInspect().player;
+        return Math.hypot(v.x - p.x, v.z - p.z) > 0.5;
+      }, mobileStart);
+      await joystick.dispatchEvent("pointerup", {
+        pointerId: 21,
+        pointerType: "touch",
+        button: 0,
+        clientX: joystickCenter.x,
+        clientY: joystickCenter.y - 38,
+      });
+      await mp
+        .locator("#touch-jump")
+        .dispatchEvent("pointerdown", {
+          pointerId: 22,
+          pointerType: "touch",
+          button: 0,
+          buttons: 1,
+        });
+      await mp.waitForFunction(() => !window.__xiangmetaInspect().player.grounded);
+      await mp.waitForFunction(() => window.__xiangmetaInspect().player.grounded);
+      const mobileYaw = await mp.evaluate(() => window.__xiangmetaInspect().yaw);
+      await mp
+        .locator("#world canvas")
+        .dispatchEvent("pointerdown", {
+          pointerId: 23,
+          pointerType: "touch",
+          button: 0,
+          buttons: 1,
+          clientX: 300,
+          clientY: 350,
+        });
+      await mp.evaluate(() =>
+        window.dispatchEvent(
+          new PointerEvent("pointermove", {
+            pointerId: 23,
+            pointerType: "touch",
+            buttons: 1,
+            clientX: 210,
+            clientY: 350,
+          }),
+        ),
+      );
+      await mp.evaluate(() =>
+        window.dispatchEvent(
+          new PointerEvent("pointerup", {
+            pointerId: 23,
+            pointerType: "touch",
+            clientX: 210,
+            clientY: 350,
+          }),
+        ),
+      );
+      assert.notEqual(await mp.evaluate(() => window.__xiangmetaInspect().yaw), mobileYaw);
+      const canvas = mp.locator("#world canvas");
+      await joystick.dispatchEvent("pointerdown", {
+        pointerId: 24,
+        pointerType: "touch",
+        button: 0,
+        buttons: 1,
+        clientX: joystickCenter.x,
+        clientY: joystickCenter.y,
+      });
+      await joystick.dispatchEvent("pointermove", {
+        pointerId: 24,
+        pointerType: "touch",
+        buttons: 1,
+        clientX: joystickCenter.x,
+        clientY: joystickCenter.y - 38,
+      });
+      await canvas.dispatchEvent("pointerdown", {
+        pointerId: 25,
+        pointerType: "touch",
+        button: 0,
+        buttons: 1,
+        clientX: 300,
+        clientY: 350,
+      });
+      await mp.evaluate(() =>
+        window.dispatchEvent(
+          new PointerEvent("pointermove", {
+            pointerId: 25,
+            pointerType: "touch",
+            buttons: 1,
+            clientX: 270,
+            clientY: 350,
+          }),
+        ),
+      );
+      const dragYaw = await mp.evaluate(() => window.__xiangmetaInspect().yaw);
+      await joystick.dispatchEvent("pointermove", {
+        pointerId: 24,
+        pointerType: "touch",
+        buttons: 1,
+        clientX: joystickCenter.x + 20,
+        clientY: joystickCenter.y - 32,
+      });
+      assert.equal(await mp.evaluate(() => window.__xiangmetaInspect().yaw), dragYaw);
+      await mp.evaluate(() =>
+        window.dispatchEvent(
+          new PointerEvent("pointermove", {
+            pointerId: 25,
+            pointerType: "touch",
+            buttons: 1,
+            clientX: 230,
+            clientY: 350,
+          }),
+        ),
+      );
+      assert.notEqual(await mp.evaluate(() => window.__xiangmetaInspect().yaw), dragYaw);
+      await joystick.dispatchEvent("pointerup", {
+        pointerId: 24,
+        pointerType: "touch",
+        button: 0,
+        clientX: joystickCenter.x + 20,
+        clientY: joystickCenter.y - 32,
+      });
+      await mp.evaluate(() =>
+        window.dispatchEvent(
+          new PointerEvent("pointerup", {
+            pointerId: 25,
+            pointerType: "touch",
+            clientX: 230,
+            clientY: 350,
+          }),
+        ),
+      );
+      await mp.locator("#mobile-menu").click();
+      await mp.waitForFunction(() => document.body.classList.contains("mobile-nav-open"));
+      assert.equal(await mp.locator(".mobile-tools button").count(), 6);
+      assert.equal(
+        await mp.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+        true,
+      );
+      await mp.screenshot({ path: `artifacts/web/${name}-mobile.png`, fullPage: true });
+      assert.deepEqual(mobileErrors, []);
       await mobile.close();
-      const noWebGL=await browser.newContext();
-      await noWebGL.addInitScript(()=>{
-        const getContext=HTMLCanvasElement.prototype.getContext;
-        HTMLCanvasElement.prototype.getContext=function(type,...args){
-          return String(type).includes('webgl')?null:getContext.call(this,type,...args);
+      const noWebGL = await browser.newContext();
+      await noWebGL.addInitScript(() => {
+        const getContext = HTMLCanvasElement.prototype.getContext;
+        HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+          return String(type).includes("webgl") ? null : getContext.call(this, type, ...args);
         };
       });
-      const fp=await noWebGL.newPage();
-      await fp.goto(url('world/'));await fp.locator('.render-error').waitFor();
-      await fp.getByRole('link',{name:'继续浏览全部项目 →'}).click();
-      await fp.locator('.project-card').first().waitFor();
-      assert.equal(await fp.locator('.project-card').count(),10);
+      const fp = await noWebGL.newPage();
+      await fp.goto(url("world/"));
+      await fp.locator(".render-error").waitFor();
+      await fp.getByRole("link", { name: "继续浏览全部项目 →" }).click();
+      await fp.locator(".project-card").first().waitFor();
+      assert.equal(await fp.locator(".project-card").count(), 10);
       await noWebGL.close();
-      assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
-      assert.ok(!requests.some(u=>/\.mp4|\/api\/|audio\/manifest/.test(u)));
-      assert.ok(requests.filter(u=>u.endsWith('.mp3')).every(u=>u.includes('/assets/music/')));
-      checkpoint('Mobile simultaneous look/move, jump and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests');
-      results.push({engine:name,status:'passed',checks:['landing isolated','filters/search/refresh','music links','3D boot','distant cover previews','fixed HUD','clear keys','walk/jump','E About','F GitHub','photo E','G memory','R music','map','opt-in BGM','four seasons','pause/resume/re-entry','research Workers','10 matching station hints','F without GitHub','mouse/keyboard consistency','harbor actions','mobile touch controls','WebGL fallback'],requests:requests.length});
-    }finally{await browser.close();}
+      assert.deepEqual(errors, []);
+      assert.deepEqual(failures, []);
+      assert.ok(!requests.some((u) => /\.mp4|\/api\/|audio\/manifest/.test(u)));
+      assert.ok(
+        requests.filter((u) => u.endsWith(".mp3")).every((u) => u.includes("/assets/music/")),
+      );
+      checkpoint(
+        "Mobile simultaneous look/move, jump and WebGL fallback passed; no HTTP/page errors, unapproved media or API requests",
+      );
+      results.push({
+        engine: name,
+        status: "passed",
+        checks: [
+          "landing isolated",
+          "filters/search/refresh",
+          "music links",
+          "3D boot",
+          "distant cover previews",
+          "fixed HUD",
+          "clear keys",
+          "walk/jump",
+          "E About",
+          "F GitHub",
+          "photo E",
+          "G memory",
+          "R music",
+          "map",
+          "opt-in BGM",
+          "four seasons",
+          "pause/resume/re-entry",
+          "research Workers",
+          "10 matching station hints",
+          "F without GitHub",
+          "mouse/keyboard consistency",
+          "harbor actions",
+          "mobile touch controls",
+          "WebGL fallback",
+        ],
+        requests: requests.length,
+      });
+    } finally {
+      await browser.close();
+    }
   }
-  await writeFile('artifacts/web/results.json',JSON.stringify({base,results},null,2));
-  console.log(JSON.stringify(results,null,2));
-}finally{server.close();}
+  await writeFile("artifacts/web/results.json", JSON.stringify({ base, results }, null, 2));
+  console.log(JSON.stringify(results, null, 2));
+} finally {
+  server.close();
+}

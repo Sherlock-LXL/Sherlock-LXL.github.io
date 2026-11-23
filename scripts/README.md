@@ -1,6 +1,10 @@
-# 维护工具
+# 维护工具 / Maintenance tools
 
-从 XiangMeta 工程根目录运行。Python 工具统一使用 `runtime/python/python.exe`；模型与素材的当前运行路径均在项目内。
+[中文](#中文) · [English](#english)
+
+## 中文
+
+从工程根目录运行；Windows 本地 Python 为 `runtime/python/python.exe`，模型与素材路径位于项目内。
 
 | 工具 | 用途 |
 |---|---|
@@ -18,6 +22,26 @@
 | `stage-portable.py` | 把 staging 中的成品与本地模型环境整理为独立版本目录 |
 | `verify-packed-media.py` | 检查刚生成的 staging 内容与工程媒体是否一致 |
 
-早期一次性脚本 `curate-world-v1.mjs`、`localize-runtime.py`、`import-personal-assets.py` 已完成迁移任务并移除。当前数据、媒体、模型以及早期说明均已归档；不再依靠旧脚本读取固定的外部仓库、缓存环境或旧素材目录。
+EXE 回归使用 `tests/portable-regression.mjs`。桌面解包与媒体检查先生成 staging；当前报告放 `artifacts/current/`，临时 profile 放 `artifacts/tmp/`。
 
-EXE 回归使用 `tests/portable-regression.mjs`；桌面解包测试和 packed-media 检查需要先生成 staging。视觉截图和当前报告放入 `artifacts/current/`，临时测试 profile 可以放 `artifacts/tmp/`。
+## English
+
+Run from the project root. The local Windows interpreter is `runtime/python/python.exe`; model and media paths are inside the project.
+
+| Tool | Purpose |
+|---|---|
+| `measure-audio.py` | Measure music/MV loudness and maintain calibration records |
+| `build-icon.py` | Build app icons from the eight-point emblem |
+| `audit-local.mjs` | Check configs, model hashes, media and paper paths |
+| `doctor.mjs` | Check module and interpreter availability |
+| `model-smoke.mjs` | Run real model inference; --config checks a packaged runtime |
+| `dev.mjs` | Start frontend and backend development services |
+| `new-module.mjs` | Create a module skeleton |
+| `import-albums.py --source <directory>` | Import album archives from an explicit source |
+| `import-research.py` | Extract equations from the two local papers; --output selects a draft |
+| `media_import.py` | Shared audio import helpers using local FFmpeg |
+| `normalize-media.py` | Normalize new WAV copies while retaining lossless originals |
+| `stage-portable.py` | Assemble a complete portable release folder |
+| `verify-packed-media.py` | Compare staging media with project files |
+
+Use `tests/portable-regression.mjs` for EXE regression. Build staging before unpacking or media checks. Current reports go in `artifacts/current/`, temporary profiles in `artifacts/tmp/`.

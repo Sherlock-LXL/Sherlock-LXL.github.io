@@ -136,6 +136,7 @@ if "favorites" not in st.session_state:
 if "continuation" not in st.session_state:
     st.session_state.continuation = ""
 
+
 @st.cache_resource
 def load_model():
     with open(VOCAB_PATH, "r", encoding="utf-8") as f:
@@ -157,11 +158,9 @@ def load_model():
         )
     )
     model.eval()
-    idx_to_char = {
-        idx: char
-        for char, idx in char_to_idx.items()
-    }
+    idx_to_char = {idx: char for char, idx in char_to_idx.items()}
     return model, char_to_idx, idx_to_char, device
+
 
 model, char_to_idx, idx_to_char, device = load_model()
 vocab_size = len(char_to_idx)
@@ -169,6 +168,7 @@ pad_id = char_to_idx["<PAD>"]
 bos_id = char_to_idx["<BOS>"]
 eos_id = char_to_idx["<EOS>"]
 unk_id = char_to_idx["<UNK>"]
+
 
 def sample_next_token(
     next_logits,
@@ -183,6 +183,7 @@ def sample_next_token(
     probabilities = torch.softmax(top_logits, dim=-1)
     sampled_index = torch.multinomial(probabilities, num_samples=1).item()
     return top_indices[sampled_index].item()
+
 
 def generate_line(
     temperature,
@@ -211,11 +212,13 @@ def generate_line(
             token_id = next_id
     return "".join(generated_chars)
 
+
 def generate_blind_verse(mode):
     settings = GENERATION_MODES[mode]
     line_a = generate_line(temperature=settings["temperature"], top_k=settings["top_k"])
     line_b = generate_line(temperature=settings["temperature"], top_k=settings["top_k"])
     return line_a, line_b
+
 
 def continue_text(
     prefix,
@@ -229,7 +232,10 @@ def continue_text(
         if token_id is None:
             return None
         prefix_ids.append(token_id)
-    input_ids = [bos_id, *prefix_ids,]
+    input_ids = [
+        bos_id,
+        *prefix_ids,
+    ]
     x = torch.tensor(
         [input_ids],
         dtype=torch.long,
@@ -257,8 +263,10 @@ def continue_text(
             next_logits = logits[0, -1]
     return prefix + "".join(generated_chars)
 
+
 def is_favorite(line):
-    return (bool(line) and line in st.session_state.favorites)
+    return bool(line) and line in st.session_state.favorites
+
 
 def toggle_favorite(line):
     if not line:
@@ -268,7 +276,11 @@ def toggle_favorite(line):
     else:
         st.session_state.favorites.append(line)
 
-def copy_button(text, label="复制",):
+
+def copy_button(
+    text,
+    label="复制",
+):
     text_json = json.dumps(text, ensure_ascii=False)
     label_json = json.dumps(label, ensure_ascii=False)
     components.html(
@@ -354,6 +366,7 @@ def copy_button(text, label="复制",):
         height=58,
     )
 
+
 st.markdown('<div class="main-title">双盲诗生成器</div>', unsafe_allow_html=True)
 st.markdown(
     """
@@ -387,9 +400,7 @@ blind_mode = st.radio(
     horizontal=True,
     key="blind_mode",
 )
-blind_settings = GENERATION_MODES[
-    blind_mode
-]
+blind_settings = GENERATION_MODES[blind_mode]
 
 st.markdown(
     f"""
@@ -412,9 +423,9 @@ if st.button(
     st.session_state.line_a = line_a
     st.session_state.line_b = line_b
 
-if (st.session_state.line_a or st.session_state.line_b):
-    line_a = (st.session_state.line_a or "……")
-    line_b = (st.session_state.line_b or "……")
+if st.session_state.line_a or st.session_state.line_b:
+    line_a = st.session_state.line_a or "……"
+    line_b = st.session_state.line_b or "……"
     safe_line_a = html.escape(line_a)
     safe_line_b = html.escape(line_b)
     st.markdown(
@@ -422,7 +433,7 @@ if (st.session_state.line_a or st.session_state.line_b):
             '<div class="poem-card">'
             f'<div class="poem-line">{safe_line_a}</div>'
             f'<div class="poem-line">{safe_line_b}</div>'
-            '</div>'
+            "</div>"
         ),
         unsafe_allow_html=True,
     )
@@ -433,16 +444,8 @@ if (st.session_state.line_a or st.session_state.line_b):
 
     with col_a:
         st.button(
-            (
-                "♥ 已收藏第一句"
-                if favorite_a
-                else "♡ 收藏第一句"
-            ),
-            type=(
-                "primary"
-                if favorite_a
-                else "secondary"
-            ),
+            ("♥ 已收藏第一句" if favorite_a else "♡ 收藏第一句"),
+            type=("primary" if favorite_a else "secondary"),
             use_container_width=True,
             key="favorite_a",
             on_click=toggle_favorite,
@@ -451,26 +454,15 @@ if (st.session_state.line_a or st.session_state.line_b):
 
     with col_b:
         st.button(
-            (
-                "♥ 已收藏第二句"
-                if favorite_b
-                else "♡ 收藏第二句"
-            ),
-            type=(
-                "primary"
-                if favorite_b
-                else "secondary"
-            ),
+            ("♥ 已收藏第二句" if favorite_b else "♡ 收藏第二句"),
+            type=("primary" if favorite_b else "secondary"),
             use_container_width=True,
             key="favorite_b",
             on_click=toggle_favorite,
             args=(st.session_state.line_b,),
         )
 
-    poem_text = (
-        f"{line_a}\n"
-        f"{line_b}"
-    )
+    poem_text = f"{line_a}\n{line_b}"
 
     copy_button(
         poem_text,
@@ -544,32 +536,18 @@ if st.button(
             st.session_state.continuation = result
 
 if st.session_state.continuation:
-    continuation = (st.session_state.continuation)
+    continuation = st.session_state.continuation
     safe_continuation = html.escape(continuation)
     st.markdown(
-        (
-            '<div class="continuation-card">'
-            '<div class="poem-line">'
-            f'{safe_continuation}'
-            '</div>'
-            '</div>'
-        ),
+        (f'<div class="continuation-card"><div class="poem-line">{safe_continuation}</div></div>'),
         unsafe_allow_html=True,
     )
     col_favorite, col_copy = st.columns(2)
     continuation_favorite = is_favorite(continuation)
     with col_favorite:
         st.button(
-            (
-                "♥ 已收藏"
-                if continuation_favorite
-                else "♡ 收藏续写"
-            ),
-            type=(
-                "primary"
-                if continuation_favorite
-                else "secondary"
-            ),
+            ("♥ 已收藏" if continuation_favorite else "♡ 收藏续写"),
+            type=("primary" if continuation_favorite else "secondary"),
             use_container_width=True,
             key="favorite_continuation",
             on_click=toggle_favorite,
@@ -584,7 +562,7 @@ with st.expander(f"♡ 我的收藏  ·  {len(st.session_state.favorites)}"):
         st.caption("还没有收藏的句子。")
     else:
         for i, line in enumerate(st.session_state.favorites):
-            col_text, col_remove = (st.columns([5, 1]))
+            col_text, col_remove = st.columns([5, 1])
             with col_text:
                 st.markdown(f"**{i + 1}.** {line}")
             with col_remove:
@@ -592,7 +570,10 @@ with st.expander(f"♡ 我的收藏  ·  {len(st.session_state.favorites)}"):
                     st.session_state.favorites.pop(i)
                     st.rerun()
         st.write("")
-        if st.button("清空收藏", use_container_width=True,):
+        if st.button(
+            "清空收藏",
+            use_container_width=True,
+        ):
             st.session_state.favorites = []
             st.rerun()
 

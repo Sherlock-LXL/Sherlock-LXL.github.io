@@ -1,30 +1,59 @@
-import * as T from 'three';
-import {FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
+import * as T from "three";
+import { FullScreenQuad } from "three/addons/postprocessing/Pass.js";
 
-/** Fresh mineral washes on ivory paper. Shared by rendering, architecture and painted canvases. */
-export const pigment={
-  silk:'#edf3ed',paper:'#faf8ef',ink:'#293e42',inkSoft:'#536b69',
-  azurite:'#609eaf',azuriteDeep:'#396a82',malachite:'#65ad96',malachiteLight:'#acd7b6',
-  ochre:'#bd986d',ochreLight:'#e2c79b',gamboge:'#e6bd6b',cinnabar:'#d07a67',cinnabarDeep:'#9f5449',
-  leadWhite:'#faf7ed',celadon:'#c0ddcb',bronze:'#ad9163',bronzeLight:'#d9b77e',stone:'#e3e5d8',stoneDeep:'#9faeaa',timber:'#8b7056',tile:'#698e93'
+/** 象牙纸底与矿物色供渲染、建筑与画布共用。 */
+export const pigment = {
+  silk: "#edf3ed",
+  paper: "#faf8ef",
+  ink: "#293e42",
+  inkSoft: "#536b69",
+  azurite: "#609eaf",
+  azuriteDeep: "#396a82",
+  malachite: "#65ad96",
+  malachiteLight: "#acd7b6",
+  ochre: "#bd986d",
+  ochreLight: "#e2c79b",
+  gamboge: "#e6bd6b",
+  cinnabar: "#d07a67",
+  cinnabarDeep: "#9f5449",
+  leadWhite: "#faf7ed",
+  celadon: "#c0ddcb",
+  bronze: "#ad9163",
+  bronzeLight: "#d9b77e",
+  stone: "#e3e5d8",
+  stoneDeep: "#9faeaa",
+  timber: "#8b7056",
+  tile: "#698e93",
 } as const;
 
-/** Each island's data colour is a pastel; in the painting it is laid as the matching mineral pigment. */
-const accents:Record<string,string>={'#ebbdcf':'#c97986','#cbdde9':'#5d99b1','#e3c385':'#c69950','#acd9c5':'#529d86'};
-export function pigmentAccent(color:T.ColorRepresentation){
-  const c=new T.Color(color),known=accents['#'+c.getHexString()];if(known)return known;
-  const hsl={h:0,s:0,l:0};c.getHSL(hsl);return '#'+new T.Color().setHSL(hsl.h,Math.min(.5,hsl.s*.7+.1),.42).getHexString();
+/** 数据色使用浅色，画面采用对应矿物颜料。 */
+const accents: Record<string, string> = {
+  "#ebbdcf": "#c97986",
+  "#cbdde9": "#5d99b1",
+  "#e3c385": "#c69950",
+  "#acd9c5": "#529d86",
+};
+export function pigmentAccent(color: T.ColorRepresentation) {
+  const c = new T.Color(color),
+    known = accents["#" + c.getHexString()];
+  if (known) return known;
+  const hsl = { h: 0, s: 0, l: 0 };
+  c.getHSL(hsl);
+  return "#" + new T.Color().setHSL(hsl.h, Math.min(0.5, hsl.s * 0.7 + 0.1), 0.42).getHexString();
 }
 
-let installed=false;
-/** Every built-in material shares two painted conventions: mist that settles over the sea, and a gouache light ramp. */
-export function installInkShading(){
-  if(installed)return;installed=true;
-  const C=T.ShaderChunk as Record<string,string>;
-  C.fog_pars_vertex='#ifdef USE_FOG\nvarying float vFogDepth;varying float vFogHeight;\n#endif';
-  C.fog_vertex='#ifdef USE_FOG\nvFogDepth=-mvPosition.z;vFogHeight=cameraPosition.y+(transpose(mat3(viewMatrix))*mvPosition.xyz).y;\n#endif';
-  C.fog_pars_fragment='#ifdef USE_FOG\nuniform vec3 fogColor;varying float vFogDepth;varying float vFogHeight;\n#ifdef FOG_EXP2\nuniform float fogDensity;\n#else\nuniform float fogNear;uniform float fogFar;\n#endif\n#endif';
-  C.fog_fragment=`#ifdef USE_FOG
+let installed = false;
+/** 内置材质共用海雾与水粉式光照梯度。 */
+export function installInkShading() {
+  if (installed) return;
+  installed = true;
+  const C = T.ShaderChunk as Record<string, string>;
+  C.fog_pars_vertex = "#ifdef USE_FOG\nvarying float vFogDepth;varying float vFogHeight;\n#endif";
+  C.fog_vertex =
+    "#ifdef USE_FOG\nvFogDepth=-mvPosition.z;vFogHeight=cameraPosition.y+(transpose(mat3(viewMatrix))*mvPosition.xyz).y;\n#endif";
+  C.fog_pars_fragment =
+    "#ifdef USE_FOG\nuniform vec3 fogColor;varying float vFogDepth;varying float vFogHeight;\n#ifdef FOG_EXP2\nuniform float fogDensity;\n#else\nuniform float fogNear;uniform float fogFar;\n#endif\n#endif";
+  C.fog_fragment = `#ifdef USE_FOG
 #ifdef FOG_EXP2
 float fogFactor=1.0-exp(-fogDensity*fogDensity*vFogDepth*vFogDepth);
 float mistAmount=clamp(fogDensity*330.0,0.0,1.0);
@@ -37,20 +66,30 @@ float mistLayer=exp(-max(vFogHeight+5.6,0.0)*.11)*smoothstep(18.0,140.0,vFogDept
 fogFactor=clamp(fogFactor+mistLayer*mistAmount*.8,0.0,1.0);
 gl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,fogFactor);
 #endif`;
-  // Flatter, gouache-like terminator; specular keeps its own term.
-  C.lights_physical_pars_fragment=C.lights_physical_pars_fragment.replace('vec3 irradiance = dotNL * directLight.color;','vec3 irradiance = mix( dotNL, smoothstep( 0.0, 0.42, dotNL ), 0.62 ) * directLight.color;');
+  // 明暗交界采用较平缓的水粉效果，镜面项独立计算。
+  C.lights_physical_pars_fragment = C.lights_physical_pars_fragment.replace(
+    "vec3 irradiance = dotNL * directLight.color;",
+    "vec3 irradiance = mix( dotNL, smoothstep( 0.0, 0.42, dotNL ), 0.62 ) * directLight.color;",
+  );
 }
 
-/** Exact-colour surfaces (artworks, signs) keep their pixels: the silk grade skips them. */
-export function exact<M extends T.Material>(material:M){
-  const previous=material.onBeforeCompile,key=material.customProgramCacheKey();
-  material.onBeforeCompile=(shader,renderer)=>{previous.call(material,shader,renderer);shader.fragmentShader=shader.fragmentShader.replace('#include <dithering_fragment>','#include <dithering_fragment>\ngl_FragColor.a=min(gl_FragColor.a,.5);');};
-  material.customProgramCacheKey=()=>key+'-exact';
+/** 画作与标牌保留原像素色，跳过绢色调色。 */
+export function exact<M extends T.Material>(material: M) {
+  const previous = material.onBeforeCompile,
+    key = material.customProgramCacheKey();
+  material.onBeforeCompile = (shader, renderer) => {
+    previous.call(material, shader, renderer);
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <dithering_fragment>",
+      "#include <dithering_fragment>\ngl_FragColor.a=min(gl_FragColor.a,.5);",
+    );
+  };
+  material.customProgramCacheKey = () => key + "-exact";
   return material;
 }
 
-const vertexShader='varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}';
-const fragmentShader=`
+const vertexShader = "varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}";
+const fragmentShader = `
 uniform sampler2D tColor;uniform sampler2D tDepth;uniform vec2 texel;uniform float near,far,aspect,pixelAngle,lineWidth,exposure,strength;
 uniform vec2 inkRange;uniform vec3 inkColor,paperTint,shadowInk;varying vec2 vUv;
 float hash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
@@ -89,36 +128,84 @@ void main(){
   #include <colorspace_fragment>
 }`;
 
-/** Scene → HDR target with depth → one painted resolve: ink lines, silk grade, aged edges. */
-export class InkPipeline{
-  readonly target:T.WebGLRenderTarget;readonly material:T.ShaderMaterial;private quad:FullScreenQuad;private samples=4;
-  readonly range=new T.Vector2(40,150);
-  constructor(private renderer:T.WebGLRenderer){
-    const hdr=renderer.extensions.has('EXT_color_buffer_float')||renderer.extensions.has('EXT_color_buffer_half_float');
-    this.target=new T.WebGLRenderTarget(1,1,{type:hdr?T.HalfFloatType:T.UnsignedByteType,samples:this.samples,depthTexture:new T.DepthTexture(1,1,T.FloatType)});
-    this.target.texture.name='ink-scene';
-    this.material=new T.ShaderMaterial({vertexShader,fragmentShader,depthTest:false,depthWrite:false,toneMapped:false,uniforms:{
-      tColor:{value:this.target.texture},tDepth:{value:this.target.depthTexture},texel:{value:new T.Vector2(1,1)},near:{value:.1},far:{value:900},aspect:{value:1},
-      pixelAngle:{value:.002},lineWidth:{value:1},exposure:{value:1},strength:{value:1},inkRange:{value:this.range},
-      inkColor:{value:new T.Color(pigment.ink)},paperTint:{value:new T.Color('#fcfff9')},shadowInk:{value:new T.Color('#101e23')}
-    }});
-    this.quad=new FullScreenQuad(this.material);
+/** 场景经带深度的 HDR 目标，统一处理墨线、绢色与旧纸边缘。 */
+export class InkPipeline {
+  readonly target: T.WebGLRenderTarget;
+  readonly material: T.ShaderMaterial;
+  private quad: FullScreenQuad;
+  private samples = 4;
+  readonly range = new T.Vector2(40, 150);
+  constructor(private renderer: T.WebGLRenderer) {
+    const hdr =
+      renderer.extensions.has("EXT_color_buffer_float") ||
+      renderer.extensions.has("EXT_color_buffer_half_float");
+    this.target = new T.WebGLRenderTarget(1, 1, {
+      type: hdr ? T.HalfFloatType : T.UnsignedByteType,
+      samples: this.samples,
+      depthTexture: new T.DepthTexture(1, 1, T.FloatType),
+    });
+    this.target.texture.name = "ink-scene";
+    this.material = new T.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      depthTest: false,
+      depthWrite: false,
+      toneMapped: false,
+      uniforms: {
+        tColor: { value: this.target.texture },
+        tDepth: { value: this.target.depthTexture },
+        texel: { value: new T.Vector2(1, 1) },
+        near: { value: 0.1 },
+        far: { value: 900 },
+        aspect: { value: 1 },
+        pixelAngle: { value: 0.002 },
+        lineWidth: { value: 1 },
+        exposure: { value: 1 },
+        strength: { value: 1 },
+        inkRange: { value: this.range },
+        inkColor: { value: new T.Color(pigment.ink) },
+        paperTint: { value: new T.Color("#fcfff9") },
+        shadowInk: { value: new T.Color("#101e23") },
+      },
+    });
+    this.quad = new FullScreenQuad(this.material);
   }
-  setSize(width:number,height:number,pixelRatio:number){
-    const w=Math.max(1,Math.round(width*pixelRatio)),h=Math.max(1,Math.round(height*pixelRatio)),u=this.material.uniforms;
-    // Whole-texel offsets: depth is sampled nearest, so a fractional step (1.275 at pixel ratio 1.5) snaps to
-    // uneven neighbours and flat ground reads as folds, blotting floors with false ink.
-    this.target.setSize(w,h);u.texel.value.set(1/w,1/h);u.aspect.value=width/Math.max(1,height);u.lineWidth.value=Math.max(1,Math.round(pixelRatio*.85));
+  setSize(width: number, height: number, pixelRatio: number) {
+    const w = Math.max(1, Math.round(width * pixelRatio)),
+      h = Math.max(1, Math.round(height * pixelRatio)),
+      u = this.material.uniforms;
+    // 深度最近采样使用整像素偏移，避免分数步长造成不均邻域和地面伪墨线。
+    this.target.setSize(w, h);
+    u.texel.value.set(1 / w, 1 / h);
+    u.aspect.value = width / Math.max(1, height);
+    u.lineWidth.value = Math.max(1, Math.round(pixelRatio * 0.85));
   }
-  set quality(low:boolean){const samples=low?0:4;if(samples===this.samples)return;this.samples=samples;this.target.dispose();this.target.samples=samples;}
-  render(scene:T.Scene,camera:T.PerspectiveCamera){
-    const u=this.material.uniforms,renderer=this.renderer;
-    u.near.value=camera.near;u.far.value=camera.far;
-    // Angular size of one depth sample step, so fold strength is independent of resolution and field of view.
-    u.pixelAngle.value=2*Math.tan(T.MathUtils.degToRad(camera.fov)/2)/camera.zoom*u.lineWidth.value/this.target.height;
-    const previous=renderer.getRenderTarget();
-    renderer.setRenderTarget(this.target);renderer.render(scene,camera);
-    renderer.setRenderTarget(previous);this.quad.render(renderer);
+  set quality(low: boolean) {
+    const samples = low ? 0 : 4;
+    if (samples === this.samples) return;
+    this.samples = samples;
+    this.target.dispose();
+    this.target.samples = samples;
   }
-  dispose(){this.target.depthTexture?.dispose();this.target.dispose();this.material.dispose();this.quad.dispose();}
+  render(scene: T.Scene, camera: T.PerspectiveCamera) {
+    const u = this.material.uniforms,
+      renderer = this.renderer;
+    u.near.value = camera.near;
+    u.far.value = camera.far;
+    // 以深度采样的角尺度计算褶皱强度，使其不受分辨率与视野影响。
+    u.pixelAngle.value =
+      (((2 * Math.tan(T.MathUtils.degToRad(camera.fov) / 2)) / camera.zoom) * u.lineWidth.value) /
+      this.target.height;
+    const previous = renderer.getRenderTarget();
+    renderer.setRenderTarget(this.target);
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(previous);
+    this.quad.render(renderer);
+  }
+  dispose() {
+    this.target.depthTexture?.dispose();
+    this.target.dispose();
+    this.material.dispose();
+    this.quad.dispose();
+  }
 }

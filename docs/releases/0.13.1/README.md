@@ -1,31 +1,23 @@
-# v0.13.1 运行修复
+# XiangMeta 0.13.1 · 运行修复 / Runtime fixes
 
-## 图片与音乐在运行中丢失
+[中文](#中文) · [English](#english)
 
-现场检查正在运行的 v0.13 EXE：封面、摄影请求返回 404，临时 resources 目录中的 modules 已不存在。NSIS 便携包默认按构建版本共用解压目录；再次启动同一个包，会先清理该目录，再启动 Electron。即使 Electron 的单实例锁拒绝第二个窗口，第二个启动器退出时仍会清理第一个窗口正在使用的资源。
+## 中文
 
-设置 `build.portable.unpackDirName: true`，采用每次启动独立的 NSIS 临时目录。注意锁定的 electron-builder 26.15.3 在 `NsisTarget.js` 中以 `typeof unpackDirName === "string" || !unpackDirName` 判断是否创建固定目录，与类型注释对 false 的描述相反；false 的成品在重复启动测试中仍失败。升级打包工具时必须重新运行重复启动回归，不能只依赖选项描述。
+每次启动使用独立 NSIS 解包目录，修复重复启动后的资源丢失；物理 Esc 松开后重新锁鼠，山路铺装绘入同一曲面。
 
-重复启动只唤起已有窗口，退出时只清理自己的资源。照片、封面、音乐和适配器仍随包携带，未修改原始素材。原生测试改用独立 profile 和端口，避免测试加入用户窗口。
+### 验证
 
-## Esc 恢复第一人称
+40 项单元测试、真实 Windows Esc 与首次/重复启动/刷新回归通过。electron-builder 26.15.3 使用 unpackDirName: true。
 
-原生 keydown 只关闭面板，整个按键周期内吞掉重复按下事件；等物理 keyup 完成，再以用户动作恢复鼠标锁定。这样不会在 Esc 仍按着时先锁定又被释放。没有界面时按 Esc 仍释放鼠标。
+[技术与验收记录](notes.md)保留当时的操作、参数、指标、SHA 和验证范围。旧构建路径仅作历史记录；当前运行方式见[主 README](../../../README.md)。
 
-测试使用 Windows 键盘输入，包含停留 6.5 秒的帮助、星图、展品索引、时光面板，长按 Esc、摄影模式以及再次释放。不使用 CDP 焦点模拟来替代原生窗口焦点。
+## English
 
-## 山路与展台地形
+Used a separate NSIS extraction folder per launch to fix resource loss on repeated launches, restored pointer lock after physical Esc release and painted roads into the terrain.
 
-将登山主路、CNN 捷径和圆形停留区的铺装画在山体同一表面，移除原来分别抬高 12 厘米、18 厘米的路面和圆形平面，消除接缝处的悬浮薄片及重叠。
+### Validation
 
-地形最后明确保留五个展台的平坦基础，防止邻近的上层平台和斜坡覆盖底座；保留主路中心线高度、五个台地顺序和原有围栏。新增密集采样回归覆盖底座周边，山路上下行、CNN 捷径、传送、跳跃和落地测试通过。
+Forty unit tests, real Windows Esc and first/repeated-launch/refresh regression passed. electron-builder 26.15.3 uses unpackDirName: true.
 
-## 验证
-
-- TypeScript/Vite 构建通过，40 项单元测试通过。
-- `node tests/mountain-world.mjs`：全段主路、双向捷径、模型工作台及跳跃落地通过。
-- `node tests/native-escape.mjs`：真实 Windows Esc、长时间停留、长按、摄影退出和再次释放通过。
-- `node tests/portable-regression.mjs`：最终完整便携包首次启动、重复启动、刷新后三轮检查全部 19 张封面与照片解码及文件哈希；抽检 MP3 完整性、专辑实际播放；帮助、星图、索引、时光和两馆工作台停留后，物理 Esc 恢复锁定，再按 Esc 释放，全部通过。没有使用焦点模拟，也不连接用户正在使用的窗口。
-- 包内 60 个媒体及模型适配文件与源文件哈希一致；两馆实际 EXE 画面保存在 `artifacts/v13.1-personal-music-native.png` 与 `artifacts/v13.1-photography-native.png`。
-
-交付目录：`build/XiangMeta-0.13.1/`。EXE 为 564,305,353 字节，SHA-256 为 `A47BBC5F9287561ED52263BF38DBA5D73FDCE9B01D215E99D68E92563D60EC8D`。更新时先退出旧窗口，随后启动新版，保留整个目录及 runtime。
+[Technical and validation notes](notes.md) retain the original controls, parameters, metrics, hashes and test scope. Build paths are historical; see the [main README](../../../README.md) for current usage.

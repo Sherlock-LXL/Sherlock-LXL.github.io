@@ -1,32 +1,23 @@
-# v0.5 · 跳进世界
+# XiangMeta 0.5.0 · 跳跃与支撑 / Jumping and support
 
-## 跳跃与通行
+[中文](#中文) · [English](#english)
 
-- 空格起跳，最高约 1.45 米，落地后可再次跳跃；按住空格不会连续弹跳，空中不能二段跳。
-- 保持 WASD / 方向键移动，Shift 加速。跳跃时可以控制方向，较宽的障碍也可以先跳上去再走下来。
-- 矮凳、花坛、跃石和展台地台都有实际高度与落地支撑；22 厘米以内的小台阶自动迈上。
-- 收紧展品的碰撞范围：镜子使用薄墙、诗园使用桌面和立柱、猫咪区分别处理树干和雕像，开放区域不再被大圆形碰撞范围整块封住。
-- 高墙与大型展品保持阻挡，跳跃不能越出岛屿和桥梁的安全边界。传送会重置高度与竖直速度；面板和总览模式不接收跳跃指令。
-- 各区入口后方新增四块不同高度的「跃石小径」，可练习起跳、站稳和连续换台。
+## 中文
 
-计算独立于渲染：`shared/locomotion.mjs` 使用脚底高度、重力与最长 1/120 秒的碰撞子步。`src/world/colliders.ts` 保存建筑预设的碰撞形状，普通矮障碍设置 `height`；未指定高度的旧障碍保持阻挡。第一人称眼高仍为脚底上方 1.7 米。
+空格起跳约 1.45 米，自动迈上不超过 22 厘米的台阶；增加高低踏石与物件落地支撑。
 
-## 进一步精细化
+### 验证
 
-树木增加分枝和外露树根，提高树冠细分；木质部分合并几何体并复用，避免每根枝条增加一次绘制。大型建筑圆角和环形装饰更平滑。
+17 项核心测试通过，覆盖跳跃、拒绝二段跳、碰撞、台阶和 10/120 FPS 一致性；便携版实测通过。
 
-展廊加入三幅原创程序化装饰画、纸面层次、细边框和灯头。它们是等待真实摄影作品替换的装饰习作，不作为用户原作展示。休憩角增加叠放的书与杯子，跃石使用不同高度与柔和拼色。
+[技术与验收记录](notes.md)保留当时的操作、参数、指标、SHA 和验证范围。旧构建路径仅作历史记录；当前运行方式见[主 README](../../../README.md)。
 
-上一版的双盲诗统一字体、四座 R 键趣味装置、旅行印记、风铃和近景细节均保留。
+## English
 
-## 验证
+Added Space jumps of about 1.45 m, automatic steps up to 22 cm, stepping stones and support on raised props.
 
-- TypeScript / Vite 构建与 17 项核心测试通过。
-- 物理测试覆盖完整跳跃弧线、拒绝二段跳、矮障碍跨越/落顶/走下、高墙阻挡、岛屿边缘、台阶自动迈上及 10/120 帧的计算一致性。
-- 浏览器实测空格起跳、按住不连续弹跳、落在 0.795 米跃石上、空中传送复位以及地图/面板禁用跳跃，均通过。
-- 十个展台传送与 F 工作台、科研示意交互、摄像头轨道释放、收藏和真实礼物模型回归通过。
-- 四个 R 装置、旅行印记持久化、风铃音符/静音、减少动态效果和双盲诗真实生成回归通过；双盲诗字体继续与其他产品输出一致。
-- 更新后的移动检查实测普通 5.14 米/秒、加速 8.49 米/秒，终端碰撞和 F 交互通过；短时实测受坐标保留一位小数影响，配置速度仍为 5.2 / 8.5 米每秒。
-- 最终 Windows 便携 EXE 实际启动验证通过：空格跳跃/落地、R 装置、旅行印记、传送、F 产品工作台、真实礼物模型与同目录配置。隐藏窗口回归为坐标到达留出限帧等待时间，测试后恢复原探索记录。文件大小 86,619,458 字节，SHA-256 见 `build/SHA256-0.5.0.txt`。
+### Validation
 
-成品：`build/XiangMeta-0.5.0-x64.exe`。画面记录：`artifacts/jump-airborne.png`、`artifacts/jump-stone-landing.png`、各区域截图。
+Seventeen core tests covered jumping, rejection of mid-air jumps, collision, steps and consistency at 10/120 FPS. Portable app checks passed.
+
+[Technical and validation notes](notes.md) retain the original controls, parameters, metrics, hashes and test scope. Build paths are historical; see the [main README](../../../README.md) for current usage.

@@ -1,5 +1,6 @@
 from torch import nn
 
+
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super().__init__()
@@ -45,6 +46,7 @@ class ResidualBlock(nn.Module):
         out = out + identity
         out = self.relu(out)
         return out
+
 
 class NeuralNetwork(nn.Module):
     def __init__(self):

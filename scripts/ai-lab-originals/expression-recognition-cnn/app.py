@@ -26,11 +26,13 @@ for checkpoint_path in checkpoint_paths:
     models.append(model)
 print(f"{len(models)} models loaded successfully.")
 
-transform = transforms.Compose([
-    transforms.Grayscale(num_output_channels=1),
-    transforms.Resize((48, 48)),
-    transforms.ToTensor(),
-])
+transform = transforms.Compose(
+    [
+        transforms.Grayscale(num_output_channels=1),
+        transforms.Resize((48, 48)),
+        transforms.ToTensor(),
+    ]
+)
 
 if len(sys.argv) < 2:
     print("Usage: py app.py <image_name>")
@@ -67,7 +69,4 @@ top_indices = top_indices[0]
 
 for prob, index in zip(top_probs, top_indices):
     class_name = CLASS_NAMES[index.item()]
-    print(
-        f"{class_name}: "
-        f"{prob.item() * 100:.2f}%"
-    )
+    print(f"{class_name}: {prob.item() * 100:.2f}%")

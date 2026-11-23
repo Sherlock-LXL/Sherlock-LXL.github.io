@@ -10,6 +10,7 @@ from .config import (
     TRAIN_STEPS,
 )
 
+
 def initialize_parameters(
     input_dim: int,
     hidden_dim: int,
@@ -29,15 +30,14 @@ def initialize_parameters(
     }
     return parameters
 
-def linear_forward(
-    x: np.ndarray,
-    weight: np.ndarray,
-    bias: np.ndarray
-) -> np.ndarray:
+
+def linear_forward(x: np.ndarray, weight: np.ndarray, bias: np.ndarray) -> np.ndarray:
     return x @ weight + bias
+
 
 def relu_forward(x: np.ndarray) -> np.ndarray:
     return np.maximum(0, x)
+
 
 def forward(
     X: np.ndarray,
@@ -52,7 +52,8 @@ def forward(
         "H1": H1,
     }
     return S, cache
-    
+
+
 def mse_loss(
     prediction: np.ndarray,
     target: np.ndarray,
@@ -65,6 +66,7 @@ def mse_loss(
         for j in range(cols):
             total_loss += (prediction[i, j] - target[i, j]) ** 2
     return total_loss / prediction.size
+
 
 def backward(
     prediction: np.ndarray,
@@ -87,6 +89,7 @@ def backward(
     }
     return gradients
 
+
 def train(
     X: np.ndarray,
     y: np.ndarray,
@@ -102,9 +105,7 @@ def train(
     if X.shape[0] != y.shape[0]:
         raise ValueError("X and y must contain the same number of samples.")
     if X.shape[1] != INPUT_DIM:
-        raise ValueError(
-            f"X must have {INPUT_DIM} features, got {X.shape[1]}."
-        )    
+        raise ValueError(f"X must have {INPUT_DIM} features, got {X.shape[1]}.")
     parameters = initialize_parameters(INPUT_DIM, HIDDEN_DIM, OUTPUT_DIM, seed)
     loss_history = []
     for step in range(steps):
@@ -120,12 +121,14 @@ def train(
             print(f"Step: {step + 1}, Loss: {current_loss}")
     return parameters, loss_history
 
+
 def predict(
     X: np.ndarray,
     parameters: dict[str, np.ndarray],
 ) -> np.ndarray:
     prediction, _ = forward(X, parameters)
     return prediction
+
 
 def save_model(
     parameters: dict[str, np.ndarray],
@@ -134,9 +137,7 @@ def save_model(
     required_keys = {"W1", "b1", "W2", "b2"}
     missing_keys = required_keys - parameters.keys()
     if missing_keys:
-        raise ValueError(
-            f"Missing model parameters: {sorted(missing_keys)}"
-        )
+        raise ValueError(f"Missing model parameters: {sorted(missing_keys)}")
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     np.savez(
@@ -147,22 +148,19 @@ def save_model(
         b2=parameters["b2"],
     )
 
+
 def load_model(
     file_path: str | Path,
 ) -> dict[str, np.ndarray]:
     path = Path(file_path)
     if not path.exists():
-        raise FileNotFoundError(
-            f"Model file not found: {path}"
-        )
+        raise FileNotFoundError(f"Model file not found: {path}")
     required_keys = {"W1", "b1", "W2", "b2"}
     with np.load(path) as saved_data:
         saved_keys = set(saved_data.files)
         missing_keys = required_keys - saved_keys
         if missing_keys:
-            raise ValueError(
-                f"Model file is missing parameters: {sorted(missing_keys)}"
-            )
+            raise ValueError(f"Model file is missing parameters: {sorted(missing_keys)}")
         parameters = {
             "W1": saved_data["W1"].copy(),
             "b1": saved_data["b1"].copy(),
@@ -178,8 +176,5 @@ def load_model(
     for name, expected_shape in expected_shapes.items():
         actual_shape = parameters[name].shape
         if actual_shape != expected_shape:
-            raise ValueError(
-                f"{name} has shape {actual_shape}, "
-                f"expected {expected_shape}."
-            )
+            raise ValueError(f"{name} has shape {actual_shape}, expected {expected_shape}.")
     return parameters

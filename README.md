@@ -1,251 +1,95 @@
-# XiangMeta
+# XiangMeta Web
 
-**李湘伦 / Sherlock-LXL — AI · Engineering · Research · Music**
+[中文](#中文) · [English](#english) · [在线体验](https://sherlock-lxl.github.io/)
 
-A personal portfolio inside an explorable 3D world. This Web edition reuses
-the original Three.js islands, terrain, architecture, first-person movement,
-collisions, teleportation, seasons, photography and exploration systems.
+## 中文
 
-`Landing → Enter XiangMeta` opens the world. `View Projects` opens the fast,
-responsive project archive, with no 3D engine download.
+李湘伦（Sherlock-LXL）的个人作品网站，将 AI、工程、科研、摄影与原创音乐放入可探索的 Three.js 3D 世界。
 
-`AI Lab` opens three original AI projects in one static browser application.
-The Gift Chooser, Expression CNN and Blind Verse stations also open this same
-application inside the world. See [AI Lab delivery and validation](docs/ai-lab-delivery.md).
+### 主要功能
 
-<!-- Browser validation generates the screenshots referenced below. -->
-![XiangMeta Web portfolio](docs/images/landing.png)
-![The original XiangMeta world, running in the browser](docs/images/world.png)
+- 首页进入 3D 世界，项目页提供按分类浏览的轻量作品档案。
+- 保留四岛地形、建筑、第一人称行走、碰撞、跳跃、传送、四季、拍照与探索。
+- 科研气泡模拟在浏览器 Worker 运行；音乐保留七首 BGM 与四段季节提示，点击 ♪ 后加载、交叉淡化并支持暂停继续。
 
-## Local development
+AI Lab 将送礼选择器、表情识别 CNN 与双盲诗的原模型放在同一静态应用中，独立页面与世界站点共用。触屏支持摇杆、拖动视角、跳跃与上下文按钮；四岛包含 16 件可移动物品和十只动物，支持抚摸与骑乘。
 
-Node.js **22.14+** and npm are required for development. Visitors only need a
-browser; there is no Python server, Electron or installation step. AI Lab
-downloads only the selected project's original model, then runs locally.
+[Teaching Studio](https://sherlock-lxl.github.io/teaching-studio/) 入口跳转至独立教学应用。
 
-```sh
+### 运行
+
+开发需要 Node.js 22.14+：
+
+```bash
 npm ci --ignore-scripts
 npm run dev
-# http://127.0.0.1:5173
-```
-
-```sh
 npm run build
 npm test
 npm run preview
-# http://127.0.0.1:4173
 ```
 
-Browser checks use the production files and a strict static HTTP server:
+开发/预览地址为 `http://127.0.0.1:5173` / `http://127.0.0.1:4173`。浏览器测试使用 `npx playwright install chromium` 与 `npm run test:ui`；可安装 WebKit 并设置 `TEST_WEBKIT=1`。
 
-```sh
-npx playwright install chromium
-npm run test:ui
-# Optional: install webkit and run TEST_WEBKIT=1 npm run test:ui
-```
+页面需要 HTTP(S)，本地也应使用预览服务。Home/Projects 不下载 Three.js；世界按阶段显示加载进度，WebGL 不可用时提供项目页入口。
 
-Use HTTP(S), including for a local preview. Opening `index.html` through
-`file://` is not supported because the site loads ES modules and JSON.
+### 控制与架构
 
-## Controls
+WASD/方向键行走，Shift 跑，Space 跳；点击或拖动转视角，F 执行附近主要动作，E 查看项目详情，R 打开可用演示/音乐，G 查看发现，P 拍照，Esc 关闭面板。侧栏传送，世界概览打开轨道地图。
 
-| Input | Action |
-|---|---|
-| WASD / arrows | Walk |
-| Shift | Run |
-| Space | Jump |
-| Click canvas / drag | Look around; drag works when pointer lock is unavailable |
-| F | Experience the nearby AI project in a window; other exhibits open GitHub/exhibitions, artwork or harbor routes |
-| E | Project description, technologies, results and exhibition |
-| R | Demo / music / MV, shown only when a destination exists |
-| G | Discoveries and memory fragments |
-| Q | Pick up / place seasonal objects, or pet the animal you face |
-| T | Ride a deer / polar bear, or dismount on clear ground |
-| P | Photo mode; WASD moves, Q / E changes altitude |
-| Esc | Close panel / release pointer |
-| Sidebar region | Teleport |
-| World overview | Orbit map |
-| ♪ sound button | Start / pause background music, seasonal cues and chimes |
+`modules/<id>/manifest.json` 是项目与世界信息的共同来源；`src/world/` 实现世界，`shared/` 保存物理与导航规则，`data/` 保存个人资料、布局与媒体映射。构建生成 `content/projects.json` / `content/world.json`，新增有效 manifest 自动进入两种体验。
 
-Touch devices have a movement joystick, drag-to-look, jump and contextual
-interaction buttons. The Help panel offers reduced rendering quality.
+[完整控制、扩展与性能](docs/web-guide.md) · [Web 迁移记录](docs/web-migration.md) · [AI Lab 交付与验证](docs/ai-lab-delivery.md) · [历史版本](docs/releases/README.md)
 
-The original four islands contain 16 portable objects and ten animals.
-Animals alternate between resting, wandering, grazing and curious looks;
-petting produces hearts. Mounts move 1.45× faster and jump higher within their
-home island. Object placement requires clear, level ground and keeps entrances
-open. Object arrangements last for the current visit.
+### 发布与致谢
 
-Island Time includes distant tornadoes, hail, aurora and sunset skies. Choosing
-aurora or sunset also selects a suitable hour. Photo mode freezes their motion.
-Run `node tests/living-browser.mjs` for the object, pet, mount and weather checks;
-`TEST_WEBKIT=1` includes WebKit.
+个人站点为 `https://sherlock-lxl.github.io/`；推送站点仓库 `main` 后由 GitHub Actions 构建、测试并部署。`BASE_PATH` 支持嵌套路径，本地可设置后构建与浏览器验收。`npm run export:pages` 仅生成站点源码，不自动提交或发布。
 
-## Content and architecture
+桌面历史保存在 `backend/`、`desktop/` 与 `docs/releases/`；`test:legacy` 需要相应 Python、模型与媒体环境。
 
-```text
-index.html                   Landing
-projects/index.html          Filterable Portfolio
-world/index.html             Deferred 3D entrance
-ai-lab/index.html            Three original models, standalone or embedded
-data/profile.json            Name, introduction, GitHub and music profile
-data/world.json              Original islands and world layout
-data/audio.json              Seven BGM tracks, four seasonal cues, playback gain
-data/image-previews.json     Real artwork preview → detail mapping
-modules/<id>/manifest.json   Single authoring source for project + world data
-modules/<id>/scene.ts        Optional original procedural scene extension
-modules/<id>/assets/         Author-supplied images; local media archive
-shared/                     Schemas, physics, navigation and collision rules
-src/portfolio-page.ts        Lightweight ordinary pages
-src/main.ts                 World interface and project actions
-src/core/nearby-actions.ts   Shared key/label definitions for signs, HUD and input
-src/world/                  Original world implementation
-scripts/web-content.mjs      Validated static content + asset allowlist
-.github/workflows/pages.yml  Build, test and deploy on main
-```
+世界与个人作品由李湘伦创作，《燕来有声》保留未名拾音团队署名。代码采用 [MIT](LICENSE)，不重新许可摄影、封面、音乐、歌词、影片或品牌素材；详见 [CREDITS.md](CREDITS.md)。Three.js 通知随构建提供。
 
-The build generates `content/projects.json` and `content/world.json` from the
-same manifests. Do **not** edit the generated JSON. The export strips Python
-runtime settings, model forms, album audio sources and private configuration.
-Only the compressed background/seasonal tracks in `data/audio.json` are exported.
+## English
 
-Add an exhibit with a manifest using an existing visual preset, then give it
-a `portfolio` section:
+Sherlock-LXL's personal portfolio brings AI, engineering, research, photography and original music into an explorable Three.js world.
 
-```json
-{
-  "name": "My Project",
-  "category": "AI",
-  "summary": "A short, factual description.",
-  "technologies": ["Python", "PyTorch"],
-  "github": "https://github.com/your-name/your-project",
-  "order": 11,
-  "featured": false
-}
-```
+### Features
 
-Supported categories: `AI`, `Research`, `Engineering`, `Creative`. `github`,
-`demo`, `screenshots` are optional; absent links are hidden. Region-local
-`position`, `visual`, `rotation`, `facts` and `story` stay in the same manifest.
-Existing module schemas and optional `scene.ts` provide the full contract.
-A new valid manifest automatically appears in both experiences; no registry
-edit is required. Projects without verified source URLs remain browsable
-without an invented GitHub link.
-Physical consoles, nearby cards and the bottom action button share the same
-F/E/R definitions. F always performs the displayed primary action; E opens
-project details, and R appears only when a Demo/music/MV destination exists.
+- Enter the 3D world from Home or browse a lightweight, filterable project archive.
+- Four islands retain terrain, architecture, first-person movement, collisions, jumping, teleportation, seasons, photography and exploration.
+- Bubble research simulations run in a browser Worker. Seven BGM tracks and four seasonal cues load after clicking ♪, with crossfades and pause/resume.
 
-## Web scope and performance
+AI Lab brings the original Gift Chooser, Expression CNN and Blind Verse models into one static application shared by standalone and world stations. Touch supports a joystick, drag-to-look, jumping and contextual buttons. Four islands contain 16 portable objects and ten animals with petting and mounts.
 
-- Five AI project archives link to their source repositories. Local Python
-  inference remains in the historical source for other projects. Gift Chooser,
-  Expression CNN and Blind Verse now run their original models in AI Lab,
-  using JavaScript or ONNX Runtime Web WASM in a Worker.
-- Both bubble research simulations still run in a browser Worker. Parameters
-  illustrate the equations; they are not fitted experimental predictions.
-- Albums use the author's supplied NetEase links; the MV links to Bilibili.
-  The original seven BGM tracks and four seasonal cues are retained as MP3.
-  They download only after clicking ♪, with crossfades, pause/resume and a
-  shuffled BGM playlist. Each seasonal cue premieres once per tab journey.
-- The 11 background tracks use LAME VBR q2, 44.1 kHz stereo: **83.05 MB →
-  46.21 MB** (44% smaller). Playback gain balances loudness without changing
-  the recordings' dynamics. Original masters remain in the local archive.
-  Optional chime/interface sounds remain synthesized.
-- Home and Projects do not import Three.js. World loading has a program
-  download indicator, followed by measured construction-stage progress.
-- All core collision geometry and **20 real artwork previews (384 KB total)**
-  are ready before the loading screen closes. Region arrival upgrades the
-  same textures; map/photo mode upgrades all. Full photography originals
-  still load only when explicitly opened.
-- Static batching, instancing, capped pixel ratio, shadow update throttling
-  and the original procedural architecture are preserved. The revised world
-  adds sculpted rock strata, coastal reflections/foam, warm architectural
-  details and stronger directional lighting. Default DPR is capped at 1.5;
-  2048px shadows update three times per second. Reduced quality remains available.
-- WebGL failure offers a direct Portfolio link. Refreshing `/projects/` and
-  `/world/` works with real directory index files; no SPA rewrite is needed.
+The [Teaching Studio](https://sherlock-lxl.github.io/teaching-studio/) entry redirects to the separate teaching application.
 
-There are no original GLB models to compress in this version. Draco/Meshopt,
-KTX2 and additional geometry LOD remain options if future imported assets
-justify them. See [migration notes](docs/web-migration.md) for measured build
-sizes and validation limits.
+### Run
 
-## GitHub Pages
+Development requires Node.js 22.14+:
 
-Target user site: **`https://Sherlock-LXL.github.io/`**.
-
-The existing site uses a separate checkout at `.runtime/pages-source/`.
-To update it from this source repository, first ensure that checkout is clean:
-
-```sh
-node scripts/sync-pages.mjs
-cd .runtime/pages-source
+```bash
 npm ci --ignore-scripts
+npm run dev
 npm run build
 npm test
-npm run test:smoke
-AI_LAB_ONLY_TEST=1 npm run test:ai-lab
+npm run preview
 ```
 
-Review the diff before committing and publishing. The script preserves the
-existing Pages workflow and unrelated pages; it does not commit or push.
-Confirm GitHub Actions and live model inference after an authorized push.
+Development/preview use `http://127.0.0.1:5173` / `http://127.0.0.1:4173`. Browser checks use `npx playwright install chromium` and `npm run test:ui`; install WebKit and set `TEST_WEBKIT=1` for additional coverage.
 
-The steps below describe a **new**, empty publication checkout:
+Use HTTP(S), including local preview. Home/Projects do not download Three.js; world construction shows staged progress and WebGL failure offers a Portfolio link.
 
-1. Create the public repository `Sherlock-LXL.github.io`.
-2. Use `npm run export:pages` to prepare a clean source folder at
-   `.runtime/pages-source/`. It includes the compressed BGM/seasonal MP3s,
-   excludes original audio/video archives, private model configuration,
-   historical binaries and existing Git history. AI Lab includes explicitly
-   versioned, hash-verified model exports and their original notices.
-3. Push that source folder to the new repository's `main` branch.
-4. Set **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-5. The included workflow builds, runs regression/browser checks, uploads
-   only `dist/`, and deploys after success.
+### Controls and architecture
 
-Create the repository empty (without an initial README), then run from the
-original checkout:
+WASD/arrows walk, Shift runs and Space jumps. Click/drag to look; F performs the nearby primary action, E opens details, R opens available demo/music, G opens discoveries, P enters photo mode and Esc closes panels. Sidebar regions teleport; World Overview opens an orbit map.
 
-```sh
-cd .runtime/pages-source
-git init -b main
-git add .
-git commit -m "Launch XiangMeta Web portfolio"
-git remote add origin https://github.com/Sherlock-LXL/Sherlock-LXL.github.io.git
-git push -u origin main
-```
+`modules/<id>/manifest.json` is the shared project/world content source. `src/world/` implements the world, `shared/` contains physics/navigation and `data/` stores profile, layout and media mappings. Builds generate `content/projects.json` / `content/world.json`; valid new manifests appear in both experiences automatically.
 
-When using the exported source ZIP, start in its extracted folder instead.
-Use your normal GitHub authentication for the push. In the repository's
-Actions tab, confirm the deployment succeeds before sharing the public URL.
-If Pages was enabled only after the first push, rerun the workflow.
+[Controls, extension and performance](docs/web-guide.md) · [Web migration](docs/web-migration.md) · [AI Lab delivery and validation](docs/ai-lab-delivery.md) · [Version history](docs/releases/README.md)
 
-The local source export does not push or publish anything. Existing `origin`
-is left unchanged. An authenticated GitHub account with repository permissions
-is required to create/push the new repository.
+### Publishing and credits
 
-The workflow obtains the correct `BASE_PATH` from `configure-pages`. The live
-site uses the root domain; the old `/xiangmeta/` deployment remains disabled.
-To test a generic nested path locally:
+The user site is `https://sherlock-lxl.github.io/`. Pushing the site repository's `main` branch runs GitHub Actions build, tests and deployment. `BASE_PATH` supports nested paths for local build/browser checks. `npm run export:pages` generates site source without committing or publishing it.
 
-```sh
-BASE_PATH=/nested/ npm run build
-BASE_PATH=/nested/ npm run test:ui
-```
+Desktop history remains in `backend/`, `desktop/` and `docs/releases/`; `test:legacy` needs the corresponding Python, model and media environment.
 
-PowerShell: set `$env:BASE_PATH="/nested/"` before those commands.
-
-## Credits
-
-Original world and personal works: 李湘伦. 《燕来有声》 retains 未名拾音
-team attribution. The author confirmed ownership/rights for the supplied media.
-See [CREDITS.md](CREDITS.md) and [LICENSE](LICENSE); the MIT code license does
-not relicense the photography, covers, music, lyrics, films or branding.
-Three.js dependency notices are included in the built site.
-
-In the original XiangMeta checkout, desktop history is retained under
-`backend/`, `desktop/`, `docs/releases/` and the legacy scripts.
-Its `npm run test:legacy` includes historical tests requiring local
-Python/model/media environments; it is not the Web release gate. The clean
-Pages source export excludes those archives and legacy commands.
+World and personal works are by 李湘伦; 《燕来有声》 retains 未名拾音 team attribution. The [MIT](LICENSE) code license does not relicense photography, covers, music, lyrics, films or branding. See [CREDITS.md](CREDITS.md); Three.js notices accompany the build.

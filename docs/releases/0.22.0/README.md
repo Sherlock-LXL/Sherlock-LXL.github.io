@@ -1,21 +1,23 @@
-# v0.22 · 青山与科研营地
+# XiangMeta 0.22.0 · 青山与科研营地 / Green mountains and research camp
 
-- 开关与界面提示音从 0.10 降至 0.045，并加入短促的淡入，减少突兀的起音；背景音乐与互动旋律音量保持原配置。
-- 未收集的记忆碎片呈暖金色，带柔光与粒子；收集后平滑变为较暗的青绿色，光晕与粒子随之淡出。星图同步区分状态，已收集碎片仍可按 R 查看。
-- F 箭头、R 星形与碎片提示采用统一 25 像素矢量图标和 36 像素底框。
-- AI 山脉改用更偏绿色的春季草地、山脊和岩壁配色。
-- 科研营地从左至右为天文、力学、机器人、计算机、AI。分别搭配三脚架望远镜、桁架结构、机械臂、电脑终端、卷积特征图与输出节点。
-- 五座实验室按用户确认仅作外观展示，没有增加交互或编写新的科研经历。
-- 移除旧的悬空管线、三道无支撑拱环及其雪帽，改为两端落地的浅拱；装置全部落在实验室屋顶基座上。
-- 重做入口柱脚、连接梁、檐板及门牌吊接，修复横梁悬空。
-- 修复邻近记忆碎片与小互动争抢 R 键的问题：结合距离与视线方向统一选择目标，只显示一个 R 提示，按键触发该提示对应的物件。
+[中文](#中文) · [English](#english)
 
-验证：55 项自动测试通过；五座屋顶装置的支撑位置、碎片收集前后的明暗变化与重复交互、三处提示图标尺寸以及浏览器渲染检查通过。
+## 中文
 
-实地通行验证：16 个 R 小互动全部可以从对应区域入口步行抵达，面向物件时只显示一个 R 提示，触发及重新打开后的收藏持久化通过。
+降低界面提示音，区分已收集碎片；统一 F/R 图标，五座科研实验室仅作外观展示，并修复支撑及 R 焦点选择。
 
-资源验证：开发与便携版共 10 份模型配置、58 个本地媒体地址、2 份论文及模型文件校验通过；包内 63 个媒体与模型工作文件逐一比对通过。
+### 验证
 
-成品验证：最终 EXE 首次启动、重复启动和刷新后，19 张图片正常解码且抽查媒体哈希一致；专辑试听、两套论文参数曲线、MV 播放与拖动、港口航线和团队时间线通过。本轮没有重新验证物理 Esc 按键与鼠标锁定，相关行为未改动。
+55 项自动测试、十六互动实走、十份模型配置与63 个工作文件通过；最终成品内容检查通过，本轮未重测物理 Esc。
 
-运行 `build/XiangMeta-0.22.0/XiangMeta-0.22.0-x64.exe`，移动时复制整个版本目录。截图与验证报告位于 `artifacts/current/`。
+[技术与验收记录](notes.md)保留当时的操作、参数、指标、SHA 和验证范围。旧构建路径仅作历史记录；当前运行方式见[主 README](../../../README.md)。
+
+## English
+
+Reduced UI sounds, distinguished collected fragments, unified F/R icons, added five decorative research labs and fixed supports and R focus selection.
+
+### Validation
+
+Fifty-five automated tests, walking access to sixteen interactions, ten model configurations and 63 working files passed. Final content checks passed; physical Esc was not retested.
+
+[Technical and validation notes](notes.md) retain the original controls, parameters, metrics, hashes and test scope. Build paths are historical; see the [main README](../../../README.md) for current usage.
