@@ -1,0 +1,51 @@
+{
+  "origin": "https://sherlock-lxl.github.io",
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "c9ffbf1d286c8ed45ec586dc72dce42f757efb44977abce9afc8193e1dbeec53"
+    },
+    {
+      "route": "/projects/",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "140dc7f4f1db091d0247fa3e4cad8ae468e17d69815935b3b83723b4b83d6fa4"
+    },
+    {
+      "route": "/world/",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "482275c60aa827554fbefdcc3a5383ff4523b02bda861616aa239b54aff267dd"
+    },
+    {
+      "route": "/jiahui/",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "96873f46a9233db845cfcf2976e8255803decd628fb6dfa42a287c51d181dd43"
+    },
+    {
+      "route": "/ai-lab/",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "9650d6036bee871849111e9cdb38110563cb5d4824436a4267c9987c3117d9bf"
+    },
+    {
+      "route": "/content/ai-lab.json",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "767efbbe93aa761430a3dca567694bbccf76e82183955782920487c009040831"
+    },
+    {
+      "route": "/content/world.json",
+      "status": 200,
+      "matchesVerifiedBuild": true,
+      "sha256": "57b95409543946241b7446cfd3cd658dfa5c0239ef936bac3ba12957c322d892"
+    },
+    {
+      "route": "/xiangmeta/",
+      "status": 404
+    }
+  ]
+}

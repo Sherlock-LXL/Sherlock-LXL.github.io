@@ -14,7 +14,7 @@
 
 世界内进入 AI 山脉，靠近送礼、表情、诗歌展台，按 F 或点击「体验 AI」。小窗自动打开相应项目，保留当前位置与视角。点击右上角关闭或按 Esc 返回世界；输入文字时世界不移动。E 仍可查看作品简介、档案和源码。
 
-发布地址为现有根域名的新增目录。旧 `/xiangmeta/` 路径继续停用。线上部署与实际推理结果在发布完成后记录于本文末尾。
+发布地址为现有根域名的新增目录。旧 `/xiangmeta/` 路径继续停用。线上部署与实际推理记录见本文末尾。
 
 ## 原项目调查与来源
 
@@ -102,7 +102,7 @@ WASM 为单线程，在专用 Worker 内运行，不要求 WebGPU、SharedArrayB
 
 ## 真实结果与一致性证据
 
-基线由原 NumPy/PyTorch 实现生成，不参与应用的结果输出。完整输入与输出位于 [本地 Chromium 证据](ai-lab-images/evidence-local.json)、[独立子路径证据](ai-lab-images/evidence-independent.json)、[WebKit 证据](ai-lab-images/evidence-webkit.json) 和 [固定基线](../tests/fixtures/ai-lab/baseline.json)。
+基线由原 NumPy/PyTorch 实现生成，不参与应用的结果输出。完整输入与输出位于 [本地 Chromium 证据](ai-lab-images/evidence-local.json)、[独立子路径证据](ai-lab-images/evidence-independent.json)、[WebKit 证据](ai-lab-images/evidence-webkit.json)、[公网推理证据](ai-lab-images/evidence-live.json) 和 [固定基线](../tests/fixtures/ai-lab/baseline.json)。
 
 | 真实任务 | 输入 | 原始结果与浏览器对照 |
 | --- | --- | --- |
@@ -131,6 +131,9 @@ Chromium 153.0.8010.12 在 macOS 上从生产静态文件运行，CNN 本地单�
 | 其他引擎 | WebKit 26.6 手机布局、三模型真实推理 | 通过 |
 | 独立构建 | `/nested/ai-lab/` 实际刷新和三模型路径 | 通过 |
 | 原世界 smoke | 四岛及原有移动/多点触控等回归 | 通过 |
+| 完整世界 UI | `npm run test:ui`，项目搜索/刷新、十展台、科研 Worker、音频/四季、摄影控制、多点触控、WebGL 降级 | 通过 |
+| 公网端到端 | 与本地相同的 20 项 AI Lab 检查，包括三处世界内真实推理 | 通过 |
+| 公网页面完整性 | 首页、Projects、World、Jiahui、AI Lab 及两份元数据与构建 hash 一致；旧路径 404 | 通过 |
 
 完整本地 AI Lab 端到端记录：页面异常、失败资源和 console warning 均为空。测试摄像头使用 Chromium 合成设备与真实权限 API；未使用实体摄像头或实体手机，不把 viewport 模拟当作真机测试。Firefox 未测试。原模型训练准确率不属于本次验收范围。
 
@@ -145,6 +148,8 @@ Chromium 153.0.8010.12 在 macOS 上从生产静态文件运行，CNN 本地单�
 | RNN | [截图](ai-lab-images/desktop-verse.png) | [截图](ai-lab-images/mobile-verse.png) | [截图](ai-lab-images/world-blind-verse-rnn.png) |
 
 另有 [手机世界嵌入结果](ai-lab-images/world-mobile-gift.png)。
+
+公网复核截图：[独立送礼](ai-lab-images/live-desktop-gift.png)、[世界内送礼](ai-lab-images/live-world-gift-chooser.png)、[手机世界内结果](ai-lab-images/live-world-mobile-gift.png)。
 
 ![世界内送礼真实推理](ai-lab-images/world-gift-chooser.png)
 ![桌面表情真实推理](ai-lab-images/desktop-expression.png)
@@ -161,4 +166,17 @@ Chromium 153.0.8010.12 在 macOS 上从生产静态文件运行，CNN 本地单�
 
 源码在 `detail-refinement` 分支本地提交；正式发布仅使用独立 `.runtime/pages-source` 的 `main`。同步脚本不会提交或推送，要求发布 checkout 先保持干净。已有根首页、`/projects/`、`/world/`、`/jiahui/` 和 Pages 工作流保留，CI 增加原模型实际浏览器推理检查。
 
-本次提交与部署的精确 SHA、Actions 结果和线上验收证据将在发布完成后补充。可用 `git log --oneline` 查看本地记录，用 `git -C .runtime/pages-source log --oneline` 查看发布记录。
+| 记录 | 提交 |
+| --- | --- |
+| 本地完整源码、权重、测试及截图 | `b19db57` — Integrate original AI models into static lab and world windows |
+| Pages 发布源码 | `56215caa798f475293a7195d8d07cb5db50e486a` — Add original-model AI Lab and in-world experience |
+
+部署工作流：[45138811921](https://github.com/Sherlock-LXL/Sherlock-LXL.github.io/actions/runs/45138811921)，`success`。原站独立验证工作流：[45138811944](https://github.com/Sherlock-LXL/Sherlock-LXL.github.io/actions/runs/45138811944)，`success`。Linux CI 包括原模型实际 WASM 浏览器推理，而不是只检查构建。公网 AI Lab 已返回 HTTP 200。
+
+Pages 同步后的 104 个构建文件与已测试源码构建逐文件 SHA256 一致；发布副本另行通过 85 项核心测试、12 组独立 AI 端到端检查和原世界 smoke。可用 `git log --oneline` 查看本地记录，用 `git -C .runtime/pages-source log --oneline` 查看发布记录。
+
+2026-11-23 从 `https://sherlock-lxl.github.io` 完成 20 项公网 Chromium 验收，实际调用原模型，三处展台均在父页面内体验。`errors`、`failures`、`warnings` 均为空。数值误差与本地相同；固定 RNN 解码仍逐 token 一致。见 [线上证据](ai-lab-images/evidence-live.json)、[页面 hash 与旧路径记录](ai-lab-images/evidence-live-paths.json)、[Actions 记录](ai-lab-images/evidence-deployment.json)。
+
+公网第一次故障测试因 Pages 的 HTTP 缓存继续提供元数据，断网时没有进入预期错误状态。数值检查已成功并保留证据；测试随后先清除 HTTP 缓存，续跑剩余故障、手机与世界检查并全部通过。此调整只改变测试，应用仍允许浏览器缓存正常发挥作用。
+
+完整世界 UI 回归也已从头运行通过，记录见 [世界 UI 证据](ai-lab-images/evidence-world-ui.json)。完整套件更新三处 AI 展台的主操作断言，并统一采用已验证的 macOS Metal / Linux SwiftShader 浏览器启动配置，设置明确等待上限；没有为测试修改世界移动、鼠标或渲染功能。

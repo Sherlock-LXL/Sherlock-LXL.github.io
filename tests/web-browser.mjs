@@ -21,16 +21,18 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin=`http://127.0.0.1:${server.address().port}`,url=route=>origin+base+route;
 await mkdir('artifacts/web',{recursive:true});
 const engines=process.env.TEST_WEBKIT==='1'?{chromium,webkit}:{chromium};
+const graphics=process.platform==='darwin'?['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist']:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'];
 const results=[];
 try{
   for(const [name,engine] of Object.entries(engines)){
     const checkpoint=label=>console.log(`[${name} ${base}] ${label}`);
-    const browser=await engine.launch({headless:true,args:name==='chromium'?['--disable-crash-reporter','--disable-breakpad']:[]});
+    const browser=await engine.launch({headless:true,args:name==='chromium'?['--disable-crash-reporter','--disable-breakpad',...graphics]:[]});
     try{
       const context=await browser.newContext({viewport:{width:1440,height:1000}});
+      context.setDefaultTimeout(30_000);
       const page=await context.newPage(),errors=[],requests=[],failures=[];
       const activate=async locator=>{
-        await page.evaluate(()=>document.pointerLockElement&&document.exitPointerLock());
+        await page.evaluate(()=>{if(document.pointerLockElement)document.exitPointerLock();});
         await page.waitForFunction(()=>!document.pointerLockElement);
         await locator.click();
       };
@@ -181,8 +183,9 @@ try{
         })));
         const demo=m.portfolio.demo??m.link;
         assert.deepEqual(actions.map(a=>a.key),demo?['F','E','R']:['F','E'],m.id);
-        assert.equal(actions[0].label,m.portfolio.github?'GitHub':'打开展览',m.id);
-        assert.equal(actions[0].href,m.portfolio.github??null,m.id);
+        const aiStation=['recommendation','emotion-recognition','poetry'].includes(m.id);
+        assert.equal(actions[0].label,aiStation?'体验 AI':m.portfolio.github?'GitHub':'打开展览',m.id);
+        assert.equal(actions[0].href,aiStation?null:m.portfolio.github??null,m.id);
         if(demo)assert.equal(actions[2].href,demo,m.id);
         const sign=await page.evaluate(id=>window.__xiangmetaInspect().stations.find(s=>s.id===id).hint,m.id);
         assert.equal(sign,actions.map(a=>`[${a.key}] ${a.label}`).join('   ·   '),`${m.id}: physical sign and HUD agree`);
