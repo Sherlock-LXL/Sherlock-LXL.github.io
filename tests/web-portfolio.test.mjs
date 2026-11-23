@@ -48,10 +48,13 @@ test('production contains direct-loadable pages and only the allowed compressed 
   const files=await walk('dist');
   assert.ok(files.includes('dist/world/index.html'));assert.ok(files.includes('dist/projects/index.html'));
   assert.ok(files.includes('dist/jiahui/index.html'));
-  const entry=await readFile('dist/jiahui/index.html','utf8');
+  assert.ok(files.includes('dist/teaching-studio/index.html'));
+  const oldEntry=await readFile('dist/jiahui/index.html','utf8');
+  assert.ok(oldEntry.includes('../teaching-studio/'));
+  const entry=await readFile('dist/teaching-studio/index.html','utf8');
   assert.match(entry,/http-equiv=["']?refresh/);
-  assert.ok(entry.includes("location.replace('https://teaching-studio.de5.net/jiahui/')"));
-  assert.ok(entry.includes('href="https://teaching-studio.de5.net/jiahui/"'));
+  assert.ok(entry.includes("location.replace('https://teaching-studio.de5.net/')"));
+  assert.ok(entry.includes('href="https://teaching-studio.de5.net/"'));
   assert.ok(files.includes('dist/.nojekyll'));
   assert.ok(!files.some(f=>/\.(wav|mp4|pth|py|pt|exe)$/.test(f)));
   const audio=files.filter(f=>f.endsWith('.mp3'));

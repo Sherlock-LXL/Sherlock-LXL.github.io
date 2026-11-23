@@ -8,7 +8,7 @@ export default defineConfig({
   server: { host: '127.0.0.1', port: 5173, strictPort: true },
   worker:{format:'es'},
   build: {outDir:process.env.AI_LAB_ONLY?'dist-ai-lab':'dist',chunkSizeWarningLimit: 650, rollupOptions: {
-    input: process.env.AI_LAB_ONLY?{aiLab:'ai-lab/index.html'}:{home:'index.html',projects:'projects/index.html',world:'world/index.html',jiahui:'jiahui/index.html',aiLab:'ai-lab/index.html'},
+    input: process.env.AI_LAB_ONLY?{aiLab:'ai-lab/index.html'}:{home:'index.html',projects:'projects/index.html',world:'world/index.html',studio:'teaching-studio/index.html',jiahui:'jiahui/index.html',aiLab:'ai-lab/index.html'},
     output: {manualChunks:{three:['three']}}
   }}
 });

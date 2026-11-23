@@ -49,14 +49,14 @@ try{
   await page.goto(url(''));
   await page.locator('.hero').waitFor({timeout:15000});
   assert.ok(await page.getByRole('link',{name:'View Projects',exact:false}).isVisible());
-  assert.equal(await page.getByRole('link',{name:'Jiahui Teaching Studio'}).getAttribute('href'),`${base}jiahui/`);
-  for(const javaScriptEnabled of [true,false]){
+  assert.equal(await page.getByRole('link',{name:'Teaching Studio'}).getAttribute('href'),`${base}teaching-studio/`);
+  for(const javaScriptEnabled of [true,false])for(const entry of ['teaching-studio/','jiahui/']){
     const entryContext=await browser.newContext({javaScriptEnabled});
-    const destination='https://teaching-studio.de5.net/jiahui/';
+    const destination='https://teaching-studio.de5.net/';
     await entryContext.route(destination,route=>route.fulfill({contentType:'text/html',body:'<title>Teaching Studio destination</title>'}));
     try{
       const entryPage=await entryContext.newPage();
-      await entryPage.goto(url('jiahui/'));
+      await entryPage.goto(url(entry));
       await entryPage.waitForURL(destination,{timeout:15000});
       assert.equal(await entryPage.title(),'Teaching Studio destination');
     }finally{await entryContext.close();}
@@ -97,7 +97,7 @@ try{
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   const mobilePage=await mobile.newPage();
   await mobilePage.goto(url(''));
-  await mobilePage.getByRole('link',{name:'Jiahui Teaching Studio'}).waitFor();
+  await mobilePage.getByRole('link',{name:'Teaching Studio'}).waitFor();
   assert.equal(await mobilePage.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
   await mobilePage.goto(url('world/?inspect'));
   await mobilePage.locator('#world canvas').waitFor({timeout:75000});
@@ -152,7 +152,7 @@ try{
 
   assert.deepEqual(errors,[]);
   assert.deepEqual(failures,[]);
-  console.log('Smoke passed: Jiahui entry with and without JavaScript, mobile footer, four-island world, project link, responsive ambience, resonance and mobile movement.');
+  console.log('Smoke passed: Teaching Studio and legacy entry with and without JavaScript, mobile footer, four-island world, project link, responsive ambience, resonance and mobile movement.');
 }finally{
   await browser.close();
   await new Promise((resolve,reject)=>server.close(error=>error?reject(error):resolve()));
