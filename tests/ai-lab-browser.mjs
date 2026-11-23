@@ -85,6 +85,9 @@ try{
   await shot(page,'desktop-verse');
   await page.reload();await ready(page);assert.equal((await page.evaluate(()=>window.__aiLabInspect())).project,'blind-verse-rnn');
   const before=requested.length;
+  // Pages may serve metadata from its HTTP cache even while offline.
+  const cacheControl=await context.newCDPSession(page);
+  await cacheControl.send('Network.clearBrowserCache');await cacheControl.detach();
   await context.setOffline(true);await page.locator('[data-project=expression-recognition-cnn]').click();
   // Metadata is not persistently cached: offline inference is not promised.
   await page.locator('#model-status[data-state=error]').waitFor();await context.setOffline(false);

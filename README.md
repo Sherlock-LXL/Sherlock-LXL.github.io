@@ -196,9 +196,9 @@ The steps below describe a **new**, empty publication checkout:
 1. Create the public repository `Sherlock-LXL.github.io`.
 2. Use `npm run export:pages` to prepare a clean source folder at
    `.runtime/pages-source/`. It includes the compressed BGM/seasonal MP3s,
-  excludes original audio/video archives, private model configuration,
-  historical binaries and existing Git history. AI Lab includes explicitly
-  versioned, hash-verified model exports and their original notices.
+   excludes original audio/video archives, private model configuration,
+   historical binaries and existing Git history. AI Lab includes explicitly
+   versioned, hash-verified model exports and their original notices.
 3. Push that source folder to the new repository's `main` branch.
 4. Set **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 5. The included workflow builds, runs regression/browser checks, uploads

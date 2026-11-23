@@ -1,0 +1,36 @@
+{
+  "base": "/",
+  "results": [
+    {
+      "engine": "chromium",
+      "status": "passed",
+      "checks": [
+        "landing isolated",
+        "filters/search/refresh",
+        "music links",
+        "3D boot",
+        "distant cover previews",
+        "fixed HUD",
+        "clear keys",
+        "walk/jump",
+        "E About",
+        "F GitHub",
+        "photo E",
+        "G memory",
+        "R music",
+        "map",
+        "opt-in BGM",
+        "four seasons",
+        "pause/resume/re-entry",
+        "research Workers",
+        "10 matching station hints",
+        "F without GitHub",
+        "mouse/keyboard consistency",
+        "harbor actions",
+        "mobile touch controls",
+        "WebGL fallback"
+      ],
+      "requests": 210
+    }
+  ]
+}
