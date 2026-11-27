@@ -340,6 +340,85 @@ test("2048 continues after the milestone, tracks tile motion and drains fast buf
   assert.equal(g.mergeQueue.length, 0);
   assert.ok(g.moves >= 2);
 });
+const mergeSnapshot = (game) => ({
+  board: game.board.map((row) => row.slice()),
+  score: game.score,
+  moves: game.moves,
+  won: game.won,
+  over: game.over,
+  time: game.time,
+});
+const playedMerge = (count) => {
+  const game = new Arcade("merge", seededRandom(19)),
+    states = [mergeSnapshot(game)],
+    directions = [],
+    keys = ["left", "down", "right", "up"];
+  for (let attempt = 0; game.moves < count && attempt < 200; attempt++) {
+    const key = keys[attempt % keys.length],
+      before = game.moves;
+    game.action(key);
+    if (game.moves === before) continue;
+    game.update(0.1);
+    game.update(0.1);
+    directions.push(key);
+    states.push(mergeSnapshot(game));
+  }
+  assert.equal(game.moves, count);
+  return { game, states, directions };
+};
+test("2048 restores five real states in order, including score, flags and the random stream", () => {
+  const { game, states, directions } = playedMerge(12);
+  assert.equal(game.rewindMerge(), true);
+  game.action("left");
+  assert.deepEqual(mergeSnapshot(game), states[12], "input is ignored during playback");
+  for (let step = 1; step <= 5; step++) {
+    const moves = game.moves;
+    for (let frame = 0; frame < 30 && game.moves === moves; frame++) game.update(0.02);
+    assert.deepEqual(mergeSnapshot(game), states[12 - step]);
+  }
+  assert.equal(game.mergePlayback, null);
+  assert.equal(game.mergeHistory.length, 7);
+  for (const direction of directions.slice(7)) {
+    game.action(direction);
+    game.update(0.1);
+    game.update(0.1);
+  }
+  assert.deepEqual(
+    mergeSnapshot(game),
+    states[12],
+    "replaying the same moves spawns the same tiles",
+  );
+});
+test("2048 omits no-op history, clears queued input and stops at the beginning of the round", () => {
+  const empty = new Arcade("merge", seededRandom(1));
+  empty.board = Array.from({ length: 4 }, () => Array(4).fill(0));
+  empty.board[0][0] = 2;
+  empty.action("left");
+  assert.equal(empty.mergeHistory.length, 0);
+  assert.equal(empty.rewindMerge(), false);
+  const { game, states } = playedMerge(2);
+  game.mergeQueue = ["left", "up"];
+  assert.equal(game.rewindMerge(5, false), true);
+  assert.deepEqual(mergeSnapshot(game), states[0]);
+  assert.deepEqual(game.mergeQueue, []);
+  assert.equal(game.mergePlayback, null);
+  assert.equal(game.rewindMerge(), false);
+  assert.equal(new Arcade("merge").mergeHistory.length, 0);
+  assert.equal(new Arcade("snake").rewindMerge(), false);
+});
+test("2048 can recover from a finished state and restores milestone flags", () => {
+  const { game, states } = playedMerge(8);
+  game.over = true;
+  game.won = true;
+  assert.equal(game.rewindMerge(5, false), true);
+  assert.deepEqual(mergeSnapshot(game), states[3]);
+  assert.equal(game.over, false);
+  assert.equal(game.won, false);
+  game.action("left");
+  game.update(0.1);
+  game.update(0.1);
+  assert.ok(game.moves >= 3);
+});
 test("pairs lose health only on mismatches, retain earned points and continue on freshly shuffled boards", () => {
   const finish = (extra) => {
     const g = new Arcade("pairs", seededRandom(9));

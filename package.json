@@ -22,6 +22,7 @@
     "test:games": "node tests/seasonal-browser.mjs",
     "test:game-experience": "node tests/seasonal-experience.mjs",
     "test:arcade": "node tests/arcade-polish.mjs",
+    "test:arcade-admin": "node tests/arcade-admin-browser.mjs",
     "test:mounts": "node tests/mounted-travel.mjs",
     "test:smoke": "node tests/web-smoke.mjs",
     "test:legacy": "node --test tests/*.test.mjs",

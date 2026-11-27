@@ -44,6 +44,11 @@ export const pairsHealth = 40;
 export const blockInterval = (time, lines, pieces) =>
   0.15 + 0.37 * Math.exp(-Math.max(time / 45, lines / 3, pieces / 8) * 0.16);
 export const mergeDuration = 0.12;
+export const mergePlaybackDuration = 0.24;
+/**
+ * @typedef {{board:number[][],score:number,moves:number,won:boolean,over:boolean,time:number,tick:number,randomCursor:number}} MergeState
+ * @typedef {{before:MergeState,after:number[][],tiles:{fromX:number,fromY:number,x:number,y:number,value:number}[],newTile:{x:number,y:number}|null}} MergeFrame
+ */
 const shapes = [
   [[1, 1, 1, 1]],
   [
@@ -96,6 +101,13 @@ export class Arcade {
   constructor(kind, random = Math.random) {
     this.kind = kind;
     this.random = random;
+    /** @type {number[]} */ this.mergeRandom = [];
+    this.mergeRandomCursor = 0;
+    if (kind === "merge")
+      this.random = () => {
+        if (this.mergeRandomCursor === this.mergeRandom.length) this.mergeRandom.push(random());
+        return this.mergeRandom[this.mergeRandomCursor++];
+      };
     this.score = 0;
     this.over = false;
     this.won = false;
@@ -145,6 +157,8 @@ export class Arcade {
     /** @type {{x:number;y:number}|null} */ this.newTile = null;
     this.mergeAge = mergeDuration;
     /** @type {string[]} */ this.mergeQueue = [];
+    /** @type {MergeFrame[]} */ this.mergeHistory = [];
+    /** @type {{frames:MergeFrame[],age:number,total:number}|null} */ this.mergePlayback = null;
     /** @type {number[]} */ this.cards = shuffle([...Array(8).keys(), ...Array(8).keys()], random);
     /** @type {number[]} */ this.open = [];
     /** @type {number[]} */ this.matched = [];
@@ -221,6 +235,40 @@ export class Arcade {
       this.newTile = p;
     }
   }
+  mergeState() {
+    return {
+      board: this.board.map((row) => row.slice()),
+      score: this.score,
+      moves: this.moves,
+      won: this.won,
+      over: this.over,
+      time: this.time,
+      tick: this.tick,
+      randomCursor: this.mergeRandomCursor,
+    };
+  }
+  /** @param {MergeFrame} frame */
+  restoreMergeFrame(frame) {
+    const { board, randomCursor, ...state } = frame.before;
+    Object.assign(this, state);
+    this.board = board.map((row) => row.slice());
+    this.mergeRandomCursor = randomCursor;
+    this.tiles = [];
+    this.merges = [];
+    this.newTile = null;
+    this.mergeAge = mergeDuration;
+  }
+  rewindMerge(steps = 5, animate = true) {
+    if (this.kind !== "merge" || this.mergePlayback || !this.mergeHistory.length) return false;
+    const count = Math.min(this.mergeHistory.length, Math.max(0, Math.floor(steps)));
+    if (!count) return false;
+    const frames = this.mergeHistory.splice(-count).reverse();
+    this.mergeQueue = [];
+    this.mergeAge = mergeDuration;
+    if (animate) this.mergePlayback = { frames, age: 0, total: count };
+    else for (const frame of frames) this.restoreMergeFrame(frame);
+    return true;
+  }
   get ballSpeed() {
     return 0.6 + 0.72 * (1 - Math.exp(-this.activeTime / 220));
   }
@@ -252,7 +300,7 @@ export class Arcade {
     if (!this.bricks.some((b) => b.row === brick.row)) this.clearedRows++;
   }
   action(key) {
-    if (this.over) return;
+    if (this.over || this.mergePlayback) return;
     if (this.falling) {
       if (key === "left") this.falling.aim = clamp(this.falling.aim - 0.05, 0.1, 0.9);
       if (key === "right") this.falling.aim = clamp(this.falling.aim + 0.05, 0.1, 0.9);
@@ -301,6 +349,7 @@ export class Arcade {
         return;
       }
       const old = JSON.stringify(this.board),
+        before = this.mergeState(),
         vertical = key === "up" || key === "down",
         reverse = key === "right" || key === "down";
       this.tiles = [];
@@ -344,6 +393,15 @@ export class Arcade {
         )
       )
         this.over = true;
+      if (JSON.stringify(this.board) !== old) {
+        this.mergeHistory.push({
+          before,
+          after: this.board.map((row) => row.slice()),
+          tiles: this.tiles.map((tile) => ({ ...tile })),
+          newTile: this.newTile ? { ...this.newTile } : null,
+        });
+        if (this.mergeHistory.length > 100) this.mergeHistory.shift();
+      }
     } else if (this.kind === "bricks") {
       if (key === "space") this.serving = false;
       if (key === "left") this.paddle = clamp(this.paddle - 0.045, 0.1, 0.9);
@@ -384,6 +442,15 @@ export class Arcade {
   }
   update(dt) {
     dt = clamp(dt, 0, 0.1);
+    if (this.mergePlayback) {
+      this.mergePlayback.age += dt;
+      if (this.mergePlayback.age >= mergePlaybackDuration) {
+        this.restoreMergeFrame(this.mergePlayback.frames.shift());
+        this.mergePlayback.age -= mergePlaybackDuration;
+        if (!this.mergePlayback.frames.length) this.mergePlayback = null;
+      }
+      return;
+    }
     if (this.kind === "merge") {
       this.mergeAge = Math.min(mergeDuration, this.mergeAge + dt);
       if (!this.over && this.mergeAge >= mergeDuration && this.mergeQueue.length)

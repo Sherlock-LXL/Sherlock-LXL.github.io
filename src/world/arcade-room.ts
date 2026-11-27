@@ -3,10 +3,12 @@ import {
   arcadeCatalog,
   arcadeScoreKey,
   mergeDuration,
+  mergePlaybackDuration,
   pairsHealth,
 } from "../../shared/arcade.mjs";
 import { readBest, saveBest } from "../../shared/seasonal-games.mjs";
 import { orbRadii, orbNames } from "../../shared/falling-merge.mjs";
+import { AdminPin } from "./admin-pin";
 
 const colors = [
   "#ede4d2",
@@ -50,6 +52,8 @@ export class ArcadeRoom {
   private score = -1;
   private best: number | null;
   private drag: { x: number; y: number } | null = null;
+  private pin?: AdminPin;
+  private reduced = matchMedia("(prefers-reduced-motion: reduce)");
   constructor(
     private host: HTMLElement,
     private id: string,
@@ -73,6 +77,8 @@ export class ArcadeRoom {
       "click",
       () => {
         this.store();
+        this.pin?.dispose();
+        this.pin = undefined;
         this.game = new Arcade(id);
         this.recorded = false;
         this.result.hidden = true;
@@ -220,6 +226,22 @@ export class ArcadeRoom {
     window.addEventListener(
       "keydown",
       (e) => {
+        if (this.pin) {
+          this.pin.handleKey(e);
+          return;
+        }
+        if (
+          id === "merge" &&
+          (e.ctrlKey || e.metaKey) &&
+          e.code === "KeyZ" &&
+          !e.shiftKey &&
+          !e.altKey
+        ) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          if (!e.repeat && !this.game.mergePlayback) this.openAdmin();
+          return;
+        }
         if (e.code === "Escape") {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -263,7 +285,24 @@ export class ArcadeRoom {
     };
   }
   private press(key: string) {
-    if (!this.paused) this.game.action(key);
+    if (!this.paused && !this.pin) this.game.action(key);
+  }
+  private openAdmin() {
+    this.clearInput();
+    this.game.mergeQueue = [];
+    this.pin = new AdminPin((accepted) => {
+      this.pin = undefined;
+      this.last = 0;
+      if (accepted && this.game.mergeHistory.length) {
+        this.store();
+        if (this.game.rewindMerge(5, !this.reduced.matches)) {
+          this.recorded = false;
+          this.result.hidden = true;
+          this.score = -1;
+        }
+      }
+      if (this.canvas.isConnected) this.canvas.focus({ preventScroll: true });
+    });
   }
   private releaseMouse() {
     this.mouseActive = false;
@@ -273,13 +312,16 @@ export class ArcadeRoom {
   }
   private pause(value: boolean) {
     this.paused = value;
+    this.clearInput();
+    this.host.querySelector("[data-pause]")!.textContent = value ? "继续" : "暂停";
+  }
+  private clearInput() {
     this.releaseMouse();
     this.held.clear();
     this.pointers.clear();
     this.game.axis = 0;
     this.drag = null;
     this.dragPointer = null;
-    this.host.querySelector("[data-pause]")!.textContent = value ? "继续" : "暂停";
   }
   private store() {
     if (this.recorded) return;
@@ -292,7 +334,7 @@ export class ArcadeRoom {
     this.frame = requestAnimationFrame(this.animate);
     const dt = this.last ? Math.min(0.1, (time - this.last) / 1000) : 0;
     this.last = time;
-    if (!this.paused) {
+    if (!this.pin && (!this.paused || this.game.mergePlayback)) {
       const held = new Set([...this.held, ...this.pointers.values()]);
       this.repeat -= dt;
       if (this.repeat <= 0) {
@@ -300,10 +342,17 @@ export class ArcadeRoom {
         if (this.id === "blocks")
           for (const key of held) if (["left", "right", "down"].includes(key)) this.press(key);
       }
-      this.game.axis = Number(held.has("right")) - Number(held.has("left"));
+      this.game.axis = this.game.mergePlayback
+        ? 0
+        : Number(held.has("right")) - Number(held.has("left"));
       this.game.update(dt);
     }
-    if (this.game.over && !this.recorded && this.game.mergeAge >= mergeDuration) {
+    if (
+      this.game.over &&
+      !this.game.mergePlayback &&
+      !this.recorded &&
+      this.game.mergeAge >= mergeDuration
+    ) {
       this.releaseMouse();
       const r = this.store();
       this.result.hidden = false;
@@ -377,9 +426,7 @@ export class ArcadeRoom {
     } else if (this.id === "merge") {
       for (let y = 0; y < 4; y++)
         for (let x = 0; x < 4; x++) cell(x * 120, y * 120, 120, "#e6ddcc");
-      const age = matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? mergeDuration
-          : g.mergeAge,
+      const age = this.reduced.matches ? mergeDuration : g.mergeAge,
         t = Math.min(1, age / 0.085),
         ease = 1 - (1 - t) ** 3;
       const tile = (x: number, y: number, v: number, scale = 1) => {
@@ -392,7 +439,40 @@ export class ArcadeRoom {
           String(v),
         );
       };
-      if (t < 1)
+      if (g.mergePlayback) {
+        const frame = g.mergePlayback.frames[0],
+          progress = Math.min(1, g.mergePlayback.age / mergePlaybackDuration),
+          split = Math.min(1, progress / 0.28),
+          travel = Math.max(0, (progress - 0.18) / 0.82),
+          motion = travel * travel * (3 - 2 * travel),
+          merged = new Map<string, number>();
+        for (const p of frame.tiles) {
+          const key = `${p.x},${p.y}`;
+          merged.set(key, (merged.get(key) ?? 0) + 1);
+        }
+        c.save();
+        if (frame.newTile) {
+          c.globalAlpha = Math.max(0, 1 - progress / 0.22);
+          tile(frame.newTile.x, frame.newTile.y, frame.after[frame.newTile.y][frame.newTile.x]);
+        }
+        for (const [key, count] of merged) {
+          if (count < 2) continue;
+          const [x, y] = key.split(",").map(Number);
+          c.globalAlpha = 1 - split;
+          tile(x, y, frame.after[y][x]);
+        }
+        for (const p of frame.tiles) {
+          const combined = (merged.get(`${p.x},${p.y}`) ?? 0) > 1;
+          c.globalAlpha = combined ? split : 1;
+          tile(
+            p.x + (p.fromX - p.x) * motion,
+            p.y + (p.fromY - p.y) * motion,
+            p.value,
+            combined ? 0.7 + 0.3 * split : 1,
+          );
+        }
+        c.restore();
+      } else if (t < 1)
         g.tiles.forEach((p) =>
           tile(p.fromX + (p.x - p.fromX) * ease, p.fromY + (p.y - p.fromY) * ease, p.value),
         );
@@ -542,7 +622,7 @@ export class ArcadeRoom {
         c.fillText("空格 / 点击画面发球", 240, 300);
       }
     }
-    if (this.paused) {
+    if (this.paused && !g.mergePlayback && !this.pin) {
       c.fillStyle = "#f3eddfdf";
       c.fillRect(0, 0, w, w);
       c.fillStyle = "#514c42";
@@ -575,6 +655,15 @@ export class ArcadeRoom {
       ball: { ...this.game.ball },
       snake: this.game.snake.map((p) => ({ ...p })),
       mergeAge: this.game.mergeAge,
+      historyDepth: this.game.mergeHistory.length,
+      adminOpen: !!this.pin,
+      playback: this.game.mergePlayback
+        ? {
+            step: this.game.mergePlayback.total - this.game.mergePlayback.frames.length,
+            total: this.game.mergePlayback.total,
+            age: this.game.mergePlayback.age,
+          }
+        : null,
       board: this.game.board,
       falling: this.game.falling
         ? {
@@ -589,6 +678,8 @@ export class ArcadeRoom {
     };
   }
   dispose() {
+    this.pin?.dispose();
+    this.pin = undefined;
     this.releaseMouse();
     this.store();
     cancelAnimationFrame(this.frame);
